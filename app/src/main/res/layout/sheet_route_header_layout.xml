@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/routeTransportSelecter">
+
+    <TextView
+        android:id="@+id/routeCar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/margin_small"
+        android:layout_marginEnd="@dimen/margin_small"
+        android:contentDescription="@string/content_description"
+        android:drawableStart="@drawable/ic_directions_car"
+        android:drawablePadding="@dimen/margin_tiny"
+        />
+
+    <TextView
+        android:id="@+id/routeWalk"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/margin_small"
+        android:layout_toEndOf="@+id/routeCar"
+        android:layout_marginEnd="@dimen/margin_small"
+        android:contentDescription="@string/content_description"
+        android:drawableStart="@drawable/ic_directions_walk"
+        android:drawablePadding="@dimen/margin_small"
+        />
+
+    <TextView
+        android:id="@+id/routeTrain"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/margin_small"
+        android:layout_toEndOf="@+id/routeWalk"
+        android:layout_marginEnd="@dimen/margin_small"
+        android:contentDescription="@string/content_description"
+        android:drawableStart="@drawable/ic_directions_subway"
+        android:drawablePadding="@dimen/margin_small"
+        />
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_alignParentEnd="true"
+        android:gravity="end">
+
+        <TextView
+            android:id="@+id/routeCancelBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@null"
+            android:layout_marginEnd="@dimen/margin_small"
+            android:drawableStart="@drawable/ic_times"
+            android:padding="@dimen/margin_small"
+            />
+
+        <TextView
+            android:id="@+id/routeListBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@null"
+            android:drawableStart="@drawable/ic_view_list"
+            android:padding="@dimen/margin_small"
+            tools:drawableTint="@color/black"
+            />
+
+    </LinearLayout>
+
+</RelativeLayout>

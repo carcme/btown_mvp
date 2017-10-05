@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/margin_small"
+    android:paddingTop="@dimen/margin_small">
+
+    <RelativeLayout
+        android:id="@+id/textHolder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@+id/favListIcon"
+        android:layout_toRightOf="@+id/favListIcon"
+        >
+
+        <me.carc.btownmvp.ui.custom.CapitalisedTextView
+            android:id="@+id/favListName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="70dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginRight="70dp"
+            android:layout_marginLeft="8dp"
+            android:ellipsize="end"
+            android:gravity="center_vertical"
+            android:maxLines="1"
+            android:textSize="16sp"
+            tools:text="Title" />
+
+        <me.carc.btownmvp.ui.custom.CapitalisedTextView
+            android:id="@+id/favListDesc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/favListName"
+            android:layout_marginEnd="70dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginRight="70dp"
+            android:layout_marginLeft="8dp"
+            android:ellipsize="end"
+            android:gravity="center_vertical"
+            android:textSize="12sp"
+            tools:text="desc" />
+
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/favListIcon"
+        android:layout_width="24dp"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/textHolder"
+        android:layout_alignBottom="@+id/textHolder"
+        android:contentDescription="@string/content_description"
+        tools:src="@drawable/ic_heart" />
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="@dimen/margin_small"
+        android:layout_marginLeft="@dimen/margin_small"
+        android:layout_toEndOf="@+id/favListIcon"
+        android:layout_toRightOf="@+id/favListIcon"
+        android:orientation="horizontal">
+
+        <me.carc.btownmvp.ui.CompassView
+            android:id="@+id/favListNavigationIcon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/ic_navigation" />
+
+        <TextView
+            android:id="@+id/favListDistance"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:layout_marginBottom="@dimen/margin_small"
+            android:layout_toStartOf="@+id/favListNavigationIcon"
+            android:layout_toLeftOf="@+id/favListNavigationIcon"
+            android:ellipsize="end"
+            android:gravity="center_vertical"
+            android:maxLines="1"
+            android:textColor="@color/almostBlack"
+            android:textSize="15sp"
+            tools:text="0.3km" />
+    </RelativeLayout>
+
+</RelativeLayout>

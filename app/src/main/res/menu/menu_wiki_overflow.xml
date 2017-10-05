@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/menu_link_preview_open_in_new_tab"
+        android:title="Get Directions"
+        />
+    <item android:id="@+id/menu_link_preview_add_to_list"
+        android:title="Read More"
+        />
+    <item android:id="@+id/menu_link_preview_share_page"
+        android:title="Share Link"
+        />
+    <item android:id="@+id/menu_link_preview_copy_link"
+        android:title="Share Image"
+        />
+</menu>

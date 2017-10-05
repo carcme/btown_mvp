@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">B-Town mvp</string>
+
+    <string name="content_description">Content Description</string>
+
+    <!--FAVORITES VIEW-->
+    <string name="use_long_press_to_remove_favorite">Taste lange drücken, um Favoriten zu löschen</string>
+    <string name="favorites_places">Beliebteste Orte</string>
+    <string name="favorite_saved">Added to Favorites</string>
+    <string name="favorite_removed">Removed from Favorites</string>
+    <string name="history_saved">Added to History</string>
+    <string name="history_removed">Removed from History</string>
+
+
+    <string name="text_close">Schließen</string>
+    <string name="elevation">Höhe</string>
+    <string name="distance">Strecke</string>
+    <string name="total_distance">Gesamtstrecke</string>
+    <string name="shared_string_time">Zeit</string>
+    <string name="altitude_descent">Abstieg</string>
+    <string name="altitude_ascent">Aufstieg</string>
+    <string name="shared_string_go">Go</string>
+    <string name="shared_my_location">My Location</string>
+    <string name="shared_string_selected_lowercase">ausgewählt</string>
+
+
+</resources>

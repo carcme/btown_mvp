@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="vehicle_car" translatable="false">car</string>
+    <string name="vehicle_walk" translatable="false">foot</string>
+    <string name="vehicle_train" translatable="false">train</string>
+    <string name="vehicle_bike" translatable="false">bike</string>
+</resources>

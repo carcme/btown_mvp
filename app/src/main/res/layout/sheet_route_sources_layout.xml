@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginBottom="@dimen/margin_small"
+    android:layout_marginTop="@dimen/margin_small"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/margin_tiny"
+        android:paddingBottom="@dimen/margin_tiny">
+
+        <TextView
+            android:id="@+id/routeDeparture"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/ic_place"
+            android:drawableTint="@color/routeFromColor"
+            android:drawablePadding="@dimen/margin_small"
+            android:gravity="center_vertical"
+            android:textColor="@color/sheet_icon_color"
+            android:textSize="@dimen/default_list_text_size"
+            tools:text="Where I want to go" />
+
+    </LinearLayout>
+
+    <!--
+        <Spinner
+            android:id="@+id/routeDeparture"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:listitem="@layout/share_list_item" />
+    -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/margin_tiny"
+        android:paddingBottom="@dimen/margin_tiny">
+
+        <TextView
+            android:id="@+id/routeDestination"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/ic_place"
+            android:drawableTint="@color/routeToColor"
+            android:drawablePadding="@dimen/margin_small"
+            android:gravity="center_vertical"
+            android:textColor="@color/sheet_icon_color"
+            android:textSize="@dimen/default_list_text_size"
+            tools:text="Where I want to be" />
+
+    </LinearLayout>
+
+    <!--
+        <Spinner
+            android:id="@+id/routeDestination"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:listitem="@layout/share_list_item"/>
+    -->
+</LinearLayout>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/black54"
+        android:padding="@dimen/margin_standard">
+
+    <TextView
+            android:id="@+id/compassTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/margin_large"
+            android:layout_marginBottom="@dimen/margin_standard"
+            android:layout_centerHorizontal="true"
+            android:textAlignment="center"
+            android:textColor="@color/almostWhite"
+            android:textSize="35sp"
+            tools:text="POI Title"/>
+
+    <me.carc.btownmvp.ui.custom.CapitalisedTextView
+            android:id="@+id/compassType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/compassTitle"
+            android:layout_centerHorizontal="true"
+            android:textAlignment="center"
+            android:textSize="25sp"
+            android:textColor="@color/almostWhite"
+            tools:text="POI Type"/>
+
+    <me.carc.btownmvp.ui.CompassView
+            android:id="@+id/compassArrow"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_marginTop="@dimen/margin_huge"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/compassType"
+            app:srcCompat="@drawable/ic_navigation"/>
+
+    <TextView
+            android:id="@+id/compassDistance"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/compassArrow"
+            android:layout_centerHorizontal="true"
+            android:textAlignment="center"
+            android:textSize="25sp"
+            android:textColor="@color/almostWhite"
+            tools:text="Distance"/>
+
+</RelativeLayout>

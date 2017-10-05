@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--DONATE STRINGS-->
+    <string-array name="donate_items_names">
+        <item>Kaffee</item>
+        <item>Sandwich</item>
+        <item>Mittagessen</item>
+        <item>Abendessen</item>
+        <item>Liebe</item>
+    </string-array>
+
+
+    <!--First Item is display name, 2nd is subtitle, 3rd is "search type" all other items are used to search for places in area-->
+    <string-array name="poi_category_tags">
+
+        <item>Wikipedia:Siehe lokale Wikipedia-Einträge</item>
+        <!--food and drink-->
+        <item>Essen &amp; Trinken:Ein Halt für ein Bier oder einen Snack:amenity=bbq:amenity=cafe:amenity=fast_food:amenity=food_court:amenity=ice_cream:amenity=restaurant:amenity=bar:amenity=biergarten:amenity=cafe:amenity=pub</item>
+
+        <!--<item>Späti:Billige Drinks und Snacks für unterwegs&#8230;:shop=confectionery:shop=convenience:shop=bakery:shop=alcohol:shop=beverages:shop=ice_cream:shop=pastry:shop=kiosk:shop=supermarket</item>-->
+
+        <!--tourism-->
+        <item>Sightseeing:Die wichtigsten Attraktionen in der Umgebung:amenity=fountain:amenity=planetarium:tourism=aquarium:tourism=artwork:tourism=attraction:tourism=museum:tourism=viewpoint:tourism=zoo:historic=building:historic=castle:historic=city_gate:historic=memorial:historic=monument:historic=pillory:historic=ruins</item>
+        <item>Kunst &amp; Kultur:Schau dir die Sehenswürdigkeiten an:amenity=arts_centre:amenity=planetarium:amenity=theatre:amenity=fountain:tourism=gallery:tourism=gallery:tourism=museum:tourism=viewpoint:tourism=artwork</item>
+        <item>Tourismus:Touristen Attraktionen:amenity=planetarium:amenity=fountain:tourism=museum:tourism=viewpoint:tourism=aquarium:tourism=zoo:tourism=theme_park:tourism=attraction</item>
+        <item>Geschichte:Museen und historische Plätze:tourism=museum:historic=castle:historic=building:historic=city_gate:historic=ruins:historic=tomb:historic=pillory:historic=memorial:historic=monument:historic=monastery:amenity=monastery:historic=citywalls:tourism=attraction</item>
+        <item>Natur:Geh auf Wanderung:amenity=graveyard:leisure=beach_resort:leisure=common:leisure=nature_reserve:leisure=park:leisure=swimming_area:leisure=swimming_pool:tourism=picnic_site:landuse=cemetery:landuse=forest:landuse=recreation_ground:natural=wood:natural=beach:natural=peak:natural=stone</item>
+        <!--money-->
+        <item>Geld:Banken und Geldautomaten:amenity=atm:amenity=bank:amenity=bureau_de_change</item>
+        <!--Adult-->
+        <item>FSK18:Unterhaltung für Erwachsene:amenity=brothel:amenity=casino:amenity=gambling:amenity=stripclub:amenity=swingerclub:amenity=sauna:leisure=sauna:leisure=adult_gaming_centre:shop=massage:shop=erotic</item>
+        <item>Nightlife:Tanze durch die Nacht:amenity=nightclub::leisure=dance</item>
+
+        <item>Shopping:Klamotten, Schuhe &amp; Accessoires:shop=department_store:shop=mall:shop=bag:shop=boutique:shop=clothes:shop=fashion:shop=jewelry:shop=leather:shop=shoes</item>
+
+        <!--Emergency-->
+        <item>Notfälle:So ziemlich jeder Notfall wird hier abgedeckt:shop=chemist:amenity=clinic:amenity=dentist:amenity=doctors:amenity=hospital:amenity=pharmacy:amenity=embassy:amenity=police:emergency=phone</item>
+        <item>Hotels:Zuhause in der Fremde:tourism=apartment:tourism=hotel:tourism=guest_house:tourism=hostel:tourism=sleeping_pods:</item>
+        <!--<item>Öffentliche Verkehrsmittel:So navigiert ihr durch die Stadt:amenity=bus_station:amenity=taxi:highway=bus_stop:railway=light_rail:railway=rail:railway=subway:railway=subway_entrance:railway=tram:railway=station:railway=tram_stop:building=train_station:public_transport=stop_position:public_transport=platform:public_transport=station:public_transport=stop_area</item>-->
+
+    </string-array>
+
+
+</resources>

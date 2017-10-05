@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="margin_tiny">4dp</dimen>
+    <dimen name="margin_small">8dp</dimen>
+    <dimen name="margin_standard">16dp</dimen>
+    <dimen name="margin_large">32dp</dimen>
+    <dimen name="margin_huge">64dp</dimen>
+
+    <dimen name="tiny_list_text_size">12sp</dimen>
+    <dimen name="small_list_text_size">14sp</dimen>
+    <dimen name="default_list_text_size">16sp</dimen>
+    <dimen name="large_list_text_size">19sp</dimen>
+
+
+    <dimen name="fab_space">72dp</dimen>
+    <dimen name="toolbar_height">56dp</dimen>
+
+    <dimen name="wikiSheetPeekHeight">320dp</dimen>
+
+    <!-- Default height of list items -->
+    <dimen name="defaultListItemSize">56dp</dimen>
+    <dimen name="wikiIconSize">76dp</dimen>
+    <dimen name="list_item_height">50dp</dimen>
+
+
+    <dimen name="favorites_icon_right_margin">24dp</dimen>
+    <dimen name="favorites_icon_top_margin">13dp</dimen>
+    <dimen name="search_list_icon_size">24dp</dimen>
+
+
+</resources>

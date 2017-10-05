@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="search_all_hint">Type to search all</string>
+    <string name="initial_search_text">Type to search</string>
+    <string name="dist_away_from_my_location">Search %1$s away</string>
+
+    <string name="search_tab_favorite">Favorites</string>
+    <string name="search_tab_history">History</string>
+    <string name="search_tab_category">Categories</string>
+
+    <!-- string name="lat_lon_pattern">Lat: %1$.5f Lon: %2$.5f</string -->
+    <string name="map_mode">Map mode</string>
+    <string name="shared_string_delete">Delete</string>
+    <string name="shared_string_delete_all">Delete All</string>
+    <string name="shared_string_share">Share</string>
+    <string name="shared_string_close">Close</string>
+    <string name="anonymous">Anonymous</string>
+    <string name="manage_account">Manage Account</string>
+    <string name="search_no_results_found">No Results Found. Please expand the map radius</string>
+
+    <string name="tour_search_shops" translatable="false">shop=department_store:shop=mall:shop=bag:shop=boutique:shop=clothes:shop=fashion:shop=jewelry:shop=leather:shop=shoes:shop=beauty:shop=chemist:shop=cosmetics:shop=hairdresser:shop=perfumery</string>
+    <string name="tour_search_tourism" translatable="false">amenity=arts_centre:amenity=planetarium:amenity=theatre:amenity=fountain:tourism=gallery:tourism=museum:tourism=viewpoint:tourism=artwork:tourism=viewpoint:tourism=aquarium:tourism=zoo:tourism=theme_park:tourism=attraction:historic=castle:historic=building:historic=city_gate:historic=ruins:historic=tomb:historic=pillory:historic=memorial:historic=monument:historic=monastery:amenity=monastery:historic=citywalls</string>
+    <string name="tour_search_food" translatable="false">amenity=bbq:amenity=cafe:amenity=fast_food:amenity=food_court:amenity=ice_cream:amenity=restaurant:amenity=bar:amenity=biergarten:amenity=cafe:amenity=pub</string>
+
+    <string name="add_your_comment">Add comment</string>
+    <string name="save">Save</string>
+    <string name="route_to">Route</string>
+    <string name="share">Share</string>
+    <string name="more">More</string>
+
+    <string name="added_to_favorites">Added to Favorites</string>
+    <string name="seaching">Searching&#8230;</string>
+    <string name="closed">Closed</string>
+    <string name="open">Open</string>
+
+
+    <string name="shared_string_show_details">Show details</string>
+    <string name="shared_string_io_error">I/O error occurred</string>
+    <string name="send_location">Send location</string>
+    <string name="zxing_barcode_scanner_not_found">ZXing Barcode Scanner application not installed. Search in Google Play?</string>
+
+    <string name="shared_string_send">Send</string>
+    <string name="shared_string_copy">Copy</string>
+    <string name="share_geo">geo:</string>
+    <string name="shared_string_qr_code">QR-code</string>
+    <string name="no_address_found">No address found</string>
+    <string name="shared_string_location">Location</string>
+    <string name="share_menu_location">Share location</string>
+
+
+
+</resources>

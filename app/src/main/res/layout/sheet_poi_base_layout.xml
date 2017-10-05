@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true"
+    android:orientation="vertical"
+    android:paddingEnd="@dimen/margin_standard"
+    android:paddingStart="@dimen/margin_standard"
+    android:paddingTop="@dimen/margin_standard"
+    app:layout_behavior="@string/bottom_sheet_behavior">
+    <!--style="style/PoiItemDialog"-->
+
+    <include layout="@layout/sheet_poi_header_layout" />
+
+    <EditText
+        android:id="@+id/userDesc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/add_your_comment"
+        android:imeOptions="actionDone"
+        android:inputType="textMultiLine"
+        android:paddingBottom="@dimen/margin_standard"
+        android:paddingTop="@dimen/margin_standard"
+        android:textColor="@color/black54" />
+
+    <include layout="@layout/sheet_poi_buttons" />
+
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/moreScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/moreRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="vertical"
+            android:visibility="gone"
+            tools:visibility="visible"/>
+
+    </android.support.v4.widget.NestedScrollView>
+
+</LinearLayout>

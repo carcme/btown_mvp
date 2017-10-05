@@ -1,0 +1,103 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 26
+    buildToolsVersion "26.0.0"
+
+    defaultConfig {
+        applicationId "me.carc.b_townmvp"
+        minSdkVersion 21
+        targetSdkVersion 26
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        vectorDrawables.useSupportLibrary = true
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
+            }
+        }
+    }
+    buildTypes {
+        debug {
+            minifyEnabled false
+            shrinkResources false
+            zipAlignEnabled false
+            useProguard false
+            buildConfigField "String", "GRAPHHOPPER_API_KEY", getRouteApiKey("GRAPHHOPPER_API_KEY")
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        release {
+            minifyEnabled true
+            shrinkResources false
+            zipAlignEnabled true
+            useProguard true
+            buildConfigField "String", "GRAPHHOPPER_API_KEY", getRouteApiKey("GRAPHHOPPER_API_KEY")
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+// Get your own key at https://graphhopper.com/#directions-api and copy it to 'local.properties'
+def getRouteApiKey(String property){
+    def Properties props = new Properties()
+    props.load(new FileInputStream(new File('local.properties')))
+    return props['GRAPHHOPPER_API_KEY']
+}
+
+ext {
+    butterknife = '8.4.0'
+    gsonVersion = '2.8.0'
+    okhttpVersion = '3.6.0'
+    retrofitVersion = '2.2.0'
+    supportLibVersion = '26.+'
+    constraintLayoutVersion = '1.0.2'
+    googlePlayServices = '11.0.4'
+    osmdroid = '5.6.5'
+    glide = '3.7.0'
+    roomVersion = '1.0.0-alpha7'
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+
+    compile "com.android.support:appcompat-v7:${supportLibVersion}"
+    compile "com.android.support:design:${supportLibVersion}"
+    compile "com.android.support:support-v4:${supportLibVersion}"
+    compile "com.android.support:recyclerview-v7:${supportLibVersion}"
+    compile "com.android.support.constraint:constraint-layout:${constraintLayoutVersion}"
+
+    compile "com.google.android.gms:play-services-auth:${googlePlayServices}"
+    compile "com.google.android.gms:play-services-location:${googlePlayServices}"
+
+    compile "com.jakewharton:butterknife:$butterknife"
+    annotationProcessor "com.jakewharton:butterknife-compiler:$butterknife"
+    compile "org.osmdroid:osmdroid-android:$osmdroid"
+    compile "com.github.bumptech.glide:glide:$glide"
+
+    compile 'com.squareup.retrofit2:retrofit:2.3.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.3.0'
+
+
+//    compile 'com.mikepenz:fontawesome-typeface:4.7.0.1@aar'
+//    compile 'com.mikepenz:materialdrawer:5.8.1'
+    compile 'com.mikepenz:iconics-core:2.9.3@aar'
+    compile 'com.mikepenz:iconics-views:2.9.3@aar'
+    compile 'com.mikepenz:fontawesome-typeface:4.4.0.1@aar'
+    compile 'com.mikepenz:community-material-typeface:1.9.32.2@aar'
+
+
+    compile 'pub.devrel:easypermissions:1.0.0'
+
+
+    compile "android.arch.persistence.room:runtime:$roomVersion"
+    annotationProcessor "android.arch.persistence.room:compiler:$roomVersion"
+//    androidTestImplementation "android.arch.persistence.room:testing:$roomVersion"
+
+
+    testCompile 'junit:junit:4.12'
+}

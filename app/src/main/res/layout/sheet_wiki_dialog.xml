@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="bottom"
+    app:behavior_peekHeight="@dimen/wikiSheetPeekHeight"
+    app:layout_behavior="@string/bottom_sheet_behavior"
+    tools:context="me.carc.btownmvp.map.sheets.WikiPoiSheetDialog">
+
+    <LinearLayout
+        android:id="@+id/wikiDialogContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:animateLayoutChanges="true"
+        android:background="@color/paper_color"
+        android:minHeight="@dimen/wikiSheetPeekHeight"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/wikiToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:minHeight="64dp">
+
+            <ImageView
+                android:id="@+id/wikiThumbnail"
+                android:layout_width="@dimen/wikiIconSize"
+                android:layout_height="@dimen/wikiIconSize"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="16dp"
+                android:contentDescription="@null"
+                android:scaleType="centerCrop"
+                android:src="@drawable/background_image_blank" />
+
+            <TextView
+                android:id="@+id/wikiTitle"
+                style="@style/RtlAwareTextView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:fontFamily="serif"
+                android:lineSpacingMultiplier="0.9"
+                android:maxLines="3"
+                android:paddingBottom="4dp"
+                android:textColor="@color/sheet_heading_text_color"
+                android:textSize="20sp"
+                tools:text="Wikipedia Title Here" />
+
+            <ImageView
+                android:id="@+id/wikiOverflowBtn"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_gravity="center_vertical"
+                android:background="?attr/actionBarItemBackground"
+                android:contentDescription="@string/abc_action_menu_overflow_description"
+                android:padding="12dp"
+                android:tint="@color/sheet_icon_color"
+                app:srcCompat="@drawable/ic_more" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:background="@color/material_theme_border_color" />
+
+        <android.support.v4.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:id="@+id/wikiDialogContentContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <me.carc.btownmvp.ui.custom.CapitalisedTextView
+                    android:id="@+id/wikiDescription"
+                    style="@style/RtlAwareTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:lineSpacingMultiplier="1.3"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    android:paddingTop="8dp"
+                    android:textColor="@color/sheet_sub_heading_text_color"
+                    android:textIsSelectable="true"
+                    android:textSize="18sp"
+                    tools:text="Description Here" />
+
+                <TextView
+                    android:id="@+id/wikiExtract"
+                    style="@style/RtlAwareTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:lineSpacingMultiplier="1.3"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    android:paddingTop="8dp"
+                    android:textColor="@color/black54"
+                    android:textIsSelectable="true"
+                    android:textSize="16sp"
+                    tools:text="Extract Info Here" />
+
+            </LinearLayout>
+
+        </android.support.v4.widget.NestedScrollView>
+
+        <!-- Bottom padding for overlay button -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="70dp" />
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/wikiProgress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center" />
+
+</FrameLayout>

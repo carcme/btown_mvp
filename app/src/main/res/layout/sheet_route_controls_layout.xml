@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
+
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@color/colorPrimary"
+        android:gravity="center"
+        android:padding="@dimen/margin_small">
+
+        <TextView
+            android:id="@+id/routeGoBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:drawableStart="@drawable/ic_navigation_24dp"
+            android:text="@string/shared_string_go"
+            android:textColor="@color/white"
+            android:textSize="@dimen/default_list_text_size" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/margin_small">
+
+        <ImageView
+            android:id="@+id/routeCancelBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_times_red"
+            android:text="@string/shared_string_go"
+            android:textColor="@color/white"
+            android:textSize="@dimen/default_list_text_size" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/margin_small">
+
+        <ImageView
+            android:id="@+id/routeListBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_view_list"
+            android:tint="@color/fabSearchProgressColor"
+            android:text="@string/shared_string_go"
+            android:textColor="@color/white"
+            android:textSize="@dimen/default_list_text_size" />
+
+    </LinearLayout>
+
+</LinearLayout>

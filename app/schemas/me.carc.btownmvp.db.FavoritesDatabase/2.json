@@ -1,0 +1,72 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 2,
+    "identityHash": "f08c8fee0f7e75acdbcdae20b0c00e8b",
+    "entities": [
+      {
+        "tableName": "FavoriteEntry",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`itemid` INTEGER, `osmId` INTEGER, `wikiId` INTEGER, `lat` REAL, `lon` REAL, `address` TEXT, `comment` TEXT, `iconStr` TEXT, `iconInt` INTEGER, PRIMARY KEY(`itemid`))",
+        "fields": [
+          {
+            "fieldPath": "itemid",
+            "columnName": "itemid",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "osmId",
+            "columnName": "osmId",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "wikiId",
+            "columnName": "wikiId",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "lat",
+            "columnName": "lat",
+            "affinity": "REAL"
+          },
+          {
+            "fieldPath": "lon",
+            "columnName": "lon",
+            "affinity": "REAL"
+          },
+          {
+            "fieldPath": "address",
+            "columnName": "address",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "comment",
+            "columnName": "comment",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "iconStr",
+            "columnName": "iconStr",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "iconInt",
+            "columnName": "iconInt",
+            "affinity": "INTEGER"
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "itemid"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"f08c8fee0f7e75acdbcdae20b0c00e8b\")"
+    ]
+  }
+}

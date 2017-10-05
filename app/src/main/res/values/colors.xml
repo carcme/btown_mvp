@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <color name="fabColorAlmostClear">#33000000</color>
+    <color name="fabColorTracking">#ffff8a00</color>
+    <color name="fabCameraPoiListToggle">#ffff8a00</color>
+    <color name="fabSearchCancelColor">#C00</color>
+    <color name="fabSearchProgressColor">#669900</color>
+
+    <color name="routeToColor">#C00</color>
+    <color name="routeFromColor">#669900</color>
+
+    <color name="poiOpenTimesOpenColor">#669900</color>
+    <color name="poiOpenTimesClosedColor">#C00</color>
+
+    <color name="white">#FFFFFF</color>
+    <color name="almostWhite">#EEEEEE</color>
+    <color name="black">#000000</color>
+    <color name="almostBlack">#2d2d2d</color>
+    <color name="lightBlack">#4d4d4d</color>
+    <item name="gallery_overlay" type="color">#80000000</item>
+
+
+
+
+    <color name="sheet_icon_color">#999</color>
+
+    <color name="sheet_heading_text_color">@color/colorPrimary</color>
+    <color name="sheet_sub_heading_text_color">@color/colorPrimaryDark</color>
+    <color name="sheet_edit_text_color">@color/colorPrimaryDark</color>
+
+
+    <color name="map_widget_blue">#536dfe</color>
+
+
+
+
+    <color name="md_yellow_500">#FFEB3B</color>
+    <color name="md_yellow_600">#FDD835</color>
+    <color name="md_yellow_700">#FBC02D</color>
+
+
+    <color name="paper_color">#FFF</color>
+
+    <color name="primary_text_color">#000</color>
+    <color name="menu_icon_color">@color/black54</color>
+    <color name="material_theme_border_color">@color/black12</color>
+
+
+    <!-- Light and Dark mode consolidation-->
+    <color name="black87">#DE000000</color>
+    <color name="black54">#8A000000</color>
+    <color name="black38">#61000000</color>
+    <color name="black26">#42000000</color>
+    <color name="black12">#1F000000</color>
+    <color name="white70">#B3ffffff</color>
+    <color name="white50">#80ffffff</color>
+    <color name="white20">#33ffffff</color>
+
+
+
+</resources>

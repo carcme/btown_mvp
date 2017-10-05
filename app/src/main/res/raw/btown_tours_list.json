@@ -1,0 +1,175 @@
+{
+  "filename": "btownTourList",
+  "version": 0,
+  "tours": [
+    {
+      "id": 0,
+      "tourName": "Bus Route 100",
+      "de_tourName": "Bus Route 100",
+      "tourDistance": 7.5,
+      "tourTime": 300,
+      "tourRating": 4.1,
+      "tourDesc": "Use your day ticket to see popular Berlin attractions (Dev Ref: LV)",
+      "de_tourDesc": "Use your day ticket to see popular Berlin attractions",
+      "tourBrief": [
+        {
+          "0": "A cheap alternative to the hop on/hop off bus tour of Berlin. This tour offers a simple way to make your own sightseeing tour at the cost of a day ticket or the Berlin WelcomeCard. We'll show you where the important attractions are and you decide if you want to hop off the bus for a closer look or just stay in the bus and enjoy looking at them in passing.",
+          "1": "For the best views, use the upper deck and if you're quick, try and get the seats above the driver for panoramic views of the city's attractions."
+        }
+      ],
+      "de_tourBrief": [
+        {
+          "0": "Die Buslinie 100 ist ein toller Insider-Tipp für Berlin. Sie fährt zahlreiche klassische Sehenswürdigkeiten an. Man kann mit einem gültigen Ticket aus- und zusteigen sooft man will. Im Vergleich zu organisierten Touren spart man so jede Menge Geld, bleibt individuell, ohne Zeitdruck und mit der B-Town App bekommt man die wirklich interessanten Infos sowieso live aufs Handy geschickt!",
+          "1": "Also einsteigen und die Stadt auf eigene Faust unsicher machen!"
+        }
+      ],
+      "tourCoverImageFile": "Bus100.jpg",
+      "attractions": [
+        {
+          "id": 0,
+          "stopName": "Zoologischer Garten",
+          "busStop": "S+U Zoologischer Garten",
+          "facebookPageId": 132123623490697,
+          "address": "Hardenbergplatz 11, 10623 Berlin",
+          "tel": "+49 30 297 1055",
+          "hours": "All year, every day, all day",
+          "web": "https://goo.gl/IdciCc",
+          "stopImageFile": "ZoologischerGarten.jpg",
+          "stopImagesource": "http://www.berlin.de",
+          "stopRating": 0,
+          "stopType": "",
+          "location": {
+            "lat": 52.507294,
+            "long": 13.332367
+          },
+          "pois": [
+            {
+              "title": "bus_stop",
+              "tag": "bus_stop",
+              "lat": 52.506901,
+              "lng": 13.333218
+            },
+            {
+              "title": "Kurfürstendamm",
+              "tag": "",
+              "lat": 52.50384,
+              "lng": 13.33118
+            },
+            {
+              "title": "Waldorf Astoria",
+              "tag": "",
+              "lat": 52.505605,
+              "lng": 13.332911
+            },
+            {
+              "title": "Berlin Zoo",
+              "tag": "",
+              "lat": 52.508270,
+              "lng": 13.334833
+            }
+          ],
+          "stopInfo": {
+            "title": [
+              {
+                "0": "S+U Zoologischer Garten"
+              }
+            ],
+            "teaser": [
+              {
+                "0": "You are at Zoo, the train station not the animal park. Even though you might meet more interesting creatures in their crazy habitat here.",
+                "1": "Built in 1882 it inspired a bunch of artists and has a lot of history. Some of it even interesting. Check out the details below!"
+              }
+            ],
+            "history": [
+              {
+                "0": "Zoologischer Garten - 1900<img src=https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/Zoo%2C_Berlin_1900.png/320px-Zoo%2C_Berlin_1900.png>",
+                "1": "The station opened on February 7th 1882, and in 1902 the underground train U2 followed. Until the reunification of Germany Bahnhof Zoo was the most significant Train station in West Germany.",
+                "2": "During the 70s and 80s the backstreet of the train station, the Jebensstraße, was a popular meeting point for the drug and prostitution scene. The book “We Children from Bahnhof ZOO” shows the bottomless pit of that time in a very impressive way. Towards the end of the 80s police would raid the area more often hoping to make Zoo safer. In reality though the area up until a couple of years ago was still understood to be a very bad neighbourhood.",
+                "3": "Breitscheidplatz at night<img src=https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Zoofenster_vom_Breitscheidplatz_aus_bei_Nacht_20141023_5.jpg/360px-Zoofenster_vom_Breitscheidplatz_aus_bei_Nacht_20141023_5.jpg>",
+                "4": "Building the 5 star hotel „Waldorf Astoria“ polished up that image. ",
+                "5": "The famous shopping mile „Kurfürstendamm“ is in walking distance from the train station. If you haven't found the map yet, just click the top image or rotate your device."
+              }
+            ],
+            "qi": [
+              {
+                "0": "The Irish band U2 was inspired here to write the song “Zoo station”.",
+                "1": "The famous photographer Helmut Newton saw the building Nr. 2 in Jebensstraße on the backside of Zoo station last before he left Berlin for Los Angeles. He had to flee the country. In 2004 the museum for photography opened exactly here following the last wish of Newton, whose pictures can be seen in a permanent exhibition on the first floor.",
+                "2": "The Swedish punk band Randy sings about the lack of hope and bleak perspective in the song “Bahnhof Zoo“.",
+                "3": "The famous song “Big in Japan” by Alphaville dedicated a line to the train station.",
+                "4": "Bernd Brandes took a train in March 2001 to go from Zoo to the German city Kassel. He there would meet Armin Meiwes, the man that killed and ate him making him famous as the “Rotenburg Cannibal”."
+              }
+            ],
+            "look_out": [
+              {
+                "0": "The Lost and Found for trains, busses and S-Bahns can be found in the building. So if you forgot your umbrella on the bus this is the place to look for it.",
+                "1": "The roof of the station is protected as a site of historic interest and was built 1998 by the plans of architects Charles de Picciotto and Jörg Steinwender.",
+                "2": "The train station is “smoke free” since February 15th 2004 which means smoking is prohibited."
+              }
+            ],
+            "next_stop": [
+              {
+                "0": "It’s only 350 metres to the Breitscheidplatz."
+              }
+            ],
+            "extra": [
+              {
+                "0": ""
+              }
+            ]
+          },
+          "de_stopInfo": {
+            "title": [
+              {
+                "0": "S+U Zoologischer Garten"
+              }
+            ],
+            "teaser": [
+              {
+                "0": "Ihr steht vor dem Zoo. Dem Bahnhof, nicht dem Tierpark. Hier trefft Ihr höchstwahrscheinlich auf viel ausgefallenere Kreaturen in ihrer natürlichen Umgebung.",
+                "1": "1882 erbaut hat der Bahnhof Zoo einen Haufen Künstler inspiriert und überrascht mit einer langen Geschichte. Einige der Fakten sind sogar ziemlich unterhaltsam. Stöbert doch einfach mal durch die Details!"
+              }
+            ],
+            "history": [
+              {
+                "0": "Zoologischer Garten - 1900<img src=https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/Zoo%2C_Berlin_1900.png/320px-Zoo%2C_Berlin_1900.png>",
+                "1": "Eröffnung des Durchgangbahnhofs am 7. Februar 1882. ",
+                "2": "1902 wurde die U-Bahn der heutigen Linie U2 in Betrieb genommen. ",
+                "3": "Bahnhof Zoo war bis zur Deutschen Wiedervereinigung der wichtigste Bahnhof Westdeutschlands. ",
+                "4": "In den 70er und 80er Jahren war die Rückseite an der Jebensstraße Treffpunkt der Drogen- und Strickerszene. Das Buch „ Wir Kinder vom Bahnhof Zoo“ zeigt eindrucksvoll die Abgründe der damaligen Zeit.",
+                "5": "Breitscheidplatz aus bei Nacht<img src=https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Zoofenster_vom_Breitscheidplatz_aus_bei_Nacht_20141023_5.jpg/360px-Zoofenster_vom_Breitscheidplatz_aus_bei_Nacht_20141023_5.jpg>",
+                "6": "Der Bau des Luxus-Hotels Waldorf Astoria verlieh dem Viertel neuen Glanz. ",
+                "7": "Die beliebte Shopping-Meile „Kurfürstendamm“ befindet sich ganz in der Nähe. Wenn Du die Karte noch nicht gefunden hast, klicke auf das erste Bild oder drehe einfach dein Handy."
+              }
+            ],
+            "qi": [
+              {
+                "0": "Die irische Rockband U2 wurde hier zum Song „Zoo Station“ inspiriert. Der berühmte Fotograf Helmut Newton sah 1938 bei seiner Flucht aus Berlin ein Gebäude in der Jebensstraße Nummer 2 direkt neben dem Bahnhof Zoo. Es war das letzte Berliner Haus, das er sah. Hier eröffnete 2004 nach seinem Tod das Museum für Fotografie, das als Hauptattraktion ganzjährig zahlreiche Bilder Newtons ausstellt.",
+                "1": "Die schwedische Punkband Randy setzt sich mit dem Song „Bahnhof Zoo“ mit der Perspektivlosigkeit von Jugendlichen auseinender. ",
+                "2": "Die Band Alphaville greift den Bahnhof in ihrem Song „Big in Japan“ auf. ",
+                "3": "Nina Hagen schrieb den Song und das gleichnamige Album „Auf’m Bahnhof Zoo“.",
+                "4": "Am Bahnhof Zoo nahm Mordopfer Bernd Brandes im März 2001 einen Zug nach Kassel. Dort traf er sich mit seinem späteren Mörder Armin Meiwes, der schließlich als „Kannibale von Rotenburg“ in die Geschichte eingehen würde."
+              }
+            ],
+            "look_out": [
+              {
+                "0": "Im Gebäude findet sich die Fundstelle der S-Bahn, der Berliner Busse und der Regionalbahn. Wer also seinen Regenschirm im Zug vergessen hat, hat hier die Chance, ihn wieder zu finden.",
+                "1": "Das Dach des Bahnhofes steht unter Denkmalschutz und wurde 1998 nach den Plänen der Architekten Charles de Picciotto und Jörg Steinwender erbaut.",
+                "2": "Am 15. Februar 2004 wurde die Station zum „rauchfreien Bahnhof“ erklärt"
+              }
+            ],
+            "next_stop": [
+              {
+                "0": "Zum Breitscheidplatz sind es lediglich 350 Meter."
+              }
+            ],
+            "extra": [
+              {
+                "0": ""
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

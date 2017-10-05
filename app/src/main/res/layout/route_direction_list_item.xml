@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="@dimen/list_item_height"
+    android:layout_marginStart="@dimen/margin_tiny"
+    android:layout_marginEnd="@dimen/margin_tiny"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="@dimen/margin_small"
+        android:layout_marginEnd="@dimen/margin_small"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/stepDistance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:textColor="?android:attr/textColorSecondary"
+            android:textSize="@dimen/tiny_list_text_size"
+            tools:text="123 m"/>
+
+        <TextView
+            android:id="@+id/stepDuration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:textColor="?android:attr/textColorSecondary"
+            android:textSize="@dimen/tiny_list_text_size"
+            tools:text="1.23 "/>
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/directionIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/favorites_icon_right_margin"
+        android:layout_marginTop="@dimen/favorites_icon_top_margin"
+        android:contentDescription="@string/content_description"
+        android:focusable="false"
+        tools:src="@drawable/ic_heart" />
+
+    <TextView
+        android:id="@+id/directions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/favorites_icon_top_margin"
+        android:textColor="?android:textColorPrimary"
+        android:textSize="@dimen/default_list_text_size"
+        tools:text="Direction Description" />
+
+</LinearLayout>

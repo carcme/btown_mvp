@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--DONATE STRINGS-->
+    <string-array name="donate_items" translatable="false">
+        <item>test_1</item>
+        <item>test_2</item>
+        <item>test_3</item>
+        <item>test_4</item>
+        <item>test_5</item>
+    </string-array>
+
+
+    <!--DONATE STRINGS-->
+    <string-array name="donate_items_names">
+        <item>Coffee</item>
+        <item>Sandwich</item>
+        <item>Lunch</item>
+        <item>Dinner</item>
+        <item>Love</item>
+    </string-array>
+
+    <array name="poi_category_icons" translatable="false">
+        <item>@drawable/ic_wiki</item> 	<!--food and drink-->
+        <item>@drawable/ic_food_drink</item> 	<!--food and drink-->
+        <item>@drawable/ic_beer</item>			<!--spati-->
+        <item>@drawable/ic_attractions</item>
+        <item>@drawable/ic_art</item>
+
+        <item>@drawable/ic_attractions</item>
+        <item>@drawable/ic_castle</item>
+        <item>@drawable/ic_nature</item>
+        <item>@drawable/ic_money</item>
+        <item>@drawable/ic_heart</item>
+
+        <item>@drawable/ic_music</item>
+        <item>@drawable/ic_shop</item>
+        <item>@drawable/ic_hospital</item>
+        <item>@drawable/ic_hotel</item>
+        <item>@drawable/ic_directions_bus</item>
+    </array>
+
+    <!--First Item is display name, 2nd is subtitle, 3rd is "search type" all other items are used to search for places in area-->
+    <string-array name="poi_category_tags">
+
+        <!--food and drink-->
+        <item>Wikipedia:Get Wikipedia entries in this area</item>
+        <!--food and drink-->
+        <item>Food &amp; Drink:Stop for a bite or a beer:amenity=bbq:amenity=cafe:amenity=fast_food:amenity=food_court:amenity=ice_cream:amenity=restaurant:amenity=bar:amenity=biergarten:amenity=pub</item>
+        <!--<item>Drink:Coffee or Bar:amenity=bar:amenity=biergarten:amenity=cafe:amenity=pub</item>-->
+        <!--<item>Späti:Cheap beer and snacks for walking or watching&#8230;:shop=confectionery:shop=convenience:shop=bakery:shop=alcohol:shop=beverages:shop=ice_cream:shop=pastry:shop=kiosk:shop=supermarket</item>-->
+
+        <!--tourism-->
+        <item>Sightseeing:Top attractions in your area:amenity=fountain:amenity=planetarium:tourism=aquarium:tourism=artwork:tourism=attraction:tourism=museum:tourism=viewpoint:tourism=zoo:historic=building:historic=castle:historic=city_gate:historic=memorial:historic=monument:historic=pillory:historic=ruins</item>
+        <!--		<item>Information:Got lost? You know you have a map right!:tourism=information</item>-->
+        <item>Arts &amp; Culture:Check out the sights:amenity=arts_centre:amenity=planetarium:amenity=theatre:amenity=fountain:tourism=gallery:tourism=gallery:tourism=museum:tourism=viewpoint:tourism=artwork</item>
+        <item>Tourism:Tourist Attractions:amenity=planetarium:amenity=fountain:tourism=museum:tourism=viewpoint:tourism=aquarium:tourism=zoo:tourism=theme_park:tourism=attraction</item>
+        <item>Historic:Museums and historic sites:tourism=museum:historic=castle:historic=building:historic=city_gate:historic=ruins:historic=tomb:historic=pillory:historic=memorial:historic=monument:historic=monastery:amenity=monastery:historic=citywalls:tourism=attraction</item>
+        <item>Nature:Get out to the sticks:amenity=graveyard:leisure=beach_resort:leisure=common:leisure=nature_reserve:leisure=park:leisure=swimming_area:leisure=swimming_pool:tourism=picnic_site:landuse=cemetery:landuse=forest:landuse=recreation_ground:natural=wood:natural=beach:natural=peak:natural=stone</item>
+
+        <!--money-->
+        <item>Money:Banks and ATM:amenity=atm:amenity=bank:amenity=bureau_de_change</item>
+
+        <!--transport-->
+        <!--<item>Bicycle:Hire a bicycle for the day:amenity=bicycle_rental</item>-->
+        <!--		<item>Car:Fill your tank or hire a car:amenity=taxi:amenity=car_rental:amenity=fuel:amenity=parking:shop=fuel</item>
+        -->
+        <!--Adult-->
+        <item>Adult:Entertainment for the discerning ladies and gentlemen:amenity=brothel:amenity=casino:amenity=gambling:amenity=stripclub:amenity=swingerclub:amenity=sauna:leisure=sauna:leisure=adult_gaming_centre:shop=massage:shop=erotic</item>
+        <item>Nightlife:Dance the night away:amenity=nightclub::leisure=dance</item>
+
+        <!--shopping-->
+        <!--		<item>Shopping:Department Store &amp; Mall:shop=department_store:shop=mall</item>-->
+        <item>Shopping:Clothing, Shoes &amp; Accessories:shop=department_store:shop=mall:shop=bag:shop=boutique:shop=clothes:shop=fashion:shop=jewelry:shop=leather:shop=shoes</item>
+        <!--
+                <item>Shopping:Health &amp; Beauty:shop=beauty:shop=chemist:shop=cosmetics:shop=hairdresser:shop=perfumery</item>
+        -->
+
+        <!--Emergency-->
+        <item>Emergency:Any emergency should be covered here:shop=chemist:amenity=clinic:amenity=dentist:amenity=doctors:amenity=hospital:amenity=pharmacy:amenity=embassy:amenity=police:emergency=phone</item>
+
+        <item>Hotels:Home from home:tourism=apartment:tourism=hotel:tourism=guest_house:tourism=hostel:tourism=sleeping_pods:</item>
+
+        <!--<item>Public Transport:Getting Around the City:amenity=bus_station:amenity=taxi:highway=bus_stop:railway=light_rail:railway=rail:railway=subway:railway=subway_entrance:railway=tram:railway=station:railway=tram_stop:building=train_station:public_transport=stop_position:public_transport=platform:public_transport=station:public_transport=stop_area</item>-->
+        <!--
+                <item>Religion:Places of Worship:amenity=place_of_worship:building=chapel:building=church:building=mosque:building=temple:building=synagogue:building=:building=cathedral</item>
+        -->
+
+    </string-array>
+
+
+</resources>
