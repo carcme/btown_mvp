@@ -1,6 +1,7 @@
 package me.carc.btownmvp.map.search.fragments;
 
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -75,7 +76,7 @@ public abstract class QuickSearchListFragment extends BaseListFragment {
         setListAdapter(mylistAdapter);
 
         ListView listView = getListView();
-        listView.setBackgroundColor(getResources().getColor(R.color.almostBlack));
+        listView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.almostBlack));
         listView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -126,6 +127,18 @@ public abstract class QuickSearchListFragment extends BaseListFragment {
         if (mylistAdapter != null) {
             mylistAdapter.addItems(listItems);
         }
+        bugFixShowHide();
+    }
+
+
+    public void sortList(int sortBy) {
+        if (mylistAdapter != null) {
+            mylistAdapter.sortList(sortBy);
+        }
+//        bugFixShowHide();
+    }
+
+    private void bugFixShowHide(){
         // Bug fix - without this, the last element repeats after deleting items!!
         getListView().setVisibility(View.GONE);
         getListView().setVisibility(View.VISIBLE);

@@ -5,11 +5,14 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
 
+import org.osmdroid.util.GeoPoint;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Collect the route directions
  * Created by bamptonm on 30/09/2017.
  */
 
@@ -69,29 +72,17 @@ public class RouteResult implements Parcelable, Serializable {
             @SerializedName("street_name")
             public String street_name;
         }
-/*
+
+        @SerializedName("points_encoded")
+        public boolean points_encoded;
+
         @SerializedName("points")
-        public List<Points> points = new ArrayList<>();
+        public String points;
 
+        private ArrayList<GeoPoint> routePoints;
 
-        public static class Points {
-
-            @SerializedName("coordinates")
-            public double[][] coordinates;
-
-
-            public double getLon(){return coordinates[0];}
-            public double getLat(){return coordinates[1];}
-            public double getElevation(){return coordinates.length > 2 ? coordinates[3] : null;}
-
-
-
-        }
-
-        public GeoPoint getPointsGeoPoint(int index) {
-            return new GeoPoint(points.get(index).getLat(),points.get(index).getLon());
-        }
-*/
+        public void setRoutePoints(ArrayList<GeoPoint> points) { routePoints = points; }
+        public ArrayList<GeoPoint> getRoutePoints() { return routePoints; }
 
 
     }
@@ -114,7 +105,7 @@ public class RouteResult implements Parcelable, Serializable {
     }
 
     protected RouteResult(Parcel in) {
-        this.paths = new ArrayList<Paths>();
+        this.paths = new ArrayList<>();
         in.readList(this.paths, List.class.getClassLoader());
     }
 

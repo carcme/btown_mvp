@@ -11,10 +11,9 @@
 
     <!-- string name="lat_lon_pattern">Lat: %1$.5f Lon: %2$.5f</string -->
     <string name="map_mode">Map mode</string>
-    <string name="shared_string_delete">Delete</string>
-    <string name="shared_string_delete_all">Delete All</string>
-    <string name="shared_string_share">Share</string>
-    <string name="shared_string_close">Close</string>
+    <string name="poi_string_open">Open</string>
+    <string name="poi_string_closed">Closed</string>
+
     <string name="anonymous">Anonymous</string>
     <string name="manage_account">Manage Account</string>
     <string name="search_no_results_found">No Results Found. Please expand the map radius</string>
@@ -24,30 +23,24 @@
     <string name="tour_search_food" translatable="false">amenity=bbq:amenity=cafe:amenity=fast_food:amenity=food_court:amenity=ice_cream:amenity=restaurant:amenity=bar:amenity=biergarten:amenity=cafe:amenity=pub</string>
 
     <string name="add_your_comment">Add comment</string>
-    <string name="save">Save</string>
     <string name="route_to">Route</string>
     <string name="share">Share</string>
     <string name="more">More</string>
 
     <string name="added_to_favorites">Added to Favorites</string>
     <string name="seaching">Searching&#8230;</string>
-    <string name="closed">Closed</string>
-    <string name="open">Open</string>
 
 
-    <string name="shared_string_show_details">Show details</string>
-    <string name="shared_string_io_error">I/O error occurred</string>
     <string name="send_location">Send location</string>
     <string name="zxing_barcode_scanner_not_found">ZXing Barcode Scanner application not installed. Search in Google Play?</string>
 
-    <string name="shared_string_send">Send</string>
-    <string name="shared_string_copy">Copy</string>
     <string name="share_geo">geo:</string>
     <string name="shared_string_qr_code">QR-code</string>
     <string name="no_address_found">No address found</string>
-    <string name="shared_string_location">Location</string>
     <string name="share_menu_location">Share location</string>
-
+    <string name="sort_by_time">Sort by Time</string>
+    <string name="sort_by_distance">Sort by Distance</string>
+    <string name="show_all_on_map">Show all on Map</string>
 
 
 </resources>

@@ -2,4 +2,10 @@
 <resources>
     <string name="rationale_storage">B-Town needs to store map tiles.</string>
     <string name="permission_rejected_msg">B-Town really needs those permissions for the map functions. Hope you change your mind and grant the permissions another time.</string>
+
+
+    <string name="enable_gps_request">Please enable the device GPS</string>
+
+    <string name="no_gps">No GPS</string>
+
 </resources>

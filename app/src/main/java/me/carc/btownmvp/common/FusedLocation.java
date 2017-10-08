@@ -9,6 +9,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -20,31 +21,35 @@ import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListe
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
-import java.util.Calendar;
-
 import pub.devrel.easypermissions.EasyPermissions;
 
 /**
  * Interface for using Google's FusedLocationAPI.
  */
 public class FusedLocation implements ConnectionCallbacks, OnConnectionFailedListener, com.google.android.gms.location.LocationListener {
+    public interface Callback {
+        void onConnected(boolean connected);
+        void onLocationChanged(Location location);
+    }
+    private Callback mCallback = null;
+
 
     private static final String TAG = C.DEBUG + Commons.getTag();
 
     /**
      * The desired interval for location updates. Inexact. Updates may be more or less frequent.
      */
-    public static final long UPDATE_INTERVAL_IN_MILLISECONDS = 1000;
+    private static final long UPDATE_INTERVAL_IN_MILLISECONDS = 1000;
     /**
      * The fastest rate for active location updates. Exact. Updates will never be more frequent
      * than this value.
      */
-    public static final long FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS = UPDATE_INTERVAL_IN_MILLISECONDS / 2;
+    private static final long FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS = UPDATE_INTERVAL_IN_MILLISECONDS / 2;
 
     /**
      * Stores parameters for requests to the FusedLocationProviderApi.
      */
-    protected LocationRequest mLocationRequest;
+    private LocationRequest mLocationRequest;
     /**
      * Provides the entry point to Google Play services.
      */
@@ -53,19 +58,6 @@ public class FusedLocation implements ConnectionCallbacks, OnConnectionFailedLis
     private Location mCurrentLocation = null;
     private int PRIORITY = LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY;
     private boolean inProgress = false;
-    private int numTries = 0;
-    private long diffTime = 5000;
-    private float minAccuracy = 35;
-    private int maxTries = 1;
-    private boolean lastKnownLocation = false;
-
-
-    public Callback mCallback = null;
-
-    public interface Callback {
-        void onConnected(boolean connected);
-        void onLocationChanged(Location location);
-    }
 
 
     public FusedLocation(Context c, Callback callback) {
@@ -82,11 +74,9 @@ public class FusedLocation implements ConnectionCallbacks, OnConnectionFailedLis
      * @param maxTries Maximum number of times to sample GPS readings
      */
     public void getCurrentLocation(int maxTries) {
-        this.maxTries = maxTries;
         chooseNetworkGps();
         buildGoogleApiClient();
-        lastKnownLocation = false;
-        inProgress = true;
+                inProgress = true;
         if (canGetLocation())
             mGoogleApiClient.connect();
     }
@@ -101,11 +91,8 @@ public class FusedLocation implements ConnectionCallbacks, OnConnectionFailedLis
      */
 
     public void getLastKnownLocation(long diffTime, float minAccuracy) {
-        this.diffTime = diffTime;
-        this.minAccuracy = minAccuracy;
         chooseNetworkGps();
         buildGoogleApiClient();
-        lastKnownLocation = true;
         inProgress = true;
         if (canGetLocation())
             mGoogleApiClient.connect();
@@ -115,7 +102,7 @@ public class FusedLocation implements ConnectionCallbacks, OnConnectionFailedLis
         mCallback = callback;
     }
 
-    protected synchronized void buildGoogleApiClient() {
+    private synchronized void buildGoogleApiClient() {
         if(Commons.isNull(mGoogleApiClient)) {
             mGoogleApiClient = new GoogleApiClient.Builder(mContext)
                     .addConnectionCallbacks(this)
@@ -126,7 +113,7 @@ public class FusedLocation implements ConnectionCallbacks, OnConnectionFailedLis
         createLocationRequest();
     }
 
-    protected void createLocationRequest() {
+    private void createLocationRequest() {
         mLocationRequest = new LocationRequest();
 
         // Sets the desired interval for active location updates. This interval is
@@ -176,27 +163,17 @@ public class FusedLocation implements ConnectionCallbacks, OnConnectionFailedLis
      */
     @Override
     public void onLocationChanged(Location location) {
-        numTries++;
+//        numTries++;
         if (mCurrentLocation == null)
             mCurrentLocation = location;
         else if (mCurrentLocation.getAccuracy() > location.getAccuracy()) {
             mCurrentLocation = location;
         }
-        if (numTries >= maxTries) {
-            mCallback.onLocationChanged(mCurrentLocation);
-            stopLocationUpdates();
-        } else {
-            chooseNetworkGps();
-            //Toast.makeText(mContext, "latitude: "+mCurrentLocation.getLatitude()+" Longitude: "+mCurrentLocation.getLongitude(), Toast.LENGTH_SHORT).show();
-        }
-
+        chooseNetworkGps();
     }
 
-    public Location getLocation(int maxtries) {
-        if (numTries >= maxtries)
+    public Location getLocation() {
             return mCurrentLocation;
-        else
-            return null;
     }
 
     /**
@@ -214,15 +191,10 @@ public class FusedLocation implements ConnectionCallbacks, OnConnectionFailedLis
         // the Start Updates button.
         //
         if (EasyPermissions.hasPermissions(mContext, Manifest.permission.ACCESS_FINE_LOCATION)) {
-            if (lastKnownLocation) {
-                mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-                if (mCurrentLocation != null && (mCurrentLocation.getTime() - Calendar.getInstance().getTime().getTime()) < diffTime
-                        && mCurrentLocation.getAccuracy() <= minAccuracy) {
-                    mCallback.onLocationChanged(mCurrentLocation);
-                    reset();
-                } else {
-                    startLocationUpdates();
-                }
+             mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+            if (mCurrentLocation != null) {
+                mCallback.onLocationChanged(mCurrentLocation);
+                startLocationUpdates();
             } else {
                 startLocationUpdates();
             }
@@ -240,7 +212,7 @@ public class FusedLocation implements ConnectionCallbacks, OnConnectionFailedLis
     }
 
     @Override
-    public void onConnectionFailed(ConnectionResult result) {
+    public void onConnectionFailed(@NonNull ConnectionResult result) {
         // Refer to the javadoc for ConnectionResult to see what error codes might be returned in
         // onConnectionFailed.
         Log.i(TAG, "Connection failed: ConnectionResult.getErrorCode() = " + result.getErrorCode());
@@ -283,11 +255,9 @@ public class FusedLocation implements ConnectionCallbacks, OnConnectionFailedLis
         alertDialog.show();
     }
 
-    public void reset() {
-        numTries = 0;
+    private void reset() {
         mCurrentLocation = null;
         inProgress = false;
-        lastKnownLocation = false;
         mGoogleApiClient.disconnect();
     }
 
@@ -295,11 +265,11 @@ public class FusedLocation implements ConnectionCallbacks, OnConnectionFailedLis
         return isNetworkEnabled() || isGPSEnabled();
     }
 
-    public boolean isNetworkEnabled() {
+    private boolean isNetworkEnabled() {
         return ((LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE)).isProviderEnabled(LocationManager.NETWORK_PROVIDER);
     }
 
-    public boolean isGPSEnabled() {
+    private boolean isGPSEnabled() {
         return ((LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE)).isProviderEnabled(LocationManager.GPS_PROVIDER);
     }
 

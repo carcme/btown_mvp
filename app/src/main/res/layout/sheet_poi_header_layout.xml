@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/margin_small"
     android:orientation="vertical">
 
     <ImageView
@@ -54,7 +55,7 @@
             android:maxLines="1"
             android:gravity="bottom"
             android:textColor="@color/fabSearchProgressColor"
-            tools:text="Open" />
+            tools:text="@string/poi_string_closed" />
 
     </LinearLayout>
 
@@ -65,7 +66,7 @@
         android:layout_alignParentEnd="true"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:scaleType="fitCenter"
-        app:srcCompat="@drawable/ic_navigation" />
+        app:srcCompat="@drawable/ic_navigation_large" />
 
     <TextView
         android:id="@+id/featureSubtitle"

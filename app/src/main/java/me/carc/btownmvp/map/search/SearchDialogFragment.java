@@ -10,7 +10,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -18,8 +17,10 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -33,6 +34,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.OnTextChanged;
 import butterknife.Unbinder;
 import me.carc.btownmvp.MapActivity;
@@ -57,15 +59,10 @@ import static android.view.View.GONE;
  * Search dialog - show categories and history
  */
 public class SearchDialogFragment extends DialogFragment implements ISearch.View {
-
-
     public interface SearchListener {
         void searchItemSelected(Place poi);
-
         void showPlaceItem(Place poi);
-
-        void showFavoriteItem(Place poi);
-
+        void showFromDatabase(int dbType, Place poi);
         void doWikiLookup();
     }
 
@@ -88,18 +85,18 @@ public class SearchDialogFragment extends DialogFragment implements ISearch.View
     public static final int SEARCH_ITEM_HISTORY = 3;
     public static final int SEARCH_ITEM_FAVORITE = 4;
 
+    public static final int SORT_TIME = 1;
+    public static final int SORT_DATE = 2;
+
     private TinyDB db;
 
     private GeoPoint myLocation = null;
     private GeoPoint mapCenter;
 
     private String searchQuery;
-    //    private boolean paused;
     private boolean show;
-    //    private boolean hidden;
     private String toolbarTitle;
     private boolean toolbarVisible;
-    private boolean showingCategories;
 
     private QuickSearchMainListFragment mainSearchFragment;
     private QuickSearchHistoryListFragment historySearchFragment;
@@ -125,7 +122,7 @@ public class SearchDialogFragment extends DialogFragment implements ISearch.View
     ImageButton clearButton;
 
     @BindView(R.id.settingButton)
-    ImageButton settingsButton;
+    ImageButton settingButton;
 
     @BindView(R.id.tab_toolbar_layout)
     View tabToolbarView;
@@ -250,7 +247,9 @@ public class SearchDialogFragment extends DialogFragment implements ISearch.View
 
     public void show() {
         getDialog().show();
-        Snackbar.make(tabLayout, R.string.search_no_results_found, Snackbar.LENGTH_LONG).show();
+        updateClearButtonVisibility(true);
+        progressBar.setVisibility(GONE);
+        Toast.makeText(getActivity(), R.string.search_no_results_found, Toast.LENGTH_LONG).show();
     }
 
     public void hide() {
@@ -284,15 +283,7 @@ public class SearchDialogFragment extends DialogFragment implements ISearch.View
         searchToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (tabLayout.getSelectedTabPosition() == 0) {
                     closeSearch();
-                } else if (!showingCategories) {
-                    if (Commons.isNotNull(categoriesSearchFragment) || showingCategories) {
-                        presenter.loadCategories();
-                    }
-                } else {
-                    closeSearch();
-                }
             }
         });
 
@@ -315,33 +306,7 @@ public class SearchDialogFragment extends DialogFragment implements ISearch.View
                 }
         );
 
-/*        searchEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                String newQueryText = s.toString();
-                presenter.setSearchHint(searchEditText.length());
-                updateClearButtonVisibility(true);
-                updateTabbarVisibility(newQueryText.length() == 0);
-
-                if (!searchQuery.equalsIgnoreCase(newQueryText)) {
-                    searchQuery = newQueryText;
-                    if (!Commons.isEmpty(searchQuery))
-                        presenter.runMainSearch(searchQuery);
-                }
-            }
-        });
-*/
-
         clearButton.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_times));
-
         clearButton.setOnClickListener(new View.OnClickListener() {
                                            @Override
                                            public void onClick(View v) {
@@ -351,14 +316,6 @@ public class SearchDialogFragment extends DialogFragment implements ISearch.View
                                                }
                                            }
                                        }
-        );
-
-        settingsButton.setOnClickListener(new View.OnClickListener() {
-                                              @Override
-                                              public void onClick(View v) {
-                                                  Toast.makeText(getActivity(), "TODO", Toast.LENGTH_SHORT).show();
-                                              }
-                                          }
         );
 
         if (Commons.isNull(db))
@@ -382,6 +339,55 @@ public class SearchDialogFragment extends DialogFragment implements ISearch.View
         }
         presenter.showLongPressSelectionDialog(type, place);
     }
+
+
+    @OnClick(R.id.settingButton)
+    void onSettingOverflow() {
+        PopupMenu popupMenu = new PopupMenu(getActivity(), settingButton);
+        popupMenu.inflate(R.menu.menu_search_overflow);
+        popupMenu.setOnMenuItemClickListener(menuListener);
+        popupMenu.show();
+    }
+
+    private PopupMenu.OnMenuItemClickListener menuListener = new PopupMenu.OnMenuItemClickListener() {
+        @Override
+        public boolean onMenuItemClick(MenuItem item) {
+
+            int index = viewPager.getCurrentItem();
+
+            switch (item.getItemId()) {
+                case R.id.menu_sort_date:
+                    if (Commons.isNotNull(favoriteSearchFragment) && index == 1) {
+                        favoriteSearchFragment.sortList(SORT_DATE);
+                    } else if (Commons.isNotNull(historySearchFragment) && index == 2) {
+                        historySearchFragment.sortList(SORT_DATE);
+                    }
+                    return true;
+
+                case R.id.menu_sort_time:
+                    if (Commons.isNotNull(favoriteSearchFragment) && index == 1) {
+                        favoriteSearchFragment.sortList(SORT_TIME);
+                    } else if (Commons.isNotNull(historySearchFragment) && index == 2) {
+                        historySearchFragment.sortList(SORT_TIME);
+                    }
+                    return true;
+
+                case R.id.menu_show_all:
+                    if (Commons.isNotNull(favoriteSearchFragment) && index == 1 ) {
+                        if(favoriteSearchFragment.getAdapter().getCount() > 0)
+                            cbSearchListener.showFromDatabase(SEARCH_ITEM_FAVORITE, null);
+
+                    } else if (Commons.isNotNull(historySearchFragment) && index == 2) {
+                        if(historySearchFragment.getAdapter().getCount() > 0)
+                            cbSearchListener.showFromDatabase(SEARCH_ITEM_HISTORY, null);
+                    }
+                    return true;
+
+                default:
+                    return false;
+            }
+        }
+    };
 
 
     @OnTextChanged(R.id.searchEditText)
@@ -451,23 +457,18 @@ public class SearchDialogFragment extends DialogFragment implements ISearch.View
                 break;
 
             case SEARCH_ITEM_POI_CATEGORIES:
-                showingCategories = true;
                 categoriesSearchFragment.updateListAdapter(places);
                 break;
 
             case SEARCH_ITEM_HISTORY:
                 if (Commons.isNotNull(places)) {
-                    showingCategories = false;
                     historySearchFragment.updateListAdapter(places);
-                    historySearchFragment.getAdapter().notifyDataSetChanged();
                 }
                 break;
 
             case SEARCH_ITEM_FAVORITE:
                 if (Commons.isNotNull(places)) {
-                    showingCategories = false;
                     favoriteSearchFragment.updateListAdapter(places);
-                    favoriteSearchFragment.getAdapter().notifyDataSetChanged();
                 }
                 break;
         }
@@ -476,12 +477,12 @@ public class SearchDialogFragment extends DialogFragment implements ISearch.View
 
     @Override
     public void updateClearButtonVisibility(boolean show) {
-        if (show) {
-            clearButton.setVisibility(searchEditText.length() > 0 ? View.VISIBLE : GONE);
-        } else {
-            clearButton.setVisibility(GONE);
-        }
-        settingsButton.setVisibility(clearButton.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+        if (show) clearButton.setVisibility(searchEditText.length() > 0 ? View.VISIBLE : GONE);
+         else     clearButton.setVisibility(View.GONE);
+
+        boolean pos = viewPager.getCurrentItem() == 0;
+        if(pos)settingButton.setVisibility(View.GONE);
+        else   settingButton.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -545,18 +546,22 @@ public class SearchDialogFragment extends DialogFragment implements ISearch.View
             else
                 cbSearchListener.searchItemSelected(place);
 
+        } else if(place.getPlaceId() == SEARCH_ITEM_HISTORY){
+//            cbSearchListener.showPlaceItem(place);
+            cbSearchListener.showFromDatabase(place.getPlaceId(), place);
+
         } else if (place.getPlaceId() == SEARCH_ITEM_MAIN) {
             presenter.addToHistory(place);
             cbSearchListener.showPlaceItem(place);
 
         } else if (place.getPlaceId() == SEARCH_ITEM_FAVORITE) {
-            cbSearchListener.showFavoriteItem(place);
+//            cbSearchListener.showFavoriteItem(place);
+            cbSearchListener.showFromDatabase(place.getPlaceId(), place);
         }
     }
 
     public void updatePoiDirection(float dir, GeoPoint myLocation) {
         int index = viewPager.getCurrentItem();
-
         if (Commons.isNotNull(favoriteSearchFragment) && index == 1) {
             favoriteSearchFragment.updateLocation(myLocation, dir);
         } else if (Commons.isNotNull(historySearchFragment) && index == 2) {

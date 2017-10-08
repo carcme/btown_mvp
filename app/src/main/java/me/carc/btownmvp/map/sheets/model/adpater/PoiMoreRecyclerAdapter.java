@@ -25,7 +25,7 @@ public class PoiMoreRecyclerAdapter extends RecyclerView.Adapter<PoiMoreRecycler
 
     private static final String TAG = C.DEBUG + Commons.getTag();
     private final ArrayList<InfoCard> list;
-    public MyClickListener onClickListener;
+    private MyClickListener onClickListener;
 
 
     public PoiMoreRecyclerAdapter(ArrayList<InfoCard> tours, MyClickListener listener ) {
@@ -42,14 +42,14 @@ public class PoiMoreRecyclerAdapter extends RecyclerView.Adapter<PoiMoreRecycler
     @Override
     public void onBindViewHolder(final ViewHolder holder, int pos) {
 
+        // build the icon
         IconicsDrawable drawable = new IconicsDrawable(holder.itemView.getContext(),
                 list.get(pos).getIcon())
                 .color(ContextCompat.getColor(holder.itemView.getContext(), R.color.sheet_icon_color))
                 .sizeDp(20);
-
         holder.infoText.setCompoundDrawablesRelativeWithIntrinsicBounds(drawable, null, null, null);
-        holder.infoText.setText(list.get(pos).getData());
 
+        // set link mask before setting the setText(...)
         switch (list.get(pos).getType()) {
             case EMAIL:
                 holder.infoText.setAutoLinkMask(Linkify.EMAIL_ADDRESSES);
@@ -63,6 +63,9 @@ public class PoiMoreRecyclerAdapter extends RecyclerView.Adapter<PoiMoreRecycler
                 holder.infoText.setAutoLinkMask(Linkify.PHONE_NUMBERS);
                 break;
         }
+
+        // set the text
+        holder.infoText.setText(list.get(pos).getData());
 
 
         // Click Handlers
@@ -87,11 +90,11 @@ public class PoiMoreRecyclerAdapter extends RecyclerView.Adapter<PoiMoreRecycler
         return list.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder {
 
         CapitalisedTextView infoText;
 
-        public ViewHolder(View v) {
+        ViewHolder(View v) {
             super(v);
 
             infoText = (CapitalisedTextView ) v.findViewById(R.id.infoText);

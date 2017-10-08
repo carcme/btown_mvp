@@ -37,6 +37,7 @@ public class Place implements Parcelable {
     private int iconRes;
     private String iconName;
     private int iconColor;
+    private long timestamp;
 
     private String userComment;
 
@@ -61,6 +62,7 @@ public class Place implements Parcelable {
         setPlaceId(builder.placeId);
         setDisplayType(builder.displayType);
         setUserComment(builder.userComment);
+        setTimestamp(builder.timestamp);
     }
 
     @Override
@@ -110,7 +112,7 @@ public class Place implements Parcelable {
      * get placeid of location.
      * placeid is string id and can be used to get details of a place
      *
-     * @return
+     * @return place id
      */
     public int getPlaceId() {
         return placeId;
@@ -148,7 +150,7 @@ public class Place implements Parcelable {
     /**
      * set location types
      *
-     * @param types
+     * @param types array of tags
      */
     public void setTypes(String[] types) {
         this.types = types;
@@ -211,6 +213,9 @@ public class Place implements Parcelable {
     public void setIconColor(int color) { this.iconColor = color; }
     public int getIconColor() { return iconColor; }
 
+    public void setTimestamp(long timestamp) { this.timestamp = timestamp; }
+    public long getTimestamp() { return timestamp; }
+
 
     public GeoPoint getGeoPoint() {
         return new GeoPoint(getLat(), getLng());
@@ -244,7 +249,7 @@ public class Place implements Parcelable {
         private String osmType;
         private String displayType;
         private String userComment;
-
+        private long timestamp;
 
         public Builder() {
         }
@@ -336,6 +341,11 @@ public class Place implements Parcelable {
             return this;
         }
 
+        public Builder timestamp(long val) {
+            timestamp = val;
+            return this;
+        }
+
         public Place build() {
             return new Place(this);
         }
@@ -366,6 +376,7 @@ public class Place implements Parcelable {
         dest.writeString(this.iconName);
         dest.writeInt(this.iconColor);
         dest.writeString(this.userComment);
+        dest.writeLong(this.timestamp);
     }
 
     protected Place(Parcel in) {
@@ -387,6 +398,7 @@ public class Place implements Parcelable {
         this.iconName = in.readString();
         this.iconColor = in.readInt();
         this.userComment = in.readString();
+        this.timestamp = in.readLong();
     }
 
     public static final Creator<Place> CREATOR = new Creator<Place>() {

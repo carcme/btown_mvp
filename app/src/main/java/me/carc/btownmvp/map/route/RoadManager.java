@@ -5,12 +5,17 @@ import org.osmdroid.views.overlay.Polyline;
 
 import java.util.ArrayList;
 
+import me.carc.btownmvp.data.model.RouteResult;
+
 /**
- * Created by bamptonm on 02/10/2017.
+ * Generic class to get a route between a start and a destination point,
+ * going through a list of waypoints.
+ *
+ * @author M.Kergall
  */
 public abstract class RoadManager {
 
-    protected String mOptions;
+    private String mOptions;
 
     /**
      * @param waypoints
@@ -57,16 +62,16 @@ public abstract class RoadManager {
 
     /**
      * Using the road high definition shape, builds and returns a Polyline.
-     * @param road
+     * @param path
      * @param color Android Color. Setting some transparency is highly recommended.
      * @param width in pixels.
      */
-    public static Polyline buildRoadOverlay(Road road, int color, float width){
+    public static Polyline buildRoadOverlay(RouteResult.Paths path, int color, float width){
         Polyline roadOverlay = new Polyline();
         roadOverlay.setColor(color);
         roadOverlay.setWidth(width);
-        if (road != null) {
-            ArrayList<GeoPoint> polyline = road.mRouteHigh;
+        if (path != null) {
+            ArrayList<GeoPoint> polyline = path.getRoutePoints();
             roadOverlay.setPoints(polyline);
         }
         return roadOverlay;
@@ -76,8 +81,8 @@ public abstract class RoadManager {
      * Builds an overlay for the road shape with a default (and nice!) style.
      * @return route shape overlay
      */
-    public static Polyline buildRoadOverlay(Road road){
-        return buildRoadOverlay(road, 0x800000FF, 5.0f);
+    public static Polyline buildRoadOverlay(RouteResult.Paths path){
+        return buildRoadOverlay(path, 0x800000FF, 5.0f);
     }
 
 }

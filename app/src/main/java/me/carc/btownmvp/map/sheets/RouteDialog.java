@@ -22,7 +22,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 import me.carc.btownmvp.MapActivity;
-import me.carc.btownmvp.map.interfaces.MyClickListener;
 import me.carc.btownmvp.R;
 import me.carc.btownmvp.Utils.FragmentUtil;
 import me.carc.btownmvp.Utils.MapUtils;
@@ -33,6 +32,7 @@ import me.carc.btownmvp.data.model.ReverseResult;
 import me.carc.btownmvp.data.model.RouteResult;
 import me.carc.btownmvp.data.reverse.ReverseApi;
 import me.carc.btownmvp.data.reverse.ReverseServiceProvider;
+import me.carc.btownmvp.map.interfaces.MyClickListener;
 import me.carc.btownmvp.map.sheets.model.RouteInfo;
 import me.carc.btownmvp.map.sheets.model.adpater.RouteInstructionsAdapter;
 import retrofit2.Call;
@@ -46,6 +46,7 @@ import retrofit2.Response;
 public class RouteDialog extends BottomSheetDialogFragment {
     public interface RouteDialogCallback {
         void onRouteChange(RouteInfo info);
+        void onRouteClose();
     }
 
     public static final String ID_TAG = "RouteDialog";
@@ -135,13 +136,14 @@ public class RouteDialog extends BottomSheetDialogFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setStyle(STYLE_NORMAL, R.style.PoiItemDialog);
+        setStyle(STYLE_NORMAL, R.style.RoutingDialog);
     }
 
     @Override
     public void setupDialog(final Dialog dialog, int style) {
         View rootView = View.inflate(getContext(), R.layout.sheet_route_base_layout, null);
         unbinder = ButterKnife.bind(this, rootView);
+
 
         dialog.setContentView(rootView);
 
@@ -154,12 +156,15 @@ public class RouteDialog extends BottomSheetDialogFragment {
         if (behavior != null && behavior instanceof BottomSheetBehavior) {
             this.behavior = (BottomSheetBehavior) behavior;
             this.behavior.setBottomSheetCallback(mBottomSheetCB);
+            this.behavior.setHideable(false);
         }
 
         try {
+            assert args != null;
             routeInfo = args.getParcelable(INFO);
-            RouteResult graphhopperResult = args.getParcelable(RESULT);
-            RouteResult.Paths path = graphhopperResult.getPath();
+            RouteResult routeResult = args.getParcelable(RESULT);
+            assert routeResult != null;
+            RouteResult.Paths path = routeResult.getPath();
 
             if (Commons.isNull(path))
                 return;
@@ -228,18 +233,30 @@ public class RouteDialog extends BottomSheetDialogFragment {
     void onTrainClick() {
     }
 
+    @OnClick(R.id.routeCancelBtn)
+    void onClose() {
+        RouteDialogCallback callback = callback();
+        if(Commons.isNotNull(callback)) callback.onRouteClose();
+    }
+
+
+
     private void changeRouteMode(RouteInfo.Vehicle vehicle) {
         if (Commons.isNotNull(routeInfo)) {
 
-            // reset the vehicle icon colors
-            ViewUtils.changeTextViewIconColour(getActivity(), routeCar, R.color.sheet_icon_color);
-            ViewUtils.changeTextViewIconColour(getActivity(), routeWalk, R.color.sheet_icon_color);
-            ViewUtils.changeTextViewIconColour(getActivity(), routeTrain, R.color.sheet_icon_color);
+            resetVehicleIcons();
 
             routeInfo.setVehicle(vehicle);
             RouteDialogCallback callback = callback();
-            callback.onRouteChange(routeInfo);
+            if(Commons.isNotNull(callback)) callback.onRouteChange(routeInfo);
         }
+    }
+
+    private void resetVehicleIcons() {
+        // reset the vehicle icon colors
+        ViewUtils.changeTextViewIconColour(getActivity(), routeCar, R.color.routeVehicleUnselecttColor);
+        ViewUtils.changeTextViewIconColour(getActivity(), routeWalk, R.color.routeVehicleUnselecttColor);
+        ViewUtils.changeTextViewIconColour(getActivity(), routeTrain, R.color.routeVehicleUnselecttColor);
     }
 
 
@@ -290,15 +307,16 @@ public class RouteDialog extends BottomSheetDialogFragment {
             } else
                 routeDestination.setText(routeInfo.getAddressTo());
 
+            resetVehicleIcons();
             switch (routeInfo.getVehicle()) {
                 case R.string.vehicle_car:
-                    ViewUtils.changeTextViewIconColour(getActivity(), routeCar, R.color.fabColorTracking);
+                    ViewUtils.changeTextViewIconColour(getActivity(), routeCar, R.color.routeVehicleHighlightColor);
                     break;
                 case R.string.vehicle_walk:
-                    ViewUtils.changeTextViewIconColour(getActivity(), routeWalk, R.color.fabColorTracking);
+                    ViewUtils.changeTextViewIconColour(getActivity(), routeWalk, R.color.routeVehicleHighlightColor);
                     break;
                 case R.string.vehicle_train:
-                    ViewUtils.changeTextViewIconColour(getActivity(), routeTrain, R.color.fabColorTracking);
+                    ViewUtils.changeTextViewIconColour(getActivity(), routeTrain, R.color.routeVehicleHighlightColor);
                     break;
             }
 

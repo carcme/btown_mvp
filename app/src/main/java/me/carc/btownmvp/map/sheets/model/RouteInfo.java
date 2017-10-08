@@ -17,6 +17,7 @@ public class RouteInfo implements Parcelable {
     private GeoPoint to;
     private String addressTo;
     private Vehicle vehicle;
+    private int ordinal;
 
     public enum Vehicle {
         CAR(R.string.vehicle_car),
@@ -45,8 +46,12 @@ public class RouteInfo implements Parcelable {
     public GeoPoint getTo() { return to; }
     public void setTo(GeoPoint to) { this.to = to; }
 
+    public int getOrdinal() { return ordinal; }
     public int getVehicle() { return vehicle.getVehicle(); }
-    public void setVehicle(Vehicle vehicle) { this.vehicle = vehicle; }
+    public void setVehicle(Vehicle vehicle) {
+        this.vehicle = vehicle;
+        this.ordinal = vehicle.ordinal();
+    }
 
     public String getAddressFrom() { return addressFrom; }
     public void setAddressFrom(String addressFrom) { this.addressFrom = addressFrom; }

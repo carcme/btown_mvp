@@ -52,7 +52,6 @@ import butterknife.Unbinder;
 import me.carc.btownmvp.App;
 import me.carc.btownmvp.BuildConfig;
 import me.carc.btownmvp.MapActivity;
-import me.carc.btownmvp.map.interfaces.MyClickListener;
 import me.carc.btownmvp.R;
 import me.carc.btownmvp.Utils.AndroidUtils;
 import me.carc.btownmvp.Utils.FragmentUtil;
@@ -69,6 +68,7 @@ import me.carc.btownmvp.data.model.ReverseResult;
 import me.carc.btownmvp.data.reverse.ReverseApi;
 import me.carc.btownmvp.data.reverse.ReverseServiceProvider;
 import me.carc.btownmvp.db.favorite.FavoriteEntry;
+import me.carc.btownmvp.map.interfaces.MyClickListener;
 import me.carc.btownmvp.map.search.SearchDialogFragment;
 import me.carc.btownmvp.map.search.model.Place;
 import me.carc.btownmvp.map.search.model.SavedFavoriteItem;
@@ -78,6 +78,7 @@ import me.carc.btownmvp.map.sheets.model.adpater.PoiMoreRecyclerAdapter;
 import me.carc.btownmvp.map.sheets.share.ShareMenu;
 import me.carc.btownmvp.ui.CompassDialog;
 import me.carc.btownmvp.ui.CompassView;
+import me.carc.btownmvp.ui.FeedbackDialog;
 import me.carc.btownmvp.ui.custom.CapitalisedTextView;
 import pub.devrel.easypermissions.EasyPermissions;
 import retrofit2.Call;
@@ -137,6 +138,9 @@ public class SinglePoiOptionsDialog extends BottomSheetDialogFragment {
 
     @BindView(R.id.featureSave)
     Button featureSave;
+
+    @BindView(R.id.featureRoute)
+    Button featureRoute;
 
     @BindView(R.id.featureMore)
     Button featureMore;
@@ -204,8 +208,9 @@ public class SinglePoiOptionsDialog extends BottomSheetDialogFragment {
         }
 
         try {
+            assert args != null;
             OverpassQueryResult.Element node = (OverpassQueryResult.Element) args.getSerializable(ITEM);
-
+            assert node != null;
             featureTitle.setText(node.tags.name);
 
             if (!Commons.isEmpty(node.userDescription))
@@ -228,7 +233,9 @@ public class SinglePoiOptionsDialog extends BottomSheetDialogFragment {
             } else
                 featureSubtitle.setText(address);
 
-            featureDistance.setText(node.distance > 0 ? MapUtils.getFormattedDistance(node.distance) : "--");
+            featureDistance.setText(node.distance > 0 ? MapUtils.getFormattedDistance(node.distance) : getActivity().getResources().getText(R.string.no_gps));
+            featureRoute.setEnabled(node.distance > 0);
+            featureRoute.setText(node.distance > 0 ? R.string.route_to : R.string.no_gps);
 
             // used to update the location arrow
             poiPosition = new GeoPoint(node.lat, node.lon);
@@ -274,13 +281,6 @@ public class SinglePoiOptionsDialog extends BottomSheetDialogFragment {
             @Override
             public void onClick(View v) {
                 OverpassQueryResult.Element node = (OverpassQueryResult.Element) getArguments().getSerializable(ITEM);
-
-                String type = node.tags.getPrimaryType();
-
-                if (!Commons.isEmpty(node.tags.cuisine))
-                    type += " • " + Commons.capitalizeFirstLetter(node.tags.cuisine);
-
-
                 CompassDialog.showInstance((MapActivity) getActivity(),
                         node.tags.name,
                         featureType.getText().toString(),
@@ -347,10 +347,10 @@ public class SinglePoiOptionsDialog extends BottomSheetDialogFragment {
                 featureOpeningHours.setTextColor(ContextCompat.getColor(getActivity(), R.color.primary_text_color));
             } else {
                 if (hours.isOpenedForTime(Calendar.getInstance())) {
-                    featureOpeningHours.setText(R.string.open);
+                    featureOpeningHours.setText(R.string.poi_string_open);
                     featureOpeningHours.setTextColor(ContextCompat.getColor(getActivity(), R.color.poiOpenTimesOpenColor));
                 } else {
-                    featureOpeningHours.setText(R.string.closed);
+                    featureOpeningHours.setText(R.string.poi_string_closed);
                     featureOpeningHours.setTextColor(ContextCompat.getColor(getActivity(), R.color.poiOpenTimesClosedColor));
                 }
                 items.add(new InfoCard(hours.getOriginalFormatted(), InfoCard.ItemType.NONE, FontAwesome.Icon.faw_clock_o));
@@ -533,6 +533,58 @@ public class SinglePoiOptionsDialog extends BottomSheetDialogFragment {
 
     @OnClick(R.id.featureSave)
     void save() {
+
+        final OverpassQueryResult.Element element = (OverpassQueryResult.Element) getArguments().getSerializable(ITEM);
+        if (Commons.isNotNull(element)) {
+            // Title and appearance
+            FeedbackDialog.Builder builder = new FeedbackDialog.Builder(getActivity());
+            builder.titleTextColor(R.color.black);
+
+            builder.formTitle(element.tags.name + " • " + Commons.capitalizeFirstLetter(element.tags.getPrimaryType()));
+            builder.formHint(getString(R.string.add_your_comment));
+            builder.formText(element.userDescription);
+
+            // Allow empty comments
+            builder.allowEmpty(true);
+
+            // Positive button
+            builder.submitBtnText(getString(R.string.shared_string_save));
+            builder.positiveBtnTextColor(R.color.positiveBtnTextColor);
+            builder.positiveBtnBgColor(R.drawable.button_selector_positive);
+
+            // Negative button - if tag is ic_star_yellow, item is already in the Favorites DB
+            if (featureSave.getTag().equals(R.drawable.ic_star))
+                builder.cancelBtnText(getString(android.R.string.cancel));
+            else
+                builder.cancelBtnText(getString(R.string.shared_string_remove));
+            builder.negativeBtnTextColor(R.color.negativeBtnTextColor);
+            builder.negativeBtnBgColor(R.drawable.button_selector_negative);
+
+            builder.onSumbitClick(
+                    new FeedbackDialog.Builder.FeedbackDialogFormListener() {
+                        @Override
+                        public void onFormSubmitted(String feedback) {
+                            if (!feedback.equalsIgnoreCase(userDescription)) {
+                                userDescription = feedback;
+                                addToFavoritesDb(element);
+                            }
+                        }
+
+                        @Override
+                        public void onFormCancel() {
+                            // if tag is ic_star_yellow, item is already in the Favorites DB
+                            if (featureSave.getTag().equals(R.drawable.ic_star_yellow))
+                                removeFavorites(element.id);
+
+                        }
+                    });
+            builder.build().show();
+
+        }
+
+
+
+/*
         AndroidUtils.hideSoftKeyboard(getActivity(), userDesc);
         OverpassQueryResult.Element element = (OverpassQueryResult.Element) getArguments().getSerializable(ITEM);
         if (Commons.isNotNull(element)) {
@@ -543,6 +595,7 @@ public class SinglePoiOptionsDialog extends BottomSheetDialogFragment {
                 addToFavoritesDb(element);
             }
         }
+*/
     }
 
     @OnClick(R.id.featurePin)
@@ -572,16 +625,7 @@ public class SinglePoiOptionsDialog extends BottomSheetDialogFragment {
             routeInfo.setAddressTo(element.tags.getAddress());
             callback.onRouteTo(routeInfo);
         }
-/*
-        try {
-            OverpassQueryResult.Element node = getArguments().getParcelable(ITEM);
-//            MapActivity.getMapActivity().routeToPoi(node.getGeoPoint());
-            dismiss();
-        } catch (NullPointerException e) {
-            Log.d(TAG, "setupDialog ERROR: " + e.getLocalizedMessage());
-        }
-*/
-    }
+   }
 
     @OnClick(R.id.featureMore)
     void more() {
@@ -622,9 +666,9 @@ public class SinglePoiOptionsDialog extends BottomSheetDialogFragment {
         Executors.newSingleThreadExecutor().execute(new Runnable() {
             @Override
             public void run() {
-               FavoriteEntry entry = App.get().getDB().favoriteDao().findByOsmId(nodeId);
+                FavoriteEntry entry = App.get().getDB().favoriteDao().findByOsmId(nodeId);
                 final Drawable icon;
-                if(Commons.isNull(entry)){
+                if (Commons.isNull(entry)) {
                     icon = ContextCompat.getDrawable(getActivity(), R.drawable.ic_star);
                     featureSave.setTag(R.drawable.ic_star);
                 } else {
@@ -646,7 +690,7 @@ public class SinglePoiOptionsDialog extends BottomSheetDialogFragment {
             @Override
             public void run() {
                 FavoriteEntry entry = App.get().getDB().favoriteDao().findByOsmId(nodeId);
-                if(Commons.isNotNull(entry)){
+                if (Commons.isNotNull(entry)) {
                     App.get().getDB().favoriteDao().delete(entry);
                     checkFavorite(entry.getOsmId());
 

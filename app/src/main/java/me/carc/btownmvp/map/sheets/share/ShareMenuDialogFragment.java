@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.design.widget.CoordinatorLayout;
@@ -60,6 +61,12 @@ public class ShareMenuDialogFragment extends BottomSheetDialogFragment implement
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+    }
+
+    @Override
     public void setupDialog(final Dialog dialog, int style) {
         View rootView = View.inflate(menu.getMapActivity(), R.layout.share_menu_fragment, null);
 
@@ -90,13 +97,15 @@ public class ShareMenuDialogFragment extends BottomSheetDialogFragment implement
 
             @SuppressLint("InflateParams")
             @Override
-            public View getView(final int position, View convertView, ViewGroup parent) {
+            @NonNull
+            public View getView(final int position, View convertView, @NonNull ViewGroup parent) {
                 View v = convertView;
                 if (v == null) {
                     v = menu.getMapActivity().getLayoutInflater().inflate(R.layout.share_list_item, null);
                 }
                 final ShareMenu.ShareItem item = getItem(position);
                 ImageView icon = (ImageView) v.findViewById(R.id.icon);
+                assert item != null;
                 icon.setImageDrawable(new IconicsDrawable(ctx, item.getIconResourceId()).color(ContextCompat.getColor(ctx, R.color.sheet_heading_text_color)).sizeDp(20));
                 TextView name = (TextView) v.findViewById(R.id.name);
                 name.setText(getContext().getText(item.getTitleResourceId()));

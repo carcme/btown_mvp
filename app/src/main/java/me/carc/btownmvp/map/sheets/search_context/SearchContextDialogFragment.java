@@ -26,6 +26,7 @@ import java.util.List;
 import me.carc.btownmvp.R;
 import me.carc.btownmvp.common.C;
 import me.carc.btownmvp.common.Commons;
+import me.carc.btownmvp.map.search.SearchDialogFragment;
 
 
 public class SearchContextDialogFragment extends BottomSheetDialogFragment implements OnItemClickListener {
@@ -77,7 +78,19 @@ public class SearchContextDialogFragment extends BottomSheetDialogFragment imple
         listView.setOnItemClickListener(this);
 
         TextView title = (TextView) rootView.findViewById(R.id.header_caption);
-        title.setText(R.string.search_tab_favorite);
+
+        switch (menu.getCategory()) {
+            case SearchDialogFragment.SEARCH_ITEM_FAVORITE:
+                title.setText(R.string.search_tab_favorite);
+                break;
+
+            case SearchDialogFragment.SEARCH_ITEM_HISTORY:
+                title.setText(R.string.search_tab_history);
+                break;
+
+            default:
+                throw new RuntimeException("showLongPressSelectionDialog::Unhandled case");
+        }
     }
 
 
@@ -93,13 +106,15 @@ public class SearchContextDialogFragment extends BottomSheetDialogFragment imple
 
             @SuppressLint("InflateParams")
             @Override
-            public View getView(final int position, View convertView, ViewGroup parent) {
+            @NonNull
+            public View getView(final int position, View convertView, @NonNull ViewGroup parent) {
                 View v = convertView;
                 if (v == null) {
                     v = menu.getMapActivity().getLayoutInflater().inflate(R.layout.share_list_item, null);
                 }
                 final SearchContextMenu.ContextItem item = getItem(position);
                 ImageView icon = (ImageView) v.findViewById(R.id.icon);
+                assert item != null;
                 icon.setImageDrawable(new IconicsDrawable(ctx, item.getIconResourceId()).color(ContextCompat.getColor(ctx, R.color.sheet_heading_text_color)).sizeDp(20));
                 TextView name = (TextView) v.findViewById(R.id.name);
                 name.setText(getContext().getText(item.getTitleResourceId()));

@@ -24,6 +24,16 @@ public class C {
     public static final int PERMISSION_CAMERA     = 202;
     public static final int PERMISSION_STORAGE = 203;
 
+    // NETWORK CHANGE STATES
+    public static final String CONNECT_TO_WIFI = "WIFI";
+    public static final String CONNECT_TO_MOBILE = "MOBILE";
+    public static final String NOT_CONNECT = "NOT_CONNECT";
+    final static String CONNECTIVITY_ACTION = "android.net.conn.CONNECTIVITY_CHANGE";
+
+    public static final int TYPE_NC     = 0;
+    public static final int TYPE_WIFI   = 1;
+    public static final int TYPE_MOBILE = 2;
+
 
     public static String USER_LANGUAGE;
 

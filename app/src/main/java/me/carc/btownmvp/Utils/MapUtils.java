@@ -147,16 +147,60 @@ public class MapUtils {
     }
 
     public static class DistanceComparator implements Comparator<Place> {
+        boolean closestFirst;
+        public DistanceComparator(boolean closestFirst) {
+            this.closestFirst = closestFirst;
+        }
         @Override
         public int compare(Place lhs, Place rhs) {
-            Double distance = lhs.getDistance();
-            Double distance1 = rhs.getDistance();
-            if (distance.compareTo(distance1) < 0) {
-                return -1;
-            } else if (distance.compareTo(distance1) > 0) {
-                return 1;
+            Double d1 = lhs.getDistance();
+            Double d2 = rhs.getDistance();
+            if(closestFirst) {
+                if (d1.compareTo(d2) < 0) {
+                    return -1;
+                } else if (d1.compareTo(d2) > 0) {
+                    return 1;
+                } else {
+                    return 0;
+                }
             } else {
-                return 0;
+                if (d1.compareTo(d2) > 0) {
+                    return -1;
+                } else if (d1.compareTo(d2) < 0) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+            }
+        }
+    }
+
+    public static class TimeStampComparator implements Comparator<Place> {
+        boolean newstFirst;
+        public TimeStampComparator(boolean newstFirst) {
+            this.newstFirst = newstFirst;
+        }
+
+        @Override
+        public int compare(Place lhs, Place rhs) {
+            Long ts1 = lhs.getTimestamp();
+            Long ts2 = rhs.getTimestamp();
+            if(newstFirst) {
+                if (ts1.compareTo(ts2) > 0) {
+                    return -1;
+                } else if (ts1.compareTo(ts2) < 0) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+            } else {
+                if (ts1.compareTo(ts2) < 0) {
+                    return -1;
+                } else if (ts1.compareTo(ts2) > 0) {
+                    return 1;
+                } else {
+                    return 0;
+                }
             }
         }
     }

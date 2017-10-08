@@ -33,6 +33,15 @@
         <item name="android:windowIsFloating">true</item>
     </style>
 
+    <style name="RoutingDialog" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="android:windowCloseOnTouchOutside">false</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:backgroundDimAmount">0.3</item>
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowIsFloating">true</item>
+    </style>
+
 
     <style name="RtlAwareTextView" parent="@android:style/Widget.TextView" tools:targetApi="17">
         <item name="android:textDirection">anyRtl</item>

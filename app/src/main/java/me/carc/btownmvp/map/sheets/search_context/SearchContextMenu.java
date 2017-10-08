@@ -34,10 +34,10 @@ public class SearchContextMenu {
     private String title;
     private String address;
 
-    private  SimpleClickListener onClickListener;
+    private SimpleClickListener onClickListener;
 
 
-    public enum ContextItem {
+    enum ContextItem {
         DELETE_ITEM(CommunityMaterial.Icon.cmd_delete, R.string.shared_string_delete),
         DELETE_All(CommunityMaterial.Icon.cmd_delete_sweep, R.string.shared_string_delete_all),
         SHARE(CommunityMaterial.Icon.cmd_share_variant, R.string.shared_string_share);
@@ -95,7 +95,7 @@ public class SearchContextMenu {
         return title;
     }
 
-    public void selected(ContextItem item) {
+    void selected(ContextItem item) {
         switch (item) {
             case DELETE_ITEM:
                 deleteItem();
@@ -146,8 +146,12 @@ public class SearchContextMenu {
         onClickListener.OnClick(category);
     }
 
-    public void saveMenu(Bundle bundle) {
+    void saveMenu(Bundle bundle) {
 
+    }
+
+    int getCategory() {
+        return category;
     }
 
 }

@@ -12,41 +12,32 @@
 
     <!-- string name="lat_lon_pattern">Lat: %1$.5f Lon: %2$.5f</string -->
     <string name="map_mode">Karten Modus</string>
-    <string name="shared_string_delete">Löschen</string>
-    <string name="shared_string_delete_all">Löschen Alles</string>
-    <string name="shared_string_share">Teilen</string>
-    <string name="shared_string_close">Schließen</string>
     <string name="anonymous">Anonym</string>
     <string name="manage_account">Konto verwalten</string>
     <string name="search_no_results_found">Keine Ergebnisse. Bitte erweitere den Suchradius auf der Karte.</string>
 
     <string name="add_your_comment">Add comment</string>
-    <string name="save">Save</string>
     <string name="route_to">Route</string>
     <string name="share">Share</string>
     <string name="more">More</string>
 
 
-    <string name="shared_string_show_details">Details anzeigen</string>
-    <string name="shared_string_io_error">I/O Fehler aufgetreten</string>
     <string name="send_location">Standort senden</string>
     <string name="zxing_barcode_scanner_not_found">Barcode-Scanner-Anwendung nicht installiert. Soll im Google Play-Store danach gesucht werden?</string>
-
-    <string name="shared_string_send">Senden</string>
-    <string name="shared_string_copy">Kopieren</string>
     <string name="share_geo">geo:</string>
     <string name="shared_string_qr_code">QR-Code</string>
     <string name="no_address_found">Keine Adresse bekannt</string>
-    <string name="shared_string_location">Standort</string>
     <string name="share_menu_location">Standort teilen</string>
 
 
 
     <string name="added_to_favorites">Added to Favorites</string>
-    <string name="seaching">Searching...</string>
-    <string name="closed">Closed</string>
-    <string name="open">Open</string>
-
+    <string name="seaching">Searching…</string>
+    <string name="poi_string_closed">Geschlossen</string>
+    <string name="poi_string_open">Offen</string>
+    <string name="sort_by_time">Sort by Time</string>
+    <string name="sort_by_distance">Sort by Distance</string>
+    <string name="show_all_on_map">Show all on Map</string>
 
 
 </resources>

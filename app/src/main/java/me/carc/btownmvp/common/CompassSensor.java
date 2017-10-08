@@ -21,18 +21,23 @@ public class CompassSensor implements SensorEventListener {
     private SensorManager mSensorManager;
     private Sensor accelerometer;
     private Sensor magnetometer;
+    private boolean isEnabled;
 
     private float[] mGravity;
     private float[] mGeomagnetic;
 
 
-    public CompassSensor.Callback mCallback = null;
+    private CompassSensor.Callback mCallback = null;
 
     public interface Callback {
         void onAccuracyChanged(Sensor sensor, int accuracy);
+
         void onAngleCalculation(float degree);
     }
 
+    public boolean isEnabled() {
+        return isEnabled;
+    }
 
     public CompassSensor(Context context, Callback callback) {
         this.mContext = context;
@@ -47,11 +52,13 @@ public class CompassSensor implements SensorEventListener {
     }
 
     public void enableSensors() {
+        isEnabled = true;
         mSensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_UI);
         mSensorManager.registerListener(this, magnetometer, SensorManager.SENSOR_DELAY_UI);
     }
 
     public void disableSensors() {
+        isEnabled = false;
         mSensorManager.unregisterListener(this);
     }
 
@@ -77,7 +84,6 @@ public class CompassSensor implements SensorEventListener {
             }
         }
     }
-
 
 
     @Override

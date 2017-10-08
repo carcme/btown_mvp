@@ -4,5 +4,8 @@
     <string name="rationale_storage">B-Town wird beendet</string>
     <string name="permission_rejected_msg">B-Town braucht deine Zustimmung unbedingt, um zu funktionieren. Wir hoffen, du lässt dich überzeugen und stimmst beim nächsten Mal zu.</string>
 
+    <string name="enable_gps_request">Bitte aktiviere GPS</string>
+
+    <string name="no_gps">Kein GPS</string>
 
 </resources>

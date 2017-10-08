@@ -42,7 +42,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/favorites_icon_right_margin"
         android:layout_marginTop="@dimen/favorites_icon_top_margin"
-        android:contentDescription="@string/content_description"
+        android:contentDescription="@null"
         android:focusable="false"
         tools:src="@drawable/ic_heart" />
 

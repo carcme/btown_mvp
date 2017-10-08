@@ -4,6 +4,7 @@ import android.arch.persistence.room.Embedded;
 import android.arch.persistence.room.Ignore;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -14,16 +15,23 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import me.carc.btownmvp.BuildConfig;
+import me.carc.btownmvp.common.C;
+import me.carc.btownmvp.common.Commons;
+
 /**
  * http://wiki.openstreetmap.org/wiki/Map_Features
  * <p>
  * Map tags to class
  */
-public class OverpassQueryResult implements Parcelable {
+public class OverpassQueryResult {
+
+    private static final String TAG = C.DEBUG + Commons.getTag();
+
     @SerializedName("elements")
     public List<Element> elements = new ArrayList<>();
 
-    public static class Element implements Serializable {
+    public static class Element implements Serializable, Parcelable {
 
         @SerializedName("type")
         public String type;
@@ -71,7 +79,7 @@ public class OverpassQueryResult implements Parcelable {
         @SerializedName("tags")
         public Tags tags = new Tags();
 
-        public static class Tags implements Serializable {
+        public static class Tags implements Serializable, Parcelable {
 
 /*
             @SerializedName("type")
@@ -361,41 +369,225 @@ public class OverpassQueryResult implements Parcelable {
 
                 list.removeAll(Collections.singleton(null));
 
+                if(BuildConfig.DEBUG) {
+                    if(list.size() > 1) {
+                        for(String str : list){
+                            Log.d(TAG, "getPrimaryType: " + str);
+                        }
+//                        throw new RuntimeException(list.toString());
+                    }
+                }
+
                 return list.size() > 0 ? list.get(0) : null;
             }
+
+            @Override
+            public int describeContents() {
+                return 0;
+            }
+
+            @Override
+            public void writeToParcel(Parcel dest, int flags) {
+                dest.writeString(this.aerialway);
+                dest.writeString(this.aeroway);
+                dest.writeString(this.amenity);
+                dest.writeString(this.barrier);
+                dest.writeString(this.boundary);
+                dest.writeString(this.building);
+                dest.writeString(this.craft);
+                dest.writeString(this.emergency);
+                dest.writeString(this.geological);
+                dest.writeString(this.highway);
+                dest.writeString(this.historic);
+                dest.writeString(this.landuse);
+                dest.writeString(this.leisure);
+                dest.writeString(this.man_made);
+                dest.writeString(this.military);
+                dest.writeString(this.natural);
+                dest.writeString(this.office);
+                dest.writeString(this.place);
+                dest.writeString(this.power);
+                dest.writeString(this.public_transport);
+                dest.writeString(this.railway);
+                dest.writeString(this.route);
+                dest.writeString(this.shop);
+                dest.writeString(this.sport);
+                dest.writeString(this.tourism);
+                dest.writeString(this.waterway);
+                dest.writeString(this.healthcare);
+                dest.writeString(this.entrance);
+                dest.writeString(this.memorial);
+                dest.writeString(this.name);
+                dest.writeString(this.phone);
+                dest.writeString(this.contactPhone);
+                dest.writeString(this.contactEmail);
+                dest.writeString(this.website);
+                dest.writeString(this.fax);
+                dest.writeString(this.contactWebsite);
+                dest.writeString(this.source);
+                dest.writeString(this.sourceName);
+                dest.writeString(this.sourceRef);
+                dest.writeString(this.url);
+                dest.writeString(this.addressCity);
+                dest.writeString(this.addressPostCode);
+                dest.writeString(this.addressSuburb);
+                dest.writeString(this.addressStreet);
+                dest.writeString(this.addressHouseNumber);
+                dest.writeString(this.wheelchair);
+                dest.writeString(this.wheelchairToilets);
+                dest.writeString(this.wheelchairDescription);
+                dest.writeString(this.openingHours);
+                dest.writeString(this.internetAccess);
+                dest.writeString(this.fee);
+                dest.writeString(this.operator);
+                dest.writeString(this.collectionTimes);
+                dest.writeString(this.takeaway);
+                dest.writeString(this.delivery);
+                dest.writeString(this.outdoor_seating);
+                dest.writeString(this.religion);
+                dest.writeString(this.denomination);
+                dest.writeString(this.image);
+                dest.writeString(this.smoking);
+                dest.writeString(this.note);
+                dest.writeString(this.cuisine);
+                dest.writeString(this.wikipedia);
+                dest.writeString(this.wikidata);
+                dest.writeString(this.nudism);
+                dest.writeString(this.cycleway);
+                dest.writeString(this.comment);
+                dest.writeString(this.height);
+            }
+
+            public Tags() {
+            }
+
+            protected Tags(Parcel in) {
+                this.aerialway = in.readString();
+                this.aeroway = in.readString();
+                this.amenity = in.readString();
+                this.barrier = in.readString();
+                this.boundary = in.readString();
+                this.building = in.readString();
+                this.craft = in.readString();
+                this.emergency = in.readString();
+                this.geological = in.readString();
+                this.highway = in.readString();
+                this.historic = in.readString();
+                this.landuse = in.readString();
+                this.leisure = in.readString();
+                this.man_made = in.readString();
+                this.military = in.readString();
+                this.natural = in.readString();
+                this.office = in.readString();
+                this.place = in.readString();
+                this.power = in.readString();
+                this.public_transport = in.readString();
+                this.railway = in.readString();
+                this.route = in.readString();
+                this.shop = in.readString();
+                this.sport = in.readString();
+                this.tourism = in.readString();
+                this.waterway = in.readString();
+                this.healthcare = in.readString();
+                this.entrance = in.readString();
+                this.memorial = in.readString();
+                this.name = in.readString();
+                this.phone = in.readString();
+                this.contactPhone = in.readString();
+                this.contactEmail = in.readString();
+                this.website = in.readString();
+                this.fax = in.readString();
+                this.contactWebsite = in.readString();
+                this.source = in.readString();
+                this.sourceName = in.readString();
+                this.sourceRef = in.readString();
+                this.url = in.readString();
+                this.addressCity = in.readString();
+                this.addressPostCode = in.readString();
+                this.addressSuburb = in.readString();
+                this.addressStreet = in.readString();
+                this.addressHouseNumber = in.readString();
+                this.wheelchair = in.readString();
+                this.wheelchairToilets = in.readString();
+                this.wheelchairDescription = in.readString();
+                this.openingHours = in.readString();
+                this.internetAccess = in.readString();
+                this.fee = in.readString();
+                this.operator = in.readString();
+                this.collectionTimes = in.readString();
+                this.takeaway = in.readString();
+                this.delivery = in.readString();
+                this.outdoor_seating = in.readString();
+                this.religion = in.readString();
+                this.denomination = in.readString();
+                this.image = in.readString();
+                this.smoking = in.readString();
+                this.note = in.readString();
+                this.cuisine = in.readString();
+                this.wikipedia = in.readString();
+                this.wikidata = in.readString();
+                this.nudism = in.readString();
+                this.cycleway = in.readString();
+                this.comment = in.readString();
+                this.height = in.readString();
+            }
+
+            public static final Creator<Tags> CREATOR = new Creator<Tags>() {
+                public Tags createFromParcel(Parcel source) {
+                    return new Tags(source);
+                }
+
+                public Tags[] newArray(int size) {
+                    return new Tags[size];
+                }
+            };
         }
 
         public GeoPoint getGeoPoint() {
             return new GeoPoint(lat, lon);
         }
-    }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeList(this.elements);
-    }
-
-    public OverpassQueryResult() {
-    }
-
-    protected OverpassQueryResult(Parcel in) {
-        this.elements = new ArrayList<Element>();
-        in.readList(this.elements, List.class.getClassLoader());
-    }
-
-    public static final Creator<OverpassQueryResult> CREATOR = new Creator<OverpassQueryResult>() {
-        public OverpassQueryResult createFromParcel(Parcel source) {
-            return new OverpassQueryResult(source);
+        @Override
+        public int describeContents() {
+            return 0;
         }
 
-        public OverpassQueryResult[] newArray(int size) {
-            return new OverpassQueryResult[size];
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(this.type);
+            dest.writeLong(this.id);
+            dest.writeDouble(this.lat);
+            dest.writeDouble(this.lon);
+            dest.writeDouble(this.distance);
+            dest.writeDoubleArray(this.extent);
+            dest.writeString(this.userDescription);
+            dest.writeInt(this.iconId);
+            dest.writeSerializable(this.tags);
         }
-    };
+
+        public Element() {
+        }
+
+        protected Element(Parcel in) {
+            this.type = in.readString();
+            this.id = in.readLong();
+            this.lat = in.readDouble();
+            this.lon = in.readDouble();
+            this.distance = in.readDouble();
+            this.extent = in.createDoubleArray();
+            this.userDescription = in.readString();
+            this.iconId = in.readInt();
+            this.tags = (Tags) in.readSerializable();
+        }
+
+        public static final Parcelable.Creator<Element> CREATOR = new Parcelable.Creator<Element>() {
+            public Element createFromParcel(Parcel source) {
+                return new Element(source);
+            }
+
+            public Element[] newArray(int size) {
+                return new Element[size];
+            }
+        };
+    }
 }
-

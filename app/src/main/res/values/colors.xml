@@ -11,11 +11,27 @@
     <color name="fabSearchCancelColor">#C00</color>
     <color name="fabSearchProgressColor">#669900</color>
 
+
+    <color name="routeVehicleHighlightColor">#669900</color>
+    <color name="routeVehicleUnselecttColor">#999</color>
+
     <color name="routeToColor">#C00</color>
     <color name="routeFromColor">#669900</color>
 
     <color name="poiOpenTimesOpenColor">#669900</color>
     <color name="poiOpenTimesClosedColor">#C00</color>
+
+    <color name="positiveBtnBgColor">@color/white</color>
+    <color name="negativeBtnBgColor">@color/white</color>
+    <color name="positiveBtnTextColor">#669900</color>
+    <color name="negativeBtnTextColor">#C00</color>
+
+
+
+
+
+
+
 
     <color name="white">#FFFFFF</color>
     <color name="almostWhite">#EEEEEE</color>
@@ -36,6 +52,8 @@
 
     <color name="map_widget_blue">#536dfe</color>
 
+    <color name="roadOverlayBlue">#0000FF</color>
+    <color name="roadOverlayGray">#90666666</color>
 
 
 
@@ -51,6 +69,10 @@
     <color name="material_theme_border_color">@color/black12</color>
 
 
+    <color name="grey_400">#BDBDBD</color>
+    <color name="grey_500">#9E9E9E</color>
+
+
     <!-- Light and Dark mode consolidation-->
     <color name="black87">#DE000000</color>
     <color name="black54">#8A000000</color>
@@ -60,7 +82,6 @@
     <color name="white70">#B3ffffff</color>
     <color name="white50">#80ffffff</color>
     <color name="white20">#33ffffff</color>
-
 
 
 </resources>

@@ -12,6 +12,7 @@ import org.osmdroid.util.GeoPoint;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -40,7 +41,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-/**
+/** Show the search, favorite and history dialog
  * Created by bamptonm on 20/09/2017.
  */
 
@@ -132,7 +133,7 @@ public class SearchDialogPresenter implements ISearch.Presenter {
                         break;
 
                     default:
-//                        throw new RuntimeException("showLongPressSelectionDialog::Unhandled case");
+                        throw new RuntimeException("showLongPressSelectionDialog::Unhandled case");
                 }
             }
 
@@ -310,10 +311,11 @@ public class SearchDialogPresenter implements ISearch.Presenter {
                             .lng(entry.getLon())
                             .osmId(entry.getOsmId())
                             .osmKey(entry.getOsmPojo().tags.getPrimaryType())
-                            .iconRes(entry.getIconInt())
+                            .iconRes(entry.getIconInt() != 0 ? entry.getIconInt() : R.drawable.ic_heart)
                             .iconName(entry.getIconStr())
                             .userComment(entry.getComment() != null ? entry.getComment() : entry.getIconStr())
                             .placeId(SearchDialogFragment.SEARCH_ITEM_FAVORITE)
+                            .timestamp(entry.getTimestamp())
                             .build());
                 }
 
@@ -351,10 +353,11 @@ public class SearchDialogPresenter implements ISearch.Presenter {
                             .lng(entry.getLon())
                             .osmId(entry.getOsmId())
                             .osmKey(entry.getOsmPojo().tags.getPrimaryType())
-                            .iconRes(entry.getIconInt())
+                            .iconRes(entry.getIconInt() != 0 ? entry.getIconInt() : R.drawable.ic_history)
                             .iconName(entry.getIconStr())
                             .userComment(entry.getComment() != null ? entry.getComment() : entry.getIconStr())
                             .placeId(SearchDialogFragment.SEARCH_ITEM_HISTORY)
+                            .timestamp(entry.getTimestamp())
                             .build());
                 }
 
@@ -369,49 +372,6 @@ public class SearchDialogPresenter implements ISearch.Presenter {
                     }
                 });
 //                }
-            }
-        });
-    }
-
-
-    private void addToHistoryDebug() {
-        Executors.newSingleThreadExecutor().execute(new Runnable() {
-            @Override
-            public void run() {
-
-                final List<Place> places = new ArrayList<>();
-                if (BuildConfig.DEBUG) {
-
-                    for (int i = 0; i < 11; i++) {
-                        places.add(new Place.Builder()
-                                .name("test " + i)          // display name
-                                .address("test " + i)       // display sub title
-                                .lat(0)
-                                .lng(0)
-                                .osmId(i + 10000)
-                                .osmKey("amentiy")
-                                .osmType("pub")
-                                .iconRes(0)
-                                .iconName("")
-                                .placeId(SearchDialogFragment.SEARCH_ITEM_HISTORY)
-                                .build());
-                    }
-
-                    for (Place place : places) {
-                        HistoryEntry entry = new HistoryEntry(new PlaceToOverpass(null).convertPlace(place));
-                        App.get().getDB().historyDao().insert(entry);
-
-                    }
-                }
-
-
-                ((MapActivity) mContext).runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        view.updateListAdapter(SearchDialogFragment.SEARCH_ITEM_HISTORY, places);
-                        Toast.makeText(mContext, mContext.getText(R.string.history_saved), Toast.LENGTH_SHORT).show();
-                    }
-                });
             }
         });
     }
@@ -434,4 +394,51 @@ public class SearchDialogPresenter implements ISearch.Presenter {
             }
         });
     }
+
+
+    private void addToHistoryDebug() {
+        Executors.newSingleThreadExecutor().execute(new Runnable() {
+            @Override
+            public void run() {
+
+                final List<Place> places = new ArrayList<>();
+                if (BuildConfig.DEBUG) {
+
+                    long timestamp = Calendar.getInstance().getTimeInMillis();
+
+                    for (int i = 0; i < 11; i++) {
+                        places.add(new Place.Builder()
+                                .name("test " + i)          // display name
+                                .address("test " + i)       // display sub title
+                                .lat(0)
+                                .lng(0)
+                                .osmId(i + 10000)
+                                .osmKey("amentiy")
+                                .osmType("pub")
+                                .iconRes(0)
+                                .iconName("")
+                                .placeId(SearchDialogFragment.SEARCH_ITEM_HISTORY)
+                                .timestamp(timestamp - (i * C.TIME_ONE_WEEK))
+                                .build());
+                    }
+
+                    for (Place place : places) {
+                        HistoryEntry entry = new HistoryEntry(new PlaceToOverpass(null).convertPlace(place));
+                        App.get().getDB().historyDao().insert(entry);
+
+                    }
+                }
+
+
+                ((MapActivity) mContext).runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        view.updateListAdapter(SearchDialogFragment.SEARCH_ITEM_HISTORY, places);
+                        Toast.makeText(mContext, mContext.getText(R.string.history_saved), Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+    }
+
 }

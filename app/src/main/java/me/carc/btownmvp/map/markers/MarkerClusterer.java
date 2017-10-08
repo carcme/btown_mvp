@@ -29,9 +29,9 @@ public abstract class MarkerClusterer extends Overlay {
     /** impossible value for zoom level, to force clustering */
     protected static final int FORCE_CLUSTERING = -1;
 
-    protected ArrayList<Marker> mItems = new ArrayList<Marker>();
+    protected ArrayList<Marker> mItems = new ArrayList<>();
     protected Point mPoint = new Point();
-    protected ArrayList<StaticCluster> mClusters = new ArrayList<StaticCluster>();
+    protected ArrayList<StaticCluster> mClusters = new ArrayList<>();
     protected int mLastZoomLevel;
     protected Bitmap mClusterIcon;
     protected String mName, mDescription;
@@ -92,6 +92,10 @@ public abstract class MarkerClusterer extends Overlay {
     /** @return the list of Markers. */
     public ArrayList<Marker> getItems(){
         return mItems;
+    }
+
+    /** @return the list of Markers. */
+    public int getItemsLength(){return mItems != null ? mItems.size() : 0;
     }
 
     @Override public void draw(Canvas canvas, MapView mapView, boolean shadow) {

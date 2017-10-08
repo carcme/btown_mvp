@@ -1,13 +1,14 @@
 package me.carc.btownmvp.ui.custom;
 
 import android.content.Context;
+import android.support.v7.widget.AppCompatTextView;
 import android.util.AttributeSet;
 
 /**
  * Capialise the first character in the textview
  * Created by bamptonm on 5/16/17.
  */
-public class CapitalisedTextView extends android.support.v7.widget.AppCompatTextView {
+public class CapitalisedTextView extends AppCompatTextView {
 
     public CapitalisedTextView(Context context, AttributeSet attrs) {
         super(context, attrs);

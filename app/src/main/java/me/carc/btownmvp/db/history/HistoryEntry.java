@@ -91,14 +91,17 @@ public class HistoryEntry {
         this.osmPojo = osmPojo;
     }
 
+    /**
+     * Sort most recent to top
+     */
     public static class TimeStampComparator implements Comparator<HistoryEntry> {
         @Override
         public int compare(HistoryEntry lhs, HistoryEntry rhs) {
             Long ts1 = lhs.getTimestamp();
             Long ts2 = rhs.getTimestamp();
-            if (ts1.compareTo(ts2) < 0) {
+            if (ts1.compareTo(ts2) > 0) {
                 return -1;
-            } else if (ts1.compareTo(ts2) > 0) {
+            } else if (ts1.compareTo(ts2) < 0) {
                 return 1;
             } else {
                 return 0;

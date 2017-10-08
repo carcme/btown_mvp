@@ -1,7 +1,6 @@
 <resources>
     <string name="app_name">B-Town mvp</string>
 
-    <string name="content_description">Content Description</string>
 
 <!--FAVORITES VIEW-->
     <string name="use_long_press_to_remove_favorite">Use long press to remove favorite</string>
@@ -16,11 +15,39 @@
     <string name="elevation">Elevation</string>
     <string name="distance">Distance</string>
     <string name="total_distance">Total Distance</string>
-    <string name="shared_string_time">Time</string>
     <string name="altitude_descent">Descent</string>
     <string name="altitude_ascent">Ascent</string>
+
+
+    <string name="shared_string_never_ask">Never Ask</string>
+
+
+    <string name="shared_string_delete">Delete</string>
+    <string name="shared_string_delete_all">Delete All</string>
+    <string name="shared_string_share">Share</string>
+    <string name="shared_string_close">Close</string>
+    <string name="shared_string_time">Time</string>
     <string name="shared_string_go">Go</string>
     <string name="shared_my_location">My Location</string>
     <string name="shared_string_selected_lowercase">selected</string>
+    <string name="shared_string_remove">Remove</string>
+    <string name="shared_string_save">Save</string>
+    <string name="shared_string_show_details">Show details</string>
+    <string name="shared_string_io_error">I/O error occurred</string>
+    <string name="shared_string_send">Send</string>
+    <string name="shared_string_copy">Copy</string>
+    <string name="shared_string_location">Location</string>
+
+
+    <!--FEEDBACK DIALOG-->
+    <string name="rating_dialog_experience">How was your experience with us?</string>
+    <string name="rating_dialog_maybe_later">Maybe later</string>
+    <string name="rating_dialog_never">Never</string>
+    <string name="rating_dialog_feedback_title">Feedback</string>
+    <string name="rating_dialog_submit">Submit</string>
+    <string name="rating_dialog_cancel">Cancel</string>
+    <string name="rating_dialog_suggestions">Suggest what you want and we\'ll work on it!</string>
+
+
 
 </resources>

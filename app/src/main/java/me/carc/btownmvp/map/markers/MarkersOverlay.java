@@ -9,6 +9,7 @@ import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.util.Log;
+import android.widget.Toast;
 
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
@@ -71,34 +72,41 @@ public class MarkersOverlay extends RadiusMarkerClusterer {
         mOnMarkerClickListener = listener;
     }
 
+    @Override
+    public int getItemsLength() {
+        return super.getItemsLength();
+    }
 
     public boolean clear() {
         boolean cleared = false;
-        if (elements != null && elements.size() > 0) {
+        if (getElementsListLen() > 0) {
             elements.clear();
             cleared = true;
         }
-        if (mMarkers.getItems() != null && mMarkers.getItems().size() > 0) {
+        if (getSize() > 0) {
             mMarkers.getItems().clear();
             cleared = true;
         }
         invalidate();
         return cleared;
-
     }
 
-    OverpassQueryResult.Element getNode(int id) {
-        if (elements != null && id < elements.size())
-            return elements.get(id);
-        return null;
+    private int getElementsListLen() {
+        return elements != null ? elements.size() : 0;
     }
 
-    ArrayList<OverpassQueryResult.Element> getNodes() {
+
+    public ArrayList<OverpassQueryResult.Element> getElemets() {
         if (elements != null)
             return elements;
         return null;
     }
 
+    public int getSize() {
+        if (mMarkers != null)
+            return mMarkers.getItemsLength();
+        return 0;
+    }
 
     public ArrayList<Marker> getItems() {
         if (mMarkers != null)
@@ -245,7 +253,7 @@ public class MarkersOverlay extends RadiusMarkerClusterer {
 
                         add(poiMarker);
                     } else
-                        Log.d("DEAD", "updateUIWithNodePOI: Icon not found ");
+                        Log.d("DEAD", "updateUIWithNodePOI: Icon not found " + primaryType);
                 }/**/
             }
             return featureTag;
@@ -253,11 +261,19 @@ public class MarkersOverlay extends RadiusMarkerClusterer {
 
         @Override
         protected void onPostExecute(String tag) {
-            super.onPostExecute(tag);
 
-            if (mMarkers.getItems().size() == 1) {
+            if (mMarkers.getItemsLength() == 1) {
                 mOnMarkerClickListener.onMarkerClick(mMarkers.getItem(0), map);
-            }
+
+            } else if(mMarkers.getItemsLength() > 1) {
+                // showing multi POI's - catch the null in the MapPresenter#onMarkerClick()
+                Marker indicator = new Marker(map);
+                indicator.setTitle("SEARCH_INDICATOR");
+                mOnMarkerClickListener.onMarkerClick(indicator, map);
+            } else
+                Toast.makeText(mContext, "TODO - pan map and zoom to show all new pois", Toast.LENGTH_SHORT).show();
+
+            // TODO: 08/10/2017 animate map to show newly added markers
 
             mMarkers.setName(tag);
             invalidate();

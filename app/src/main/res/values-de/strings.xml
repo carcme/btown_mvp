@@ -3,8 +3,6 @@
 
     <string name="app_name">B-Town mvp</string>
 
-    <string name="content_description">Content Description</string>
-
     <!--FAVORITES VIEW-->
     <string name="use_long_press_to_remove_favorite">Taste lange drücken, um Favoriten zu löschen</string>
     <string name="favorites_places">Beliebteste Orte</string>
@@ -21,9 +19,33 @@
     <string name="shared_string_time">Zeit</string>
     <string name="altitude_descent">Abstieg</string>
     <string name="altitude_ascent">Aufstieg</string>
+
+    <string name="shared_string_never_ask">Niemals nachfragen</string>
+
+    <string name="shared_string_delete">Löschen</string>
+    <string name="shared_string_delete_all">Löschen Alles</string>
+    <string name="shared_string_share">Teilen</string>
+    <string name="shared_string_close">Schließen</string>
+    <string name="shared_string_save">Save</string>
+    <string name="shared_string_show_details">Details anzeigen</string>
+    <string name="shared_string_io_error">I/O Fehler aufgetreten</string>
+    <string name="shared_string_send">Senden</string>
+    <string name="shared_string_copy">Kopieren</string>
+    <string name="shared_string_location">Standort</string>
     <string name="shared_string_go">Go</string>
     <string name="shared_my_location">My Location</string>
     <string name="shared_string_selected_lowercase">ausgewählt</string>
+    <string name="shared_string_remove">Entfernen</string>
+
+
+    <!--FEEDBACK DIALOG-->
+    <string name="rating_dialog_experience">Wie finden Sie unsere App?</string>
+    <string name="rating_dialog_maybe_later">Vielleicht später</string>
+    <string name="rating_dialog_never">Niemals</string>
+    <string name="rating_dialog_feedback_title">Feedback</string>
+    <string name="rating_dialog_submit">Abschicken</string>
+    <string name="rating_dialog_cancel">Abbrechen</string>
+    <string name="rating_dialog_suggestions">Sagen Sie uns was Ihnen nicht gefällt und wir arbeiten daran!</string>
 
 
 </resources>

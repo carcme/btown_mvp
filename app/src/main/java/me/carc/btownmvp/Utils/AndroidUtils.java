@@ -28,7 +28,7 @@ import java.util.Date;
 public class AndroidUtils {
 
 	/**
-	 * @param context
+	 * @param context the context
 	 * @return true if Hardware keyboard is available
 	 */
 	private static boolean isHardwareKeyboardAvailable(Context context) {
@@ -66,6 +66,10 @@ public class AndroidUtils {
 		ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
 		ClipData clip = ClipData.newPlainText("label", text);
 		clipboard.setPrimaryClip(clip);
+	}
+
+	public static String formatDateMedium(Context ctx, long time) {
+		return DateFormat.getMediumDateFormat(ctx).format(new Date(time));
 	}
 
 	public static String formatDate(Context ctx, long time) {

@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:padding="@dimen/margin_small"
         android:layout_marginEnd="@dimen/margin_small"
-        android:contentDescription="@string/content_description"
+        android:contentDescription="@null"
         android:drawableStart="@drawable/ic_directions_car"
         android:drawablePadding="@dimen/margin_tiny"
         />
@@ -25,7 +25,7 @@
         android:padding="@dimen/margin_small"
         android:layout_toEndOf="@+id/routeCar"
         android:layout_marginEnd="@dimen/margin_small"
-        android:contentDescription="@string/content_description"
+        android:contentDescription="@null"
         android:drawableStart="@drawable/ic_directions_walk"
         android:drawablePadding="@dimen/margin_small"
         />
@@ -37,7 +37,7 @@
         android:padding="@dimen/margin_small"
         android:layout_toEndOf="@+id/routeWalk"
         android:layout_marginEnd="@dimen/margin_small"
-        android:contentDescription="@string/content_description"
+        android:contentDescription="@null"
         android:drawableStart="@drawable/ic_directions_subway"
         android:drawablePadding="@dimen/margin_small"
         />

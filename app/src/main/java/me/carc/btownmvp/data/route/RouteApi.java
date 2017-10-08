@@ -6,6 +6,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Query;
 
 /**
+ * graphhopper.com Directions API
  * Created by bamptonm on 21/08/2017.
  */
 
@@ -13,7 +14,7 @@ public interface RouteApi {
 
     String ENDPOINT = "https://graphhopper.com";
 
-    @GET("/api/1/route?points_encoded=false&")
+    @GET("/api/1/route?points_encoded=true&")
     Call<RouteResult> route(@Query("key") String apiKey,
                             @Query("point") String fromLatlon,
                             @Query("point") String toLatlon,

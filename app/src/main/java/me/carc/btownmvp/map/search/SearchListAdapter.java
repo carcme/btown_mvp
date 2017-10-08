@@ -3,6 +3,7 @@ package me.carc.btownmvp.map.search;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,6 +18,7 @@ import org.osmdroid.util.GeoPoint;
 import java.util.List;
 
 import me.carc.btownmvp.R;
+import me.carc.btownmvp.Utils.AndroidUtils;
 import me.carc.btownmvp.Utils.MapUtils;
 import me.carc.btownmvp.common.C;
 import me.carc.btownmvp.common.Commons;
@@ -33,6 +35,10 @@ public class SearchListAdapter extends ArrayAdapter<Place> {
 	private GeoPoint location;
     private Float heading;
     private IconManager iconManager;
+
+    private boolean newestFirst = true;
+    private boolean closestFirst = true;
+
 
     public SearchListAdapter(Context ctx) {
         super(ctx, R.layout.search_list_item);
@@ -64,6 +70,18 @@ public class SearchListAdapter extends ArrayAdapter<Place> {
         notifyDataSetChanged();
     }
 
+    public void sortList(int sortBy){
+        if(sortBy == SearchDialogFragment.SORT_TIME) {
+            sort(new MapUtils.TimeStampComparator(newestFirst));
+//            newestFirst = !newestFirst;
+
+        } else if(sortBy == SearchDialogFragment.SORT_DATE) {
+            sort(new MapUtils.DistanceComparator(closestFirst));
+//            closestFirst = !closestFirst;
+        }
+        notifyDataSetChanged();
+    }
+
     public void insertListItem(Place item, int index) {
         setNotifyOnChange(false);
         insert(item, index);
@@ -92,8 +110,9 @@ public class SearchListAdapter extends ArrayAdapter<Place> {
         return super.getItem(position);
     }
 
+    @NonNull
 	@Override
-	public View getView(int position, View convertView, ViewGroup viewGroup) {
+	public View getView(int position, View convertView, @NonNull ViewGroup viewGroup) {
         Place place = getItem(position);
 
 		View view;
@@ -107,8 +126,10 @@ public class SearchListAdapter extends ArrayAdapter<Place> {
 		ImageView imageView = (ImageView) view.findViewById(R.id.imageView);
 		TextView title = (TextView) view.findViewById(R.id.title);
 		TextView subtitle = (TextView) view.findViewById(R.id.subtitle);
-		TextView distance = (TextView) view.findViewById(R.id.distance);
+        TextView distance = (TextView) view.findViewById(R.id.distance);
+        TextView timestamp = (TextView) view.findViewById(R.id.timestamp);
 
+        assert place != null;
         if(place.getIconRes() != 0 || !Commons.isEmpty(place.getOsmKey()))  {
 
             if(place.getPlaceId()== SearchDialogFragment.SEARCH_ITEM_MAIN)
@@ -142,12 +163,18 @@ public class SearchListAdapter extends ArrayAdapter<Place> {
 
 		} else if(Commons.isNotNull(location) && place.getLat() != 0 && place.getLng() != 0 ) {
             double d = MapUtils.getDistance(location, place.getLat(), place.getLng());
+            place.setDistance(d);  // update place - faster if needed later
             distance.setText(MapUtils.getFormattedDistance(d));
 
         } else {
 			distance.setVisibility(View.INVISIBLE);
 		}
 
+		if(place.getTimestamp() > 0) {
+            timestamp.setText(AndroidUtils.formatDateMedium(view.getContext(), place.getTimestamp() ));
+        } else{
+            timestamp.setVisibility(View.INVISIBLE);
+        }
 		// todo add bearing arrow
 
 		return view;

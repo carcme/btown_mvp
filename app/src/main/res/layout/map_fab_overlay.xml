@@ -22,7 +22,6 @@
         android:layout_gravity="start|top"
         android:layout_marginTop="150dp"
         android:layout_marginStart="@dimen/margin_standard"
-        android:layout_marginLeft="@dimen/margin_standard"
         app:srcCompat="@drawable/ic_directions_walk"
         app:backgroundTint="#66000000"
         app:borderWidth="0dp"
@@ -38,7 +37,6 @@
         android:layout_gravity="end|top"
         android:layout_marginTop="@dimen/margin_standard"
         android:layout_marginEnd="@dimen/margin_standard"
-        android:layout_marginRight="@dimen/margin_standard"
         android:tag="false"
         app:srcCompat="@drawable/ic_search"
         app:backgroundTint="@color/fabColorAlmostClear"
@@ -54,7 +52,6 @@
         android:layout_height="64dp"
         android:layout_marginTop="12dp"
         android:layout_marginEnd="12dp"
-        android:layout_marginRight="12dp"
         android:layout_gravity="end|top"
         android:indeterminate="true"
         android:visibility="gone"
@@ -67,7 +64,6 @@
         android:layout_gravity="end|top"
         android:layout_marginTop="78dp"
         android:layout_marginEnd="@dimen/margin_standard"
-        android:layout_marginRight="@dimen/margin_standard"
         app:srcCompat="@drawable/ic_camera_white"
         app:backgroundTint="@color/fabColorAlmostClear"
         app:borderWidth="0dp"
@@ -90,7 +86,7 @@
         app:pressedTranslationZ="0dp"/>
 
     <TextView
-        android:id="@+id/routeInfo"
+        android:id="@+id/routeInfoText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
@@ -115,7 +111,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/margin_standard"
-            android:layout_marginRight="@dimen/margin_standard"
             android:layout_marginBottom="@dimen/margin_standard"
             android:layout_gravity="end"
             app:srcCompat="@drawable/ic_plus"
@@ -133,8 +128,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:layout_marginEnd="@dimen/margin_standard"
-            android:layout_marginRight="@dimen/margin_standard"
-            android:layout_marginBottom="@dimen/margin_small"
+            android:layout_marginBottom="@dimen/margin_standard"
             app:srcCompat="@drawable/ic_minus"
             app:layout_anchorGravity="right|end"
             app:backgroundTint="@color/fabColorAlmostClear"
@@ -150,14 +144,13 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
             android:layout_marginEnd="@dimen/margin_standard"
-            android:layout_marginRight="@dimen/margin_standard"
             android:layout_marginBottom="@dimen/margin_standard"
             app:srcCompat="@drawable/ic_my_location"
             app:backgroundTint="@color/fabColorAlmostClear"
             app:borderWidth="0dp"
             app:elevation="0dp"
             app:fabSize="normal"
-            app:pressedTranslationZ="0dp"/>
+            app:pressedTranslationZ="0dp" />
 
     </LinearLayout>
 
