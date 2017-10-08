@@ -8,7 +8,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.overlay.Marker;
@@ -19,7 +18,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import me.carc.btownmvp.MapActivity;
-import me.carc.btownmvp.map.interfaces.MyClickListener;
 import me.carc.btownmvp.R;
 import me.carc.btownmvp.Utils.MapUtils;
 import me.carc.btownmvp.common.Commons;
@@ -27,6 +25,7 @@ import me.carc.btownmvp.common.TinyDB;
 import me.carc.btownmvp.data.model.OverpassQueryResult;
 import me.carc.btownmvp.data.wiki.WikiQueryPage;
 import me.carc.btownmvp.map.IconManager;
+import me.carc.btownmvp.map.interfaces.MyClickListener;
 import me.carc.btownmvp.ui.custom.DividerItemDecoration;
 
 /**
@@ -41,9 +40,6 @@ public class MarkerListDialogFragment extends DialogFragment {
     private static final String MARKER_LIST = "MARKER_LIST";
     private MarkerListAdapter adapter;
     private TinyDB db;
-
-    @BindView(R.id.emptyFavoriteList)
-    TextView emptyList;
 
     @BindView(R.id.recyclerview)
     RecyclerView recyclerView;
@@ -137,12 +133,6 @@ public class MarkerListDialogFragment extends DialogFragment {
                 recyclerView.setLayoutManager(layoutManager);
 
                 recyclerView.setAdapter(adapter);
-            }
-
-//            emptyList = (TextView) view.findViewById(R.id.emptyFavoriteList);
-
-            if (adapter.getItemCount() > 0) {
-                emptyList.setVisibility(View.GONE);
             }
         }
         return view;

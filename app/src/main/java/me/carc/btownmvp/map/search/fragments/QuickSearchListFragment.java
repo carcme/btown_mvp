@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import org.osmdroid.util.GeoPoint;
 
@@ -43,7 +44,24 @@ public abstract class QuickSearchListFragment extends BaseListFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ListView listView = getListView();
+
+        ListView listView = (ListView)view.findViewById(android.R.id.list);
+        TextView emptyText = (TextView)view.findViewById(android.R.id.empty);
+
+        SearchListFragmentType type = getType();
+
+        switch (type){
+            case FAVORITE:
+                emptyText.setText(R.string.favorites_list_empty);
+                emptyText.setCompoundDrawablesRelativeWithIntrinsicBounds(null, ContextCompat.getDrawable(getContext(), R.drawable.ic_building), null, null);
+                break;
+
+            case HISTORY:
+                emptyText.setText(R.string.history_list_empty);
+                emptyText.setCompoundDrawablesRelativeWithIntrinsicBounds(null, ContextCompat.getDrawable(getContext(), R.drawable.ic_history_large), null, null);
+                break;
+        }
+
         if (listView != null) {
             listView.setOnScrollListener(new AbsListView.OnScrollListener() {
                 public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {

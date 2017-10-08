@@ -5,7 +5,8 @@
 
     <!--FAVORITES VIEW-->
     <string name="use_long_press_to_remove_favorite">Taste lange drücken, um Favoriten zu löschen</string>
-    <string name="favorites_places">Beliebteste Orte</string>
+    <string name="favorites_list_empty">Beliebteste Orte\n\nAdd new favorite places using the map.\n\nUse the top menu to sort or show them all on the map</string>
+    <string name="history_list_empty">Search History\n\nFind specific places and roads using the top bar… selections are added here.\n\n Press and hold an item for additional options</string>
     <string name="favorite_saved">Added to Favorites</string>
     <string name="favorite_removed">Removed from Favorites</string>
     <string name="history_saved">Added to History</string>

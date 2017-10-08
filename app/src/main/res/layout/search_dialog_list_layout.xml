@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/white"
     android:orientation="vertical">
 
@@ -10,9 +11,21 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="@color/almostWhite"
-        android:dividerHeight="1dp"
         android:divider="@color/white"
-        android:drawSelectorOnTop="true"
+        android:dividerHeight="1dp"
+        android:drawSelectorOnTop="true" />
+
+    <TextView
+        android:id="@android:id/empty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_standard"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:textColor="@color/sheet_icon_color"
+        android:textSize="20sp"
+        tools:drawableTop="@drawable/ic_history_large"
+        tools:text="@string/history_list_empty"
         />
 
-</LinearLayout>
+</RelativeLayout>

@@ -436,7 +436,7 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
     }
 
     /**
-     * Show database (favorites, history) items
+     * Show items
      * @param dbType  which database to query
      * @param poi null = display all database entries,  poi = display single item
      */
