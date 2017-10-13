@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 
@@ -12,7 +13,7 @@ import org.osmdroid.util.GeoPoint;
 import java.util.LinkedList;
 import java.util.List;
 
-import me.carc.btownmvp.MapActivity;
+import me.carc.btownmvp.App;
 import me.carc.btownmvp.R;
 import me.carc.btownmvp.Utils.MapUtils;
 import me.carc.btownmvp.common.Commons;
@@ -20,128 +21,136 @@ import me.carc.btownmvp.common.Commons;
 /**
  * Display share options in bottomsheet
  */
-public class ShareMenu  {
+public class ShareMenu {
 
-	private Context mContext;
-	private GeoPoint latLon;
-	private String title;
-	private String address;
+    private Context mAppContext;
+    private GeoPoint latLon;
+    private String title;
+    private String address;
 
-	private static final String KEY_SHARE_MENU_LATLON = "key_share_menu_latlon";
-	private static final String KEY_SHARE_MENU_POINT_TITLE = "key_share_menu_point_title";
+    private static final String KEY_SHARE_MENU_LATLON = "key_share_menu_latlon";
+    private static final String KEY_SHARE_MENU_POINT_TITLE = "key_share_menu_point_title";
 
-	public enum ShareItem {
-		MESSAGE(FontAwesome.Icon.faw_envelope, R.string.shared_string_send),
-		CLIPBOARD(FontAwesome.Icon.faw_clipboard, R.string.shared_string_copy),
-		GEO(FontAwesome.Icon.faw_globe, R.string.share_geo),
-		QR_CODE(FontAwesome.Icon.faw_qrcode, R.string.shared_string_qr_code);
+    public enum ShareItem {
+        MESSAGE(FontAwesome.Icon.faw_envelope, R.string.shared_string_send),
+        CLIPBOARD(FontAwesome.Icon.faw_clipboard, R.string.shared_string_copy),
+        GEO(FontAwesome.Icon.faw_globe, R.string.share_geo),
+        QR_CODE(FontAwesome.Icon.faw_qrcode, R.string.shared_string_qr_code),
+        WEB(FontAwesome.Icon.faw_link, R.string.shared_string_internet);
 
-		final FontAwesome.Icon iconResourceId;
-		final int titleResourceId;
+        final FontAwesome.Icon iconResourceId;
+        final int titleResourceId;
 
-		ShareItem(FontAwesome.Icon iconResourceId, int titleResourceId) {
-			this.iconResourceId = iconResourceId;
-			this.titleResourceId = titleResourceId;
-		}
+        ShareItem(FontAwesome.Icon iconResourceId, int titleResourceId) {
+            this.iconResourceId = iconResourceId;
+            this.titleResourceId = titleResourceId;
+        }
 
-		public FontAwesome.Icon getIconResourceId() {
-			return iconResourceId;
-		}
+        public FontAwesome.Icon getIconResourceId() {
+            return iconResourceId;
+        }
 
-		public int getTitleResourceId() {
-			return titleResourceId;
-		}
-	}
+        public int getTitleResourceId() {
+            return titleResourceId;
+        }
+    }
 
-	private ShareMenu(MapActivity mapActivity) {
-		mContext = mapActivity;
-	}
+    private ShareMenu(Context context) {
+        mAppContext= context;
+    }
 
-	public MapActivity getMapActivity() {
-		return (MapActivity)mContext;
-	}
+    public AppCompatActivity getActivity() {
+        return ((App) mAppContext).getCurrentActivity();
+    }
 
-	public List<ShareItem> getItems() {
-		List<ShareItem> list = new LinkedList<>();
-		list.add(ShareItem.MESSAGE);
-		list.add(ShareItem.CLIPBOARD);
-		list.add(ShareItem.GEO);
-		list.add(ShareItem.QR_CODE);
-		return list;
-	}
 
-	public GeoPoint getLatLon() {
-		return latLon;
-	}
+    public List<ShareItem> getItems() {
+        List<ShareItem> list = new LinkedList<>();
+        list.add(ShareItem.MESSAGE);
+        list.add(ShareItem.CLIPBOARD);
+        list.add(ShareItem.GEO);
+        list.add(ShareItem.QR_CODE);
+        if(address.toLowerCase().startsWith("http"))
+            list.add(ShareItem.WEB);
+        return list;
+    }
 
-	public String getTitle() {
-		return title;
-	}
+    public GeoPoint getLatLon() {
+        return latLon;
+    }
 
-	public static void show(GeoPoint latLon, String title, String address, MapActivity mapActivity) {
+    public String getTitle() {
+        return title;
+    }
 
-		ShareMenu menu = new ShareMenu(mapActivity);
+    public static void show(GeoPoint latLon, String title, String address, Context appContext) {
 
-		menu.latLon = latLon;
-		menu.title = title;
-		menu.address = address;
+        AppCompatActivity activity = ((App) appContext).getCurrentActivity();
 
-		ShareMenuDialogFragment.showInstance(menu);
-	}
+        ShareMenu menu = new ShareMenu(appContext);
 
-	public void share(ShareItem item) {
-		final int zoom = ((MapActivity)mContext).getMapView().getZoomLevel();
-		final String geoUrl = MapUtils.buildGeoUrl(latLon.getLatitude(), latLon.getLongitude(), zoom);
+        menu.latLon = latLon;
+        menu.title = title;
+        menu.address = address;
 
-		final String httpUrlGoogle = "http://maps.google.com/?q=" + ((float) latLon.getLatitude()) + "," + ((float) latLon.getLongitude());
-		final String httpUrl = "https://www.openstreetmap.org/#map=" + zoom + "/" + ((float) latLon.getLatitude()) + "/" + ((float) latLon.getLongitude());
-		StringBuilder sb = new StringBuilder();
-		if (!Commons.isEmpty(title)) {
-			sb.append(title).append("\n");
-		}
-		if (!Commons.isEmpty(address) && !address.equals(title) && !address.equals(mContext.getString(R.string.no_address_found))) {
-			sb.append(address).append("\n");
-		}
-		sb.append(mContext.getString(R.string.shared_string_location)).append(": ");
-		sb.append(geoUrl).append("\n").append(httpUrl);
-		String sms = sb.toString();
-		switch (item) {
-			case MESSAGE:
-				ShareDialog.sendMessage((MapActivity)mContext, sms);
-				break;
-			case CLIPBOARD:
-				ShareDialog.sendToClipboard((MapActivity)mContext, sms);
-				break;
-			case GEO:
-				Intent mapIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(geoUrl));
-				((MapActivity)mContext).startActivity(mapIntent);
-				break;
-			case QR_CODE:
-				Bundle bundle = new Bundle();
-				bundle.putFloat("LAT", (float) latLon.getLatitude());
-				bundle.putFloat("LONG", (float) latLon.getLongitude());
-				ShareDialog.sendQRCode((MapActivity)mContext, "LOCATION_TYPE", bundle, null);
-				break;
-		}
+        ShareMenuDialogFragment.showInstance(menu);
+    }
 
-	}
+    public void share(ShareItem item) {
+        final int zoom = 17;// ((MapActivity) mActivity).getMapView().getZoomLevel();
 
-	public void saveMenu(Bundle bundle) {
-		bundle.putSerializable(KEY_SHARE_MENU_LATLON, latLon);
-		bundle.putString(KEY_SHARE_MENU_POINT_TITLE, title);
-	}
+        final String geoUrl = MapUtils.buildGeoUrl(latLon.getLatitude(), latLon.getLongitude(), zoom);
 
-	public static ShareMenu restoreMenu(Bundle bundle, MapActivity mapActivity) {
+        final String httpUrlGoogle = "http://maps.google.com/?q=" + ((float) latLon.getLatitude()) + "," + ((float) latLon.getLongitude());
 
-		ShareMenu menu = new ShareMenu(mapActivity);
+        final String httpUrl = "https://www.openstreetmap.org/#map=" + zoom + "/" + ((float) latLon.getLatitude()) + "/" + ((float) latLon.getLongitude());
 
-		menu.title = bundle.getString(KEY_SHARE_MENU_POINT_TITLE);
-		Object latLonObj = bundle.getSerializable(KEY_SHARE_MENU_LATLON);
-		if (latLonObj != null) {
-			menu.latLon = (GeoPoint) latLonObj;
-		}
+        StringBuilder sb = new StringBuilder();
+        if (!Commons.isEmpty(title)) {
+            sb.append(title).append("\n");
+        }
+        if (!Commons.isEmpty(address) && !address.equals(title) && !address.equals(getActivity().getString(R.string.no_address_found))) {
+            sb.append(address).append("\n");
+        }
+        String wiki = sb.toString();
 
-		return menu;
-	}
+        // Add Location
+        sb.append(getActivity().getString(R.string.shared_string_location)).append(": ");
+        sb.append(geoUrl).append("\n").append(httpUrl);
+        String sms = sb.toString();
 
+        switch (item) {
+
+            case MESSAGE:
+                ShareDialog.sendMessage(getActivity(), sms);
+                break;
+
+            case CLIPBOARD:
+                ShareDialog.sendToClipboard(getActivity(), sms);
+                break;
+
+            case GEO:
+                Intent mapIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(geoUrl));
+                getActivity().startActivity(mapIntent);
+                break;
+
+            case QR_CODE:
+                Bundle bundle = new Bundle();
+                bundle.putFloat("LAT", (float) latLon.getLatitude());
+                bundle.putFloat("LONG", (float) latLon.getLongitude());
+                ShareDialog.sendQRCode(getActivity(), "LOCATION_TYPE", bundle, null);
+                break;
+
+            case WEB:
+                ShareDialog.sendMessage(getActivity(), wiki);
+                break;
+
+        }
+
+    }
+
+    public void saveMenu(Bundle bundle) {
+        bundle.putSerializable(KEY_SHARE_MENU_LATLON, latLon);
+        bundle.putString(KEY_SHARE_MENU_POINT_TITLE, title);
+    }
 }

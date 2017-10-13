@@ -53,18 +53,30 @@
                     style="@style/Widget.AppCompat.ActionButton"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:contentDescription="@string/shared_string_close"
+                    android:background="@drawable/backgroud_round_image_button"
+                    android:contentDescription="@null"
                     app:srcCompat="@drawable/ic_times" />
 
+                <ImageButton
+                    android:id="@+id/bookmarkBtn"
+                    style="@style/Widget.AppCompat.ActionButton"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:background="@drawable/backgroud_round_image_button"
+                    android:contentDescription="@string/shared_string_bookmark"
+                    app:srcCompat="@drawable/ic_bookmark"
+                    android:visibility="visible"
+                    />
                 <ImageButton
                     android:id="@+id/settingButton"
                     style="@style/Widget.AppCompat.ActionButton"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:contentDescription="@string/shared_string_close"
+                    android:contentDescription="@string/abc_action_menu_overflow_description"
                     app:srcCompat="@drawable/ic_more"
                     android:visibility="gone"
                     tools:visibility="visible"/>
+
 
             </LinearLayout>
 

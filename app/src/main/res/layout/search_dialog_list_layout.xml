@@ -13,7 +13,9 @@
         android:background="@color/almostWhite"
         android:divider="@color/white"
         android:dividerHeight="1dp"
-        android:drawSelectorOnTop="true" />
+        android:drawSelectorOnTop="true"
+        tools:listitem="@layout/search_list_item"
+        />
 
     <TextView
         android:id="@android:id/empty"

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools"
+    tools:shrinkMode="strict" >
 
     <string name="tour_explorer_title">Tour Explorer</string>
     <string name="tour_explorer_subtitle">See what Berlin has to offer</string>

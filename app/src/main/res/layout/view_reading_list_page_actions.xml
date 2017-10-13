@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:parentTag="LinearLayout"
+    tools:background="@color/paper_color"
+    tools:layout_width="match_parent"
+    tools:layout_height="wrap_content"
+    tools:orientation="vertical">
+
+    <TextView
+        android:id="@+id/reading_list_item_title"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        android:paddingLeft="@dimen/margin_standard"
+        android:paddingRight="@dimen/margin_standard"
+        android:gravity="center_vertical"
+        style="@style/RtlAwareTextView"
+        android:textColor="@color/primary_text_color"
+        android:textSize="18sp"
+        android:fontFamily="sans-serif-medium"
+        android:maxLines="1"
+        android:ellipsize="end"
+        tools:text="Article title"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/material_theme_border_color"/>
+
+
+    <LinearLayout
+        android:id="@+id/reading_list_item_share"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground">
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginLeft="@dimen/margin_standard"
+            android:layout_marginRight="@dimen/margin_standard"
+            android:layout_gravity="center_vertical"
+            app:srcCompat="@drawable/ic_menu_share"
+            android:contentDescription="@null"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="54dp"
+            android:layout_weight="1"
+            android:paddingLeft="@dimen/margin_standard"
+            android:paddingRight="@dimen/margin_standard"
+            android:gravity="center_vertical"
+            style="@style/RtlAwareTextView"
+            android:textColor="@color/primary_text_color"
+            android:textSize="16sp"
+            android:text="@string/shared_string_share"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/reading_list_item_showMap"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground">
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginLeft="@dimen/margin_standard"
+            android:layout_marginRight="@dimen/margin_standard"
+            android:layout_gravity="center_vertical"
+            app:srcCompat="@drawable/ic_my_location"
+            android:tint="@color/sheet_icon_color"
+            android:contentDescription="@null"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="54dp"
+            android:layout_weight="1"
+            android:paddingLeft="@dimen/margin_standard"
+            android:paddingRight="@dimen/margin_standard"
+            android:gravity="center_vertical"
+            style="@style/RtlAwareTextView"
+            android:textColor="@color/primary_text_color"
+            android:textSize="16sp"
+            android:text="@string/shared_string_show_on_map"/>
+    </LinearLayout>
+
+    <include layout="@layout/divider"/>
+
+    <LinearLayout
+        android:id="@+id/reading_list_item_remove"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground">
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginLeft="@dimen/margin_standard"
+            android:layout_marginRight="@dimen/margin_standard"
+            android:layout_gravity="center_vertical"
+            app:srcCompat="@drawable/ic_times"
+            android:tint="@color/sheet_icon_color"
+            android:contentDescription="@null"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="54dp"
+            android:layout_weight="1"
+            android:paddingLeft="@dimen/margin_standard"
+            android:paddingRight="@dimen/margin_standard"
+            android:gravity="center_vertical"
+            style="@style/RtlAwareTextView"
+            android:textColor="@color/primary_text_color"
+            android:textSize="16sp"
+            android:text="@string/shared_string_remove"/>
+    </LinearLayout>
+
+</merge>

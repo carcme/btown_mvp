@@ -8,8 +8,11 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.support.annotation.ColorRes;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
@@ -354,5 +357,12 @@ public class ViewUtils {
             Drawable[] drawables = textview.getCompoundDrawablesRelative();
             DrawableCompat.setTint(drawables[0], ContextCompat.getColor(ctx, colour));
         }
+    }
+
+    public static Drawable changeIconColor(Context context, @DrawableRes int res, @ColorRes int color) {
+        Drawable mDrawable = ContextCompat.getDrawable(context, res);
+        int mColor = ContextCompat.getColor(context, color);
+        mDrawable.setColorFilter(new PorterDuffColorFilter(mColor, PorterDuff.Mode.MULTIPLY));
+        return mDrawable;
     }
 }

@@ -10,23 +10,11 @@
     android:paddingStart="@dimen/margin_standard"
     android:paddingTop="@dimen/margin_standard"
     app:layout_behavior="@string/bottom_sheet_behavior">
-    <!--style="style/PoiItemDialog"-->
 
     <include layout="@layout/sheet_poi_header_layout" />
 
     <include layout="@layout/divider"/>
 
-    <EditText
-        android:id="@+id/userDesc"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/add_your_comment"
-        android:imeOptions="actionDone"
-        android:inputType="textMultiLine"
-        android:paddingBottom="@dimen/margin_standard"
-        android:paddingTop="@dimen/margin_standard"
-        android:textColor="@color/black54"
-        android:visibility="gone"/>
 
     <include layout="@layout/sheet_poi_buttons" />
 
@@ -43,7 +31,9 @@
             android:layout_height="wrap_content"
             android:scrollbars="vertical"
             android:visibility="gone"
-            tools:visibility="visible"/>
+            tools:visibility="visible"
+            tools:listitem="@layout/sheet_more_item_layout"
+            />
 
     </android.support.v4.widget.NestedScrollView>
 

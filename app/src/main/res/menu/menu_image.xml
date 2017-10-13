@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item
+        android:id="@+id/menu_image_homescreen"
+        android:title="@string/shared_string_use_on_home_screen"
+        android:icon="@drawable/ic_download"/>
+    <item
+        android:id="@+id/menu_image_share"
+        android:title="@string/shared_string_share"
+        android:icon="@drawable/ic_menu_share"/>
+    <item
+        android:id="@+id/menu_image_help"
+        android:title="@string/shared_string_help_toggle"
+        android:icon="@drawable/ic_help"/>
+</menu>

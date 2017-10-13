@@ -17,6 +17,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -37,7 +38,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
 import butterknife.Unbinder;
-import me.carc.btownmvp.MapActivity;
+import me.carc.btownmvp.App;
 import me.carc.btownmvp.R;
 import me.carc.btownmvp.Utils.AndroidUtils;
 import me.carc.btownmvp.common.C;
@@ -61,13 +62,17 @@ import static android.view.View.GONE;
 public class SearchDialogFragment extends DialogFragment implements ISearch.View {
     public interface SearchListener {
         void searchItemSelected(Place poi);
+
         void showPlaceItem(Place poi);
+
         void showFromDatabase(int dbType, Place poi);
+
         void doWikiLookup();
     }
 
     SearchListener cbSearchListener;
 
+    @SuppressWarnings("unused")
     private static final String TAG = C.DEBUG + Commons.getTag();
     public static final String ID_TAG = "SearchDialogFragment";
 
@@ -91,7 +96,6 @@ public class SearchDialogFragment extends DialogFragment implements ISearch.View
     private TinyDB db;
 
     private GeoPoint myLocation = null;
-    private GeoPoint mapCenter;
 
     private String searchQuery;
     private boolean show;
@@ -124,6 +128,10 @@ public class SearchDialogFragment extends DialogFragment implements ISearch.View
     @BindView(R.id.settingButton)
     ImageButton settingButton;
 
+    @BindView(R.id.bookmarkBtn)
+    ImageButton bookmarkBtn;
+
+
     @BindView(R.id.tab_toolbar_layout)
     View tabToolbarView;
 
@@ -149,7 +157,9 @@ public class SearchDialogFragment extends DialogFragment implements ISearch.View
         this.presenter = presenter;
     }
 
-    public static boolean showInstance(final MapActivity mapActivity, boolean show, final GeoPoint mapCenter, final GeoPoint myLocation) {
+    public static boolean showInstance(final Context appContext, boolean show, final GeoPoint mapCenter, final GeoPoint myLocation) {
+
+        AppCompatActivity activity = ((App) appContext).getCurrentActivity();
 
         try {
             Bundle bundle = new Bundle();
@@ -160,7 +170,7 @@ public class SearchDialogFragment extends DialogFragment implements ISearch.View
 
             SearchDialogFragment fragment = new SearchDialogFragment();
             fragment.setArguments(bundle);
-            fragment.show(mapActivity.getSupportFragmentManager(), ID_TAG);
+            fragment.show(activity.getSupportFragmentManager(), ID_TAG);
 
             return true;
 
@@ -185,7 +195,7 @@ public class SearchDialogFragment extends DialogFragment implements ISearch.View
         Bundle args = getArguments();
         if (Commons.isNotNull(args)) {
             show = args.getBoolean(QUICK_SEARCH_SHOW_START_HIDDEN, true);
-            mapCenter = args.getParcelable(MAP_CENTER);
+            GeoPoint mapCenter = args.getParcelable(MAP_CENTER);
             myLocation = args.getParcelable(MY_LOCATION);
             presenter.setLocations(mapCenter, myLocation);
         }
@@ -194,7 +204,7 @@ public class SearchDialogFragment extends DialogFragment implements ISearch.View
             searchQuery = "";
 
 
-        setupUI(view);
+        setupUI();
 
         return view;
     }
@@ -252,6 +262,7 @@ public class SearchDialogFragment extends DialogFragment implements ISearch.View
         Toast.makeText(getActivity(), R.string.search_no_results_found, Toast.LENGTH_LONG).show();
     }
 
+    @SuppressWarnings("unused")
     public void hide() {
         updateClearButtonVisibility(true);
         getDialog().hide();
@@ -276,14 +287,14 @@ public class SearchDialogFragment extends DialogFragment implements ISearch.View
     }
 
     @TargetApi(Build.VERSION_CODES.M)
-    private void setupUI(View view) {
+    private void setupUI() {
         final Drawable backArrow = ContextCompat.getDrawable(getActivity(), R.drawable.ic_arrow_back);
         backArrow.setColorFilter(ContextCompat.getColor(getActivity(), R.color.almostBlack), PorterDuff.Mode.SRC_ATOP);
         searchToolbar.setNavigationIcon(backArrow);
         searchToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    closeSearch();
+                closeSearch();
             }
         });
 
@@ -298,6 +309,7 @@ public class SearchDialogFragment extends DialogFragment implements ISearch.View
 
                     @Override
                     public void onPageSelected(int pos) {
+                        updateOverflowButtonVisibility(pos);
                     }
 
                     @Override
@@ -340,6 +352,11 @@ public class SearchDialogFragment extends DialogFragment implements ISearch.View
         presenter.showLongPressSelectionDialog(type, place);
     }
 
+    @OnClick(R.id.bookmarkBtn)
+    void showWikiReadingList() {
+        presenter.onShowWikiReadingList();
+    }
+
 
     @OnClick(R.id.settingButton)
     void onSettingOverflow() {
@@ -348,6 +365,7 @@ public class SearchDialogFragment extends DialogFragment implements ISearch.View
         popupMenu.setOnMenuItemClickListener(menuListener);
         popupMenu.show();
     }
+
 
     private PopupMenu.OnMenuItemClickListener menuListener = new PopupMenu.OnMenuItemClickListener() {
         @Override
@@ -373,12 +391,12 @@ public class SearchDialogFragment extends DialogFragment implements ISearch.View
                     return true;
 
                 case R.id.menu_show_all:
-                    if (Commons.isNotNull(favoriteSearchFragment) && index == 1 ) {
-                        if(favoriteSearchFragment.getAdapter().getCount() > 0)
+                    if (Commons.isNotNull(favoriteSearchFragment) && index == 1) {
+                        if (favoriteSearchFragment.getAdapter().getCount() > 0)
                             cbSearchListener.showFromDatabase(SEARCH_ITEM_FAVORITE, null);
 
                     } else if (Commons.isNotNull(historySearchFragment) && index == 2) {
-                        if(historySearchFragment.getAdapter().getCount() > 0)
+                        if (historySearchFragment.getAdapter().getCount() > 0)
                             cbSearchListener.showFromDatabase(SEARCH_ITEM_HISTORY, null);
                     }
                     return true;
@@ -410,6 +428,7 @@ public class SearchDialogFragment extends DialogFragment implements ISearch.View
         }
     }
 
+    @SuppressWarnings("unused")
     public void restoreToolbar() {
         if (toolbarVisible) {
             if (Commons.isNotNull(toolbarTitle)) {
@@ -433,6 +452,7 @@ public class SearchDialogFragment extends DialogFragment implements ISearch.View
         return searchEditText.getText().toString();
     }
 
+    @SuppressWarnings("unused")
     public boolean isSearchHidden() {
         return !show;
     }
@@ -478,12 +498,16 @@ public class SearchDialogFragment extends DialogFragment implements ISearch.View
     @Override
     public void updateClearButtonVisibility(boolean show) {
         if (show) clearButton.setVisibility(searchEditText.length() > 0 ? View.VISIBLE : GONE);
-         else     clearButton.setVisibility(View.GONE);
-
-        boolean pos = viewPager.getCurrentItem() == 0;
-        if(pos)settingButton.setVisibility(View.GONE);
-        else   settingButton.setVisibility(View.VISIBLE);
+        else clearButton.setVisibility(View.GONE);
     }
+
+    public void updateOverflowButtonVisibility(int pos) {
+        if (pos == 0)
+            settingButton.setVisibility(View.GONE);
+        else
+            settingButton.setVisibility(View.VISIBLE);
+    }
+
 
     @Override
     public void updateTabbarVisibility(boolean show) {
@@ -527,6 +551,7 @@ public class SearchDialogFragment extends DialogFragment implements ISearch.View
         searchListFragment.updateLocation(myLocation, null);
     }
 
+    @SuppressWarnings("unused")
     public int setTint(int imageRes, int color) {
         Drawable drawable = ContextCompat.getDrawable(getActivity().getApplicationContext(), imageRes);
         ColorFilter filter = new LightingColorFilter(Color.WHITE, ContextCompat.getColor(getActivity(), color));
@@ -546,7 +571,7 @@ public class SearchDialogFragment extends DialogFragment implements ISearch.View
             else
                 cbSearchListener.searchItemSelected(place);
 
-        } else if(place.getPlaceId() == SEARCH_ITEM_HISTORY){
+        } else if (place.getPlaceId() == SEARCH_ITEM_HISTORY) {
 //            cbSearchListener.showPlaceItem(place);
             cbSearchListener.showFromDatabase(place.getPlaceId(), place);
 
@@ -560,6 +585,7 @@ public class SearchDialogFragment extends DialogFragment implements ISearch.View
         }
     }
 
+    @SuppressWarnings("unused")
     public void updatePoiDirection(float dir, GeoPoint myLocation) {
         int index = viewPager.getCurrentItem();
         if (Commons.isNotNull(favoriteSearchFragment) && index == 1) {

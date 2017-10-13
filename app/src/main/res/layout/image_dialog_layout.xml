@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_glide_placeholder">
+
+    <me.carc.btownmvp.ui.TouchImageView
+        android:id="@+id/imageDialogImage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        tools:src="@drawable/no_image"
+        tools:scaleType="center"/>
+
+    <ProgressBar
+        android:id="@+id/imageLoadProgress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true" />
+
+    <LinearLayout
+        android:id="@+id/helpContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/margin_large"
+        android:layout_centerInParent="true"
+        android:background="#A0000000"
+        android:orientation="vertical"
+        android:visibility="gone"
+        tools:visibility="visible"
+        >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:layout_marginBottom="@dimen/margin_small"
+            android:fontFamily="serif"
+            android:textSize="@dimen/large_list_text_size"
+            android:text="@string/quick_guide"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:lineSpacingMultiplier="1.3"
+            android:textSize="@dimen/small_list_text_size"
+            android:text="@string/help_string_image_dialog_viewer"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="#80000000"
+        android:orientation="horizontal"
+        >
+
+        <LinearLayout
+            android:id="@+id/textContainer"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hapticFeedbackEnabled="true"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <me.carc.btownmvp.ui.custom.CapitalisedTextView
+                android:id="@+id/imageTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="serif"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                tools:text="Title is here" />
+
+            <me.carc.btownmvp.ui.custom.CapitalisedTextView
+                android:id="@+id/imageSubTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:paddingTop="10dp"
+                android:textSize="14sp"
+                android:maxLines="2"
+                android:ellipsize="end"
+                tools:visibility="visible"
+                tools:text="@string/lorum_ipsum" />
+
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/imageMoreBtn"
+            style="@style/Widget.AppCompat.ActionButton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="bottom"
+            android:contentDescription="@null"
+            app:srcCompat="@drawable/ic_more"
+            />
+
+
+    </LinearLayout>
+
+</RelativeLayout>

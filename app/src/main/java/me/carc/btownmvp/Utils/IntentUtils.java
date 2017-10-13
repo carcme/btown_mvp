@@ -6,7 +6,11 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
+
+import org.osmdroid.util.GeoPoint;
 
 import java.io.File;
 import java.net.URL;
@@ -57,6 +61,7 @@ public class IntentUtils {
         return marketIntent;
     }
 
+
     /**
      * Send email message
      *
@@ -72,6 +77,7 @@ public class IntentUtils {
     /**
      * @see #sendEmail(String, String, String)
      */
+    @SuppressWarnings({""})
     public static Intent sendEmail(String[] to, String subject, String text) {
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("message/rfc822");
@@ -132,7 +138,7 @@ public class IntentUtils {
      *                  if a 90 degree horizontal FOV was used in portrait mode.
      * @param mapZoom   The map zoom of the map location associated with this panorama.
      *                  This value is passed on to the Maps activity when the Street View "Go to Maps" menu item is chosen.
-     *                  It corresponds to the zoomLevel parameter in {@link #showLocation(float, float, Integer)}
+     *                  It corresponds to the zoomLevel parameter in {@link #showLocation(double, double, Integer)}
      */
     public static Intent showStreetView(float latitude,
                                         float longitude,
@@ -165,7 +171,7 @@ public class IntentUtils {
      *                  A larger zoom level will be clamped to 23.
      * @see #findLocation(String)
      */
-    public static Intent showLocation(float latitude, float longitude, Integer zoomLevel) {
+    public static Intent showLocation(double latitude, double longitude, @Nullable Integer zoomLevel) {
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_VIEW);
         String data = String.format("geo:%s,%s", latitude, longitude);
@@ -176,11 +182,27 @@ public class IntentUtils {
         return intent;
     }
 
+    public static Intent sendGeoIntent(@NonNull GeoPoint location, @Nullable String placeName) {
+        return sendGeoIntent(location.getLatitude(), location.getLongitude(), placeName);
+    }
+
+    public static Intent sendGeoIntent(double lat, double lon, @Nullable String placeName) {
+        // Using geo:latitude,longitude doesn't give a point on the map, hence using query
+        String geoStr = "geo:0,0?q=" + lat + "," + lon;
+        if (!TextUtils.isEmpty(placeName)) {
+            geoStr += "(" + Uri.encode(placeName) + ")";
+            return new Intent(Intent.ACTION_VIEW, Uri.parse(geoStr));
+        }
+        return null;
+    }
+
+
+
     /**
      * Opens the Maps application to the given query.
      *
      * @param query Query string
-     * @see #showLocation(float, float, Integer)
+     * @see #showLocation(double, double, Integer)
      */
     public static Intent findLocation(String query) {
         Intent intent = new Intent();

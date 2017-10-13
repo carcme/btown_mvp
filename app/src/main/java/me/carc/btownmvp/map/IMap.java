@@ -5,6 +5,7 @@ import android.os.Bundle;
 import me.carc.btownmvp.BasePresenter;
 import me.carc.btownmvp.BaseView;
 import me.carc.btownmvp.data.model.RouteResult;
+import me.carc.btownmvp.db.bookmark.BookmarkEntry;
 import me.carc.btownmvp.map.search.model.Place;
 import me.carc.btownmvp.map.sheets.model.RouteInfo;
 
@@ -27,7 +28,7 @@ public interface IMap {
         void showRouteBottomSheet(RouteInfo info, RouteResult gHopperRes);
 
         void requestGpsEnable();
-
+        void onCameraLaunch();
     }
 
     interface Presenter extends BasePresenter {
@@ -43,9 +44,11 @@ public interface IMap {
         void onShowFromDatabase(int dbType, Place poi);
 
         void onWikiLookup();
+        void onShowWikiOnMap(BookmarkEntry entry);
         void showPoiDialog(Object obj);
         void onShowCameraOrPoiMarkerListDialog();
         void routeToPoi(boolean newRoute, RouteInfo routeInfo);
+
 
         Bundle getBundle(Bundle outstate);
     }

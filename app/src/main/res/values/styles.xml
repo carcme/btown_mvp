@@ -1,4 +1,5 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources xmlns:tools="http://schemas.android.com/tools"
+    tools:shrinkMode="strict" >
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
@@ -6,7 +7,21 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+
+        <item name="android:itemTextAppearance">@style/OverflowMenu.MenuTextStyle</item>
     </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+    <style name="ActionBarPopupThemeOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+
+
+    <style name="OverflowMenu.MenuTextStyle" parent="style/Base.Widget.AppCompat.ActionButton.Overflow">
+        <item name="android:textColor">@color/overflowMenuTextColor</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+
 
     <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="android:windowBackground">@drawable/splash_screen</item>
@@ -22,6 +37,15 @@
     </style>
 
 
+    <style name="Dialog_FilledFullscreen" parent="Dialog_Fullscreen">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="windowActionModeOverlay">true</item>
+    </style>
+
+
     <style name="PoiItemDialog" parent="Theme.Design.Light.BottomSheetDialog">
         <!--<item name="android:windowCloseOnTouchOutside">false</item>-->
         <!--<item name="android:windowIsTranslucent">true</item>-->
@@ -32,6 +56,7 @@
         <item name="android:windowFrame">@null</item>
         <item name="android:windowIsFloating">true</item>
     </style>
+
 
     <style name="RoutingDialog" parent="Theme.Design.Light.BottomSheetDialog">
         <item name="android:windowCloseOnTouchOutside">false</item>
@@ -58,6 +83,5 @@
         <item name="android:drawablePadding">@dimen/margin_small</item>
         <item name="android:gravity">center_vertical</item>
     </style>
-
 
 </resources>

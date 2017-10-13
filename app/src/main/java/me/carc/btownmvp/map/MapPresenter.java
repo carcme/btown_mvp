@@ -19,7 +19,6 @@ import android.support.v4.content.res.ResourcesCompat;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Toast;
 
 import org.osmdroid.events.MapEventsReceiver;
 import org.osmdroid.util.BoundingBox;
@@ -31,6 +30,7 @@ import org.osmdroid.views.overlay.OverlayManager;
 import org.osmdroid.views.overlay.ScaleBarOverlay;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -42,6 +42,7 @@ import me.carc.btownmvp.MapActivity;
 import me.carc.btownmvp.R;
 import me.carc.btownmvp.Utils.ImageUtils;
 import me.carc.btownmvp.Utils.MapUtils;
+import me.carc.btownmvp.Utils.MapZoom;
 import me.carc.btownmvp.Utils.WikiUtils;
 import me.carc.btownmvp.common.C;
 import me.carc.btownmvp.common.Commons;
@@ -61,6 +62,8 @@ import me.carc.btownmvp.data.wiki.WikiApi;
 import me.carc.btownmvp.data.wiki.WikiQueryPage;
 import me.carc.btownmvp.data.wiki.WikiQueryResponse;
 import me.carc.btownmvp.data.wiki.WikiServiceProvider;
+import me.carc.btownmvp.db.AppDatabase;
+import me.carc.btownmvp.db.bookmark.BookmarkEntry;
 import me.carc.btownmvp.db.favorite.FavoriteEntry;
 import me.carc.btownmvp.db.history.HistoryEntry;
 import me.carc.btownmvp.map.markers.MarkersOverlay;
@@ -98,7 +101,7 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
     public static final String OVERLAY_ROUTE = "OVERLAY_ROUTE";
 
     private static final int DEFAULT_WIKI_SEARCH_RADIUS = 10000;
-    private static final int DEFAULT_WIKI_THUMBNAIL_SIZE = 320;
+    private static final int DEFAULT_WIKI_THUMBNAIL_SIZE = C.SCREEN_WIDTH;
 
     public final static float BERLIN_LAT = 52.517f;
     public final static float BERLIN_LNG = 13.350f;
@@ -138,6 +141,7 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
 
         db = TinyDB.getTinyDB();
 
+/*
         compassSensor = new CompassSensor(mContext, onCompassCallback);
 
         fusedLocation = new FusedLocation(context, onLocationChanged);
@@ -147,6 +151,7 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
         } else {
             compassSensor.enableSensors();
         }
+*/
     }
 
     @Override
@@ -177,7 +182,7 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
                     Double.valueOf(location.getAltitude()).floatValue(),
                     System.currentTimeMillis());
 
-            if(!compassSensor.isEnabled()) {
+            if (!compassSensor.isEnabled()) {
                 compassSensor.enableSensors();
             }
 
@@ -236,6 +241,16 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
         GeoPoint point = new GeoPoint(db.getDouble(C.LAST_CENTER_LAT, 0), db.getDouble(C.LAST_CENTER_LNG, 0));
         mMap.getController().animateTo(point);
         mMap.getController().setZoom(TinyDB.getTinyDB().getInt(C.LAST_ZOOM_LEVEL, 2));
+
+        compassSensor = new CompassSensor(mContext, onCompassCallback);
+
+        fusedLocation = new FusedLocation(mContext, onLocationChanged);
+        if (!fusedLocation.canGetLocation()) {
+            view.enableLocationDependantFab(false);
+            view.requestGpsEnable();
+        } else {
+            compassSensor.enableSensors();
+        }
     }
 
     @Override
@@ -394,7 +409,9 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
     public boolean singleTapConfirmedHelper(GeoPoint p) {
         mTouchPoint = p;
         // Clear existing icons and return
-        if (mMarkersOverlay.clear()) return true;
+        mMarkersOverlay.clear();
+//        if (mMarkersOverlay.clear())
+//            return true;
 
         view.onLoadStart();
 
@@ -409,10 +426,10 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
 
     @Override
     public boolean longPressHelper(GeoPoint p) {
-        mTouchPoint = p;
-        String query = new QueryGenerator().generator(OverpassDataTags.FoodDrinkData(), mMap.getBoundingBox()).build();
-        findPOI(query, false);
-        return false;
+
+        onWikiLookup();
+
+        return true;
     }
 
     /**
@@ -435,10 +452,15 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
         findPOI(query, false);
     }
 
+    private AppDatabase getDatabase() {
+        return ((App) mContext.getApplicationContext()).getDB();
+    }
+
     /**
      * Show items
-     * @param dbType  which database to query
-     * @param poi null = display all database entries,  poi = display single item
+     *
+     * @param dbType which database to query
+     * @param poi    null = display all database entries,  poi = display single item
      */
     @Override
     public void onShowFromDatabase(final int dbType, final Place poi) {
@@ -451,11 +473,11 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
                 switch (dbType) {
                     case SearchDialogFragment.SEARCH_ITEM_HISTORY:
                         if (Commons.isNotNull(poi)) {  // get single item from history database
-                            HistoryEntry entry = App.get().getDB().historyDao().findByOsmId(poi.getOsmId());
+                            HistoryEntry entry = getDatabase().historyDao().findByOsmId(poi.getOsmId());
                             if (Commons.isNotNull(entry))
                                 element = entry.getOsmPojo();
                         } else {  // get all from favorites database
-                            List<HistoryEntry> entries = App.get().getDB().historyDao().getAllHistories();
+                            List<HistoryEntry> entries = getDatabase().historyDao().getAllHistories();
                             if (Commons.isNotNull(entries))
                                 for (HistoryEntry entry : entries)
                                     elements.add(entry.getOsmPojo());
@@ -464,11 +486,11 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
 
                     case SearchDialogFragment.SEARCH_ITEM_FAVORITE:
                         if (Commons.isNotNull(poi)) {  // get single item from database
-                            FavoriteEntry entry = App.get().getDB().favoriteDao().findByOsmId(poi.getOsmId());
+                            FavoriteEntry entry = getDatabase().favoriteDao().findByOsmId(poi.getOsmId());
                             if (Commons.isNotNull(entry))
                                 element = entry.getOsmPojo();
                         } else {  // get all from favorites database
-                            List<FavoriteEntry> entries = App.get().getDB().favoriteDao().getAllFavorites();
+                            List<FavoriteEntry> entries = getDatabase().favoriteDao().getAllFavorites();
                             if (Commons.isNotNull(entries))
                                 for (FavoriteEntry entry : entries)
                                     elements.add(entry.getOsmPojo());
@@ -544,15 +566,21 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
 
                         if (Commons.isNotNull(myLocationOverlay.getLocation())) {
                             // Calculate the distance to the POI
-                            element.distance = MapUtils.getDistance(myLocationOverlay.getLocation(), element.lat, element.lon);
+                            element.distance = MapUtils.getDistance(whereAmI(), element.lat, element.lon);
                         } else
                             element.distance = 0;
 
                         // Check for wiki image, format URL if found
                         if (!Commons.isEmpty(element.tags.image)) {
-                            element.tags.image = WikiUtils.buildWikiCommonsLink(element.tags.image, 0);
+                            // TODO: 13/10/2017 if has image and is wiki link, extract the wiki link from the image url. If no wiki provided, add the new link
+//                            if(Commons.isEmpty(element.tags.wikipedia) && element.tags.image.contains("/wiki/"))
+//                                element.tags.wikipedia = element.tags.image;
+                            element.tags.image = WikiUtils.buildWikiCommonsLink(element.tags.image, C.SCREEN_WIDTH);
                         }
                     }
+
+                    // Sort the elements by distance (closest first)
+                    Collections.sort(result.elements, new OverpassQueryResult.Element.DistanceComparator());
 
                     // Different overlays for single tap and search functions
                     if (singleSearch) {
@@ -654,15 +682,10 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
                 hidePoiDialog();
                 closeRouteDialog();
 
-
                 view.showRouteBottomSheet(routeInfo, response.body());
 
-//                RouteDialog.showInstance((MapActivity) mContext, routeInfo, response.body());
-
-
-                mRouteOverlay = new RouteOverlay(mContext, mMap, routeInfo, response.body());
-
-
+//                RouteDialog.showInstance(mContext.getApplicationContext(), routeInfo, response.body());
+                mRouteOverlay = new RouteOverlay(mContext.getApplicationContext(), mMap, routeInfo, response.body());
             }
 
             @Override
@@ -670,6 +693,39 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
                 Log.d(TAG, "onFailure: ");
             }
         });
+    }
+
+
+    @Override
+    public void onShowWikiOnMap(BookmarkEntry entry) {
+        WikiQueryPage page = new WikiQueryPage();
+
+        page.setPageId((int) entry.getPageId());
+        page.setCoordinates(new WikiQueryPage.Coordinates(entry.getLat(), entry.getLon()));
+        page.setTitle(entry.getTitle());
+        page.setFullurl(entry.getLinkUrl());
+        page.setExtract(entry.getExtract());
+        page.setThumbUrl(entry.getThumbnail());
+        page.setDescription(entry.getDescription());
+        page.userComment(entry.getUserComment());
+
+
+        WikiQueryPage.Coordinates p = page.coordinates().get(0);
+        page.dDist = MapUtils.getDistance(whereAmI(), p.lat(), p.lon());
+        page.setDistance(MapUtils.getFormattedDistance(page.dDist));
+
+        Marker poiMarker = new Marker(mMap);
+        poiMarker.setTitle(page.title());
+        poiMarker.setPosition(new GeoPoint(page.coordinates().get(0).lat(), page.coordinates().get(0).lon()));
+        poiMarker.setIcon(ImageUtils.drawableFromVectorDrawable(mContext, R.drawable.ic_wiki_map_marker));
+        poiMarker.setRelatedObject(page);
+        poiMarker.setOnMarkerClickListener(MapPresenter.this);
+
+        mMarkersOverlay.add(poiMarker);
+        mMarkersOverlay.invalidate();
+
+        onMarkerClick(poiMarker, mMap);
+        closeQuickSearch();
     }
 
     @Override
@@ -689,26 +745,40 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
                 try {
                     List<WikiQueryPage> pages = response.body().query().pages();
 
+                    // Get the distances
                     for (WikiQueryPage page : pages) {
                         WikiQueryPage.Coordinates p = page.coordinates().get(0);
-                        double d = MapUtils.getDistance((GeoPoint) mMap.getMapCenter(), p.lat(), p.lon());
-                        page.setDistance(MapUtils.getFormattedDistance(d));
+                        page.dDist = MapUtils.getDistance(whereAmI(), p.lat(), p.lon());
+                        page.setDistance(MapUtils.getFormattedDistance(page.dDist));
+                    }
 
+                    // sort on the distance (just calculated)
+                    Collections.sort(pages, new WikiQueryPage.DistanceComparator());
+
+                    // build a marker
+                    for (WikiQueryPage page : pages) {
                         Marker poiMarker = new Marker(mMap);
                         poiMarker.setTitle(page.title());
                         poiMarker.setPosition(new GeoPoint(page.coordinates().get(0).lat(), page.coordinates().get(0).lon()));
                         poiMarker.setIcon(ImageUtils.drawableFromVectorDrawable(mContext, R.drawable.ic_wiki_map_marker));
                         poiMarker.setRelatedObject(page);
                         poiMarker.setOnMarkerClickListener(MapPresenter.this);
-
                         mSearchOverlay.add(poiMarker);
                     }
 
+                    // calculate and zoom to bounding box for all items
+                    GeoPoint min = new GeoPoint(pages.get(0).getLat(), pages.get(0).getLon());
+                    GeoPoint max = null;
+                    if(pages.size() > 1)
+                        max = new GeoPoint(pages.get(pages.size() - 1).getLat(), pages.get(pages.size() - 1).getLon());
+                    MapZoom.zoomTo(mMap, min, Commons.isNotNull(max) ? max : whereAmI());
+
+                    // udpate the UI
                     view.setListMode(true);
                     view.onLoadFinish();
 
+                    // redraw
                     mSearchOverlay.invalidate();
-
                     closeQuickSearch();
                 } catch (NullPointerException e) {
                     e.printStackTrace();
@@ -727,7 +797,7 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
     }
 
     @Override
-    public boolean onMarkerClick(Marker marker, MapView mapView) {
+    public boolean onMarkerClick(final Marker marker, MapView mapView) {
         if (marker.getTitle().equals("SEARCH_INDICATOR")) {
             // bit of a hack - using the callback thats already available
             ((MapActivity) mContext).runOnUiThread(new Runnable() {
@@ -750,12 +820,13 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
     @Override
     public void showPoiDialog(final Object obj) {
 
+
         if (obj instanceof OverpassQueryResult.Element) {
             mMap.getController().animateTo(((OverpassQueryResult.Element) obj).getGeoPoint());
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    SinglePoiOptionsDialog.showInstance((MapActivity) mContext, (OverpassQueryResult.Element) obj);
+                    SinglePoiOptionsDialog.showInstance(mContext.getApplicationContext(), (OverpassQueryResult.Element) obj);
                 }
             }, ZOOM_IN_TIME_DELAY);
         } else if (obj instanceof WikiQueryPage) {
@@ -764,7 +835,7 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    WikiPoiSheetDialog.showInstance((MapActivity) mContext, (WikiQueryPage) obj);
+                    WikiPoiSheetDialog.showInstance(mContext.getApplicationContext(), (WikiQueryPage) obj);
                 }
             }, ZOOM_IN_TIME_DELAY);
         }
@@ -824,10 +895,10 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
             if (Commons.isNotNull(markerList)) {
                 markerList.show();
             } else
-                MarkerListDialogFragment.showInstance((MapActivity) mContext, whereAmI(), mSearchOverlay.getItems());
-        } else
-            Toast.makeText(mContext, "Show Camera", Toast.LENGTH_SHORT).show();
-
+                MarkerListDialogFragment.showInstance(mContext.getApplicationContext(), whereAmI(), mSearchOverlay.getItems());
+        } else {
+            view.onCameraLaunch();
+        }
     }
 
     @Override
@@ -850,7 +921,7 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
             fragment.dismiss();
             mMap.refreshDrawableState();
         }
-        SearchDialogFragment.showInstance((MapActivity) mContext, show, (GeoPoint) mMap.getMapCenter(), whereAmI());
+        SearchDialogFragment.showInstance(mContext.getApplicationContext(), show, (GeoPoint) mMap.getMapCenter(), whereAmI());
     }
 
     private void showQuickSearch() {

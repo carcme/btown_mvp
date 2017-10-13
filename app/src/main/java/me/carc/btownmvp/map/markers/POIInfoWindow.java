@@ -20,7 +20,6 @@ import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.infowindow.MarkerInfoWindow;
 
-import me.carc.btownmvp.App;
 import me.carc.btownmvp.MapActivity;
 import me.carc.btownmvp.R;
 import me.carc.btownmvp.common.C;
@@ -122,7 +121,7 @@ public class POIInfoWindow extends MarkerInfoWindow {
 
             //Fetch the thumbnail in background
             if (!Commons.isEmpty(mElement.tags.image))
-                Glide.with(App.get().getApplicationContext())
+                Glide.with(mapActivity)
                         .load(mElement.tags.image)
                         .asBitmap()
                         .diskCacheStrategy(DiskCacheStrategy.SOURCE)
@@ -142,7 +141,7 @@ public class POIInfoWindow extends MarkerInfoWindow {
 
 
             if (Commons.isNotNull(mWikiPOI.thumbUrl()))
-                Glide.with(App.get().getApplicationContext())
+                Glide.with(mapActivity)
                         .load(mWikiPOI.thumbUrl())
                         .asBitmap()
                         .diskCacheStrategy(DiskCacheStrategy.SOURCE)

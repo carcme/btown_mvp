@@ -17,17 +17,7 @@ import me.carc.btownmvp.map.search.model.Place;
  */
 public class MapUtils {
 
-    private static final double BOUNDS_FROM_POINT_LIMIT = 0.00012;
-    public static final double MIN_LATITUDE = -85.0511;
-    public static final double MAX_LATITUDE = 85.0511;
-    public static final double LATITUDE_TURN = 180.0;
-    public static final double MIN_LONGITUDE = -180.0;
-    public static final double MAX_LONGITUDE = 180.0;
-    public static final double LONGITUDE_TURN = 360.0;
-
-    // TODO change the hostname back to osm.org once HTTPS works for it
-    // https://github.com/openstreetmap/operations/issues/2
-    private static final String BASE_SHORT_OSM_URL = "https://openstreetmap.org/go/";
+    private static final double BOUNDS_FROM_POINT_LIMIT = 0.00015;
 
 
     public static float normalizeDegree(float value) {
@@ -37,7 +27,6 @@ public class MapUtils {
             return 180 + (180 + value);
         }
     }
-
 
     public static String getFormattedDistance(double meters) {
         double mainUnitInMeters = 1000;
@@ -94,19 +83,25 @@ public class MapUtils {
         return brng;
     }
 
-    public static double getDistance(GeoPoint p, double latitude, double longitude) {
-        if(p == null) return 0;
-        return getDistance(p.getLatitude(), p.getLongitude(), latitude, longitude);
-    }
 
-
-    private static double toRadians(double angdeg) {
+    static double toRadians(double angdeg) {
 //		return Math.toRadians(angdeg);
         return angdeg / 180.0 * Math.PI;
     }
 
     public static String buildGeoUrl(double latitude, double longitude, int zoom) {
         return "geo:" + ((float) latitude) + "," + ((float) longitude) + "?z=" + zoom;
+    }
+
+
+
+    public static double getDistance(GeoPoint l1, GeoPoint l2) {
+        return getDistance(l1.getLatitude(), l1.getLongitude(), l2.getLatitude(), l2.getLongitude());
+    }
+
+    public static double getDistance(GeoPoint p, double latitude, double longitude) {
+        if(p == null) return 0;
+        return getDistance(p.getLatitude(), p.getLongitude(), latitude, longitude);
     }
 
     public static double getDistance(double lat1, double lon1, double lat2, double lon2) {
@@ -122,21 +117,6 @@ public class MapUtils {
         return (2 * R * 1000 * Math.asin(Math.sqrt(a)));
     }
 
-    public static double getLongitudeFromTile(double zoom, double x) {
-        return x / getPowZoom(zoom) * 360.0 - 180.0;
-    }
-
-    public static double getPowZoom(double zoom) {
-        if (zoom >= 0 && zoom - Math.floor(zoom) < 0.001f) {
-            return 1 << ((int) zoom);
-        } else {
-            return Math.pow(2, zoom);
-        }
-    }
-    public static double getLatitudeFromTile(float zoom, double y) {
-        int sign = y < 0 ? -1 : 1;
-        return Math.atan(sign * Math.sinh(Math.PI * (1 - 2 * y / getPowZoom(zoom)))) * 180d / Math.PI;
-    }
 
     public static BoundingBox getBoundsFromPoint(GeoPoint p) {
         return new BoundingBox(
@@ -145,6 +125,7 @@ public class MapUtils {
                 p.getLatitude()  - BOUNDS_FROM_POINT_LIMIT,
                 p.getLongitude() - BOUNDS_FROM_POINT_LIMIT);
     }
+
 
     public static class DistanceComparator implements Comparator<Place> {
         boolean closestFirst;
@@ -204,5 +185,8 @@ public class MapUtils {
             }
         }
     }
+
+
+
 }
 

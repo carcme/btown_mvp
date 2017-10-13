@@ -35,5 +35,6 @@ public interface ISearch {
         void loadHistory();
         void loadFavorite();
         void addToHistory(Place place);
+        void onShowWikiReadingList();
     }
 }

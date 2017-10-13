@@ -15,6 +15,7 @@ import java.util.concurrent.Executors;
 import me.carc.btownmvp.App;
 import me.carc.btownmvp.MapActivity;
 import me.carc.btownmvp.R;
+import me.carc.btownmvp.db.AppDatabase;
 import me.carc.btownmvp.db.favorite.FavoriteEntry;
 import me.carc.btownmvp.db.history.HistoryEntry;
 import me.carc.btownmvp.map.interfaces.SimpleClickListener;
@@ -115,12 +116,14 @@ public class SearchContextMenu {
         Executors.newSingleThreadExecutor().execute(new Runnable() {
             @Override
             public void run() {
+                AppDatabase db = ((App)mContext.getApplicationContext()).getDB();
+
                 if (category == SearchDialogFragment.SEARCH_ITEM_FAVORITE) {
-                    FavoriteEntry entry = App.get().getDB().favoriteDao().findByOsmId(osmId);
-                    App.get().getDB().favoriteDao().delete(entry);
+                    FavoriteEntry entry = db.favoriteDao().findByOsmId(osmId);
+                    db.favoriteDao().delete(entry);
                 } else if (category == SearchDialogFragment.SEARCH_ITEM_HISTORY) {
-                    HistoryEntry entry = App.get().getDB().historyDao().findByOsmId(osmId);
-                    App.get().getDB().historyDao().delete(entry);
+                    HistoryEntry entry = db.historyDao().findByOsmId(osmId);
+                    db.historyDao().delete(entry);
                 }
                 updateListAdapters();
             }
@@ -131,10 +134,13 @@ public class SearchContextMenu {
         Executors.newSingleThreadExecutor().execute(new Runnable() {
             @Override
             public void run() {
+
+                AppDatabase db = ((App)mContext.getApplicationContext()).getDB();
+
                 if (category == SearchDialogFragment.SEARCH_ITEM_FAVORITE) {
-                    App.get().getDB().favoriteDao().nukeTable();
+                    db.favoriteDao().nukeTable();
                 } else if (category == SearchDialogFragment.SEARCH_ITEM_HISTORY) {
-                    App.get().getDB().historyDao().nukeTable();
+                    db.historyDao().nukeTable();
                 }
                 updateListAdapters();
             }

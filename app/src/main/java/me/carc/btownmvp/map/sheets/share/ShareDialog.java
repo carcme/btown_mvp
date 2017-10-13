@@ -108,22 +108,27 @@ public class ShareDialog {
             return "";
         }
 
-        public void execute(Activity a, String title) {
+        public void execute(Activity activity, String title) {
             if (type == ACTION) {
                 runnable.run();
+
             } else if (type == VIEW) {
-                AlertDialog.Builder bld = new AlertDialog.Builder(a);
+                AlertDialog.Builder bld = new AlertDialog.Builder(activity);
                 bld.setTitle(title);
                 bld.setMessage(content);
                 bld.show();
+
             } else if (type == EMAIL) {
-                sendEmail(a, content, title);
+                sendEmail(activity, content, title);
+
             } else if (type == SMS) {
-                sendSms(a, content);
+                sendSms(activity, content);
+
             } else if (type == CLIPBOARD) {
-                sendToClipboard(a, content);
+                sendToClipboard(activity, content);
+
             } else if (type == QR) {
-                sendQRCode(a, "TEXT_TYPE", null, content);
+                sendQRCode(activity, "TEXT_TYPE", null, content);
             }
         }
     }
@@ -132,6 +137,7 @@ public class ShareDialog {
         AlertDialog.Builder builder = new AlertDialog.Builder(a);
         builder.setTitle(title);
         String[] shareStrings = new String[share.size()];
+
         for (int i = 0; i < shareStrings.length; i++) {
             shareStrings[i] = share.get(i).getShareName(a);
         }
@@ -165,12 +171,12 @@ public class ShareDialog {
         a.startActivity(Intent.createChooser(intent, a.getString(R.string.send_location)));
     }
 
-    public static void sendMessage(Activity a, String msg) {
+    public static void sendMessage(Activity activity, String msg) {
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setAction(Intent.ACTION_SEND);
         intent.putExtra(Intent.EXTRA_TEXT, msg);
         intent.setType("text/plain");
-        a.startActivity(Intent.createChooser(intent, a.getString(R.string.send_location)));
+        activity.startActivity(Intent.createChooser(intent, activity.getString(R.string.send_location)));
     }
 
     public static void sendQRCode(final Activity activity, String encodeType, Bundle encodeData, String strEncodeData) {
@@ -206,8 +212,8 @@ public class ShareDialog {
         }
     }
 
-    public static void sendToClipboard(Activity activity, String text) {
-        ClipboardManager clipboard = (ClipboardManager) activity.getSystemService(Activity.CLIPBOARD_SERVICE);
+    public static void sendToClipboard(Context context, String text) {
+        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Activity.CLIPBOARD_SERVICE);
         clipboard.setText(text);
     }
 }

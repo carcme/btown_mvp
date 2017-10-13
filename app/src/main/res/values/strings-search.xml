@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools"
+    tools:shrinkMode="strict" >
 
     <string name="search_all_hint">Type to search all</string>
     <string name="initial_search_text">Type to search</string>
@@ -7,7 +8,8 @@
 
     <string name="search_tab_favorite">Favorites</string>
     <string name="search_tab_history">History</string>
-    <string name="search_tab_category">Categories</string>
+    <string name="search_tab_category">Nearby</string>
+    <string name="search_tab_bookmark">Bookmarks</string>
 
     <!-- string name="lat_lon_pattern">Lat: %1$.5f Lon: %2$.5f</string -->
     <string name="map_mode">Map mode</string>
@@ -24,7 +26,6 @@
 
     <string name="add_your_comment">Add comment</string>
     <string name="route_to">Route</string>
-    <string name="share">Share</string>
     <string name="more">More</string>
 
     <string name="added_to_favorites">Added to Favorites</string>

@@ -55,9 +55,10 @@ public class ShareMenuDialogFragment extends BottomSheetDialogFragment implement
 
     public static void showInstance(ShareMenu menu) {
 
+
         ShareMenuDialogFragment fragment = new ShareMenuDialogFragment();
         fragment.menu = menu;
-        fragment.show(menu.getMapActivity().getSupportFragmentManager(), ID_TAG);
+        fragment.show(menu.getActivity().getSupportFragmentManager(), ID_TAG);
     }
 
     @Override
@@ -68,7 +69,7 @@ public class ShareMenuDialogFragment extends BottomSheetDialogFragment implement
 
     @Override
     public void setupDialog(final Dialog dialog, int style) {
-        View rootView = View.inflate(menu.getMapActivity(), R.layout.share_menu_fragment, null);
+        View rootView = View.inflate(menu.getActivity(), R.layout.share_menu_fragment, null);
 
         dialog.setContentView(rootView);
 
@@ -93,7 +94,7 @@ public class ShareMenuDialogFragment extends BottomSheetDialogFragment implement
     private ArrayAdapter<ShareMenu.ShareItem> createAdapter() {
         final List<ShareMenu.ShareItem> items = menu.getItems();
         final Context ctx = getActivity().getBaseContext();
-        return new ArrayAdapter<ShareMenu.ShareItem>(menu.getMapActivity(), R.layout.share_list_item, items) {
+        return new ArrayAdapter<ShareMenu.ShareItem>(menu.getActivity(), R.layout.share_list_item, items) {
 
             @SuppressLint("InflateParams")
             @Override
@@ -101,7 +102,7 @@ public class ShareMenuDialogFragment extends BottomSheetDialogFragment implement
             public View getView(final int position, View convertView, @NonNull ViewGroup parent) {
                 View v = convertView;
                 if (v == null) {
-                    v = menu.getMapActivity().getLayoutInflater().inflate(R.layout.share_list_item, null);
+                    v = menu.getActivity().getLayoutInflater().inflate(R.layout.share_list_item, null);
                 }
                 final ShareMenu.ShareItem item = getItem(position);
                 ImageView icon = (ImageView) v.findViewById(R.id.icon);

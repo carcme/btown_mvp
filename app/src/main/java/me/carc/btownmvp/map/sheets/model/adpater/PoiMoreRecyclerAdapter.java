@@ -11,10 +11,8 @@ import com.mikepenz.iconics.IconicsDrawable;
 
 import java.util.ArrayList;
 
-import me.carc.btownmvp.map.interfaces.MyClickListener;
 import me.carc.btownmvp.R;
-import me.carc.btownmvp.common.C;
-import me.carc.btownmvp.common.Commons;
+import me.carc.btownmvp.map.interfaces.MyClickListener;
 import me.carc.btownmvp.map.sheets.model.InfoCard;
 import me.carc.btownmvp.ui.custom.CapitalisedTextView;
 
@@ -23,7 +21,6 @@ import me.carc.btownmvp.ui.custom.CapitalisedTextView;
  */
 public class PoiMoreRecyclerAdapter extends RecyclerView.Adapter<PoiMoreRecyclerAdapter.ViewHolder> {
 
-    private static final String TAG = C.DEBUG + Commons.getTag();
     private final ArrayList<InfoCard> list;
     private MyClickListener onClickListener;
 
@@ -56,6 +53,7 @@ public class PoiMoreRecyclerAdapter extends RecyclerView.Adapter<PoiMoreRecycler
                 break;
 
             case WEB:
+            case WIKI:
                 holder.infoText.setAutoLinkMask(Linkify.WEB_URLS);
                 break;
 

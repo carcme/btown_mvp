@@ -1,4 +1,7 @@
-<resources>
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools"
+    tools:shrinkMode="strict" >
+
     <string name="app_name">B-Town mvp</string>
 
 
@@ -6,10 +9,15 @@
     <string name="use_long_press_to_remove_favorite">Use long press to remove favorite</string>
     <string name="favorites_list_empty">Favorites Places\n\nAdd new favorite places using the map.\n\nUse the top menu to sort or show them all on the map</string>
     <string name="history_list_empty">Search History\n\nFind specific places and roads using the top bar… selections are added here.\n\n Press and hold an item for additional options</string>
+    <string name="wiki_bookmark_list_empty">Wikipedia Reading List\n\nYour saved Wikipedia entries will appear here</string>
     <string name="favorite_saved">Added to Favorites</string>
     <string name="favorite_removed">Removed from Favorites</string>
+    <string name="bookmark_addded">Added to Reading List</string>
+    <string name="bookmark_removed">Removed from Reading List</string>
     <string name="history_saved">Added to History</string>
     <string name="history_removed">Removed from History</string>
+    <string name="reading_list_remove_from_list">Remove from %s</string>
+    <string name="reading_list_remove_from_lists">Remove from reading lists</string>
 
 
     <string name="text_close">Close</string>
@@ -26,6 +34,7 @@
     <string name="shared_string_delete">Delete</string>
     <string name="shared_string_delete_all">Delete All</string>
     <string name="shared_string_share">Share</string>
+    <string name="shared_string_share_image">Share Image</string>
     <string name="shared_string_close">Close</string>
     <string name="shared_string_time">Time</string>
     <string name="shared_string_go">Go</string>
@@ -38,6 +47,13 @@
     <string name="shared_string_send">Send</string>
     <string name="shared_string_copy">Copy</string>
     <string name="shared_string_location">Location</string>
+    <string name="shared_string_camera">Camera</string>
+    <string name="shared_string_internet">Link</string>
+    <string name="shared_string_show_on_map">Show on Map</string>
+    <string name="shared_string_use_on_home_screen">Use on Home Screen</string>
+    <string name="shared_string_bookmark">Bookmarks</string>
+    <string name="shared_string_options">Options</string>
+    <string name="shared_string_help_toggle">Toggle Help</string>
 
 
     <!--FEEDBACK DIALOG-->
@@ -49,6 +65,20 @@
     <string name="rating_dialog_cancel">Cancel</string>
     <string name="rating_dialog_suggestions">Suggest what you want and we\'ll work on it!</string>
 
+
+    <!--PRODUCT NAMES AND TEXTS-->
+    <string name="wikipedia">Wikipedia</string>
+    <string name="facebook">Facebook</string>
+    <string name="google">Google</string>
+    <string name="instagram">Instagram</string>
+    <string name="install_instagram">Install Instagram</string>
+    <string name="no_instagram">Instagram not detected on device (required). Would you like to install it now?</string>
+
+
+
+
+
+    <string name="lorum_ipsum" translatable="false">Lorem ipsum dolor sit amet, faucibus morbi tortor lacus cursus, non libero lacus sapien aenean, justo non congue, id aliquam odio scelerisque augue suspendisse faucibus, vel dolor erat ac. Etiam sapien, odio porttitor dictum lectus consectetuer accumsan eros, iaculis nulla ad nunc, tempor wisi leo ut ut sodales, interdum sed nunc adipiscing molestie dolor mauris. Et nec quis at et, eleifend consectetuer nibh est, est sed. Ac dictumst in neque tempus, nam nonummy dignissim phasellus leo, sollicitudin aspernatur pharetra sed vehicula sed turpis, praesent turpis aenean. Sagittis odio. Mi habitant commodo, curae eleifend velit feugiat et laoreet, suscipit etiam mauris ipsum rutrum nisl et, erat magna. Condimentum eget cupiditate luctus enim, aliquam penatibus augue justo rutrum. In interdum luctus nulla nunc. Rhoncus suspendisse vehicula lacinia, proin quaerat vestibulum magna felis venenatis, voluptatem nobis, urna cras porttitor justo id nec. Suscipit sit, quisque pharetra cras ullamcorper. Nec wisi non tempor posuere in etiam, nunc wisi sit at, vel velit urna diamlorem mauris cum ac. Consectetuer magna suspendisse odio non. Aliquet ipsum, risus semper cubilia odio et nulla, quis semper varius vel. Suspendisse tortor volutpat nunc dapibus. Lacus hac euismod aliquam. Lectus et duis, vitae nibh nascetur tortor magna vitae, quam odio ornare. Imperdiet at rhoncus, turpis vehicula mi. Est magna in amet amet, laoreet condimentum posuere nulla auctor. Suspendisse vitae lectus ipsum consequat, venenatis mauris et hac vestibulum sit etiam, arcu leo augue, augue lectus, in elit justo. Mattis nunc nunc vitae tempus eu, mauris scelerisque nisl varius, enim eu id arcu suspendisse mi quidem, eros lacinia nulla sagittis pulvinar. Eget dapibus curabitur, sed vitae et, etiam arcu. Id lectus vehicula nulla nunc, porttitor ut viverra sapien interdum sagittis consectetuer. Et nulla ornare eleifend vitae, consequat lacus non, ante nisl. Tellus magnis velit pulvinar non luctus, sed fusce sodales magnis massa sed, suscipit amet quis ultricies mauris velit arcu, eget turpis ullamcorper cras suspendisse, ac cras massa et nonummy tincidunt rhoncus. Sed quis lectus, turpis mauris. Vel eu vivamus tincidunt. Nec quam est adipiscing, amet velit, bibendum mauris praesent amet mauris habitasse. Vehicula placerat imperdiet ut consequat. Suspendisse in venenatis nullam, donec perferendis ac, id justo ante mi mi. Habitasse porta risus massa lobortis felis, ligula vulputate, nec luctus massa, pellentesque in pulvinar vestibulum, nulla ipsam. Pretium feugiat, neque arcu quis sed, ut molestie tempus. Nec amet ut platea, dui tellus purus, in vel massa lobortis velit sed tellus, aenean ultricies amet. Lacus felis ornare et porta, id id. Habitant wisi ac mi et, in eu lectus tortor tellus, dis molestie leo rutrum, ut lectus massa per sem nascetur a. Vulputate neque dolor dapibus pharetra mauris sit, quisque tempus pretium amet, adipiscing vel tempus, etiam ac aliquam sed ut quos interdum, ligula neque ante mi fringilla sit. Mus tempor tempor id, at ut eros suspendisse at in, nullam pellentesque, donec vitae integer vitae lorem orci rhoncus, tristique pede. Aliquam aliquip donec alias. Massa aliquet massa est, donec eu nec purus dignissim ultrices. Rutrum volutpat cras nunc amet tellus, maecenas quam pede, vitae bibendum at dolor nibh. Diam tellus adipiscing magnis diam ullamcorper, ut dolor dolor sagittis mi. Aliquam erat, pellentesque vestibulum, at vel faucibus pretium lectus.</string>
 
 
 </resources>

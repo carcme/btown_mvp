@@ -8,7 +8,9 @@ import android.support.annotation.Nullable;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -22,21 +24,30 @@ public class WikiQueryPage implements Serializable {
     @SuppressWarnings("unused")
     private int index;
     @SuppressWarnings("unused")
-    private String extract;
+    private String wikitext;
     @SuppressWarnings("unused")
-    @SerializedName("pageimage")
-    private String pageimage;
+    private String pagelanguage;
+    @SuppressWarnings("unused")
+    private String pagelanguagehtmlcode;
+    @SuppressWarnings("unused")
+    private String pagelanguagedir;
+    @SuppressWarnings("unused")
+    private String touched;
+    @SuppressWarnings("unused")
+    private long lastrevid;
+    @SuppressWarnings("unused")
+    private long length;
+    @SuppressWarnings("unused")
+    private String fullurl;
+    @SuppressWarnings("unused")
+    private String editurl;
+    @SuppressWarnings("unused")
+    private String canonicalurl;
+    @SuppressWarnings("unused")
+    private String extract;
     @SuppressWarnings("unused,NullableProblems")
     @NonNull
     private String title;
-    @SuppressWarnings("unused")
-    @Nullable
-    @Ignore
-    private List<LangLink> langlinks;
-    @SuppressWarnings("unused")
-    @Nullable
-    @Ignore
-    private List<Revision> revisions;
     @SuppressWarnings("unused")
     @Nullable
     @Embedded
@@ -50,42 +61,40 @@ public class WikiQueryPage implements Serializable {
     @SerializedName("terms")
     @Ignore
     private Terms terms;
-    @SuppressWarnings("unused")
-    @SerializedName("imageinfo")
-    @Nullable
-    @Ignore
-    private List<ImageInfo> imageInfo;
-    @SuppressWarnings("unused")
-    @SerializedName("videoinfo")
-    @Nullable
-    @Ignore
-    private List<VideoInfo> videoInfo;
-    @Nullable
-    private String redirectFrom;
     @Nullable
     private String distance;
 
+    public double dDist;
+
+    @SuppressWarnings("unused")
+    private String userComment;
+
     @NonNull
-    public String title() {
-        return title;
+    public String title() { return title; }
+    public void setTitle(String title) { this.title = title; }
+
+    @NonNull
+    public String fullurl() {
+        return fullurl;
+    }
+    public void setFullurl(String url) {
+        fullurl = url;
     }
 
     public int index() {
         return index;
     }
 
-    @Nullable
-    public List<LangLink> langLinks() {
-        return langlinks;
-    }
+    public String userComment() { return userComment; }
+    public void userComment(String comment) { userComment = comment; }
+
 
     @Nullable
-    public List<Revision> revisions() {
-        return revisions;
+    public void setCoordinates(Coordinates coordinates)  {
+        this.coordinates = new ArrayList<>();
+        this.coordinates().add(coordinates);
     }
-
-    @Nullable
-    public List<Coordinates> coordinates() {
+    public List<Coordinates> coordinates()  {
         // TODO: Handle null values in lists during deserialization, perhaps with a new
         // @RequiredElements annotation and corresponding TypeAdapter
         if (coordinates != null) {
@@ -93,6 +102,9 @@ public class WikiQueryPage implements Serializable {
         }
         return coordinates;
     }
+
+    public int pageId() { return pageid; }
+    public void setPageId(int id) { pageid = id; }
 
     public double getLat() {
         return coordinates().get(0).lat();
@@ -106,91 +118,34 @@ public class WikiQueryPage implements Serializable {
     public String thumbUrl() {
         return thumbnail != null ? thumbnail.source() : null;
     }
+    public void setThumbUrl(String thumb) {
+        if(thumbnail == null)
+            thumbnail = new Thumbnail();
+        thumbnail.source = thumb;
+    }
 
     @Nullable
-    public String extract() {
-        return extract != null ? extract : null;
-    }
+    public String extract() { return extract != null ? extract : null; }
+    public void  setExtract(String ex) { extract = ex; }
 
     public void setDistance(String dist) { distance = dist; }
 
     public String distance() { return distance != null ? distance : "--"; }
 
-
     @Nullable
     public String description() {
         return terms != null && terms.description() != null ? terms.description().get(0) : null;
     }
-
     @Nullable
-    public String pageimage() {
-        return pageimage != null ? pageimage : null;
+    public void setDescription(String desc) {
+        if(terms == null)
+            terms = new Terms();
+        terms.description = new ArrayList<>();
+        terms.description.add(desc);
     }
 
 
-    @Nullable
-    public ImageInfo imageInfo() {
-        return imageInfo != null ? imageInfo.get(0) : null;
-    }
-
-    @Nullable
-    public VideoInfo videoInfo() {
-        return videoInfo != null ? videoInfo.get(0) : null;
-    }
-
-    @Nullable
-    public String redirectFrom() {
-        return redirectFrom;
-    }
-
-    public void redirectFrom(@Nullable String from) {
-        redirectFrom = from;
-    }
-
-    public void appendTitleFragment(@Nullable String fragment) {
-        title += "#" + fragment;
-    }
-
-    public static class Revision {
-        @SuppressWarnings("unused,NullableProblems")
-        @SerializedName("contentformat")
-        @NonNull
-        private String contentFormat;
-        @SuppressWarnings("unused,NullableProblems")
-        @SerializedName("contentmodel")
-        @NonNull
-        private String contentModel;
-        @SuppressWarnings("unused,NullableProblems")
-        @NonNull
-        private String content;
-
-        @NonNull
-        public String content() {
-            return content;
-        }
-    }
-
-    public static class LangLink {
-        @SuppressWarnings("unused,NullableProblems")
-        @NonNull
-        private String lang;
-
-        @NonNull
-        public String lang() {
-            return lang;
-        }
-
-        @SuppressWarnings("unused,NullableProblems")
-        @NonNull
-        private String title;
-
-        @NonNull
-        public String title() {
-            return title;
-        }
-    }
-
-    public static class Coordinates {
+    public static class Coordinates implements Serializable {
         // Use Double object type rather than primitive type so that the presence of the fields can
         // be checked correctly by the RequiredFieldsCheckOnReadTypeAdapter.
         @SuppressWarnings("unused")
@@ -199,6 +154,9 @@ public class WikiQueryPage implements Serializable {
         @SuppressWarnings("unused")
         @NonNull
         private Double lon;
+        @SuppressWarnings("unused")
+        @NonNull
+        private Double dist;
 
         public Coordinates(double lat, double lon) {
             this.lat = lat;
@@ -212,9 +170,13 @@ public class WikiQueryPage implements Serializable {
         public double lon() {
             return lon;
         }
+
+        public double dist() {
+            return dist;
+        }
     }
 
-    static class Terms {
+    static class Terms implements Serializable {
         @SuppressWarnings("unused")
         @SerializedName("description")
         private List<String> description;
@@ -224,7 +186,7 @@ public class WikiQueryPage implements Serializable {
         }
     }
 
-    static class Thumbnail {
+    static class Thumbnail implements Serializable {
         @SuppressWarnings("unused")
         private String source;
         @SuppressWarnings("unused")
@@ -236,4 +198,22 @@ public class WikiQueryPage implements Serializable {
             return source;
         }
     }
+
+    public static class DistanceComparator implements Comparator<WikiQueryPage> {
+        @Override
+        public int compare(WikiQueryPage lhs, WikiQueryPage rhs) {
+
+            Double d1 = lhs.dDist;
+            Double d2 = rhs.dDist;
+            if (d1.compareTo(d2) < 0) {
+                return -1;
+            } else if (d1.compareTo(d2) > 0) {
+                return 1;
+            } else {
+                return 0;
+            }
+        }
+    }
+
+
 }

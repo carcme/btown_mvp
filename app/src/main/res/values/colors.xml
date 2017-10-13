@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools"
+    tools:shrinkMode="strict" >
 
     <color name="colorPrimary">#263238</color>
     <color name="colorPrimaryDark">#291f37</color>
@@ -31,6 +32,11 @@
     <color name="positiveBtnTextColor">#669900</color>
     <color name="negativeBtnTextColor">#C00</color>
 
+    <color name="backgroundGlidePlaceholderColor">@color/colorPrimary</color>
+
+
+    <color name="buttonTextColor">#0000FF</color>
+    <color name="overflowMenuTextColor">#0000FF</color>
 
 
 
@@ -87,6 +93,7 @@
     <color name="white70">#B3ffffff</color>
     <color name="white50">#80ffffff</color>
     <color name="white20">#33ffffff</color>
+    <color name="base70">#c8ccd1</color> <!-- B AAA: Disabled button / 3D widget background -->
 
 
 </resources>

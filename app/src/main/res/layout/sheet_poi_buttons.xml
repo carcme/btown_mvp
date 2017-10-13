@@ -12,8 +12,11 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:contentDescription="@string/shared_string_save"
         android:drawableTop="@drawable/ic_star"
-        android:text="@string/shared_string_save" />
+        android:text="@string/shared_string_save"
+        android:textColor="@color/buttonTextColor"
+        />
 
     <Button
         android:id="@+id/featurePin"
@@ -21,9 +24,12 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:contentDescription="Pin"
         android:drawableTop="@drawable/ic_flag_arrived"
         android:visibility="gone"
-        android:text="Pin" />
+        android:textColor="@color/buttonTextColor"
+        android:text="Pin"
+        tools:ignore="String"/>
 
     <Button
         android:id="@+id/featureShare"
@@ -31,8 +37,11 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:contentDescription="@string/shared_string_share"
         android:drawableTop="@drawable/ic_menu_share"
-        android:text="@string/share" />
+        android:text="@string/shared_string_share"
+        android:textColor="@color/buttonTextColor"
+        />
 
     <Button
         android:id="@+id/featureRoute"
@@ -40,8 +49,23 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:contentDescription="@string/route_to"
         android:drawableTop="@drawable/ic_directions"
-        android:text="@string/route_to" />
+        android:text="@string/route_to"
+        android:textColor="@color/buttonTextColor"
+        android:visibility="gone"/>
+
+    <Button
+        android:id="@+id/featureGoogle"
+        style="?android:attr/buttonBarButtonStyle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:contentDescription="@string/route_to"
+        android:drawableTop="@drawable/ic_google_maps"
+        android:text="@string/route_to"
+        android:textColor="@color/buttonTextColor"
+        />
 
     <Button
         android:id="@+id/featureMore"
@@ -49,7 +73,23 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:contentDescription="@string/more"
         android:drawableTop="@drawable/ic_more"
-        android:text="@string/more" />
+        android:text="@string/more"
+        android:textColor="@color/buttonTextColor"
+        />
+
+    <Button
+        android:id="@+id/featureRead"
+        style="?android:attr/buttonBarButtonStyle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:contentDescription="@string/more"
+        android:drawableTop="@drawable/ic_book"
+        android:text="@string/more"
+        android:visibility="gone"
+        android:textColor="@color/buttonTextColor"
+        />
 
 </LinearLayout>

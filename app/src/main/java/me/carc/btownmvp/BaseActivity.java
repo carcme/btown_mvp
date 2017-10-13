@@ -78,23 +78,23 @@ public class BaseActivity extends AppCompatActivity {
     private static Typeface fancyFont;
     private static Typeface blockFont;
 
-    public static Typeface getDefaultFont() {
+    public static Typeface getDefaultFont(Context appContext) {
         if (defaultFont == null)
-            defaultFont = Typeface.createFromAsset(App.get().getAssets(), "fonts/Roboto-Light.ttf");
+            defaultFont = Typeface.createFromAsset(appContext.getAssets(), "fonts/Roboto-Light.ttf");
         return defaultFont;
     }
 
 
-    static Typeface getFancyFont() {
+    static Typeface getFancyFont(Context appContext) {
         if (fancyFont == null)
-            fancyFont = Typeface.createFromAsset(App.get().getAssets(), "fonts/Satisfy-Regular.ttf");
+            fancyFont = Typeface.createFromAsset(appContext.getAssets(), "fonts/Satisfy-Regular.ttf");
         return fancyFont;
     }
 
 
-    public static Typeface getBlockFont() {
+    public static Typeface getBlockFont(Context appContext) {
         if (blockFont == null)
-            blockFont = Typeface.createFromAsset(App.get().getAssets(), "fonts/diplomatasc-regular.ttf");
+            blockFont = Typeface.createFromAsset(appContext.getAssets(), "fonts/diplomatasc-regular.ttf");
         return blockFont;
     }
 
@@ -104,9 +104,9 @@ public class BaseActivity extends AppCompatActivity {
 
             @Override
             protected Boolean doInBackground(Void... params) {
-                defaultFont = Typeface.createFromAsset(App.get().getAssets(), "fonts/Roboto-Light.ttf");
-                fancyFont = Typeface.createFromAsset(App.get().getAssets(), "fonts/Satisfy-Regular.ttf");
-                blockFont = Typeface.createFromAsset(App.get().getAssets(), "fonts/diplomatasc-regular.ttf");
+                defaultFont = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/Roboto-Light.ttf");
+                fancyFont = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/Satisfy-Regular.ttf");
+                blockFont = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/diplomatasc-regular.ttf");
                 return true;
             }
 

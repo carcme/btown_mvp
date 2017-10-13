@@ -33,7 +33,7 @@ public class RouteInstructionsAdapter extends RecyclerView.Adapter<RouteInstruct
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.route_direction_list_item, viewGroup, false);
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.sheet_route_direction_list_item, viewGroup, false);
         return new ViewHolder(view);
     }
 

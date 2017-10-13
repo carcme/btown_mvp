@@ -13,6 +13,7 @@ import org.osmdroid.util.GeoPoint;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import me.carc.btownmvp.BuildConfig;
@@ -369,9 +370,9 @@ public class OverpassQueryResult {
 
                 list.removeAll(Collections.singleton(null));
 
-                if(BuildConfig.DEBUG) {
-                    if(list.size() > 1) {
-                        for(String str : list){
+                if (BuildConfig.DEBUG) {
+                    if (list.size() > 1) {
+                        for (String str : list) {
                             Log.d(TAG, "getPrimaryType: " + str);
                         }
 //                        throw new RuntimeException(list.toString());
@@ -546,6 +547,22 @@ public class OverpassQueryResult {
         public GeoPoint getGeoPoint() {
             return new GeoPoint(lat, lon);
         }
+
+        public static class DistanceComparator implements Comparator<OverpassQueryResult.Element> {
+            @Override
+            public int compare(Element lhs, Element rhs) {
+                Double d1 = lhs.distance;
+                Double d2 = rhs.distance;
+                if (d1.compareTo(d2) < 0) {
+                    return -1;
+                } else if (d1.compareTo(d2) > 0) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+            }
+        }
+
 
         @Override
         public int describeContents() {

@@ -52,7 +52,7 @@ public class OverpassDataTags {
         dataTest.put("", "amenity");
         dataTest.put("", "tourism");
         dataTest.put("", "historic");
-        dataTest.put("", "shop");
+//        dataTest.put("", "shop");
         return dataTest;
     }
 

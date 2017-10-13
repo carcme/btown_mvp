@@ -4,6 +4,7 @@ import android.app.Application;
 import android.arch.persistence.room.Room;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
+import android.support.v7.app.AppCompatActivity;
 
 import com.squareup.leakcanary.LeakCanary;
 
@@ -19,24 +20,24 @@ import me.carc.btownmvp.db.AppDatabase;
 public class App extends Application {
 
     private static final String BTOWN_DATABASE_NAME = "btown.db";
-    private static App mInstance;
 
     private AppDatabase database;
     private NetworkChangeReceiver networkChangeReceiver;
+    private AppCompatActivity mCurrentActivity = null;
 
-    /**
-     * Get the application context
-     *
-     * @return the application context
-     */
-    public static synchronized App get() {
-        return mInstance;
+
+    public AppCompatActivity getCurrentActivity() {
+        return mCurrentActivity;
+    }
+
+    public void setCurrentActivity(AppCompatActivity mCurrentActivity) {
+        this.mCurrentActivity = mCurrentActivity;
     }
 
     public synchronized AppDatabase getDB() {
         if (Commons.isNull(database))
-            initDB();
-        return App.get().database;
+            database = initDB();
+        return database;
     }
 
     /**
@@ -53,8 +54,7 @@ public class App extends Application {
 
         TinyDB db = new TinyDB(this);
 
-        mInstance = this;
-        initDB();
+        database = initDB();
 
         registerConnectionRecver();
     }
@@ -62,9 +62,8 @@ public class App extends Application {
     /**
      * Init database
      */
-    private void initDB() {
-        database = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, BTOWN_DATABASE_NAME)
-                .build();
+    private AppDatabase initDB() {
+        return Room.databaseBuilder(getApplicationContext(), AppDatabase.class, BTOWN_DATABASE_NAME).build();
     }
 
     private void registerConnectionRecver() {

@@ -6,8 +6,11 @@ import android.net.NetworkInfo;
 import android.support.v7.appcompat.BuildConfig;
 
 import java.lang.reflect.Field;
+import java.text.SimpleDateFormat;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -42,6 +45,20 @@ public class Commons {
         }
         return original.substring(0, 1).toUpperCase() + original.substring(1);
     }
+
+    public static String simpleDate() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd-hh-mm-ss");
+        return sdf.format(new Date());
+    }
+
+    public static String readableDate(long timestamp) {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yy", Locale.getDefault());
+        if(timestamp != 0) {
+            return  sdf.format(new Date(timestamp));
+        }
+        return sdf.format(new Date());
+    }
+
 
     public static boolean isEmpty(List list) {
         return list == null || list.isEmpty();

@@ -1,10 +1,10 @@
 package me.carc.btownmvp.map.search;
 
-
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -31,26 +31,27 @@ import me.carc.btownmvp.data.autocomplete.AutoCompleteServiceProvider;
 import me.carc.btownmvp.data.model.AutoCompleteResult;
 import me.carc.btownmvp.data.model.OverpassQueryResult;
 import me.carc.btownmvp.data.model.PlaceToOverpass;
+import me.carc.btownmvp.db.AppDatabase;
+import me.carc.btownmvp.db.bookmark.BookmarkEntry;
 import me.carc.btownmvp.db.favorite.FavoriteEntry;
 import me.carc.btownmvp.db.history.HistoryEntry;
 import me.carc.btownmvp.map.IconManager;
 import me.carc.btownmvp.map.interfaces.SimpleClickListener;
 import me.carc.btownmvp.map.search.model.Place;
 import me.carc.btownmvp.map.sheets.search_context.SearchContextMenu;
+import me.carc.btownmvp.map.sheets.wiki.WikiReadingListDialogFragment;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-/** Show the search, favorite and history dialog
+/**
+ * Show the search, favorite and history dialog
  * Created by bamptonm on 20/09/2017.
  */
 
 public class SearchDialogPresenter implements ISearch.Presenter {
 
     private static final String TAG = C.DEBUG + Commons.getTag();
-    private static final String URL_ENCODING = "UTF-8";
-
-    public static final int HISTORY_ARRAY_MAX_SIZE = 10;
 
     public static final int SEARCH_RADIUS = 20000;  // TODO: 5/12/17 make this a user setting
     public static final int AUTOCOMPLETE_THRESHOLD = 3;
@@ -72,6 +73,10 @@ public class SearchDialogPresenter implements ISearch.Presenter {
         this.mContext = context;
         this.view = view;
         view.setPresenter(this);
+    }
+
+    private AppDatabase getDatabase() {
+        return ((App) mContext.getApplicationContext()).getDB();
     }
 
     @Override
@@ -156,7 +161,7 @@ public class SearchDialogPresenter implements ISearch.Presenter {
         map.put("q", text);
         map.put("lon", String.valueOf(mapCenter.getLongitude()));
         map.put("lat", String.valueOf(mapCenter.getLatitude()));
-        map.put("lang", Locale.getDefault().getLanguage()); // TODO: 23/09/2017 Add user language
+        map.put("lang", Locale.getDefault().getLanguage());
 
         AutoCompleteApi service = AutoCompleteServiceProvider.get();
         Call<AutoCompleteResult> call = service.autoComplete(map);
@@ -165,8 +170,6 @@ public class SearchDialogPresenter implements ISearch.Presenter {
             public void onResponse(@NonNull Call<AutoCompleteResult> call, @NonNull Response<AutoCompleteResult> response) {
 
                 ArrayList<Place> places = new ArrayList<>();
-                ArrayList<OverpassQueryResult.Element> elements = new ArrayList<>();
-
                 List<AutoCompleteResult.Features> features;
 
                 try {
@@ -232,7 +235,7 @@ public class SearchDialogPresenter implements ISearch.Presenter {
             }
 
             @Override
-            public void onFailure(Call<AutoCompleteResult> call, Throwable t) {
+            public void onFailure(@NonNull Call<AutoCompleteResult> call, @NonNull Throwable t) {
                 Log.d(TAG, "onFailure: ");
             }
         });
@@ -274,8 +277,6 @@ public class SearchDialogPresenter implements ISearch.Presenter {
 
         List<Place> places = new ArrayList<>();
 
-        List<OverpassQueryResult.Element> osmElement = new ArrayList<>();
-
         for (int i = 0; i < categories.length; i++) {
             String[] line = categories[i].split(":");
 
@@ -297,10 +298,10 @@ public class SearchDialogPresenter implements ISearch.Presenter {
         Executors.newSingleThreadExecutor().execute(new Runnable() {
             @Override
             public void run() {
-                List<FavoriteEntry> list = App.get().getDB().favoriteDao().getAllFavorites();
+                List<FavoriteEntry> list = getDatabase().favoriteDao().getAllFavorites();
                 final List<Place> places = new ArrayList<>();
 
-                // Sort the list by time added. Sort by distance from is available in todo below
+                // Sort the list by time added.
                 Collections.sort(list, new FavoriteEntry.TimeStampComparator());
 
                 for (FavoriteEntry entry : list) {
@@ -319,10 +320,6 @@ public class SearchDialogPresenter implements ISearch.Presenter {
                             .build());
                 }
 
-                // TODO: 03/10/2017 Add setting to sort favorites by either time added or distance from
-//                Collections.sort(places, new MapUtils.DistanceComparator());
-
-//                if (places.size() > 0) {
                 ((MapActivity) mContext).runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -339,10 +336,10 @@ public class SearchDialogPresenter implements ISearch.Presenter {
         Executors.newSingleThreadExecutor().execute(new Runnable() {
             @Override
             public void run() {
-                List<HistoryEntry> list = App.get().getDB().historyDao().getAllHistories();
+                List<HistoryEntry> list = getDatabase().historyDao().getAllHistories();
                 final List<Place> places = new ArrayList<>();
 
-                // Sort the list by time added. Sort by distance from is available in todo below
+                // Sort the list by time added
                 Collections.sort(list, new HistoryEntry.TimeStampComparator());
 
                 for (HistoryEntry entry : list) {
@@ -361,10 +358,6 @@ public class SearchDialogPresenter implements ISearch.Presenter {
                             .build());
                 }
 
-                // TODO: 03/10/2017 Add setting to sort favorites by either time added or distance from
-//                Collections.sort(places, new MapUtils.DistanceComparator());
-
-//                if (places.size() > 0) {
                 ((MapActivity) mContext).runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -383,7 +376,7 @@ public class SearchDialogPresenter implements ISearch.Presenter {
             public void run() {
 
                 HistoryEntry entry = new HistoryEntry(new PlaceToOverpass(null).convertPlace(place));
-                App.get().getDB().historyDao().insert(entry);
+                getDatabase().historyDao().insert(entry);
 
                 ((MapActivity) mContext).runOnUiThread(new Runnable() {
                     @Override
@@ -395,7 +388,32 @@ public class SearchDialogPresenter implements ISearch.Presenter {
         });
     }
 
+    @Override
+    public void onShowWikiReadingList() {
+        view.onShowProgressBar(true);
 
+        final AppCompatActivity activity = ((App) mContext.getApplicationContext()).getCurrentActivity();
+
+        Executors.newSingleThreadExecutor().execute(new Runnable() {
+            @Override
+            public void run() {
+
+                final List<BookmarkEntry> list = getDatabase().bookmarkDao().getAllBookmarks();
+
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ArrayList<BookmarkEntry> arrayList = new ArrayList<BookmarkEntry>(list);
+
+                        WikiReadingListDialogFragment.showInstance(mContext.getApplicationContext(), myLocation, arrayList);
+                        view.onShowProgressBar(false);
+                    }
+                });
+            }
+        });
+    }
+
+    @SuppressWarnings("unused")
     private void addToHistoryDebug() {
         Executors.newSingleThreadExecutor().execute(new Runnable() {
             @Override
@@ -424,7 +442,7 @@ public class SearchDialogPresenter implements ISearch.Presenter {
 
                     for (Place place : places) {
                         HistoryEntry entry = new HistoryEntry(new PlaceToOverpass(null).convertPlace(place));
-                        App.get().getDB().historyDao().insert(entry);
+                        getDatabase().historyDao().insert(entry);
 
                     }
                 }

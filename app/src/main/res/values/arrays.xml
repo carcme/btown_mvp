@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools"
+    tools:shrinkMode="strict" >
 
     <!--DONATE STRINGS-->
     <string-array name="donate_items" translatable="false">
@@ -23,12 +24,12 @@
     <array name="poi_category_icons" translatable="false">
         <item>@drawable/ic_wiki</item> 	<!--food and drink-->
         <item>@drawable/ic_food_drink</item> 	<!--food and drink-->
-        <item>@drawable/ic_beer</item>			<!--spati-->
+<!--        <item>@drawable/ic_beer</item>			spati-->
         <item>@drawable/ic_attractions</item>
-        <item>@drawable/ic_art</item>
 
         <item>@drawable/ic_attractions</item>
         <item>@drawable/ic_castle</item>
+        <item>@drawable/ic_art</item>
         <item>@drawable/ic_nature</item>
         <item>@drawable/ic_money</item>
         <item>@drawable/ic_heart</item>
@@ -53,9 +54,9 @@
         <!--tourism-->
         <item>Sightseeing:Top attractions in your area:amenity=fountain:amenity=planetarium:tourism=aquarium:tourism=artwork:tourism=attraction:tourism=museum:tourism=viewpoint:tourism=zoo:historic=building:historic=castle:historic=city_gate:historic=memorial:historic=monument:historic=pillory:historic=ruins</item>
         <!--		<item>Information:Got lost? You know you have a map right!:tourism=information</item>-->
-        <item>Arts &amp; Culture:Check out the sights:amenity=arts_centre:amenity=planetarium:amenity=theatre:amenity=fountain:tourism=gallery:tourism=gallery:tourism=museum:tourism=viewpoint:tourism=artwork</item>
         <item>Tourism:Tourist Attractions:amenity=planetarium:amenity=fountain:tourism=museum:tourism=viewpoint:tourism=aquarium:tourism=zoo:tourism=theme_park:tourism=attraction</item>
         <item>Historic:Museums and historic sites:tourism=museum:historic=castle:historic=building:historic=city_gate:historic=ruins:historic=tomb:historic=pillory:historic=memorial:historic=monument:historic=monastery:amenity=monastery:historic=citywalls:tourism=attraction</item>
+        <item>Arts &amp; Culture:Check out the sights:amenity=arts_centre:amenity=planetarium:amenity=theatre:amenity=fountain:tourism=gallery:tourism=gallery:tourism=museum:tourism=viewpoint:tourism=artwork</item>
         <item>Nature:Get out to the sticks:amenity=graveyard:leisure=beach_resort:leisure=common:leisure=nature_reserve:leisure=park:leisure=swimming_area:leisure=swimming_pool:tourism=picnic_site:landuse=cemetery:landuse=forest:landuse=recreation_ground:natural=wood:natural=beach:natural=peak:natural=stone</item>
 
         <!--money-->

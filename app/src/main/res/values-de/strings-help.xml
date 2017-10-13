@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools"
+    tools:shrinkMode="strict" >
+
+
+    <string name="quick_guide">Quick Guide</string>
+    <string name="help_string_image_dialog_viewer">Single touch to change the scale.\nDouble tap to zoom.\nTo exit, tap the bottom text.</string>
+
+
+</resources>

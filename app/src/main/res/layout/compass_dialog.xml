@@ -16,6 +16,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="@dimen/margin_standard"
         android:padding="@dimen/margin_large"
+        android:fontFamily="serif"
         android:textAlignment="center"
         android:textColor="@color/almostWhite"
         android:textSize="35sp"

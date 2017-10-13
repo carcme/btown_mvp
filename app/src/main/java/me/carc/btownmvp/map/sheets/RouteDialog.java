@@ -1,6 +1,7 @@
 package me.carc.btownmvp.map.sheets;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -9,6 +10,7 @@ import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -21,7 +23,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
-import me.carc.btownmvp.MapActivity;
+import me.carc.btownmvp.App;
 import me.carc.btownmvp.R;
 import me.carc.btownmvp.Utils.FragmentUtil;
 import me.carc.btownmvp.Utils.MapUtils;
@@ -100,7 +102,9 @@ public class RouteDialog extends BottomSheetDialogFragment {
     TextView routeDestination;
 
 
-    public static boolean showInstance(final MapActivity mapActivity, RouteInfo info, RouteResult gHopperRes) {
+    public static boolean showInstance(final Context appContext, RouteInfo info, RouteResult gHopperRes) {
+
+        AppCompatActivity activity = ((App) appContext).getCurrentActivity();
 
         try {
             Bundle bundle = new Bundle();
@@ -109,7 +113,7 @@ public class RouteDialog extends BottomSheetDialogFragment {
 
             RouteDialog fragment = new RouteDialog();
             fragment.setArguments(bundle);
-            fragment.show(mapActivity.getSupportFragmentManager(), ID_TAG);
+            fragment.show(activity.getSupportFragmentManager(), ID_TAG);
 
         } catch (RuntimeException e) {
             return false;

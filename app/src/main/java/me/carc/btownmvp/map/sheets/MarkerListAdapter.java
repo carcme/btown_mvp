@@ -9,11 +9,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import org.osmdroid.util.GeoPoint;
 
 import java.util.ArrayList;
 
 import me.carc.btownmvp.BuildConfig;
+import me.carc.btownmvp.common.Commons;
 import me.carc.btownmvp.map.interfaces.MyClickListener;
 import me.carc.btownmvp.R;
 import me.carc.btownmvp.Utils.MapUtils;
@@ -43,6 +46,7 @@ public class MarkerListAdapter extends RecyclerView.Adapter<MarkerListAdapter.Po
         double lon;
         String distance;
         Drawable icon;
+        String image;
     }
 
 
@@ -55,7 +59,7 @@ public class MarkerListAdapter extends RecyclerView.Adapter<MarkerListAdapter.Po
     @Override
     public PoiListHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
 
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.favorite_list_layout, viewGroup, false);
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.markers_list_item_layout, viewGroup, false);
         return new PoiListHolder(view);
     }
 
@@ -71,7 +75,14 @@ public class MarkerListAdapter extends RecyclerView.Adapter<MarkerListAdapter.Po
         holder.distance.setText(item.distance);
         distanceArray.put(pos, holder.distance);
 
-        holder.icon.setImageDrawable(item.icon);
+        if(Commons.isNotNull(item.image)) {
+            Glide.with(holder.mView.getContext())
+                    .load(item.image)
+                    .placeholder(R.drawable.checkered_background)
+                    .into(holder.icon);
+        } else
+            holder.icon.setImageDrawable(item.icon);
+
 
         // point out the direction - todo: needs to be updated on device rotation
         holder.direction.rotationFromLocations(currentLocation, new GeoPoint(item.lat, item.lon), true);
@@ -94,6 +105,11 @@ public class MarkerListAdapter extends RecyclerView.Adapter<MarkerListAdapter.Po
             }
         });
 
+    }
+
+    public void updateItems(ArrayList<PoiAdpaterItem> list) {
+        this.items = list;
+        notifyDataSetChanged();
     }
 
     @Override

@@ -14,9 +14,10 @@
         android:layout_gravity="center_vertical"
         android:contentDescription="@null"
         android:scaleType="centerCrop"
-        android:src="@drawable/background_image_blank" />
+        android:src="@drawable/checkered_background" />
 
     <LinearLayout
+        android:id="@+id/titleContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -32,7 +33,8 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:gravity="top"
-            android:textSize="20sp"
+            android:textSize="@dimen/large_list_text_size"
+            android:fontFamily="serif"
             android:textColor="@color/sheet_heading_text_color"
             tools:text="Title" />
 
@@ -43,6 +45,7 @@
             android:layout_marginEnd="50dp"
             android:ellipsize="end"
             android:maxLines="1"
+            android:textSize="@dimen/small_list_text_size"
             android:textColor="@color/sheet_sub_heading_text_color"
             tools:text="Pub" />
 
@@ -54,6 +57,7 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:gravity="bottom"
+            android:textSize="@dimen/small_list_text_size"
             android:textColor="@color/fabSearchProgressColor"
             tools:text="@string/poi_string_closed" />
 
@@ -78,7 +82,7 @@
         android:ellipsize="end"
         android:maxLines="1"
         android:textColor="@color/almostBlack"
-        android:textSize="15sp"
+        android:textSize="@dimen/small_list_text_size"
         tools:text="Address" />
 
     <TextView

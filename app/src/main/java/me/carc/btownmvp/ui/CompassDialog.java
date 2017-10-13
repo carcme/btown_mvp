@@ -1,7 +1,9 @@
 package me.carc.btownmvp.ui;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +14,7 @@ import org.osmdroid.util.GeoPoint;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import me.carc.btownmvp.MapActivity;
+import me.carc.btownmvp.App;
 import me.carc.btownmvp.R;
 import me.carc.btownmvp.Utils.MapUtils;
 import me.carc.btownmvp.common.C;
@@ -43,18 +45,16 @@ public class CompassDialog extends DialogFragment {
     private Unbinder unbinder;
 
 
-    public static boolean showInstance(final MapActivity mapActivity, final String title,
+    public static boolean showInstance(final Context appContext, final String title,
                                        final String subTitle, final GeoPoint start, final GeoPoint end) {
+
+        AppCompatActivity activity = ((App) appContext).getCurrentActivity();
 
         try {
             Bundle bundle = new Bundle();
 
-            if(title != null) {
-                bundle.putString(TITLE, title);
-            }
-            if(subTitle != null) {
-                bundle.putString(SUBTITLE, subTitle);
-            }
+            if(title != null)    bundle.putString(TITLE, title);
+            if(subTitle != null) bundle.putString(SUBTITLE, subTitle);
 
             if (start != null) {
                 bundle.putDouble(MY_LAT, start.getLatitude());
@@ -66,7 +66,7 @@ public class CompassDialog extends DialogFragment {
             }
             CompassDialog fragment = new CompassDialog();
             fragment.setArguments(bundle);
-            fragment.show(mapActivity.getSupportFragmentManager(), ID_TAG);
+            fragment.show(activity.getSupportFragmentManager(), ID_TAG);
 
             return true;
 
@@ -74,8 +74,6 @@ public class CompassDialog extends DialogFragment {
             return false;
         }
     }
-
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -113,7 +111,6 @@ public class CompassDialog extends DialogFragment {
 
         return view;
     }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

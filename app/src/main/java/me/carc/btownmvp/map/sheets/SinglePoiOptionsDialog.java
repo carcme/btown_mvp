@@ -2,6 +2,8 @@ package me.carc.btownmvp.map.sheets;
 
 import android.Manifest;
 import android.app.Dialog;
+import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -14,44 +16,33 @@ import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 
 import org.osmdroid.util.GeoPoint;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.Executors;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.OnTextChanged;
 import butterknife.Unbinder;
 import me.carc.btownmvp.App;
-import me.carc.btownmvp.BuildConfig;
-import me.carc.btownmvp.MapActivity;
 import me.carc.btownmvp.R;
 import me.carc.btownmvp.Utils.AndroidUtils;
 import me.carc.btownmvp.Utils.FragmentUtil;
@@ -62,20 +53,19 @@ import me.carc.btownmvp.Utils.WikiUtils;
 import me.carc.btownmvp.common.C;
 import me.carc.btownmvp.common.Commons;
 import me.carc.btownmvp.common.CompassSensor;
-import me.carc.btownmvp.common.TinyDB;
 import me.carc.btownmvp.data.model.OverpassQueryResult;
 import me.carc.btownmvp.data.model.ReverseResult;
 import me.carc.btownmvp.data.reverse.ReverseApi;
+import me.carc.btownmvp.data.reverse.ReverseLookupLoader;
 import me.carc.btownmvp.data.reverse.ReverseServiceProvider;
+import me.carc.btownmvp.db.AppDatabase;
 import me.carc.btownmvp.db.favorite.FavoriteEntry;
 import me.carc.btownmvp.map.interfaces.MyClickListener;
-import me.carc.btownmvp.map.search.SearchDialogFragment;
-import me.carc.btownmvp.map.search.model.Place;
-import me.carc.btownmvp.map.search.model.SavedFavoriteItem;
 import me.carc.btownmvp.map.sheets.model.InfoCard;
 import me.carc.btownmvp.map.sheets.model.RouteInfo;
 import me.carc.btownmvp.map.sheets.model.adpater.PoiMoreRecyclerAdapter;
 import me.carc.btownmvp.map.sheets.share.ShareMenu;
+import me.carc.btownmvp.map.sheets.wiki.WikiWebViewActivity;
 import me.carc.btownmvp.ui.CompassDialog;
 import me.carc.btownmvp.ui.CompassView;
 import me.carc.btownmvp.ui.FeedbackDialog;
@@ -84,7 +74,6 @@ import pub.devrel.easypermissions.EasyPermissions;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
 
 /**
  * Bottom Sheet Dialog for points of interest
@@ -108,9 +97,6 @@ public class SinglePoiOptionsDialog extends BottomSheetDialogFragment {
     private RouteInfo routeInfo;
     private boolean hidden;
     private Unbinder unbinder;
-
-    @BindView(R.id.userDesc)
-    EditText userDesc;
 
     @BindView(R.id.moreRecyclerView)
     RecyclerView moreRecyclerView;
@@ -146,15 +132,16 @@ public class SinglePoiOptionsDialog extends BottomSheetDialogFragment {
     Button featureMore;
 
 
-    public static boolean showInstance(final MapActivity mapActivity, OverpassQueryResult.Element element) {
+    public static boolean showInstance(final Context appContext, OverpassQueryResult.Element element) {
 
+        AppCompatActivity activity = ((App) appContext).getCurrentActivity();
         try {
             Bundle bundle = new Bundle();
             bundle.putSerializable(ITEM, element);
 
             SinglePoiOptionsDialog fragment = new SinglePoiOptionsDialog();
             fragment.setArguments(bundle);
-            fragment.show(mapActivity.getSupportFragmentManager(), ID_TAG);
+            fragment.show(activity.getSupportFragmentManager(), ID_TAG);
 
         } catch (RuntimeException e) {
             return false;
@@ -164,20 +151,27 @@ public class SinglePoiOptionsDialog extends BottomSheetDialogFragment {
 
     private BottomSheetBehavior.BottomSheetCallback mBottomSheetCB = new BottomSheetBehavior.BottomSheetCallback() {
 
+        private boolean sliding;
+
         @Override
         public void onStateChanged(@NonNull View bottomSheet, int newState) {
+            behavior.setHideable(false);
             if (newState == BottomSheetBehavior.STATE_HIDDEN) {
-                Log.d(TAG, "onStateChanged: STATE_HIDDEN");
                 dismiss();
+            } else if (newState == BottomSheetBehavior.STATE_EXPANDED) {
+                sliding = false;
             } else if (newState == BottomSheetBehavior.STATE_COLLAPSED) {
-                more();
+                if (sliding)
+                    sliding = false;
+                else
+                    more();
             }
         }
 
         @Override
         public void onSlide(@NonNull View bottomSheet, float slideOffset) {
-            Log.d(TAG, "onSlide: " + slideOffset);
-            if (Float.isNaN(slideOffset)) {
+            if (Float.isNaN(slideOffset) && !sliding) {
+                sliding = true;
                 more();
             }
         }
@@ -213,8 +207,9 @@ public class SinglePoiOptionsDialog extends BottomSheetDialogFragment {
             assert node != null;
             featureTitle.setText(node.tags.name);
 
-            if (!Commons.isEmpty(node.userDescription))
-                userDesc.setText(Commons.capitalizeFirstLetter(node.userDescription));
+            //// TODO: 10/10/2017  should show the user description if its avaialble (saved item)
+//            if (!Commons.isEmpty(node.userDescription))
+//                userDesc.setText(Commons.capitalizeFirstLetter(node.userDescription));
 
             if (!Commons.isEmpty(node.tags.cuisine)) {
                 String type = node.tags.getPrimaryType();
@@ -229,7 +224,8 @@ public class SinglePoiOptionsDialog extends BottomSheetDialogFragment {
 
             if (Commons.isEmpty(address)) {
                 featureSubtitle.setText(getActivity().getResources().getText(R.string.seaching));
-                reverseAddressLookup(node.lat, node.lon);
+                new ReverseLookupLoader(featureSubtitle, node.lat, node.lon);
+//                reverseAddressLookup(node.lat, node.lon);
             } else
                 featureSubtitle.setText(address);
 
@@ -252,7 +248,7 @@ public class SinglePoiOptionsDialog extends BottomSheetDialogFragment {
                 }
             }
 
-            Glide.with(App.get().getApplicationContext())
+            Glide.with(getActivity())
                     .load(node.tags.image)
                     .asBitmap()
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
@@ -281,7 +277,7 @@ public class SinglePoiOptionsDialog extends BottomSheetDialogFragment {
             @Override
             public void onClick(View v) {
                 OverpassQueryResult.Element node = (OverpassQueryResult.Element) getArguments().getSerializable(ITEM);
-                CompassDialog.showInstance((MapActivity) getActivity(),
+                CompassDialog.showInstance(getActivity().getApplicationContext(),
                         node.tags.name,
                         featureType.getText().toString(),
                         new GeoPoint(node.lat, node.lon),
@@ -315,6 +311,10 @@ public class SinglePoiOptionsDialog extends BottomSheetDialogFragment {
 //        if(Commons.isNotNull(unbinder))
         unbinder.unbind();
         super.onDestroy();
+    }
+
+    private AppDatabase getDatabase() {
+        return ((App) getActivity().getApplicationContext()).getDB();
     }
 
     @Nullable
@@ -415,13 +415,18 @@ public class SinglePoiOptionsDialog extends BottomSheetDialogFragment {
                                 break;
 
                             case WEB:
-                            case WIKI:
                                 i = IntentUtils.openLink(WikiUtils.createWikiLink(item.getData()));
                                 if (Commons.isNotNull(i)) startActivity(i);
                                 break;
 
+                            case WIKI:
+                                Intent intent = new Intent(getActivity(), WikiWebViewActivity.class);
+                                intent.putExtra(WikiWebViewActivity.WIKI_EXTRA_PAGE_TITLE, getActivity().getString(R.string.wikipedia));
+                                intent.putExtra(WikiWebViewActivity.WIKI_EXTRA_PAGE_URL, item.getData());
+                                startActivity(intent);
+                                break;
+
                             case PHONE:
-                                Toast.makeText(getActivity(), "Phone Call::" + item.getData(), Toast.LENGTH_SHORT).show();
                                 if (EasyPermissions.hasPermissions(getActivity(), Manifest.permission.CALL_PHONE)) {
                                     startActivity(IntentUtils.callPhone(item.getData()));
                                 }
@@ -432,7 +437,7 @@ public class SinglePoiOptionsDialog extends BottomSheetDialogFragment {
 
                             case CLIPBOARD:
                                 AndroidUtils.copyToClipboard(getActivity(), item.getData());
-                                Toast.makeText(getActivity(), "Copied to clipboard: " + item.getData(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getActivity(), "Copied to clipboard:\n" + item.getData(), Toast.LENGTH_SHORT).show();
                                 break;
                         }
                     }
@@ -490,41 +495,6 @@ public class SinglePoiOptionsDialog extends BottomSheetDialogFragment {
 
     private Timer timer;
 
-    /**
-     * Add user comments for POI
-     */
-    @OnTextChanged(value = R.id.userDesc, callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
-    protected void afterEditTextChanged(final Editable editable) {
-
-        if (Commons.isNotNull(timer))
-            timer.cancel();
-
-        timer = new Timer();
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                userDescription = editable.toString();
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        saveFavoriteFromEditText();
-                    }
-                });
-            }
-        }, 600);  // high ish delay so we don't spam the shared preferences
-    }
-
-
-    private void saveFavoriteFromEditText() {
-        OverpassQueryResult.Element element = (OverpassQueryResult.Element) getArguments().getSerializable(ITEM);
-        if (Commons.isNotNull(element)) {
-
-            // Do not update on first open (when comment has been saved previously)
-            if (!userDescription.equalsIgnoreCase(element.userDescription)) {
-                addToFavoritesDb(element);
-            }
-        }
-    }
 
     @Override
     public void onDismiss(DialogInterface dialog) {
@@ -581,21 +551,20 @@ public class SinglePoiOptionsDialog extends BottomSheetDialogFragment {
             builder.build().show();
 
         }
+    }
 
-
-
-/*
-        AndroidUtils.hideSoftKeyboard(getActivity(), userDesc);
-        OverpassQueryResult.Element element = (OverpassQueryResult.Element) getArguments().getSerializable(ITEM);
-        if (Commons.isNotNull(element)) {
-            Drawable icon;
-            if (featureSave.getTag().equals(R.drawable.ic_star_yellow)) {
-                removeFavorites(element.id);
-            } else {
-                addToFavoritesDb(element);
+    @OnClick(R.id.featureIcon)
+    void thumbnailClick() {
+        try {
+            OverpassQueryResult.Element element = (OverpassQueryResult.Element) getArguments().getSerializable(ITEM);
+            if (Commons.isNotNull(element)) {
+                final String httpUrl = "https://www.openstreetmap.org/#map=16/" + element.lat + "/" + ((float) element.lon);
+                ImageDialog.showInstance(getActivity().getApplicationContext(), element.tags.image, httpUrl, element.tags.name, element.tags.getPrimaryType());
             }
+
+        } catch (NullPointerException e) {
+            Log.d(TAG, "setupDialog ERROR: " + e.getLocalizedMessage());
         }
-*/
     }
 
     @OnClick(R.id.featurePin)
@@ -607,11 +576,25 @@ public class SinglePoiOptionsDialog extends BottomSheetDialogFragment {
     void share() {
         try {
             OverpassQueryResult.Element node = (OverpassQueryResult.Element) getArguments().getSerializable(ITEM);
-            ShareMenu.show(node.getGeoPoint(), node.tags.name, node.tags.getAddress(), (MapActivity) getActivity());
+            ShareMenu.show(node.getGeoPoint(), node.tags.name, node.tags.getAddress(), getActivity().getApplicationContext());
         } catch (NullPointerException e) {
             Log.d(TAG, "setupDialog ERROR: " + e.getLocalizedMessage());
         }
     }
+
+    @OnClick(R.id.featureGoogle)
+    void googleRoute() {
+        OverpassQueryResult.Element element = (OverpassQueryResult.Element) getArguments().getSerializable(ITEM);
+        if (Commons.isNotNull(element)) {
+            try {
+                Intent intent = IntentUtils.sendGeoIntent(element.lat, element.lon, element.tags.name);
+                getActivity().startActivity(intent);
+            } catch (ActivityNotFoundException e) {
+                Toast.makeText(getActivity(), R.string.error_no_maps_app, Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
 
     @OnClick(R.id.featureRoute)
     void route() {
@@ -625,7 +608,12 @@ public class SinglePoiOptionsDialog extends BottomSheetDialogFragment {
             routeInfo.setAddressTo(element.tags.getAddress());
             callback.onRouteTo(routeInfo);
         }
-   }
+    }
+
+    @OnClick(R.id.titleContainer)
+    void showMore() {
+        more();
+    }
 
     @OnClick(R.id.featureMore)
     void more() {
@@ -642,7 +630,7 @@ public class SinglePoiOptionsDialog extends BottomSheetDialogFragment {
             @Override
             public void run() {
                 FavoriteEntry entry = new FavoriteEntry(element);
-                App.get().getDB().favoriteDao().insert(entry);
+                getDatabase().favoriteDao().insert(entry);
 
                 checkFavorite(element.id);
 
@@ -666,7 +654,8 @@ public class SinglePoiOptionsDialog extends BottomSheetDialogFragment {
         Executors.newSingleThreadExecutor().execute(new Runnable() {
             @Override
             public void run() {
-                FavoriteEntry entry = App.get().getDB().favoriteDao().findByOsmId(nodeId);
+
+                FavoriteEntry entry = getDatabase().favoriteDao().findByOsmId(nodeId);
                 final Drawable icon;
                 if (Commons.isNull(entry)) {
                     icon = ContextCompat.getDrawable(getActivity(), R.drawable.ic_star);
@@ -689,9 +678,10 @@ public class SinglePoiOptionsDialog extends BottomSheetDialogFragment {
         Executors.newSingleThreadExecutor().execute(new Runnable() {
             @Override
             public void run() {
-                FavoriteEntry entry = App.get().getDB().favoriteDao().findByOsmId(nodeId);
+
+                FavoriteEntry entry = getDatabase().favoriteDao().findByOsmId(nodeId);
                 if (Commons.isNotNull(entry)) {
-                    App.get().getDB().favoriteDao().delete(entry);
+                    getDatabase().favoriteDao().delete(entry);
                     checkFavorite(entry.getOsmId());
 
                     getActivity().runOnUiThread(new Runnable() {
@@ -705,89 +695,10 @@ public class SinglePoiOptionsDialog extends BottomSheetDialogFragment {
         });
     }
 
-    /**
-     * Add the favorite to the shared preferences
-     *
-     * @param element the OsmNode to save
-     */
-    public void addToFavorites(OverpassQueryResult.Element element) {
-
-        OverpassQueryResult.Element.Tags tags = element.tags;
-
-        element.userDescription = userDescription;
-
-        Place place = new Place.Builder()
-                .name(tags.name)          // display name
-                .address(tags.getAddress())       // display sub title
-                .lat(element.lat)
-                .lng(element.lon)
-                .iconRes(element.iconId)
-                .iconName(tags.getPrimaryType())
-                .userComment(userDescription != null ? userDescription : tags.getPrimaryType())
-                .placeId(SearchDialogFragment.SEARCH_ITEM_FAVORITE)
-                .build();
-
-
-        if (element == null)
-            return;
-
-        ArrayList<SavedFavoriteItem> favoritesList = new ArrayList<>();
-        Gson gson = new Gson();
-
-        TinyDB db = TinyDB.getTinyDB();
-
-        ArrayList<Long> idList = db.getListLong(C.SAVED_FAVORITES_ID_LIST);
-        String json = db.getString(C.SAVED_FAVORITES_LIST, null);
-        if (json != null) {
-            Type collectionType = new TypeToken<Collection<SavedFavoriteItem>>() {
-            }.getType();
-            favoritesList = gson.fromJson(json, collectionType);
-        }
-
-        // create new history item
-        SavedFavoriteItem savedFavorite = new SavedFavoriteItem();
-        Calendar c = Calendar.getInstance();
-        savedFavorite.setPlace(place);
-        savedFavorite.setElement(element);
-        savedFavorite.setDate(c.getTimeInMillis());
-
-        // reverse search for dups and remove old item based on GeoPoint
-        for (int i = favoritesList.size() - 1; i >= 0; i--) {
-            GeoPoint listItemPoint = favoritesList.get(i).getPlace().getGeoPoint();
-            if (listItemPoint.equals(element.getGeoPoint())) {
-                favoritesList.remove(i);
-            }
-        }
-        idList.add(0, element.id);
-        favoritesList.add(0, savedFavorite);
-        json = gson.toJson(favoritesList);
-
-        // add elements to al, including duplicates
-        Set<Long> hs = new HashSet<>();
-        hs.addAll(idList);
-        idList.clear();
-        idList.addAll(hs);
-
-        db.putListLong(C.SAVED_FAVORITES_ID_LIST, idList);
-        db.putString(C.SAVED_FAVORITES_LIST, json);
-
-        if (BuildConfig.DEBUG) {
-            if (favoritesList.size() != idList.size()) {
-                Toast.makeText(getActivity(), "Favorite poi list and favorite ids list DO NOT match", Toast.LENGTH_SHORT).show();
-//                throw new RuntimeException("Favorite poi list and favorite ids list DO NOT match");
-            }
-            for (SavedFavoriteItem fav : favoritesList) {
-                if (!idList.contains(fav.getElement().id)) {
-                    Toast.makeText(getActivity(), "Favorite ids NOT found in favorite list", Toast.LENGTH_SHORT).show();
-//                    throw new RuntimeException("Favorite ids NOT found in favorite list");
-                }
-            }
-        }
-
-    }
-
     public CompassDialog getCompassFragment() {
-        Fragment fragment = getActivity().getSupportFragmentManager().findFragmentByTag(CompassDialog.ID_TAG);
+        AppCompatActivity activity = ((App) getActivity().getApplication()).getCurrentActivity();
+
+        Fragment fragment = activity.getSupportFragmentManager().findFragmentByTag(CompassDialog.ID_TAG);
         return fragment != null && !fragment.isDetached() && !fragment.isRemoving() ? (CompassDialog) fragment : null;
     }
 

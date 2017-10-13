@@ -29,9 +29,12 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 import me.carc.btownmvp.Utils.MapUtils;
 import me.carc.btownmvp.Utils.ViewUtils;
+import me.carc.btownmvp.camera.CameraActivity;
 import me.carc.btownmvp.common.C;
 import me.carc.btownmvp.common.Commons;
 import me.carc.btownmvp.data.model.RouteResult;
+import me.carc.btownmvp.data.reverse.ReverseLookupLoader;
+import me.carc.btownmvp.db.bookmark.BookmarkEntry;
 import me.carc.btownmvp.map.IMap;
 import me.carc.btownmvp.map.MapPresenter;
 import me.carc.btownmvp.map.interfaces.MyClickListener;
@@ -42,12 +45,14 @@ import me.carc.btownmvp.map.sheets.SinglePoiOptionsDialog;
 import me.carc.btownmvp.map.sheets.WikiPoiSheetDialog;
 import me.carc.btownmvp.map.sheets.model.RouteInfo;
 import me.carc.btownmvp.map.sheets.model.adpater.RouteInstructionsAdapter;
+import me.carc.btownmvp.map.sheets.wiki.WikiReadingListDialogFragment;
 
 public class MapActivity extends BaseActivity implements
         IMap.View,
         SearchDialogFragment.SearchListener,
         WikiPoiSheetDialog.WikiCallback,
-        SinglePoiOptionsDialog.SinglePoiCallback
+        SinglePoiOptionsDialog.SinglePoiCallback,
+        WikiReadingListDialogFragment.BookmarksCallback
         /*,
         RouteDialog.RouteDialogCallback*/ {
 
@@ -144,7 +149,6 @@ public class MapActivity extends BaseActivity implements
         getBaseFunctions();
 
         presenter = new MapPresenter(this, this, mMap);
-        presenter.start();
         presenter.initMap(savedInstanceState);
 
 
@@ -166,8 +170,10 @@ public class MapActivity extends BaseActivity implements
 
     @Override
     protected void onResume() {
-        isActive = true;
         super.onResume();
+        isActive = true;
+        ((App)getApplication()).setCurrentActivity(this);
+        presenter.start();
     }
 
     @Override
@@ -391,6 +397,11 @@ public class MapActivity extends BaseActivity implements
     }
 
     @Override
+    public void onCameraLaunch() {
+        startActivity(new Intent(MapActivity.this, CameraActivity.class));
+    }
+
+    @Override
     public void showRouteBottomSheet(RouteInfo info, RouteResult routeResult) {
         routeInfo = info;
         new PopulateView(routeResult.getPath()).run();
@@ -421,23 +432,18 @@ public class MapActivity extends BaseActivity implements
      * WikiPoiSheetDialog callbacks
      */
     @Override
-    public void onLinkPreviewLoadPage() {
-        Log.d(TAG, "onLinkPreviewLoadPage: ");
+    public void todo() {
+        Toast.makeText(this, "ToDO - Show on Map", Toast.LENGTH_SHORT).show();
+        Log.d(TAG, "WikiCallback todo - is this needed");
     }
 
-    @Override
-    public void onLinkPreviewCopyLink() {
-        Log.d(TAG, "onLinkPreviewCopyLink: ");
-    }
 
+    /**
+     * WikiReadingListDialogFragment callbacks
+     */
     @Override
-    public void onLinkPreviewAddToList() {
-        Log.d(TAG, "onLinkPreviewAddToList: ");
-    }
-
-    @Override
-    public void onLinkPreviewShareLink() {
-        Log.d(TAG, "onLinkPreviewShareLink: ");
+    public void showWikiOnMap(BookmarkEntry entry) {
+        presenter.onShowWikiOnMap(entry);
     }
 
 
@@ -482,9 +488,7 @@ public class MapActivity extends BaseActivity implements
             routeDeparture.setText(routeInfo.getAddressFrom());
 
             if (Commons.isNull(routeInfo.getAddressTo())) {
-
-                Log.d(TAG, "populateRecycler: TODO - reverse address search");
-//                reverseAddressLookup(routeInfo.getTo().getLatitude(), routeInfo.getTo().getLongitude());
+                new ReverseLookupLoader(routeDestination, routeInfo.getTo().getLatitude(), routeInfo.getTo().getLongitude());
             } else
                 routeDestination.setText(routeInfo.getAddressTo());
 

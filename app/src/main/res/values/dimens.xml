@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools"
+    tools:shrinkMode="strict" >
+
     <dimen name="margin_tiny">4dp</dimen>
     <dimen name="margin_small">8dp</dimen>
     <dimen name="margin_standard">16dp</dimen>
@@ -15,7 +17,7 @@
     <dimen name="fab_space">72dp</dimen>
     <dimen name="toolbar_height">56dp</dimen>
 
-    <dimen name="wikiSheetPeekHeight">320dp</dimen>
+    <dimen name="wikiSheetPeekHeight">220dp</dimen>
 
     <!-- Default height of list items -->
     <dimen name="defaultListItemSize">56dp</dimen>
@@ -26,6 +28,9 @@
     <dimen name="favorites_icon_right_margin">24dp</dimen>
     <dimen name="favorites_icon_top_margin">13dp</dimen>
     <dimen name="search_list_icon_size">24dp</dimen>
+    <dimen name="wiki_list_thumb_size">40dp</dimen>
+    <dimen name="detail_backdrop_height">200dp</dimen>
+    <dimen name="detail_backdrop_grid_height">100dp</dimen>
 
 
 </resources>

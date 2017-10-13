@@ -9,13 +9,11 @@ import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.util.Log;
-import android.widget.Toast;
 
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.FolderOverlay;
 import org.osmdroid.views.overlay.Marker;
-import org.osmdroid.views.overlay.infowindow.MarkerInfoWindow;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -214,13 +212,13 @@ public class MarkersOverlay extends RadiusMarkerClusterer {
 
             if (nodes != null) {
 
-                POIInfoWindow poiInfoWindow = null;
-                MarkerInfoWindow markerWindow = null;
+//                POIInfoWindow poiInfoWindow = null;
+//                MarkerInfoWindow markerWindow = null;
 
-                if (featureTag.equals("TourMapRequest"))
-                    markerWindow = new MarkerInfoWindow(R.layout.btown_bubble, map);
-                else
-                    poiInfoWindow = new POIInfoWindow(mContext, map);
+//                if (featureTag.equals("TourMapRequest"))
+//                    markerWindow = new MarkerInfoWindow(R.layout.btown_bubble, map);
+//                else
+//                    poiInfoWindow = new POIInfoWindow(mContext, map);
 
                 for (OverpassQueryResult.Element node : nodes) {
                     Marker poiMarker = new Marker(map);
@@ -246,8 +244,8 @@ public class MarkersOverlay extends RadiusMarkerClusterer {
                         poiMarker.setRelatedObject(node);
                         if(mOnMarkerClickListener != null)
                             poiMarker.setOnMarkerClickListener(mOnMarkerClickListener);
-                        else
-                            poiMarker.setInfoWindow(poiInfoWindow != null ? poiInfoWindow : markerWindow);
+//                        else
+//                            poiMarker.setInfoWindow(poiInfoWindow != null ? poiInfoWindow : markerWindow);
 
                         elements.add(node);
 
@@ -270,10 +268,7 @@ public class MarkersOverlay extends RadiusMarkerClusterer {
                 Marker indicator = new Marker(map);
                 indicator.setTitle("SEARCH_INDICATOR");
                 mOnMarkerClickListener.onMarkerClick(indicator, map);
-            } else
-                Toast.makeText(mContext, "TODO - pan map and zoom to show all new pois", Toast.LENGTH_SHORT).show();
-
-            // TODO: 08/10/2017 animate map to show newly added markers
+            }
 
             mMarkers.setName(tag);
             invalidate();
