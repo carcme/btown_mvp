@@ -35,7 +35,7 @@
     <color name="backgroundGlidePlaceholderColor">@color/colorPrimary</color>
 
 
-    <color name="buttonTextColor">#0000FF</color>
+    <color name="buttonTextColor">#263238</color>
     <color name="overflowMenuTextColor">#0000FF</color>
 
 

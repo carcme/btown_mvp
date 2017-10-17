@@ -112,7 +112,7 @@
         android:background="@color/white"
         android:orientation="vertical">
 
-        <me.carc.btownmvp.ui.custom.CustomViewPager
+        <me.carc.btown_map.ui.custom.CustomViewPager
             android:id="@+id/search_pager"
             android:layout_width="match_parent"
             android:layout_height="0dp"

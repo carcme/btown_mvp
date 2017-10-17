@@ -2,7 +2,16 @@
 <resources xmlns:tools="http://schemas.android.com/tools"
     tools:shrinkMode="strict" >
 
-    <string name="app_name">B-Town mvp</string>
+    <string name="app_name">B-Town Map</string>
+
+
+    <string name="desc_background_placeholder">Berliner Dom und Fernsehturm</string>
+    <string name="name_background_jewish">Holocaust-Mahnmal </string>
+    <string name="desc_background_jewish">Mahnmal für die ermordeten Juden in Europa</string>
+    <string name="desc_background_transportr">Satelliten-App für die Öffentlichen Verkehrsmittel</string>
+    <string name="nav_menu_feedback">Feedback</string>
+
+
 
     <!--FAVORITES VIEW-->
     <string name="use_long_press_to_remove_favorite">Taste lange drücken, um Favoriten zu löschen</string>
@@ -51,6 +60,7 @@
     <string name="shared_string_bookmark">Bookmarks</string>
     <string name="shared_string_options">Options</string>
     <string name="shared_string_help_toggle">Umschalten Hilfe</string>
+    <string name="shared_string_info">Info</string>
 
 
     <!--FEEDBACK DIALOG-->
@@ -70,5 +80,6 @@
     <string name="instagram">Instagram</string>
     <string name="install_instagram">Installiere Instagram</string>
     <string name="no_instagram">Instagram nicht gefunden. Möchtest du es jetzt installieren?</string>
+
 
 </resources>

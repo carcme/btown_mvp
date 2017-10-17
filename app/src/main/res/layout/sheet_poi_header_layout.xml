@@ -38,7 +38,7 @@
             android:textColor="@color/sheet_heading_text_color"
             tools:text="Title" />
 
-        <me.carc.btownmvp.ui.custom.CapitalisedTextView
+        <me.carc.btown_map.ui.custom.CapitalisedTextView
             android:id="@+id/featureType"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -63,7 +63,7 @@
 
     </LinearLayout>
 
-    <me.carc.btownmvp.ui.CompassView
+    <me.carc.btown_map.ui.CompassView
         android:id="@+id/poiNavigationIcon"
         android:layout_width="48dp"
         android:layout_height="48dp"

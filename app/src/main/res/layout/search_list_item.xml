@@ -68,7 +68,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <me.carc.btownmvp.ui.custom.CapitalisedTextView
+                <me.carc.btown_map.ui.custom.CapitalisedTextView
                     android:id="@+id/subtitle"
                     android:layout_width="0dp"
                     android:layout_weight="1"

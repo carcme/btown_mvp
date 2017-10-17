@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="me.carc.btownmvp">
+    package="me.carc.btown_map">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.INTERNET" />
 
 
@@ -19,14 +18,14 @@
 
 
     <application
-        android:name="me.carc.btownmvp.App"
+        android:name="me.carc.btown_map.App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/SplashTheme">
-        <activity android:name="me.carc.btownmvp.SplashActivity">
+        <activity android:name="me.carc.btown_map.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -36,7 +35,7 @@
 
 
         <activity
-            android:name="me.carc.btownmvp.MapActivity"
+            android:name="me.carc.btown_map.MapActivity"
             android:hardwareAccelerated="false"
             android:label="@string/app_name"
             android:theme="@style/AppTheme">
@@ -78,17 +77,17 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="me.carc.btownmvp.camera.CameraActivity"
+        <activity android:name="me.carc.btown_map.camera.CameraActivity"
             android:theme="@style/AppTheme"/>
 
-        <activity android:name="me.carc.btownmvp.map.sheets.wiki.WikiWebViewActivity"
+        <activity android:name="me.carc.btown_map.map.sheets.wiki.WikiWebViewActivity"
             android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme"/>
 
 
         <provider
             android:name="android.support.v4.content.FileProvider"
-            android:authorities="me.carc.btownmvp.fileprovider"
+            android:authorities="me.carc.btown_map.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
@@ -96,6 +95,9 @@
                 android:resource="@xml/paths"/>
         </provider>
 
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="fbef5068aff924f588f1045c445fae0a1e2eaa4a" />
     </application>
 
 </manifest>

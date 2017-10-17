@@ -9,7 +9,7 @@
     android:padding="2dp"
     android:id="@+id/layout_poi_details">
 
-    <me.carc.btownmvp.ui.custom.CapitalisedTextView
+    <me.carc.btown_map.ui.custom.CapitalisedTextView
         android:id="@+id/infoText"
         style="@style/PoiMoreInfoTextView"
         android:drawableLeft="@drawable/ic_wheelchair"

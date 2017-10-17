@@ -36,6 +36,7 @@
     <string name="zxing_barcode_scanner_not_found">ZXing Barcode Scanner application not installed. Search in Google Play?</string>
 
     <string name="share_geo">geo:</string>
+    <string name="share_point">Share Point</string>
     <string name="shared_string_qr_code">QR-code</string>
     <string name="no_address_found">No address found</string>
     <string name="share_menu_location">Share location</string>

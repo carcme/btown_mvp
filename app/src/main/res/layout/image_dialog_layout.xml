@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/background_glide_placeholder">
 
-    <me.carc.btownmvp.ui.TouchImageView
+    <me.carc.btown_map.ui.TouchImageView
         android:id="@+id/imageDialogImage"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -68,7 +68,7 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <me.carc.btownmvp.ui.custom.CapitalisedTextView
+            <me.carc.btown_map.ui.custom.CapitalisedTextView
                 android:id="@+id/imageTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -77,7 +77,7 @@
                 android:textSize="18sp"
                 tools:text="Title is here" />
 
-            <me.carc.btownmvp.ui.custom.CapitalisedTextView
+            <me.carc.btown_map.ui.custom.CapitalisedTextView
                 android:id="@+id/imageSubTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="none">
+        <item
+            android:id="@+id/nav_group1"
+            android:icon="@drawable/ic_art"
+            android:title="test"/>
+
+    </group>
+    <group
+        android:id="@+id/nav_menu_communication"
+        android:checkableBehavior="none">
+        <item
+            android:id="@+id/nav_group2"
+            android:icon="@drawable/ic_wiki_map_marker"
+            android:title="test"/>
+
+        <item
+            android:id="@+id/nav_feedback"
+            android:icon="@drawable/ic_feedback_black_24dp"
+            android:title="@string/nav_menu_feedback"/>
+    </group>
+</menu>

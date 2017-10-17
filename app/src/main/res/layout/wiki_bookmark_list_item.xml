@@ -38,7 +38,7 @@
             tools:text="Amsterdam" />
 
 
-        <me.carc.btownmvp.ui.custom.CapitalisedTextView
+        <me.carc.btown_map.ui.custom.CapitalisedTextView
             android:id="@+id/bookmarkSubtitle"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

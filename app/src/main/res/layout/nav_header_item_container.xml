@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/margin_small"
+    android:background="?android:attr/selectableItemBackground"
+    >
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/backgroundChooserImage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:contentDescription="@null"
+            android:scaleType="centerCrop"
+            tools:ignore="UnusedAttribute"
+            tools:src="@drawable/background_brandenburg_tor" />
+
+        <TextView
+            android:id="@+id/backgroundChooserTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:padding="@dimen/margin_small"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:maxLines="1"
+            tools:text="Title" />
+
+        <TextView
+            android:id="@+id/backgroundChooserDesc"
+            style="@style/Card_16dp"
+            android:layout_gravity="bottom"
+            android:padding="@dimen/margin_small"
+            android:textColor="#EEEEEE"
+            android:maxLines="1"
+            android:textSize="14sp"
+            tools:text="Desc" />
+
+    </FrameLayout>
+
+
+</LinearLayout>

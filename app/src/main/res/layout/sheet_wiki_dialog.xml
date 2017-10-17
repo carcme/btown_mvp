@@ -7,7 +7,7 @@
     android:layout_height="wrap_content"
     android:layout_gravity="bottom"
     app:layout_behavior="@string/bottom_sheet_behavior"
-    tools:context="me.carc.btownmvp.map.sheets.WikiPoiSheetDialog">
+    tools:context="me.carc.btown_map.map.sheets.WikiPoiSheetDialog">
 
     <LinearLayout
         android:id="@+id/wikiDialogContainer"
@@ -84,7 +84,7 @@
 
                 <include layout="@layout/divider"/>
 
-                <me.carc.btownmvp.ui.custom.CapitalisedTextView
+                <me.carc.btown_map.ui.custom.CapitalisedTextView
                     android:id="@+id/wikiDescription"
                     style="@style/RtlAwareTextView"
                     android:layout_width="match_parent"

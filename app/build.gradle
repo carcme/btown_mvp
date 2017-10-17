@@ -1,11 +1,26 @@
+buildscript {
+    repositories {
+        maven { url 'https://maven.fabric.io/public' }
+    }
+
+    dependencies {
+        classpath 'io.fabric.tools:gradle:1.+'
+    }
+}
 apply plugin: 'com.android.application'
+apply plugin: 'io.fabric'
+
+repositories {
+    maven { url 'https://maven.fabric.io/public' }
+}
+
 
 android {
     compileSdkVersion 26
     buildToolsVersion "26.0.2"
 
     defaultConfig {
-        applicationId "me.carc.b_townmvp"
+        applicationId "me.carc.btown_map"
         minSdkVersion 21
         targetSdkVersion 26
         versionCode 1
@@ -24,7 +39,7 @@ android {
             shrinkResources false
             zipAlignEnabled false
             useProguard false
-            buildConfigField "String", "GRAPHHOPPER_API_KEY", getRouteApiKey("GRAPHHOPPER_API_KEY")
+            buildConfigField "String", "GRAPHHOPPER_API_KEY", getPrivateKey("GRAPHHOPPER_API_KEY")
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         release {
@@ -32,17 +47,17 @@ android {
             shrinkResources true
             zipAlignEnabled true
             useProguard true
-            buildConfigField "String", "GRAPHHOPPER_API_KEY", getRouteApiKey("GRAPHHOPPER_API_KEY")
+            buildConfigField "String", "GRAPHHOPPER_API_KEY", getPrivateKey("GRAPHHOPPER_API_KEY")
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
 }
 
 // Get your own key at https://graphhopper.com/#directions-api and copy it to 'local.properties'
-def static getRouteApiKey(String property){
+def static getPrivateKey(String property){
     def Properties props = new Properties()
     props.load(new FileInputStream(new File('local.properties')))
-    return props['GRAPHHOPPER_API_KEY']
+    return props[property]
 }
 
 ext {
@@ -109,4 +124,7 @@ dependencies {
     compile 'pub.devrel:easypermissions:1.0.0'
 
     testCompile 'junit:junit:4.12'
+    compile('com.crashlytics.sdk.android:crashlytics:2.7.0@aar') {
+        transitive = true;
+    }
 }

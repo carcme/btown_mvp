@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    android:id="@+id/nav_header.root"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="160dp">
+
+    <ImageView
+        android:id="@+id/nav_header.background_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/background_red_swirl"/>
+
+    <TextView
+        android:id="@+id/nav_header.city"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|start"
+        android:fontFamily="sans-serif"
+        android:paddingBottom="@dimen/margin_standard"
+        android:paddingEnd="@dimen/margin_standard"
+        android:paddingLeft="@dimen/margin_standard"
+        android:paddingRight="@dimen/margin_standard"
+        android:paddingStart="@dimen/margin_standard"
+        android:paddingTop="@dimen/margin_standard"
+        android:textColor="@color/white"
+        android:textSize="22sp"
+        tools:text="Some Text Here"/>
+</FrameLayout>

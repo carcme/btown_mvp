@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white"
-    android:fitsSystemWindows="false">
+    android:background="@color/paper_color">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -16,7 +15,7 @@
             android:id="@+id/wikiActivityToolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:layout_scrollFlags="scroll|snap">
+            app:layout_scrollFlags="scroll|enterAlwaysCollapsed|snap">
 
         </android.support.v7.widget.Toolbar>
 
@@ -31,7 +30,7 @@
         android:scrollbarFadeDuration="0"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <me.carc.btownmvp.ui.custom.NonLeakingWebView
+        <me.carc.btown_map.ui.custom.NonLeakingWebView
             android:id="@+id/nonLeakWebView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />

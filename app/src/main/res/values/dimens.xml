@@ -32,5 +32,6 @@
     <dimen name="detail_backdrop_height">200dp</dimen>
     <dimen name="detail_backdrop_grid_height">100dp</dimen>
 
+    <dimen name="card_elevation">4dp</dimen>
 
 </resources>
