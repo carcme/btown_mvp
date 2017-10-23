@@ -63,12 +63,17 @@
 
 
     <color name="white">#FFFFFF</color>
-    <color name="almostWhite">#EEEEEE</color>
     <color name="black">#000000</color>
+    <color name="almostWhite">#EEEEEE</color>
     <color name="almostBlack">#2d2d2d</color>
     <color name="lightBlack">#4d4d4d</color>
-    <item name="gallery_overlay" type="color">#80000000</item>
+    <color name="grey_200">#EEEEEE</color>
+    <color name="grey_300">#E0E0E0</color>
+    <color name="grey_400">#BDBDBD</color>
+    <color name="grey_500">#9E9E9E</color>
 
+    <color name="accentColorRed">#ec2045</color>
+    <item name="gallery_overlay" type="color">#80000000</item>
 
 
 
@@ -102,9 +107,6 @@
     <color name="menu_icon_color">@color/black54</color>
     <color name="material_theme_border_color">@color/black12</color>
 
-
-    <color name="grey_400">#BDBDBD</color>
-    <color name="grey_500">#9E9E9E</color>
 
 
     <!-- Light and Dark mode consolidation-->

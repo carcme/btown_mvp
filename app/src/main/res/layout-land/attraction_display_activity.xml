@@ -9,7 +9,7 @@
         android:layout_height="match_parent"
         android:background="@color/gallery_overlay"
         android:fitsSystemWindows="true"
-        tools:context="me.carc.btown_map.tours.attractionPager.AttractionPagerActivity">
+        tools:context="me.carc.btown.tours.attractionPager.AttractionPagerActivity">
 
         <include layout="@layout/attraction_map_layout"/>
 

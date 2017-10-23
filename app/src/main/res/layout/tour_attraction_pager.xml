@@ -8,7 +8,7 @@
         android:layout_height="match_parent"
         tools:context="tours.attractionPager.AttractionPagerActivity">
 
-    <me.carc.btown_map.ui.custom.LockableViewPager
+    <me.carc.btown.ui.custom.LockableViewPager
             android:id="@+id/attractionViewPager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

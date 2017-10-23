@@ -7,7 +7,7 @@
     android:background="@color/colorPrimaryDark"
     android:orientation="vertical"
     android:padding="@dimen/margin_standard"
-    tools:context="me.carc.btown_map.ui.CompassDialog">
+    tools:context="me.carc.btown.ui.CompassDialog">
 
     <TextView
         android:id="@+id/compassTitle"
@@ -22,7 +22,7 @@
         android:textSize="35sp"
         tools:text="POI Title" />
 
-    <me.carc.btown_map.ui.custom.CapitalisedTextView
+    <me.carc.btown.ui.custom.CapitalisedTextView
         android:id="@+id/compassType"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -33,7 +33,7 @@
         android:textSize="25sp"
         tools:text="POI Type" />
 
-    <me.carc.btown_map.ui.CompassView
+    <me.carc.btown.ui.CompassView
         android:id="@+id/compassArrow"
         android:layout_width="200dp"
         android:layout_height="200dp"

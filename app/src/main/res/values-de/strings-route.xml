@@ -2,8 +2,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools"
     tools:shrinkMode="strict" >
 
-    <string name="routing_disclaimer">Die Routen-Funktion sollte lediglich als Referenz verstanden und nicht während der Fahrt benutzt werden.</string>
-
     <string name="error_no_maps_app">Es konnten keine Apps gefunden werden, die Richtungen zur Verfügung stellen.</string>
 
 </resources>

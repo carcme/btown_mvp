@@ -2,12 +2,16 @@
 <resources xmlns:tools="http://schemas.android.com/tools"
     tools:shrinkMode="strict" >
 
-    <string name="app_name">B-Town Map</string>
+    <string name="app_name">B-Town</string>
     <string name="feedback_email" translatable="false">carcmedev@gmail.com</string>
 
     <!-- Navigation drawer -->
     <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
     <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
+    <string name="menu_transportr">Transportr</string>
+    <string name="menu_public_transport">Public Transport</string>
+    <string name="menu_ubahn_sbahn_plan">S and U Bahn Plan</string>
+
 
     <string name="no_name_background" translatable="false"> </string>
     <string name="no_desc_background" translatable="false"> </string>
@@ -19,7 +23,6 @@
     <string name="desc_background_transportr">Public Transport companion app</string>
     <string name="name_background_brandenburg_tor" translatable="false">Brandenburg Tor</string>
     <string name="desc_background_brandenburg_tor">The Brandenburg Tor by night</string>
-    <string name="nav_menu_feedback">Feedback</string>
 
 
     <!--FAVORITES VIEW-->
@@ -73,6 +76,11 @@
     <string name="shared_string_options">Options</string>
     <string name="shared_string_help_toggle">Toggle Help</string>
     <string name="shared_string_info">Info</string>
+    <string name="shared_string_rate">Rate</string>
+    <string name="shared_string_language">Language</string>
+    <string name="shared_string_feedback">Feedback</string>
+
+
 
 
     <!--FEEDBACK DIALOG-->
@@ -83,6 +91,11 @@
     <string name="rating_dialog_submit">Submit</string>
     <string name="rating_dialog_cancel">Cancel</string>
     <string name="rating_dialog_suggestions">Suggest what you want and we\'ll work on it!</string>
+
+    <string name="ratings_request_title">Love to know what you think of the app</string>
+    <string name="feedback_request_title">Send Feedback</string>
+    <string name="feedback_request_hint">Tell us where we can improve&#8230;</string>
+    <string name="feedbackChooserTitle">Send Feedback Via</string>
 
 
     <!--PRODUCT NAMES AND TEXTS-->
@@ -95,7 +108,6 @@
 
 
 
-    <string name="facebook_app_id" translatable="false">603938643122200</string>
     <string name="strShareBody">"B-Town | Maps and Tours for Tourist and Locals"</string>
 
 

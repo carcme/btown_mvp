@@ -41,7 +41,7 @@
         android:scrollbarFadeDuration="0"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <me.carc.btown_map.ui.custom.NonLeakingWebView
+        <me.carc.btown.ui.custom.NonLeakingWebView
             android:id="@+id/nonLeakWebView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />

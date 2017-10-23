@@ -15,7 +15,7 @@
         android:layout_toEndOf="@+id/favListIcon"
         >
 
-        <me.carc.btown_map.ui.custom.CapitalisedTextView
+        <me.carc.btown.ui.custom.CapitalisedTextView
             android:id="@+id/favListName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -27,7 +27,7 @@
             android:textSize="16sp"
             tools:text="Title" />
 
-        <me.carc.btown_map.ui.custom.CapitalisedTextView
+        <me.carc.btown.ui.custom.CapitalisedTextView
             android:id="@+id/favListDesc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -59,7 +59,7 @@
         android:layout_toEndOf="@+id/favListIcon"
         android:orientation="horizontal">
 
-        <me.carc.btown_map.ui.CompassView
+        <me.carc.btown.ui.CompassView
             android:id="@+id/favListNavigationIcon"
             android:layout_width="24dp"
             android:layout_height="24dp"

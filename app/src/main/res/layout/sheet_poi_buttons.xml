@@ -43,17 +43,6 @@
         android:textColor="@color/buttonTextColor"
         />
 
-    <Button
-        android:id="@+id/featureRoute"
-        style="?android:attr/buttonBarButtonStyle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:contentDescription="@string/route_to"
-        android:drawableTop="@drawable/ic_directions"
-        android:text="@string/route_to"
-        android:textColor="@color/buttonTextColor"
-        android:visibility="gone"/>
 
     <Button
         android:id="@+id/featureGoogle"

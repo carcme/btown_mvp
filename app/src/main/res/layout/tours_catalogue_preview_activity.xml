@@ -66,7 +66,7 @@
                             android:textSize="@dimen/text_size_header_large"
                             tools:text="Tour Title"/>
 
-                        <me.carc.btown_map.ui.custom.ExploreButton
+                        <me.carc.btown.ui.custom.ExploreButton
                                 android:id="@+id/launchBtn"
                                 android:layout_width="match_parent"
                                 android:layout_gravity="center_horizontal"
@@ -131,7 +131,7 @@
                 android:layout_height="wrap_content"
                 android:fillViewport="true">
 
-                <me.carc.btown_map.ui.custom.GalleryBottomView
+                <me.carc.btown.ui.custom.GalleryBottomView
                     android:id="@+id/bottom"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -159,7 +159,7 @@
                         android:textSize="@dimen/item_text_size"
                         tools:text="Summary of the tour"/>
 
-                </me.carc.btown_map.ui.custom.GalleryBottomView>
+                </me.carc.btown.ui.custom.GalleryBottomView>
 
             </ScrollView>
 

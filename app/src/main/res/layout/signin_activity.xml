@@ -6,7 +6,7 @@
     android:background="@color/loginBackgroundColor"
     android:orientation="vertical"
     android:weightSum="5"
-    tools:context="me.carc.btown_map.login.LoginActivity">
+    tools:context="me.carc.btown.login.LoginActivity">
 
     <ImageView
         android:id="@+id/exitLogin"

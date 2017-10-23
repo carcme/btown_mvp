@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="me.carc.btown_map.MapActivity">
+    tools:context="me.carc.btown.MapActivity">
 
     <org.osmdroid.views.MapView
         android:id="@+id/mapView"
@@ -15,23 +15,5 @@
         tools:layout="@layout/activity_map" />
 
     <include layout="@layout/map_fab_overlay" />
-
-
-    <!-- PERSISTANT BOTTOMSHEET -->
-
-    <LinearLayout
-        android:id="@+id/bottomSheet"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:color/white"
-        android:fitsSystemWindows="true"
-        android:orientation="vertical"
-        app:behavior_hideable="false"
-        app:behavior_peekHeight="0dp"
-        app:layout_behavior="@string/bottom_sheet_behavior">
-
-        <include layout="@layout/sheet_route_base_layout" />
-
-    </LinearLayout>
 
 </android.support.design.widget.CoordinatorLayout>

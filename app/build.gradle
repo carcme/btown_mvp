@@ -20,7 +20,7 @@ android {
     buildToolsVersion "26.0.2"
 
     defaultConfig {
-        applicationId "me.carc.btown_map"
+        applicationId 'me.carc.btown'
         minSdkVersion 21
         targetSdkVersion 26
         versionCode 1
@@ -38,7 +38,7 @@ android {
             minifyEnabled false
             shrinkResources false
             zipAlignEnabled false
-            useProguard false
+            useProguard true
             buildConfigField "String", "FIREBASE_ENDPOINT", getPrivateKey("FIREBASE_ENDPOINT")
             buildConfigField "String", "FIREBASE_ALT", getPrivateKey("FIREBASE_ALT")
             buildConfigField "String", "FIREBASE_TOKEN", getPrivateKey("FIREBASE_TOKEN")
@@ -59,7 +59,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-
     dexOptions {
         jumboMode true
     }

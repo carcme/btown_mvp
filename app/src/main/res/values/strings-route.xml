@@ -2,14 +2,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools"
     tools:shrinkMode="strict" >
 
-    <string name="vehicle_car" translatable="false">car</string>
-    <string name="vehicle_walk" translatable="false">foot</string>
-    <string name="vehicle_train" translatable="false">train</string>
-    <string name="vehicle_bike" translatable="false">bike</string>
-
-    <string name="routing_disclaimer">The routing feature is to be used only as a reference and should not used whilst driving.</string>
-    <string name="route_less_than_minute"><![CDATA[< 1 min]]></string>
-
     <string name="error_no_maps_app">Could not find any apps that provide directions.</string>
 
 </resources>

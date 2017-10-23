@@ -2,14 +2,20 @@
 <resources xmlns:tools="http://schemas.android.com/tools"
     tools:shrinkMode="strict" >
 
-    <string name="app_name">B-Town Map</string>
+    <string name="app_name">B-Town</string>
 
 
     <string name="desc_background_placeholder">Berliner Dom und Fernsehturm</string>
     <string name="name_background_jewish">Holocaust-Mahnmal </string>
     <string name="desc_background_jewish">Mahnmal für die ermordeten Juden in Europa</string>
     <string name="desc_background_transportr">Satelliten-App für die Öffentlichen Verkehrsmittel</string>
-    <string name="nav_menu_feedback">Feedback</string>
+    <string name="desc_background_brandenburg_tor">Das Brandenburger Tor bei Nacht</string>
+
+
+    <!-- Navigation drawer -->
+    <string name="menu_transportr">Transportr</string>
+    <string name="menu_public_transport">Öffentliche Verkehrsmittel</string>
+    <string name="menu_ubahn_sbahn_plan">U und S Bahn Plan</string>
 
 
 
@@ -62,6 +68,9 @@
     <string name="shared_string_options">Options</string>
     <string name="shared_string_help_toggle">Umschalten Hilfe</string>
     <string name="shared_string_info">Info</string>
+    <string name="shared_string_rate">Bewerte</string>
+    <string name="shared_string_language">Sprache</string>
+    <string name="shared_string_feedback">Feedback</string>
 
 
     <!--FEEDBACK DIALOG-->
@@ -72,6 +81,14 @@
     <string name="rating_dialog_submit">Abschicken</string>
     <string name="rating_dialog_cancel">Abbrechen</string>
     <string name="rating_dialog_suggestions">Sagen Sie uns was Ihnen nicht gefällt und wir arbeiten daran!</string>
+
+    <string name="ratings_request_title">Love to know what you think of the app</string>
+    <string name="feedback_request_title">Send Feedback</string>
+    <string name="feedback_request_hint">Tell us where we can improve&#8230;</string>
+    <string name="feedbackChooserTitle">Send Feedback Via</string>
+
+
+
 
 
     <!--PRODUCT NAMES AND TEXTS-->
