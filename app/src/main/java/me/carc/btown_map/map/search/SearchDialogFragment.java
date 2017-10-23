@@ -51,7 +51,7 @@ import me.carc.btown_map.map.search.fragments.QuickSearchListFragment;
 import me.carc.btown_map.map.search.fragments.QuickSearchMainListFragment;
 import me.carc.btown_map.map.search.list.SearchFragmentPagerAdapter;
 import me.carc.btown_map.map.search.model.Place;
-import me.carc.btown_map.ui.custom.CustomViewPager;
+import me.carc.btown_map.ui.custom.LockableViewPager;
 
 import static android.view.View.GONE;
 
@@ -111,7 +111,7 @@ public class SearchDialogFragment extends DialogFragment implements ISearch.View
     Toolbar searchToolbar;
 
     @BindView(R.id.search_pager)
-    CustomViewPager viewPager;
+    LockableViewPager viewPager;
 
     @BindView(R.id.search_tab_layout)
     TabLayout tabLayout;

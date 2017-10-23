@@ -13,7 +13,17 @@
         android:layout_gravity="top|start"
         android:layout_margin="@dimen/margin_standard"
         android:textSize="20sp"
-        tools:text="30 km/h"/>
+        tools:text="30 km/h"
+        android:visibility="gone"/>
+
+    <ImageView
+        android:id="@+id/fabTours"
+        android:layout_width="@dimen/fab_size"
+        android:layout_height="@dimen/fab_size"
+        android:layout_marginTop="@dimen/margin_standard"
+        android:layout_marginStart="@dimen/margin_standard"
+        app:srcCompat="@mipmap/ic_launcher_round"/>
+
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_map_friend"

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+    <com.flaviofaria.kenburnsview.KenBurnsView
+        android:id="@+id/backdrop"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:scaleType="centerCrop"
+        app:layout_collapseMode="pin"
+        tools:layout_height="200dp"
+        tools:src="@drawable/placeholder" />
+
+    <org.osmdroid.views.MapView
+        android:id="@+id/mapOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:visibility="invisible"
+        tools:ignore="Suspicious0dp" />
+
+</RelativeLayout>

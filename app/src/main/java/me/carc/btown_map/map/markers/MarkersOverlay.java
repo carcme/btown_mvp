@@ -3,6 +3,7 @@ package me.carc.btown_map.map.markers;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.support.v4.content.ContextCompat;
@@ -25,6 +26,7 @@ import me.carc.btown_map.common.C;
 import me.carc.btown_map.common.Commons;
 import me.carc.btown_map.data.model.OverpassQueryResult;
 import me.carc.btown_map.map.IconManager;
+import me.carc.btown_map.tours.model.POIs;
 
 /**
  * Overlay for handling markers
@@ -187,6 +189,57 @@ public class MarkersOverlay extends RadiusMarkerClusterer {
 
                 invalidate();
             }
+        }
+    }
+
+    public void addTourPOIs(ArrayList<POIs> pois, Resources res, String packageName) {
+        if(pois != null) // allow for the json tag to be missing.
+            new addTourPOIs().execute(map, pois, res, packageName);
+    }
+
+
+    private class addTourPOIs extends AsyncTask<Object, Void, Void> {
+
+        @SuppressWarnings("unchecked")
+        @Override
+        protected Void doInBackground(Object... params) {
+            MapView view = (MapView)params[0];
+            ArrayList<POIs> tourPOIs = (ArrayList<POIs>)params[1];
+            Resources res = (Resources)params[2];
+            String packageName = (String)params[3];
+
+            for(POIs item : tourPOIs) {
+                String title = item.title;
+                double lat = item.lat;
+                double lng = item.lon;
+
+                // Add destination location marker
+                Marker poi = new Marker(view);
+                poi.setPosition(new GeoPoint(lat, lng));
+                poi.setTitle(title);
+
+                int iconRes = res.getIdentifier(title, "raw", packageName);
+
+                if(iconRes == 0) {
+                    //tour map point of interest
+                    poi.setIcon(ResourcesCompat.getDrawable(res, R.drawable.ic_place, null));
+                } else {
+                    Drawable icon = ResourcesCompat.getDrawable(res, iconRes, null);
+                    if(icon != null) {
+                        Bitmap bitmap = ((BitmapDrawable) icon).getBitmap();
+                        Drawable d = new BitmapDrawable(res, ImageUtils.resizeBitmap(res, bitmap, 50, 50));
+                        poi.setIcon(d);
+                    }
+                }
+                add(poi);
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void v) {
+            super.onPostExecute(v);
+            invalidate();
         }
     }
 

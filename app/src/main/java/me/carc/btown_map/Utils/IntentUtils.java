@@ -423,4 +423,13 @@ public class IntentUtils {
         intent.setDataAndType(uri, mimeType);
         return intent;
     }
+
+    public static Intent launchWeb(String url) {
+        if(url.startsWith("http")) {
+            Intent i = new Intent(Intent.ACTION_VIEW);
+            i.setData(Uri.parse(url));
+            return i;
+        }
+        return null;
+    }
 }

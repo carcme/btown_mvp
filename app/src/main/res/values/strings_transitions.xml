@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="image_pop_transition" translatable="false">image_pop_transition</string>
+    <string name="title_pop_transition" translatable="false">title_pop_transition</string>
+    <string name="fab_move_transition" translatable="false">fab_move_transition</string>
+    <!--<string name="fab_pop_transition" translatable="false">fab_pop_transition</string>-->
+    <string name="story_pop_transition" translatable="false">story_pop_transition</string>
+
+    <!-- StoryTabActivity to RiddleActivity-->
+    <string name="catalogue_transition" translatable="false">catalogue_transition</string>
+    <string name="catalogue_title" translatable="false">catalogue_title</string>
+
+</resources>

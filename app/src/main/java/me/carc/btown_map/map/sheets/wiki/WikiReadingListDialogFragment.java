@@ -40,7 +40,7 @@ import me.carc.btown_map.common.Commons;
 import me.carc.btown_map.db.AppDatabase;
 import me.carc.btown_map.db.bookmark.BookmarkEntry;
 import me.carc.btown_map.map.IconManager;
-import me.carc.btown_map.map.interfaces.WikiBookmarkClickListener;
+import me.carc.btown_map.common.interfaces.WikiBookmarkClickListener;
 import me.carc.btown_map.map.sheets.ImageDialog;
 import me.carc.btown_map.map.sheets.share.ShareDialog;
 import me.carc.btown_map.map.sheets.wiki.listactions.ReadingListItemActionsDialog;
@@ -200,16 +200,18 @@ public class WikiReadingListDialogFragment extends DialogFragment implements Wik
                     randomImageList.add(entry.getThumbnail());
             }
 
-            String randomImageUrl = randomImageList.get(new Random().nextInt(randomImageList.size()));
+            if(randomImageList.size() > 0) {
+                String randomImageUrl = randomImageList.get(new Random().nextInt(randomImageList.size()));
 
-            if (Commons.isNotNull(randomImageUrl)) {
-                Glide.with(getActivity())
-                        .load(randomImageUrl)
-                        .placeholder(R.drawable.checkered_background)
-                        .into(imageBackDrop);
-            } else {
-                imageBackDrop.setScaleType(ImageView.ScaleType.FIT_XY);
-                imageBackDrop.setImageResource(R.drawable.checkered_background);
+                if (Commons.isNotNull(randomImageUrl)) {
+                    Glide.with(getActivity())
+                            .load(randomImageUrl)
+                            .placeholder(R.drawable.checkered_background)
+                            .into(imageBackDrop);
+                } else {
+                    imageBackDrop.setScaleType(ImageView.ScaleType.FIT_XY);
+                    imageBackDrop.setImageResource(R.drawable.checkered_background);
+                }
             }
         }
     }

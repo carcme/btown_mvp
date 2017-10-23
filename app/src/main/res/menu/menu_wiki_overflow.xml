@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/menu_wiki_todo"
-        android:title="ToDo"
-        />
+    <item
+        android:id="@+id/menu_wiki_share"
+        android:title="@string/shared_string_internet"
+        android:icon="@drawable/ic_menu_share"/>
+    <item
+        android:id="@+id/menu_wiki_browser"
+        android:title="@string/shared_string_browser"
+        android:icon="@drawable/ic_web"/>
 </menu>

@@ -34,4 +34,80 @@
 
     <dimen name="card_elevation">4dp</dimen>
 
+
+
+
+    <dimen name="button_elevation">4dp</dimen>
+    <dimen name="button_press_elevation">8dp</dimen>
+    <dimen name="actionBarPaadding">10dp</dimen>
+
+    <dimen name="card_corner_radius">2dp</dimen>
+    <dimen name="card_icon_padding_left">5dp</dimen>
+    <dimen name="card_icon_padding_right">10dp</dimen>
+
+
+
+    <dimen name="text_size_header_large">36sp</dimen>
+    <dimen name="item_text_size">18sp</dimen>
+
+    <!-- fab sizes -->
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="tab_indicator_height">3dp</dimen>
+
+
+    <dimen name="fab_small">40dp</dimen>
+    <dimen name="fab_size">56dp</dimen>
+    <dimen name="fab_normal">56dp</dimen>
+
+    <!-- fab specific margins -->
+    <dimen name="fab_small_margin_right">24dp</dimen>
+    <dimen name="fab_small_margin_top">-20dp</dimen>
+    <dimen name="fab_normal_margin_right">16dp</dimen>
+    <dimen name="fab_normal_margin_top">-28dp</dimen>
+    <dimen name="fab_progress_margin_top">-40dp</dimen>
+
+    <!-- Toolbar Padding -->
+
+    <dimen name="margin_extra_short">4dp</dimen>
+    <dimen name="margin_short">8dp</dimen>
+    <dimen name="margin_medium">12dp</dimen>
+
+    <dimen name="margin_comment">24dp</dimen>
+
+    <dimen name="size_2">2dp</dimen>
+    <dimen name="size_4">4dp</dimen>
+    <dimen name="size_8">8dp</dimen>
+    <dimen name="size_16">16dp</dimen>
+    <dimen name="size_32">32dp</dimen>
+
+
+    <!--TEXT-->
+
+
+    <!-- Default screen margins, per the Android Design guidelines. -->
+
+
+    <dimen name="sliding_panel_collapsed">80dp</dimen>
+
+
+    <dimen name="sliding_panel_poiListItemHeight">60dp</dimen>
+    <dimen name="sliding_panel_wikiListItemHeight">60dp</dimen>
+    <dimen name="sliding_panel_routeListItemHeight">80dp</dimen>
+
+
+    <dimen name="map_overlay_icon">24dp</dimen>
+
+
+    <dimen name="padding_mini">4dp</dimen>
+    <dimen name="padding_small">8dp</dimen>
+    <dimen name="padding_normal">16dp</dimen>
+    <dimen name="padding_large">24dp</dimen>
+    <dimen name="image_height">200dp</dimen>
+    <dimen name="grid_item_spacing_none">0dp</dimen>
+    <dimen name="grid_item_spacing">0dp</dimen>
+    <dimen name="cloud_grid_image_height">200dp</dimen>
+
+
+
+
 </resources>

@@ -1,5 +1,6 @@
 package me.carc.btown_map.Utils;
 
+import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -72,26 +73,27 @@ public class WikiUtils {
     /**
      * http://stackoverflow.com/questions/3934331/android-how-to-encrypt-a-string
      *
-     * @param s
+     * @param str String to md5
      * @return
      */
-    public static String md5(String s, byte[] temp) {
+    public static String md5(String str, byte[] temp) {
         try {
-            // Create MD5 Hash
-            MessageDigest digest = java.security.MessageDigest.getInstance("MD5");
-            digest.update(s.getBytes());
-            byte messageDigest[] = digest.digest();
+            byte[] msgBytes = str.getBytes("UTF-8");
 
-            for (int j = 0; j < temp.length; j++) {
-                temp[j] = messageDigest[j];
-            }
+            // Create MD5 Hash
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            byte messageDigest[] = md.digest(msgBytes);
+
+            System.arraycopy(messageDigest, 0, temp, 0, temp.length);
+
             // Create Hex String
             StringBuffer hexString = new StringBuffer();
-            for (int i = 0; i < messageDigest.length; i++)
-                hexString.append(Integer.toHexString(0xFF & messageDigest[i]));
+            for (byte aMessageDigest : messageDigest)
+                hexString.append(Integer.toHexString(0xFF & aMessageDigest));
+
             return hexString.toString();
 
-        } catch (NoSuchAlgorithmException e) {
+        } catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
             e.printStackTrace();
         }
         return "";

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="attractions">Stop</string>
+    <string name="gallery">Schaukasten</string>
+    <string name="notes">Notizen</string>
+    <string name="teaser_title">Teaser</string>
+    <string name="lookout_title">Aufgepasst</string>
+    <string name="history_title">Geschichte</string>
+    <string name="qi_title">Kurioses</string>
+    <string name="extra_title">EXTRA!</string>
+    <string name="nextstop_title">Zu Fuß zum nächsten Stop?</string>
+    <string name="start_the_tour">Starte die Tour</string>
+    <string name="first_comment_notification">Schreib den ersten Kommentar</string>
+    <string name="sync_comment_later">Poste deinen Kommentar. Er geht online, wenn du wieder Internetzugang hast.</string>
+    <string name="sign_in_to_post">Logge dich ein, um zu kommentieren.</string>
+    <string name="information">Information</string>
+
+
+    <string name="send_postcard">Verschicke eine Postkarte</string>
+    <string name="checking_in">Check-In</string>
+
+    <string name="view_homepage">Besuche unsere Homepage</string>
+    <string name="facebook_page">Facebook Seite</string>
+    <string name="cost_free">Kostenlos</string>
+    <string name="always_open">Jeden Tag, den ganzen Tag, das ganze Jahr</string>
+
+
+    <string name="menu_contact_us">Kontakt</string>
+    <string name="rate_app">Bewerte B-Town</string>
+    <string name="check_in">Check In</string>
+    <string name="camera">Kamera</string>
+    <string name="donate">Spende</string>
+    <string name="map">Karte</string>
+    <string name="comment">Kommentar</string>
+    <string name="postcard">Postkarte</string>
+    <string name="interact">Interaktiv</string>
+    <string name="wikipedia_subtitle">Wikipedia- Einträge aus deiner Region</string>
+
+
+    <string name="tour_explorer_title">Tour Explorer</string>
+    <string name="tour_explorer_subtitle">Was Berlin zu bieten hat</string>
+    <string name="tours_tour_catalogue">Tour Catalogue</string>
+
+</resources>

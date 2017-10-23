@@ -19,16 +19,19 @@ import android.view.View;
 import android.view.ViewParent;
 import android.view.inputmethod.InputMethodManager;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.util.Date;
 
 public class AndroidUtils {
+
+	/**
+	 * Check the screen orientation
+	 *
+	 * @param context
+	 * @return
+	 */
+	public static boolean isPortrait(Context context) {
+		return context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
+	}
 
 	/**
 	 * @param context the context
@@ -63,21 +66,6 @@ public class AndroidUtils {
 			}
 		}
 
-	}
-
-	public static void copyInputStreamToFile(InputStream in, File file) {
-		try {
-			OutputStream out = new FileOutputStream(file);
-			byte[] buf = new byte[1024];
-			int len;
-			while ((len = in.read(buf)) > 0) {
-				out.write(buf, 0, len);
-			}
-			out.close();
-			in.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 
 	static public void copyToClipboard(Context context, String text) {
@@ -209,26 +197,6 @@ public class AndroidUtils {
 
 	public static boolean isValidEmail(CharSequence target) {
 		return !TextUtils.isEmpty(target) && android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
-	}
-
-	public static String getFileAsString(File file) {
-		try {
-			FileInputStream fin = new FileInputStream(file);
-			BufferedReader reader = new BufferedReader(new InputStreamReader(fin, "UTF-8"));
-			StringBuilder sb = new StringBuilder();
-			String line;
-			while ((line = reader.readLine()) != null) {
-				if (sb.length() > 0) {
-					sb.append("\n");
-				}
-				sb.append(line);
-			}
-			reader.close();
-			fin.close();
-			return sb.toString();
-		} catch (Exception e) {
-			return null;
-		}
 	}
 
 	public static PointF centroidForPoly(PointF[] points) {

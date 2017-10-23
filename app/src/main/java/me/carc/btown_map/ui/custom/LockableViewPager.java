@@ -13,18 +13,18 @@ import android.view.View;
  * Created by bamptonm on 2/5/17.
  */
 
-public class CustomViewPager extends ViewPager {
+public class LockableViewPager extends ViewPager {
 
     private boolean swipeLocked;
     private OnClickListener mOnClickListener;
 
-    public CustomViewPager(Context context) {
+    public LockableViewPager(Context context) {
         super(context);
 
         init();
     }
 
-    public CustomViewPager(Context context, AttributeSet attrs) {
+    public LockableViewPager(Context context, AttributeSet attrs) {
         super(context, attrs);
 
         init();
@@ -67,7 +67,7 @@ public class CustomViewPager extends ViewPager {
         public boolean onSingleTapConfirmed(MotionEvent e) {
 
             if(mOnClickListener != null) {
-                mOnClickListener.onViewPagerClick(CustomViewPager.this);
+                mOnClickListener.onViewPagerClick(LockableViewPager.this);
             }
             return true;
         }
@@ -85,7 +85,7 @@ public class CustomViewPager extends ViewPager {
         @Override
         public boolean onDoubleTap(MotionEvent e) {
             if(mOnClickListener != null) {
-                mOnClickListener.onDoubleTap(CustomViewPager.this);
+                mOnClickListener.onDoubleTap(LockableViewPager.this);
             }
             return true;
         }

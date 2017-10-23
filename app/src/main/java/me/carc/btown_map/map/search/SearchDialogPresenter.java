@@ -36,7 +36,7 @@ import me.carc.btown_map.db.bookmark.BookmarkEntry;
 import me.carc.btown_map.db.favorite.FavoriteEntry;
 import me.carc.btown_map.db.history.HistoryEntry;
 import me.carc.btown_map.map.IconManager;
-import me.carc.btown_map.map.interfaces.SimpleClickListener;
+import me.carc.btown_map.common.interfaces.SimpleClickListener;
 import me.carc.btown_map.map.search.model.Place;
 import me.carc.btown_map.map.sheets.search_context.SearchContextMenu;
 import me.carc.btown_map.map.sheets.wiki.WikiReadingListDialogFragment;

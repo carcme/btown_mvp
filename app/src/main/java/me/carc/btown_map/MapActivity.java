@@ -51,6 +51,7 @@ import me.carc.btown_map.map.sheets.model.RouteInfo;
 import me.carc.btown_map.map.sheets.model.adpater.RouteInstructionsAdapter;
 import me.carc.btown_map.map.sheets.share.ShareDialog;
 import me.carc.btown_map.map.sheets.wiki.WikiReadingListDialogFragment;
+import me.carc.btown_map.tours.ToursLaunchActivity;
 
 public class MapActivity extends BaseActivity implements
         IMap.View,
@@ -105,6 +106,9 @@ public class MapActivity extends BaseActivity implements
 
     @BindView(R.id.fab_menu)
     FloatingActionButton fabMenu;
+
+    @BindView(R.id.fabTours)
+    ImageView fabTours;
 
     @BindView(R.id.fab_ZoomIn)
     FloatingActionButton fabZoomIn;
@@ -475,6 +479,12 @@ public class MapActivity extends BaseActivity implements
     @OnClick(R.id.fab_CameraAndPoiList)
     void onCameraFab() {
         presenter.onShowCameraOrPoiMarkerListDialog();
+    }
+
+    @OnClick(R.id.fabTours)
+    void launchTours() {
+        startActivity(new Intent(MapActivity.this, ToursLaunchActivity.class));
+//        TourLaunchDialogDialog.showInstance(getApplicationContext());
     }
 
     @Override

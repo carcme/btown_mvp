@@ -54,7 +54,8 @@
     <string name="shared_string_selected_lowercase">ausgewählt</string>
     <string name="shared_string_remove">Entfernen</string>
     <string name="shared_string_camera">Kamera</string>
-    <string name="shared_string_internet">Link</string>
+    <string name="shared_string_internet">Link teilen</string>
+    <string name="shared_string_browser">Im Browser öffnen</string>
     <string name="shared_string_show_on_map">Show on Map</string>
     <string name="shared_string_use_on_home_screen">Use on Home Screen</string>
     <string name="shared_string_bookmark">Bookmarks</string>
@@ -80,6 +81,17 @@
     <string name="instagram">Instagram</string>
     <string name="install_instagram">Installiere Instagram</string>
     <string name="no_instagram">Instagram nicht gefunden. Möchtest du es jetzt installieren?</string>
+
+
+
+    <string name="strShareBody">"B-Town | Maps and Tours for Tourist and Locals"</string>
+
+    <!--SIGN IN STUFF-->
+    <string name="sign_out">Ausloggen</string>
+    <string name="sign_in_with" formatted="false">Anmelden mit %s</string>
+    <string name="loading">Lade</string>
+
+    <string name="enter_your_own_notes">Füge eigene Notizen hinzu…</string>
 
 
 </resources>

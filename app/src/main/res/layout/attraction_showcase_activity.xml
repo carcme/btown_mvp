@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/showcaseRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#AA000000"
+    android:clickable="true"
+    android:gravity="center"
+    tools:context=".tours.AttractionShowcaseImageActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/activity_detail_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <me.carc.btown_map.ui.TouchImageView
+        android:id="@+id/showcaseImage"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:adjustViewBounds="true"
+        android:elevation="2dp"
+        android:scaleType="centerCrop"
+        android:transitionName="@string/image_pop_transition"
+        tools:ignore="Suspicious0dp, UnusedAttribute"
+        tools:layout_height="500dp"
+        tools:src="@drawable/placeholder" />
+
+    <FrameLayout
+        android:id="@+id/captionsFrame"
+        android:layout_width="match_parent"
+        android:layout_height="96dp"
+        android:layout_below="@id/showcaseImage"
+        android:background="#00FFFFFF">
+
+        <RelativeLayout
+            android:id="@+id/showcaseCaptions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="72dp"
+            android:layout_marginStart="@dimen/margin_standard"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <TextView
+                android:id="@+id/captionTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:fontFamily="serif"
+                android:maxLines="2"
+                android:textColor="#FFF"
+                android:textSize="24sp"
+                tools:text="This is the TITLE" />
+
+            <TextView
+                android:id="@+id/captionSubTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/captionTitle"
+                android:layout_marginTop="8dp"
+                android:ellipsize="end"
+                android:fontFamily="sans-serif-medium"
+                android:maxLines="2"
+                android:textColor="#FFF"
+                android:visibility="visible"
+                tools:text="There is the subtitle"
+                tools:visibility="visible" />
+
+        </RelativeLayout>
+
+    </FrameLayout>
+
+    <ImageButton
+        android:id="@+id/mFabWallpaperButton"
+        android:layout_width="@dimen/fab_small"
+        android:layout_height="@dimen/fab_small"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/showcaseImage"
+        android:layout_marginEnd="@dimen/fab_small_margin_right"
+        android:layout_marginTop="@dimen/fab_small_margin_top"
+        android:background="@drawable/animated_ripple"
+        android:contentDescription="Download"
+        android:elevation="3dp"
+        android:padding="8dp"
+        android:stateListAnimator="@animator/fab_animation"
+        android:transitionName="fab"
+        android:scaleX="0"
+        android:scaleY="0"
+        tools:ignore="UnusedAttribute" />
+
+    <ImageButton
+        android:id="@+id/mFabShareButton"
+        android:layout_width="@dimen/fab_small"
+        android:layout_height="@dimen/fab_small"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/showcaseImage"
+        android:layout_marginEnd="@dimen/fab_small_margin_right"
+        android:layout_marginTop="@dimen/fab_small_margin_top"
+        android:background="@drawable/animated_ripple"
+        android:contentDescription="@string/shared_string_share"
+        android:elevation="3dp"
+        android:padding="8dp"
+        android:stateListAnimator="@animator/fab_animation"
+        android:transitionName="fab"
+        android:scaleX="0"
+        android:scaleY="0"
+        tools:ignore="UnusedAttribute" />
+
+    <com.github.lzyzsd.circleprogress.DonutProgress
+        android:id="@+id/mFabProgress"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/showcaseImage"
+        android:layout_marginEnd="@dimen/size_4"
+        android:layout_marginTop="@dimen/fab_progress_margin_top"
+        android:elevation="4dp"
+        android:scaleX="0"
+        android:scaleY="0"
+        app:donut_max="100"
+        tools:ignore="UnusedAttribute" />
+
+    <ImageButton
+        android:id="@+id/fabBackButton"
+        android:layout_width="@dimen/fab_normal"
+        android:layout_height="@dimen/fab_normal"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/showcaseImage"
+        android:layout_marginEnd="@dimen/fab_normal_margin_right"
+        android:layout_marginTop="@dimen/fab_normal_margin_top"
+        android:background="@drawable/animated_ripple"
+        android:contentDescription="Exit"
+        android:elevation="4dp"
+        android:padding="8dp"
+        android:stateListAnimator="@animator/fab_animation"
+        android:transitionName="fab"
+        android:scaleX="0"
+        android:scaleY="0"
+        tools:ignore="UnusedAttribute" />
+
+
+</RelativeLayout>

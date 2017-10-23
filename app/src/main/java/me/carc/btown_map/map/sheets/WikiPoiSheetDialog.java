@@ -267,7 +267,7 @@ public class WikiPoiSheetDialog extends BottomSheetDialogFragment {
         public boolean onMenuItemClick(MenuItem item) {
             WikiCallback callback = callback();
             switch (item.getItemId()) {
-                case R.id.menu_wiki_todo:
+                case R.id.menu_wiki_share:
                     if (callback != null) {
                         callback.todo();
                     }

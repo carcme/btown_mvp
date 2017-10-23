@@ -21,6 +21,7 @@ import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
 import android.view.ViewPropertyAnimator;
+import android.view.Window;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
@@ -108,6 +109,26 @@ public class ViewUtils {
                     }
                 });
     }
+
+    /**
+     * Full screen
+     *
+     * @param window
+     */
+    public static void setHideyBar(Window window) {
+        int newUiOptions = window.getDecorView().getSystemUiVisibility();
+
+        if (Build.VERSION.SDK_INT >= 14)
+            newUiOptions ^= View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
+        if (Build.VERSION.SDK_INT >= 16)
+            newUiOptions ^= View.SYSTEM_UI_FLAG_FULLSCREEN;
+        if (Build.VERSION.SDK_INT >= 18)
+            newUiOptions ^= View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+
+        window.getDecorView().setSystemUiVisibility(newUiOptions);
+    }
+
+
 
     public static ViewPropertyAnimator createAlphaAnimator(View v, boolean show, int dur) {
         float alpha = show ? 1.0f : 0.0f;

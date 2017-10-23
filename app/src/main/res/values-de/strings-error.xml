@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--ERROR STRINGS-->
+    <string name="signed_in_err">"Fehler!"</string>
+    <string name="login_required">Um fortzufahren, musst du eingeloggt sein. Oder klicke das \'X\' zum Schließen der Datei%s</string>
+    <string name="auth_failed">Authentifizierung fehlgeschlagen</string>
+    <string name="network_offline">Überprüfe deine Internetverbindung.</string>
+    <string name="check_network">Überprüfe deine Internetverbindung. Du musst online sein, um B-Town nutzen zu können.</string>
+    <string name="text_donate_error">Hmmm&#8230; Irgendetwas hat nicht funktioniert und du kannst momentan leider nicht spenden. Wir haben noch viel Arbeit vor uns. Vielen Dank für den Versuch. Gib uns doch bitte ein Feedback.</string>
+    <string name="error_sd_card_required">Externer Speicherplatz (SD Karte) wird gebraucht. Momentaner Zustand:</string>
+    <string name="technical_error_route">Technische Probleme beim Finden der Route</string>
+    <string name="operation_error">Der Vorgang kann momentan nicht ausgeführt werden</string>
+    <string name="serious_error_title">Ernsthaftes Problem</string>
+    <string name="serious_error_body">In der Database fand sich ein schwerer Fehler. Die Seite muss neu geladen werden.</string>
+
+    <string name="retry">Retry</string>
+
+
+    <string name="network_not_available_error">Make sure you are connected to internet</string>
+
+
+
+</resources>

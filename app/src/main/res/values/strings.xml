@@ -65,7 +65,8 @@
     <string name="shared_string_copy">Copy</string>
     <string name="shared_string_location">Location</string>
     <string name="shared_string_camera">Camera</string>
-    <string name="shared_string_internet">Link</string>
+    <string name="shared_string_internet">Share Link</string>
+    <string name="shared_string_browser">Open in Browser</string>
     <string name="shared_string_show_on_map">Show on Map</string>
     <string name="shared_string_use_on_home_screen">Use on Home Screen</string>
     <string name="shared_string_bookmark">Bookmarks</string>
@@ -92,6 +93,18 @@
     <string name="install_instagram">Install Instagram</string>
     <string name="no_instagram">Instagram not detected on device (required). Would you like to install it now?</string>
 
+
+
+    <string name="facebook_app_id" translatable="false">603938643122200</string>
+    <string name="strShareBody">"B-Town | Maps and Tours for Tourist and Locals"</string>
+
+
+    <!--SIGN IN STUFF-->
+    <string name="sign_out">Sign out</string>
+    <string name="sign_in_with" formatted="false">Sign in with %s</string>
+    <string name="loading">Loading</string>
+
+    <string name="enter_your_own_notes">Enter your own notes…</string>
 
 
 

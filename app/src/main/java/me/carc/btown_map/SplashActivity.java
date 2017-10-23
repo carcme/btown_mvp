@@ -4,13 +4,19 @@ import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
+
+import com.facebook.Profile;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.List;
 
 import me.carc.btown_map.common.C;
 import me.carc.btown_map.common.Commons;
+import me.carc.btown_map.tours.data.services.FirebaseImageDownloader;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
@@ -26,9 +32,9 @@ public class SplashActivity extends BaseActivity implements EasyPermissions.Perm
 
 //    private final int SPLASH_DISPLAY_LENGTH = 500;
 
-/*    private FirebaseAuth auth;
+    private FirebaseAuth auth;
     private FirebaseAuth.AuthStateListener authListener;
-*/
+
 
     private boolean bugFixFlag = true;
     private boolean hasStorage = false;
@@ -42,9 +48,8 @@ public class SplashActivity extends BaseActivity implements EasyPermissions.Perm
         super.onCreate(savedInstanceState);
 
         //Facebook
-//        facebookSDKInitialize();
 
-/*        auth = FirebaseAuth.get();
+        auth = FirebaseAuth.getInstance();
 
         authListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -52,17 +57,14 @@ public class SplashActivity extends BaseActivity implements EasyPermissions.Perm
                 FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
                 Profile facebookUser = Profile.getCurrentProfile();
 
-                // bug fix - gets called twice for some reason
-                if(bugFixFlag) {
-                    if (firebaseUser != null || facebookUser != null) {
-                        hasUser = true;
+                if(Commons.isNotNull(facebookUser) || Commons.isNotNull(firebaseUser)) {
+                    if (Commons.isNetworkAvailable(SplashActivity.this)) {
+                        Intent getImagesIntent = new Intent(SplashActivity.this, FirebaseImageDownloader.class);
+                        startService(getImagesIntent);
                     }
-                    attemptedLogin = true;
-                    launchNextActivity();
-                    bugFixFlag = false;
                 }
             }
-        };*/
+        };
 
         if(C.HAS_L) {
             storage();
@@ -71,33 +73,26 @@ public class SplashActivity extends BaseActivity implements EasyPermissions.Perm
             hasStorage = true;
             hasLocation = true;
         }
-
-
-//         /* Start activity and close this Splash-Screen after x milliSeconds */
-//        new Handler().postDelayed(new Runnable(){
-//            @Override
-//            public void run() {
-//                Intent intent = new Intent(SplashActivity.this, SignInActivity.class);
-//                intent.putExtra(C.EXTRA_STARTUP_LOGIN, true);
-//                startActivity(intent);
-//                finish();
-//            }
-//        }, SPLASH_DISPLAY_LENGTH);
     }
 
     private void launchNextActivity() {
         if(hasStorage && hasLocation /*&& hasUser && attemptedLogin*/) {
-            Intent intent = new Intent(SplashActivity.this, MapActivity.class);
-//            intent.putExtra(C.EXTRA_STARTUP_LOGIN, true);
-            finish();
-            startActivity(intent);
-/*
-        } else if(hasStorage && hasLocation && !hasUser && attemptedLogin) {
-            Intent intent = new Intent(SplashActivity.this, SignInActivity.class);
-            intent.putExtra(C.EXTRA_STARTUP_LOGIN, true);
-            finish();
-            startActivity(intent);
-*/
+
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+
+                    //Create an intent that will start the main activity.
+                    Intent intent = new Intent(SplashActivity.this, MapActivity.class);
+                    SplashActivity.this.startActivity(intent);
+
+                    //Finish splash activity so user cant go back to it.
+                    SplashActivity.this.finish();
+
+                    //Apply splash exit (fade out) and main entry (fade in) animation transitions.
+                    overridePendingTransition(R.anim.main_fade_in, R.anim.splash_fade_out);
+                }
+            }, 500);
         }
     }
 
@@ -158,16 +153,15 @@ public class SplashActivity extends BaseActivity implements EasyPermissions.Perm
     @Override
     public void onStart() {
         super.onStart();
-//        auth.addAuthStateListener(authListener);
+        auth.addAuthStateListener(authListener);
     }
 
     @Override
     public void onStop() {
         super.onStop();
-/*
+
         if (authListener != null) {
             auth.removeAuthStateListener(authListener);
         }
-*/
     }
 }

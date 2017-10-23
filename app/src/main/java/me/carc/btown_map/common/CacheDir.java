@@ -3,6 +3,7 @@ package me.carc.btown_map.common;
 import android.content.Context;
 
 import java.io.File;
+import java.io.IOException;
 
 /**
  * Created by Carc.me on 04.05.16.
@@ -29,6 +30,7 @@ public class CacheDir {
         cacheDir = this;
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     public CacheDir(Context ctx) {
 
         // Find the dir to save cached images
@@ -44,11 +46,20 @@ public class CacheDir {
             //noinspection ResultOfMethodCallIgnored
             cacheDirectory.mkdirs();
         }
+
+        File file = new File(cacheDirectory, ".nomedia");
+        try {if (!file.exists())  file.createNewFile(); }
+        catch (IOException e) { e.printStackTrace(); }
+
         cacheDir = this;
     }
 
     public static CacheDir getCacheDir() {
         return cacheDir;
+    }
+
+    public static String getCachePath() {
+        return cacheDir.cacheDirectory.getAbsolutePath() + File.separator;
     }
 
     public static File getCacheDirAsFile() { return cacheDirectory; }

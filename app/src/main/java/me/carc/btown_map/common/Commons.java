@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 /**
  * Common functions used throughout the app
@@ -59,6 +60,49 @@ public class Commons {
         return sdf.format(new Date());
     }
 
+    public static String buildStringFromArray(String[] arr) {
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < arr.length; i++) {
+            sb.append(arr[i]);
+            if (i != arr.length - 1)
+                sb.append("\n\n");
+        }
+        return sb.toString();
+    }
+
+    public static String getString(Context ctx, int strID) {
+        return ctx.getApplicationContext().getString(strID);
+    }
+
+    /**
+     * Replace text, igmore case
+     * @param text the string
+     * @param pattern the text to replace
+     * @return
+     */
+    public static String replace(String text, String pattern) {
+        return replace(text, pattern, null);
+    }
+
+    /**
+     * Replace text, igmore case
+     * @param text the string
+     * @param pattern the text to replace
+     * @param newWord what to replace with
+     * @return
+     */
+    public static String replace(String text, String pattern, String newWord) {
+        if(text == null || pattern == null)
+            return text;
+        return Pattern.compile(pattern, Pattern.CASE_INSENSITIVE).matcher(text).replaceAll(isNull(newWord) ? "" : newWord);
+    }
+
+    public static boolean contains(String s1, String s2) {
+        if(s1 == null || s2 == null)
+            return false;
+        return Pattern.compile(Pattern.quote(s2), Pattern.CASE_INSENSITIVE).matcher(s1).find();
+    }
 
     public static boolean isEmpty(List list) {
         return list == null || list.isEmpty();

@@ -6,6 +6,7 @@
     <color name="colorPrimaryDark">#291f37</color>
     <color name="colorAccent">#e53935</color>
 
+    <color name="toursBackButtonBackgroundColor">#e53935</color>
 
     <!--<color name="colorPrimary">#3F51B5</color>-->
     <!--<color name="colorPrimaryDark">#303F9F</color>-->
@@ -38,9 +39,26 @@
     <color name="buttonTextColor">#263238</color>
     <color name="overflowMenuTextColor">#0000FF</color>
 
+    <color name="imageWithoutPaletteColor">#1C1D23</color>
+    <color name="textWithoutPaletteColor">#ffeae1da</color>
+
+
+    <color name="showcaseSuccessColor">#669900</color>
+    <color name="showcaseErrorColor">#D32F2F</color>
 
 
 
+
+    <color name="md_blue_grey_50">#ffeceff1</color>
+    <color name="md_blue_grey_100">#ffcfd8dc</color>
+    <color name="md_blue_grey_200">#ffb0bec5</color>
+    <color name="md_blue_grey_300">#ff90a4ae</color>
+    <color name="md_blue_grey_400">#ff78909c</color>
+    <color name="md_blue_grey_500">#607D8B</color>
+    <color name="md_blue_grey_600">#ff546e7a</color>
+    <color name="md_blue_grey_700">#ff455a64</color>
+    <color name="md_blue_grey_800">#ff37474f</color>
+    <color name="md_blue_grey_900">#263238</color>
 
 
 
@@ -66,6 +84,11 @@
     <color name="roadOverlayBlue">#0000FF</color>
     <color name="roadOverlayGray">#90666666</color>
 
+
+    <color name="loginBackgroundColor">#FFEB3B</color>
+    <color name="loginBottomSectionColor">#263238</color>
+
+    <color name="rippleRoundColor">#8BC34A</color>
 
 
     <color name="md_yellow_500">#FFEB3B</color>
@@ -94,6 +117,13 @@
     <color name="white50">#80ffffff</color>
     <color name="white20">#33ffffff</color>
     <color name="base70">#c8ccd1</color> <!-- B AAA: Disabled button / 3D widget background -->
+
+
+    <color name="card_title_text_color">#EEEEEE</color>
+    <color name="card_text_color">#999</color>
+    <color name="tour_explore_button_color">#669900</color>
+    <color name="catalogue_preview_text_color">#FFF</color>
+    <color name="attractionBackgroundColor">#0D47A1</color>
 
 
 </resources>

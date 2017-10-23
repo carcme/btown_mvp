@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="key_image_title" translatable="false">key_image_title</string>
+    <string name="key_image_url" translatable="false">key_image_url</string>
+
+    <string name="attractions">Stops</string>
+    <string name="gallery">Showcase</string>
+    <string name="notes">Notes</string>
+    <string name="teaser_title">Teaser</string>
+    <string name="lookout_title">Lookout For</string>
+    <string name="history_title">History</string>
+    <string name="qi_title">QI Facts</string>
+    <string name="extra_title">EXTRA!</string>
+    <string name="nextstop_title">Walking distance to next stop?</string>
+
+    <string name="start_the_tour">Start the Tour</string>
+    <string name="first_comment_notification">Be the first to comment</string>
+    <string name="sync_comment_later">Post your comment and it will synchronize when you are online again.</string>
+    <string name="sign_in_to_post">Sign in to post</string>
+    <string name="information">Information</string>
+
+
+    <string name="send_postcard">Send Postcard</string>
+    <string name="checking_in">Checking In</string>
+
+    <string name="view_homepage">View Homepage</string>
+    <string name="facebook_page">Facebook Page</string>
+    <string name="cost_free">Free</string>
+    <string name="always_open">All year, every day, all day</string>
+
+
+    <string name="menu_contact_us">Contact Us</string>
+    <string name="rate_app">Rate B-Town</string>
+    <string name="check_in">Check In</string>
+    <string name="camera">Camera</string>
+    <string name="donate">Donate</string>
+    <string name="map">Map</string>
+    <string name="comment">Comment</string>
+    <string name="postcard">Postcard</string>
+    <string name="interact">Interact</string>
+    <string name="wikipedia_subtitle">Get Wikipedia entries on the local area</string>
+
+
+    <string name="tour_explorer_title">Tour Explorer</string>
+    <string name="tour_explorer_subtitle">See what Berlin has to offer</string>
+    <string name="tours_tour_catalogue">Tour Catalogue</string>
+
+
+</resources>

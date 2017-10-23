@@ -1,4 +1,4 @@
-package me.carc.btown_map.map.interfaces;
+package me.carc.btown_map.common.interfaces;
 
 import me.carc.btown_map.map.sheets.wiki.WikiBookmarksListAdapter;
 

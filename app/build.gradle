@@ -39,6 +39,10 @@ android {
             shrinkResources false
             zipAlignEnabled false
             useProguard false
+            buildConfigField "String", "FIREBASE_ENDPOINT", getPrivateKey("FIREBASE_ENDPOINT")
+            buildConfigField "String", "FIREBASE_ALT", getPrivateKey("FIREBASE_ALT")
+            buildConfigField "String", "FIREBASE_TOKEN", getPrivateKey("FIREBASE_TOKEN")
+            buildConfigField "String", "GOOGLE_SERVER_KEY", getPrivateKey("GOOGLE_SERVER_KEY")
             buildConfigField "String", "GRAPHHOPPER_API_KEY", getPrivateKey("GRAPHHOPPER_API_KEY")
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -47,9 +51,17 @@ android {
             shrinkResources true
             zipAlignEnabled true
             useProguard true
+            buildConfigField "String", "FIREBASE_ENDPOINT", getPrivateKey("FIREBASE_ENDPOINT")
+            buildConfigField "String", "FIREBASE_ALT", getPrivateKey("FIREBASE_ALT")
+            buildConfigField "String", "FIREBASE_TOKEN", getPrivateKey("FIREBASE_TOKEN")
+            buildConfigField "String", "GOOGLE_SERVER_KEY", getPrivateKey("GOOGLE_SERVER_KEY")
             buildConfigField "String", "GRAPHHOPPER_API_KEY", getPrivateKey("GRAPHHOPPER_API_KEY")
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+
+    dexOptions {
+        jumboMode true
     }
 }
 
@@ -66,10 +78,14 @@ ext {
     googlePlayServices = '11.0.4'
     butterknife = '8.4.0'
     osmdroid = '5.6.5'
+    firebase = '11.0.4'
+    firebaseUI = '2.3.0'
+    facebook ='4.23.+'
     glide = '3.7.0'
     retrofit = '2.3.0'
     okhttp = '3.8.0'
     roomVersion = '1.0.0-alpha7'
+    gsonVersion = '2.8.2'
 //    evernotejob = '1.2.0'
 
     leakcanary = '1.5.4'
@@ -85,7 +101,10 @@ dependencies {
     compile "com.android.support:appcompat-v7:${supportLibVersion}"
     compile "com.android.support:design:${supportLibVersion}"
     compile "com.android.support:support-v4:${supportLibVersion}"
+    compile "com.android.support:customtabs:${supportLibVersion}"
     compile "com.android.support:recyclerview-v7:${supportLibVersion}"
+    compile "com.android.support:cardview-v7:${supportLibVersion}"
+    compile "com.android.support:palette-v7:${supportLibVersion}"
     compile "com.android.support.constraint:constraint-layout:${constraintLayoutVersion}"
 
     compile "com.google.android.gms:play-services-auth:${googlePlayServices}"
@@ -94,6 +113,12 @@ dependencies {
     compile "com.jakewharton:butterknife:$butterknife"
     annotationProcessor "com.jakewharton:butterknife-compiler:$butterknife"
 
+    compile "com.google.firebase:firebase-core:$firebase"
+    compile "com.google.firebase:firebase-auth:$firebase"
+    compile "com.google.firebase:firebase-storage:$firebase"
+    compile "com.firebaseui:firebase-ui-storage:$firebaseUI"
+    compile "com.facebook.android:facebook-android-sdk:$facebook"
+
     compile "org.osmdroid:osmdroid-android:$osmdroid"
 
     compile "com.github.bumptech.glide:glide:$glide"
@@ -101,6 +126,7 @@ dependencies {
     compile "com.squareup.retrofit2:retrofit:$retrofit"
     compile "com.squareup.retrofit2:converter-gson:$retrofit"
     compile "com.squareup.okhttp3:logging-interceptor:$okhttp"
+    compile "com.google.code.gson:gson:$gsonVersion"
 
     compile "android.arch.persistence.room:runtime:$roomVersion"
     annotationProcessor "android.arch.persistence.room:compiler:$roomVersion"
@@ -115,6 +141,12 @@ dependencies {
     compile 'com.mikepenz:fontawesome-typeface:4.4.0.1@aar'
     compile 'com.mikepenz:community-material-typeface:1.9.32.2@aar'
 
+    compile 'carcme:login-buttons:0.3.0'
+
+    compile 'com.github.lzyzsd:circleprogress:1.2.0@aar'
+
+    compile 'com.flaviofaria:kenburnsview:1.0.7'
+
 
 
 
@@ -128,3 +160,4 @@ dependencies {
         transitive = true;
     }
 }
+apply plugin: 'com.google.gms.google-services'

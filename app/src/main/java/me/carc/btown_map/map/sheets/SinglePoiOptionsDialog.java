@@ -35,7 +35,6 @@ import org.osmdroid.util.GeoPoint;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Timer;
 import java.util.concurrent.Executors;
 
 import butterknife.BindView;
@@ -52,12 +51,8 @@ import me.carc.btown_map.Utils.OpeningHoursParser;
 import me.carc.btown_map.Utils.WikiUtils;
 import me.carc.btown_map.common.C;
 import me.carc.btown_map.common.Commons;
-import me.carc.btown_map.common.CompassSensor;
 import me.carc.btown_map.data.model.OverpassQueryResult;
-import me.carc.btown_map.data.model.ReverseResult;
-import me.carc.btown_map.data.reverse.ReverseApi;
 import me.carc.btown_map.data.reverse.ReverseLookupLoader;
-import me.carc.btown_map.data.reverse.ReverseServiceProvider;
 import me.carc.btown_map.db.AppDatabase;
 import me.carc.btown_map.db.favorite.FavoriteEntry;
 import me.carc.btown_map.map.interfaces.MyClickListener;
@@ -71,9 +66,6 @@ import me.carc.btown_map.ui.CompassView;
 import me.carc.btown_map.ui.FeedbackDialog;
 import me.carc.btown_map.ui.custom.CapitalisedTextView;
 import pub.devrel.easypermissions.EasyPermissions;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * Bottom Sheet Dialog for points of interest
@@ -89,11 +81,9 @@ public class SinglePoiOptionsDialog extends BottomSheetDialogFragment {
 
     public static final String ITEM = "ITEM";
 
-    private String address;
     private String userDescription;
     private GeoPoint poiPosition;
     private BottomSheetBehavior behavior;
-    private CompassSensor.Callback cbCompass;
     private RouteInfo routeInfo;
     private boolean hidden;
     private Unbinder unbinder;
@@ -218,14 +208,13 @@ public class SinglePoiOptionsDialog extends BottomSheetDialogFragment {
             } else
                 featureType.setText(node.tags.getPrimaryType());
 
-            address = node.tags.getAddress();
+            String address = node.tags.getAddress();
 
             checkFavorite(node.id);
 
             if (Commons.isEmpty(address)) {
                 featureSubtitle.setText(getActivity().getResources().getText(R.string.seaching));
                 new ReverseLookupLoader(featureSubtitle, node.lat, node.lon);
-//                reverseAddressLookup(node.lat, node.lon);
             } else
                 featureSubtitle.setText(address);
 
@@ -277,11 +266,14 @@ public class SinglePoiOptionsDialog extends BottomSheetDialogFragment {
             @Override
             public void onClick(View v) {
                 OverpassQueryResult.Element node = (OverpassQueryResult.Element) getArguments().getSerializable(ITEM);
-                CompassDialog.showInstance(getActivity().getApplicationContext(),
-                        node.tags.name,
-                        featureType.getText().toString(),
-                        new GeoPoint(node.lat, node.lon),
-                        node.getGeoPoint());
+
+                if(Commons.isNotNull(node)) {
+                    CompassDialog.showInstance(getActivity().getApplicationContext(),
+                            node.tags.name,
+                            featureType.getText().toString(),
+                            new GeoPoint(node.lat, node.lon),
+                            node.getGeoPoint());
+                }
             }
         });
     }
@@ -408,21 +400,22 @@ public class SinglePoiOptionsDialog extends BottomSheetDialogFragment {
                     @Override
                     public void OnClick(View v, int pos) {
                         InfoCard item = items.get(pos);
-                        Intent i;
+                        Intent intent;
 
                         switch (item.getType()) {
                             case EMAIL:
-                                i = IntentUtils.sendEmail(item.getData(), "", "");
-                                if (Commons.isNotNull(i)) startActivity(i);
+                                intent = IntentUtils.sendEmail(item.getData(), "", "");
+                                if (Commons.isNotNull(intent)) startActivity(intent);
                                 break;
 
                             case WEB:
-                                i = IntentUtils.openLink(WikiUtils.createWikiLink(item.getData()));
-                                if (Commons.isNotNull(i)) startActivity(i);
+                                intent = new Intent(getActivity(), WikiWebViewActivity.class);
+                                intent.putExtra(WikiWebViewActivity.WIKI_EXTRA_PAGE_URL, WikiUtils.createWikiLink(item.getData()));
+                                startActivity(intent);
                                 break;
 
                             case WIKI:
-                                Intent intent = new Intent(getActivity(), WikiWebViewActivity.class);
+                                intent = new Intent(getActivity(), WikiWebViewActivity.class);
                                 intent.putExtra(WikiWebViewActivity.WIKI_EXTRA_PAGE_TITLE, getActivity().getString(R.string.wikipedia));
                                 intent.putExtra(WikiWebViewActivity.WIKI_EXTRA_PAGE_URL, WikiUtils.createWikiLink(item.getData()));
                                 startActivity(intent);
@@ -457,46 +450,6 @@ public class SinglePoiOptionsDialog extends BottomSheetDialogFragment {
             }
         }
     }
-
-
-    private void reverseAddressLookup(double lat, double lon) {
-        ReverseApi service = ReverseServiceProvider.get();
-        Call<ReverseResult> reverseCall = service.reverse(lat, lon);
-        reverseCall.enqueue(new Callback<ReverseResult>() {
-            @SuppressWarnings({"ConstantConditions"})
-            @Override
-            public void onResponse(@NonNull Call<ReverseResult> call, @NonNull Response<ReverseResult> response) {
-
-                try {
-                    if (Commons.isNotNull(response.body().address)) {
-                        ReverseResult.Address add = response.body().address;
-
-                        OverpassQueryResult.Element node = (OverpassQueryResult.Element) getArguments().getSerializable(ITEM);
-                        node.tags.addressStreet = add.road;
-                        node.tags.addressHouseNumber = add.house_number;
-                        node.tags.addressSuburb = add.suburb;
-                        node.tags.addressPostCode = add.postcode;
-                        node.tags.addressCity = add.city;
-
-                        featureSubtitle.setText(node.tags.getAddress());
-                    } else {
-                        featureSubtitle.setVisibility(View.GONE);
-                    }
-                } catch (NullPointerException e) {
-                    Log.d(TAG, "setupDialog ERROR: " + e.getLocalizedMessage());
-                }
-            }
-
-            @Override
-            public void onFailure(Call call, Throwable t) {
-                featureSubtitle.setVisibility(View.GONE);
-            }
-        });
-    }
-
-
-    private Timer timer;
-
 
     @Override
     public void onDismiss(DialogInterface dialog) {
@@ -578,7 +531,8 @@ public class SinglePoiOptionsDialog extends BottomSheetDialogFragment {
     void share() {
         try {
             OverpassQueryResult.Element node = (OverpassQueryResult.Element) getArguments().getSerializable(ITEM);
-            ShareMenu.show(node.getGeoPoint(), node.tags.name, node.tags.getAddress(), getActivity().getApplicationContext());
+            if(Commons.isNotNull(node))
+                ShareMenu.show(node.getGeoPoint(), node.tags.name, node.tags.getAddress(), getActivity().getApplicationContext());
         } catch (NullPointerException e) {
             Log.d(TAG, "setupDialog ERROR: " + e.getLocalizedMessage());
         }
@@ -648,9 +602,7 @@ public class SinglePoiOptionsDialog extends BottomSheetDialogFragment {
 
     /**
      * Check if the selected poi is in the favorite list
-     *
-     * @param nodeId
-     * @return
+     * @param nodeId database id
      */
     private void checkFavorite(final long nodeId) {
         Executors.newSingleThreadExecutor().execute(new Runnable() {

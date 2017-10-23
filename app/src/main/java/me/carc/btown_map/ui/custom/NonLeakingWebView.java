@@ -6,6 +6,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.http.SslError;
 import android.os.Build;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebResourceRequest;
@@ -26,10 +27,11 @@ public class NonLeakingWebView extends WebView {
         void onPageStarted(WebView view, String url, Bitmap favicon);
         boolean shouldOverrideUrlLoading(WebView view, String url);
         boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request);  // api 24 ver
+        boolean loadPdfUrl(String url);
         void onPageFinished(WebView view, String url);
     }
 
-    private MyWebViewClient client;
+    private PdfWebViewClient client;
 
 
 /*
@@ -47,19 +49,19 @@ public class NonLeakingWebView extends WebView {
 
     public NonLeakingWebView(Context context) {
         super(context.getApplicationContext());
-        client = new MyWebViewClient((Activity) context);
+        client = new PdfWebViewClient((Activity) context);
         setWebViewClient(client);
     }
 
     public NonLeakingWebView(Context context, AttributeSet attrs) {
         super(context.getApplicationContext(), attrs);
-        client = new MyWebViewClient((Activity) context);
+        client = new PdfWebViewClient((Activity) context);
         setWebViewClient(client);
     }
 
     public NonLeakingWebView(Context context, AttributeSet attrs, int defStyle) {
         super(context.getApplicationContext(), attrs, defStyle);
-        client = new MyWebViewClient((Activity) context);
+        client = new PdfWebViewClient((Activity) context);
         setWebViewClient(client);
     }
 
@@ -79,13 +81,15 @@ public class NonLeakingWebView extends WebView {
 */
     }
 
-    private static class MyWebViewClient extends WebViewClient {
+    private static class PdfWebViewClient extends WebViewClient {
+
+        private static final String PDF = ".pdf";
 
         WeakReference<Activity> activityRef;
         WebViewCallback callback;
 
-        MyWebViewClient(Activity activity) {
-            this.activityRef = new WeakReference<Activity>(activity);
+        PdfWebViewClient(Activity activity) {
+            this.activityRef = new WeakReference<>(activity);
         }
 
         private boolean activityValid() {
@@ -101,6 +105,7 @@ public class NonLeakingWebView extends WebView {
         public void setCallback(WebViewCallback callback) {
             this.callback = callback;
         }
+
 
         @Override
         public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
@@ -118,9 +123,14 @@ public class NonLeakingWebView extends WebView {
 
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            if (callback != null && activityValid())
-                return callback.shouldOverrideUrlLoading(view, url);
-            else
+            if (callback != null && activityValid()) {
+                if(isPdfUrl(url)) {
+                    view.stopLoading();
+                    return callback.loadPdfUrl(url);
+                } else {
+                    return callback.shouldOverrideUrlLoading(view, url);
+                }
+            } else
                 throw new RuntimeException("You should set a listener");
         }
 
@@ -129,7 +139,12 @@ public class NonLeakingWebView extends WebView {
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
             if (callback != null && activityValid())
-                return callback.shouldOverrideUrlLoading(view, request);
+                if(isPdfUrl(request.getUrl().toString())) {
+                    view.stopLoading();
+                    return callback.loadPdfUrl(request.getUrl().toString());
+                } else {
+                    return callback.shouldOverrideUrlLoading(view, request);
+                }
             else
                 throw new RuntimeException("You should set a listener");
         }
@@ -141,6 +156,17 @@ public class NonLeakingWebView extends WebView {
                 callback.onPageFinished(view, url);
             else
                 throw new RuntimeException("You should set a listener");
+        }
+
+        private boolean isPdfUrl(String url) {
+            if (!TextUtils.isEmpty(url)) {
+                url = url.trim();
+                int lastIndex = url.toLowerCase().lastIndexOf(PDF);
+                if (lastIndex != -1) {
+                    return url.substring(lastIndex).equalsIgnoreCase(PDF);
+                }
+            }
+            return false;
         }
     }
 }

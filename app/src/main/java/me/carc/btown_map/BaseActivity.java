@@ -35,10 +35,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.CallbackManager;
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
+
 import me.carc.btown_map.common.C;
 import me.carc.btown_map.common.CacheDir;
 import me.carc.btown_map.common.Commons;
 import me.carc.btown_map.common.TinyDB;
+import me.carc.btown_map.tours.CatalogueActivity;
 
 public class BaseActivity extends AppCompatActivity {
 
@@ -53,10 +58,22 @@ public class BaseActivity extends AppCompatActivity {
     @VisibleForTesting
     private static ProgressDialog mProgressDialog;
 
-
     protected TinyDB db;
     private CacheDir cacheDir;
 
+    protected CallbackManager callbackManager;
+
+
+    /**
+     * Initialize the facebook sdk.
+     * And then callback manager will handle the login responses.
+     */
+    protected CallbackManager facebookSDKInitialize() {
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        callbackManager = CallbackManager.Factory.create();
+        AppEventsLogger.activateApp(getApplication());
+        return callbackManager;
+    }
 
     public App getApp() {
         return (App) getApplication();
@@ -73,6 +90,7 @@ public class BaseActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         getApp().setCurrentActivity(this);
+        facebookSDKInitialize();
     }
 
     @Override
@@ -91,7 +109,8 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        mDrawerToggle.onConfigurationChanged(newConfig);
+        if(Commons.isNotNull(mDrawerToggle))
+            mDrawerToggle.onConfigurationChanged(newConfig);
     }
 
     @Override
@@ -128,7 +147,7 @@ public class BaseActivity extends AppCompatActivity {
 
         calculateImageHeight();
 
-//        if (defaultFont == null) getFonts();
+      if (defaultFont == null) getFonts();
     }
 
 
@@ -318,6 +337,19 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
+    public void showProgressDialog(@Nullable String msg) {
+        if (mProgressDialog == null) {
+            mProgressDialog = new ProgressDialog(this);
+            mProgressDialog.setIndeterminate(true);
+        }
+        mProgressDialog.setMessage(msg);
+        mProgressDialog.show();
+    }
+
+    public void showProgressDialog() {
+        showProgressDialog(getString(R.string.loading));
+    }
+
     public void showProgressDialog(CharSequence title, CharSequence message) {
         if (isFinishing()) {
             return;
@@ -392,13 +424,17 @@ public class BaseActivity extends AppCompatActivity {
                 case R.id.nav_feedback:
                     Intent sendMessage = new Intent(Intent.ACTION_SEND);
                     sendMessage.setType("message/rfc822");
-                    sendMessage.putExtra(Intent.EXTRA_EMAIL, new String[]{
-                            getResources().getString(R.string.feedback_email)});
+                    sendMessage.putExtra(Intent.EXTRA_EMAIL, new String[]{ getResources().getString(R.string.feedback_email)});
                     try {
                         startActivity(Intent.createChooser(sendMessage, "Send feedback"));
                     } catch (android.content.ActivityNotFoundException e) {
                         Toast.makeText(BaseActivity.this, "Email app not found", Toast.LENGTH_SHORT).show();
                     }
+                    break;
+
+                case R.id.nav_debug_clear_json:
+                    db.remove(CatalogueActivity.JSON_VERSION);
+                    db.remove(CatalogueActivity.SERVER_FILE);
                     break;
 
             }

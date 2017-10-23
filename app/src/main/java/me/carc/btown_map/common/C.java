@@ -24,6 +24,8 @@ public class C {
     public static final int PERMISSION_CAMERA     = 202;
     public static final int PERMISSION_STORAGE = 203;
 
+    public static final String FACEBOOK_PERMISSIONS = "email,user_friends,publish_actions,public_profile";
+
     // NETWORK CHANGE STATES
     public static final String CONNECT_TO_WIFI = "WIFI";
     public static final String CONNECT_TO_MOBILE = "MOBILE";

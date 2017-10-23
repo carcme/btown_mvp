@@ -18,7 +18,7 @@ import me.carc.btown_map.R;
 import me.carc.btown_map.db.AppDatabase;
 import me.carc.btown_map.db.favorite.FavoriteEntry;
 import me.carc.btown_map.db.history.HistoryEntry;
-import me.carc.btown_map.map.interfaces.SimpleClickListener;
+import me.carc.btown_map.common.interfaces.SimpleClickListener;
 import me.carc.btown_map.map.search.SearchDialogFragment;
 import me.carc.btown_map.map.search.model.Place;
 import me.carc.btown_map.map.sheets.share.ShareMenu;

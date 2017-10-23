@@ -37,5 +37,4 @@ public class InfoCard implements Serializable {
     public String getData() { return dataString; }
     public IIcon getIcon() { return icon; }
     public ItemType getType() { return type; }
-
 }

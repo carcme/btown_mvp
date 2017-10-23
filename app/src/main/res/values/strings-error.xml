@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <string name="signed_in_err">"Error!"</string>
+    <string name="login_required">You must login to proceed or press the \'X\' above to close %s</string>
+    <string name="auth_failed">Authentication failed.</string>
+    <string name="network_offline">Please check you network connection. You need to be online to use B-Town</string>
+    <string name="check_network">Please check you network connection. You need to be online to use B-Town</string>
+    <string name="text_donate_error">Hmmm&#8230; something went wrong and you can not donate at the moment. I still have some work to do!! Thanks for trying, maybe leave a comment instead?</string>
+    <string name="error_sd_card_required">External Storeage (SD Card) is required.  Current state:</string>
+    <string name="technical_error_route">Technical issue getting the route</string>
+    <string name="operation_error">Unable to perform operation at present</string>
+    <string name="serious_error_title">Serious Problem</string>
+    <string name="serious_error_body">Detected a major issue with the database and it must be refreshed.</string>
+
+    <string name="retry">Retry</string>
+
+
+    <string name="network_not_available_error">Make sure you are connected to internet</string>
+
+</resources>

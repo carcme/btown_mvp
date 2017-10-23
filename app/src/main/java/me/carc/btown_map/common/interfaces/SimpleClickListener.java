@@ -1,4 +1,4 @@
-package me.carc.btown_map.map.interfaces;
+package me.carc.btown_map.common.interfaces;
 
 /**
  * Created by bamptonm on 05/09/2017.

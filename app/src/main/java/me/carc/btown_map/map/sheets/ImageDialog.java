@@ -7,6 +7,8 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
@@ -36,7 +38,7 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 import me.carc.btown_map.App;
 import me.carc.btown_map.R;
-import me.carc.btown_map.Utils.AndroidUtils;
+import me.carc.btown_map.Utils.FileUtils;
 import me.carc.btown_map.common.C;
 import me.carc.btown_map.common.Commons;
 import me.carc.btown_map.ui.TouchImageView;
@@ -127,7 +129,7 @@ public class ImageDialog extends DialogFragment {
                     .error(R.drawable.no_image)
                     .into(new BitmapImageViewTarget(image) {
                         @Override
-                        public void onResourceReady(final Bitmap bitmap, GlideAnimation anim) {
+                        public void onResourceReady(final Bitmap bitmap, @Nullable GlideAnimation anim) {
                             super.onResourceReady(bitmap, anim);
 
                             // make sure user hasn't exited while waiting for the image to load!!
@@ -146,7 +148,6 @@ public class ImageDialog extends DialogFragment {
                                 imageLoadProgress.setVisibility(View.GONE);
                         }
                     });
-
         } else
             dismiss();
 
@@ -161,7 +162,7 @@ public class ImageDialog extends DialogFragment {
     @OnClick(R.id.imageDialogImage)
     void singleImageTouch() {
         if(image.getScaleType() == ImageView.ScaleType.CENTER_CROP) {
-            image.setScaleType(ImageView.ScaleType.CENTER);
+            image.setScaleType(ImageView.ScaleType.FIT_CENTER);
         } else
             image.setScaleType(ImageView.ScaleType.CENTER_CROP);
     }
@@ -221,14 +222,14 @@ public class ImageDialog extends DialogFragment {
 
             client.newCall(request).enqueue(new okhttp3.Callback() {
                 @Override
-                public void onFailure(Call call, IOException e) {
+                public void onFailure(@NonNull Call call, @NonNull IOException e) {
                     imageLoadProgress.setVisibility(View.GONE);
                     Toast.makeText(getActivity(), "Could not download the image", Toast.LENGTH_SHORT).show();
                 }
 
-                @SuppressWarnings({"ConstantConditions"})
+                @SuppressWarnings({"ConstantConditions", "ResultOfMethodCallIgnored"})
                 @Override
-                public void onResponse(Call call, Response response) throws IOException {
+                public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
 
                     if(response.body().byteStream() != null) {
 
@@ -241,7 +242,7 @@ public class ImageDialog extends DialogFragment {
                             File file = new File(dir, "btownTemp.jpg");
                             if (!file.exists()) file.createNewFile();
 
-                            AndroidUtils.copyInputStreamToFile(response.body().byteStream(), file);
+                            FileUtils.copyInputStreamToFile(response.body().byteStream(), file);
 
                             //get the contentUri for this file and start the intent
                             Uri contentUri = FileProvider.getUriForFile(getActivity(), "me.carc.btownmvp.fileprovider", file);

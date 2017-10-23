@@ -18,7 +18,7 @@ import me.carc.btown_map.R;
 import me.carc.btown_map.Utils.MapUtils;
 import me.carc.btown_map.data.model.OverpassQueryResult;
 import me.carc.btown_map.data.wiki.WikiQueryPage;
-import me.carc.btown_map.map.interfaces.WikiBookmarkClickListener;
+import me.carc.btown_map.common.interfaces.WikiBookmarkClickListener;
 
 /**
  * A custom adapter to use with the RecyclerView widget.
