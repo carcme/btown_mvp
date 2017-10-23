@@ -3,7 +3,10 @@
 ### OSM Map with POI lookup, searches, Wikipedia lookup and tours (Berlin only)
 
 
-App is on the [Play Store](https://play.google.com/store/apps/details?id=me.carc.btown/).
+App is on the [Play Store](https://play.google.com/store/apps/details?id=me.carc.btown/). 
+
+[Home Page](https://carcmedev.github.io/btown/index.html/). Still a work in progress.
+
 
 
 #### ToDo List
