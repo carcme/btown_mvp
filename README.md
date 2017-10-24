@@ -30,4 +30,6 @@ App is on the [Play Store](https://play.google.com/store/apps/details?id=me.carc
 - [ ] Add map pin on long press / look up long press location
 - [x] Move all keys to local.properties file
 
+- [ ] Create variant for only map app.. remove all Berlin based stuff
+
 - [x] Routing - removed all code and using Google instead... they seem to know what they're doing
