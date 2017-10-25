@@ -14,13 +14,13 @@ App is on the [Play Store](https://play.google.com/store/apps/details?id=me.carc
 - [x] Login activity
 - [x] All web activity directed to wiki web view except PDF... launch intent chooser instead
 - [x] Navigation menu
-- [ ] Donations / IAB
-- [ ] Create comments 
+- [x] Donations / IAB
+- [x] Create comments
 - [x] Connect camera to Tours
 - [ ] Ratings 
-- [ ] Logged in icons in navigation menu
-- [ ] Transportr integration
-- [ ] Public transport plan
+- [x] Logged in icons in navigation menu
+- [x] Transportr integration
+- [x] Public transport plan
 - [x] Wiki reading list done. All callbacks handled (show on map, share, remove from list)
 - [x] Wiki links directed to webview - image clicks inside webview are overridden and displayed in own image viewer
 - [x] POI lists
@@ -29,7 +29,15 @@ App is on the [Play Store](https://play.google.com/store/apps/details?id=me.carc
 - [x] Add map long click pop up menu
 - [ ] Add map pin on long press / look up long press location
 - [x] Move all keys to local.properties file
-
+- [x] Strings translated to German
+- [ ] Add the Firebase image viewer
+- [ ] Investigate the location handler - strange behaviour while in car
+- [ ] Add functionality to POI lists overflow button
 - [ ] Create variant for only map app.. remove all Berlin based stuff
 
 - [x] Routing - removed all code and using Google instead... they seem to know what they're doing
+
+
+  Add the Firebase image viewer
+  Investigate the location handler - strange behaviour while in car
+  Add functionality to POI lists overflow button
