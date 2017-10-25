@@ -2,7 +2,7 @@
 <resources>
 
     <!--ERROR STRINGS-->
-    <string name="signed_in_err">"Fehler!"</string>
+    <string name="shared_string_error">"Fehler!"</string>
     <string name="login_required">Um fortzufahren, musst du eingeloggt sein. Oder klicke das \'X\' zum Schließen der Datei%s</string>
     <string name="auth_failed">Authentifizierung fehlgeschlagen</string>
     <string name="network_offline">Überprüfe deine Internetverbindung.</string>
@@ -14,11 +14,12 @@
     <string name="serious_error_title">Ernsthaftes Problem</string>
     <string name="serious_error_body">In der Database fand sich ein schwerer Fehler. Die Seite muss neu geladen werden.</string>
 
-    <string name="retry">Retry</string>
+    <string name="retry">Wiederholen</string>
 
 
-    <string name="network_not_available_error">Make sure you are connected to internet</string>
-
+    <string name="network_not_available_error">Stellen Sie sicher, dass Sie mit dem Internet verbunden sind</string>
+    <string name="login_error">Der Login hat leider nicht geklappt. Das Problem wurde dem Entwickler-Team gemeldet</string>
+    <string name="error_playstore_not_found">Der Playstore ist auf deinem Handy nicht installiert.</string>
 
 
 </resources>

@@ -107,7 +107,6 @@ public class AttractionShowcaseImageActivity extends BaseActivity {
     @BindView(R.id.captionSubTitle)
     TextView captionSubTitle;
 
-
     @BindView(R.id.mFabProgress)
     DonutProgress mFabProgress;
 

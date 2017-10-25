@@ -3,6 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="me.carc.btown">
 
+    <!-- BILLING - Donations -->
+    <uses-permission android:name="com.android.vending.BILLING"/>
+
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -21,9 +24,9 @@
     <application
         android:name="me.carc.btown.App"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher_round"
+        android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/ic_launcher_rnd"
         android:supportsRtl="true"
         android:theme="@style/SplashTheme">
         <activity android:name="me.carc.btown.SplashActivity">
@@ -79,8 +82,29 @@
         </activity>
 
         <activity
+            android:name=".settings.SettingsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/SettingsTheme"/>
+
+
+        <activity
+            android:name="me.carc.btown.extras.messaging.CommentsActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme"/>
+
+        <activity
+            android:name="me.carc.btown.extras.messaging.FirebaseImageActivity"
+            android:label="User Images Viewer"
+            android:theme="@style/AppTheme.FullScrnActivity"/>
+
+        <activity
             android:name="me.carc.btown.camera.CameraActivity"
             android:theme="@style/AppTheme" />
+
+        <activity android:name=".extras.PublicTransportPlan"
+            android:theme="@style/AppTheme" />
+
+
 
         <activity
             android:name="me.carc.btown.map.sheets.wiki.WikiWebViewActivity"

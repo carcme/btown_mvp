@@ -37,7 +37,7 @@ public class C {
     public static final int TYPE_MOBILE = 2;
 
 
-    public static String USER_LANGUAGE;
+    public static String USER_LANGUAGE = "en";
 
     public static final String DATA_DIR = "data/BTown";
 
@@ -48,15 +48,6 @@ public class C {
 
 
     public final static String PREF_ROUTING_VEHICLE = "PREF_ROUTING_VEHICLE";
-
-
-    public final static String MAP_ZOOM_LEVEL = "MAP_ZOOM_LEVEL";
-    public final static String MAP_CENTER_LAT = "MAP_CENTER_LAT";
-    public final static String MAP_CENTER_LNG = "MAP_CENTER_LNG";
-
-    public final static String LAST_ZOOM_LEVEL = "LAST_ZOOM_LEVEL";
-    public final static String LAST_CENTER_LAT = "LAST_CENTER_LAT";
-    public final static String LAST_CENTER_LNG = "LAST_CENTER_LNG";
 
 
 
@@ -71,5 +62,8 @@ public class C {
     public static final int TIME_ONE_HOUR = TIME_ONE_MINUTE * 60;
     public static final int TIME_ONE_DAY = TIME_ONE_HOUR * 24;
     public static final int TIME_ONE_WEEK = TIME_ONE_DAY * 7;
+
+
+    public final static String ANSWERS_ERROR = "ANSWERS_ERROR";
 
 }

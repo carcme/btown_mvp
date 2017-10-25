@@ -82,21 +82,26 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
     private static final String TAG = C.DEBUG + Commons.getTag();
 
     private static int MIN_POI_LOOKUP_ZOOM_LVL = 16;
-    private static final int ZOOM_IN_TIME_DELAY = 250;
+    private static final int ZOOM_IN_TIME_DELAY = 500;
+
+    private final static String LAST_ZOOM_LEVEL = "LAST_ZOOM_LEVEL";
+    private final static String LAST_CENTER_LAT = "LAST_CENTER_LAT";
+    private final static String LAST_CENTER_LNG = "LAST_CENTER_LNG";
+
 
     private static final String LOCATION = "LOCATION";
 
-    public static final String OVERLAY_SINGLE_TAP = "OVERLAY_SINGLE_TAP";
-    public static final String OVERLAY_SEARCH = "OVERLAY_SEARCH";
+    private static final String OVERLAY_SINGLE_TAP = "OVERLAY_SINGLE_TAP";
+    private static final String OVERLAY_SEARCH = "OVERLAY_SEARCH";
 
     private static final int DEFAULT_WIKI_SEARCH_RADIUS = 10000;
     private static final int DEFAULT_WIKI_THUMBNAIL_SIZE = C.SCREEN_WIDTH;
 
-    public final static float BERLIN_LAT = 52.517f;
-    public final static float BERLIN_LNG = 13.350f;
+    private final static float BERLIN_LAT = 52.517f;
+    private final static float BERLIN_LNG = 13.350f;
 
 
-    protected MyDirectedLocationOverlay myLocationOverlay;
+    private MyDirectedLocationOverlay myLocationOverlay;
     private MarkersOverlay mMarkersOverlay;
     private MarkersOverlay mSearchOverlay;
 
@@ -221,12 +226,13 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
 
     @Override
     public void start() {
-        TinyDB db = TinyDB.getTinyDB();
-        GeoPoint point = new GeoPoint(db.getDouble(C.LAST_CENTER_LAT, 0), db.getDouble(C.LAST_CENTER_LNG, 0));
-        mMap.getController().animateTo(point);
-        mMap.getController().setZoom(db.getInt(C.LAST_ZOOM_LEVEL, 5));
-
         mMap.setTilesScaledToDpi(true);
+
+        TinyDB db = TinyDB.getTinyDB();
+        mMap.setMinZoomLevel(2);
+        mMap.getController().setZoom(db.getInt(LAST_ZOOM_LEVEL, 9));
+        GeoPoint savedCenter = new GeoPoint(db.getDouble(LAST_CENTER_LAT, BERLIN_LAT), db.getDouble(LAST_CENTER_LNG, BERLIN_LNG));
+        mMap.getController().animateTo(savedCenter);
 
         compassSensor = new CompassSensor(mContext, onCompassCallback);
 
@@ -253,17 +259,10 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
 
             GeoPoint location = myLocationOverlay.getLocation();
 
-            if (Commons.isNotNull(location)) {
-
-                db.putInt(C.MAP_ZOOM_LEVEL, mMap.getZoomLevel());
-                db.putDouble(C.MAP_CENTER_LAT, location.getLatitude());
-                db.putDouble(C.MAP_CENTER_LNG, location.getLongitude());
-            }
-
             if (Commons.isNotNull(mMap)) {
-                db.putInt(C.LAST_ZOOM_LEVEL, mMap.getZoomLevel());
-                db.putDouble(C.LAST_CENTER_LAT, mMap.getMapCenter().getLatitude());
-                db.putDouble(C.LAST_CENTER_LNG, mMap.getMapCenter().getLongitude());
+                db.putInt(LAST_ZOOM_LEVEL, mMap.getZoomLevel());
+                db.putDouble(LAST_CENTER_LAT, mMap.getMapCenter().getLatitude());
+                db.putDouble(LAST_CENTER_LNG, mMap.getMapCenter().getLongitude());
             }
         }
 
@@ -304,13 +303,6 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
         addOverlays(savedInstanceState);
 
         mMap.setOnTouchListener(onMapTouchListener);
-
-        TinyDB db = TinyDB.getTinyDB();
-
-        mMap.setMinZoomLevel(2);
-        mMap.getController().setZoom(db.getInt(C.LAST_ZOOM_LEVEL, 2));
-        GeoPoint savedCenter = new GeoPoint(db.getDouble(C.LAST_CENTER_LAT, 0.0), db.getDouble(C.LAST_CENTER_LNG, 0.0));
-        mMap.getController().animateTo(savedCenter);
     }
 
     /**
@@ -431,7 +423,9 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
         view.onLoadStart();
 
         // if search is running, allow cancel option
-        if (Commons.isNotNull(overpassCall)) overpassCall.cancel();
+        if (Commons.isNotNull(overpassCall)) {
+            overpassCall.cancel();
+        }
     }
 
     /**
@@ -744,24 +738,23 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
     @Override
     public void showPoiDialog(final Object obj) {
 
-
         if (obj instanceof OverpassQueryResult.Element) {
-            mMap.getController().animateTo(((OverpassQueryResult.Element) obj).getGeoPoint());
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     SinglePoiOptionsDialog.showInstance(mContext.getApplicationContext(), (OverpassQueryResult.Element) obj);
                 }
             }, ZOOM_IN_TIME_DELAY);
+            mMap.getController().animateTo(((OverpassQueryResult.Element) obj).getGeoPoint());
         } else if (obj instanceof WikiQueryPage) {
             GeoPoint p = new GeoPoint(((WikiQueryPage) obj).getLat(), ((WikiQueryPage) obj).getLon());
-            mMap.getController().animateTo(p);
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     WikiPoiSheetDialog.showInstance(mContext.getApplicationContext(), (WikiQueryPage) obj);
                 }
             }, ZOOM_IN_TIME_DELAY);
+            mMap.getController().animateTo(p);
         }
     }
 
@@ -918,35 +911,27 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
             GeoPoint myLocation = myLocationOverlay.getLocation();
 
             if (myLocationOverlay.isEnabled() && myLocation != null) {
+                int currentZoomLvl = mMap.getZoomLevel();
 
-                if (mMap.getZoomLevel() < MIN_POI_LOOKUP_ZOOM_LVL) {
-                    // hide location arrow
+                if (currentZoomLvl < MIN_POI_LOOKUP_ZOOM_LVL) {
+
+                    // Dont like this little hack - does make the animateTo more accurate though
+                    if(currentZoomLvl < 9 )
+                        mMap.getController().setZoom(9);
+
+                    mMap.getController().animateTo(myLocation);
                     myLocationOverlay.setEnabled(false);
 
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            mMap.getController().zoomTo(MIN_POI_LOOKUP_ZOOM_LVL);
-                        }
-                    }, ZOOM_IN_TIME_DELAY);
-
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            // show location arrow
-                            myLocationOverlay.setEnabled(true);
-                        }
-                    }, ZOOM_IN_TIME_DELAY * 2);
-
+                    animateToHandler.postDelayed(animateTo, ZOOM_IN_TIME_DELAY);
+                } else {
+                    // already at a decent zoom level - just animate
+                    mMap.getController().animateTo(myLocation);
                 }
-                mMap.getController().animateTo(myLocation);
             }
         } else {
             view.setTrackingMode(false);
 
             if (bAllowReturnLocation) {
-                mMap.getController().animateTo(browsingLocation.getBrowsingLocation());
-
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -954,8 +939,32 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
                         browsingLocation = null;
                     }
                 }, ZOOM_IN_TIME_DELAY);
+                mMap.getController().animateTo(browsingLocation.getBrowsingLocation());
             }
         }
     }
 
+    private Handler animateToHandler = new Handler();
+
+
+    /**
+     * Let map finish animating before processing the zoom controls
+     *   - zooming too early will cancel the panning animation
+     */
+    private Runnable animateTo = new Runnable() {
+        public void run() {
+            if(!mMap.isAnimating()) {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        myLocationOverlay.setEnabled(true);
+                    }
+                }, ZOOM_IN_TIME_DELAY);
+
+                mMap.getController().zoomTo(MIN_POI_LOOKUP_ZOOM_LVL);
+
+            } else
+                animateToHandler.postDelayed(this, 200);
+        }
+    };
 }

@@ -6,7 +6,6 @@ import android.os.Parcelable;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
-import java.util.Locale;
 
 import me.carc.btown.common.Commons;
 
@@ -58,8 +57,8 @@ public class TourCatalogue implements Parcelable {
         return tourId;
     }
 
-    public String getCatalogueName() {
-        return tourName;
+    public String getCatalogueName(boolean isGermanLanguage) {
+        return isGermanLanguage ? de_tourName : tourName;
     }
 
     public double getCatalogueDistance() {
@@ -73,20 +72,15 @@ public class TourCatalogue implements Parcelable {
 
     public double getCatalogueRating() { return tourRating; }
 
-    public String getCatalogueDesc() {
-        Locale locale = Locale.getDefault();
-        if(locale.getLanguage().equals("en"))
-            return tourDesc;
-        else
-            return tourDesc;
+    public String getCatalogueDesc(boolean isGermanLanguage) {
+        return isGermanLanguage ? de_tourDesc : tourDesc;
     }
 
-    public String getCatalogueBrief() {
-        Locale locale = Locale.getDefault();
-        if(locale.getLanguage().equals("en"))
-            return Commons.buildStringFromArray(tourBrief);
-         else
+    public String getCatalogueBrief(boolean isLangGerman) {
+        if(isLangGerman)
             return Commons.buildStringFromArray(de_tourBrief);
+         else
+            return Commons.buildStringFromArray(tourBrief);
     }
 
     public String getCatalogueImage() {

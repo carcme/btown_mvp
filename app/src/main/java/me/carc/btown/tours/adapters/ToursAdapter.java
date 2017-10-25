@@ -32,11 +32,13 @@ public class ToursAdapter extends RecyclerView.Adapter<ToursAdapter.CatalogueVie
 
     private ArrayList<TourCatalogue> tours;
     private StorageReference mCoverImageStorageRef;
+    private boolean isGermanLanguage;
 
     public DrawableClickListener onClickListener;
 
-    public ToursAdapter(ArrayList<TourCatalogue> tours, DrawableClickListener listener) {
+    public ToursAdapter(ArrayList<TourCatalogue> tours, boolean language, DrawableClickListener listener) {
         this.tours = tours;
+        isGermanLanguage = language;
         onClickListener = listener;
         mCoverImageStorageRef = FirebaseStorage.getInstance().getReference().child("coverImages/");
     }
@@ -51,8 +53,8 @@ public class ToursAdapter extends RecyclerView.Adapter<ToursAdapter.CatalogueVie
     public void onBindViewHolder(final CatalogueViewHolder holder, final int pos) {
         final TourCatalogue card = tours.get(pos);
 
-        holder.catalogueTitle.setText(card.getCatalogueName());
-        holder.supportingText.setText(card.getCatalogueBrief());
+        holder.catalogueTitle.setText(card.getCatalogueName(isGermanLanguage));
+        holder.supportingText.setText(card.getCatalogueBrief(isGermanLanguage));
         holder.time.setText(card.getCatalogueTourTime());
         holder.rating.setText(String.valueOf(Double.toString(card.getCatalogueRating())));
         holder.distance.setText(String.valueOf(Double.toString(card.getCatalogueDistance()) + "km"));

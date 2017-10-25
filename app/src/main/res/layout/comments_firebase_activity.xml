@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/almostWhite">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/fcmAppBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/fcm_toolbar"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+        </android.support.v7.widget.Toolbar>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/fcmAppBarLayout"
+        android:orientation="horizontal"
+        android:padding="@dimen/margin_standard">
+
+        <EditText
+            android:id="@+id/messageEditText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:textColor="@color/almostBlack"
+            android:imeOptions="actionGo"
+            android:hint="@string/shared_string_your_message_hint"
+            android:inputType="textMultiLine|textShortMessage"
+            android:textColorHint="@color/comments_disabled"/>
+
+        <Button
+            android:id="@+id/sendButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:enabled="false"
+            android:text="@string/shared_string_post"
+            style="@style/Base.TextAppearance.AppCompat.Widget.Button.Borderless.Colored"/>
+
+    </LinearLayout>
+
+
+    <ImageView
+        android:id="@+id/first_comment_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:contentDescription="@null"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/btown_skyline"
+        android:alpha="0.1"
+        android:layout_below="@+id/fcmAppBarLayout" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/messageRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/linearLayout"
+        android:paddingStart="@dimen/margin_standard"
+        android:paddingEnd="@dimen/margin_standard"/>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true" />
+
+    <TextView
+        android:id="@+id/first_comment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal|center_vertical"
+        android:text="@string/first_comment_notification"
+        android:textColor="@color/colorPrimary"
+        android:textSize="20sp" />
+
+</RelativeLayout>

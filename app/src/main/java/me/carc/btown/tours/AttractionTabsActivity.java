@@ -65,9 +65,9 @@ public class AttractionTabsActivity extends BaseActivity implements
         ButterKnife.bind(this);
 
         Intent intent = getIntent();
-        if (intent.hasExtra("ATTRACTIONS_LIST")) {
-            tourTitle = intent.getStringExtra("CATALOGUE_TITLE");
-            attractions = intent.getParcelableArrayListExtra("ATTRACTIONS_LIST");
+        if (intent.hasExtra(CataloguePreviewActivity.ATTRACTIONS_LIST)) {
+            tourTitle = intent.getStringExtra(CataloguePreviewActivity.CATALOGUE_TITLE);
+            attractions = intent.getParcelableArrayListExtra(CataloguePreviewActivity.ATTRACTIONS_LIST);
 
             // populate the various lists
             if(Commons.isNotNull(attractions)) {
@@ -105,7 +105,7 @@ public class AttractionTabsActivity extends BaseActivity implements
             gallery.setFilename(attraction.getImage());
             gallery.setCachedFilePath(CacheDir.getCachePath() + attraction.getImage());
             gallery.setTitle(attraction.getStopName());
-            gallery.setDesc(attraction.getAttractionStopInfo().getTeaser()[0]);
+            gallery.setDesc(attraction.getAttractionStopInfo(isGermanLanguage()).getTeaser()[0]);
 
             galleryItems.put(index++, gallery);
         }
@@ -139,7 +139,7 @@ public class AttractionTabsActivity extends BaseActivity implements
         Bundle bundle = null;
         if (Commons.isNotNull(attractions)) {
             bundle = new Bundle();
-            bundle.putParcelableArrayList("ATTRACTIONS_LIST", attractions);
+            bundle.putParcelableArrayList(CataloguePreviewActivity.ATTRACTIONS_LIST, attractions);
         }
 
         adapter.addFragment(new AttractionTabsStopsFragment(), getString(R.string.attractions), bundle);

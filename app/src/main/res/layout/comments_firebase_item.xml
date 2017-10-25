@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/margin_short"
+    android:paddingTop="@dimen/margin_short"
+    tools:background="@color/card_text_color">
+
+    <ImageView
+        android:id="@+id/userImage"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:contentDescription="User image"
+        android:scaleType="fitStart"
+        tools:src="@drawable/ic_user" />
+
+    <TextView
+        android:id="@+id/user"
+        android:layout_width="wrap_content"
+        android:layout_height="25dp"
+        android:layout_marginStart="@dimen/margin_short"
+        android:layout_toEndOf="@+id/userImage"
+        android:contentDescription="User name"
+        android:textColor="@color/almostBlack"
+        android:textSize="14sp"
+        tools:text="User" />
+
+    <TextView
+        android:id="@+id/date"
+        android:layout_width="wrap_content"
+        android:layout_height="25dp"
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@+id/user"
+        android:gravity="end"
+        android:textColor="@color/almostBlack"
+        android:textSize="14sp"
+        tools:text="Date" />
+
+    <me.carc.btown.ui.custom.CapitalisedTextView
+        android:id="@+id/message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/userImage"
+        android:textColor="@color/almostBlack"
+        android:inputType="textCapSentences|textMultiLine"
+        android:textSize="20sp"
+        tools:text="Message -  this it a long message to see how the layout looks like" />
+
+</RelativeLayout>

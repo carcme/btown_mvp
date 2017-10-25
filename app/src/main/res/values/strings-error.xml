@@ -2,7 +2,7 @@
 <resources>
 
 
-    <string name="signed_in_err">"Error!"</string>
+    <string name="shared_string_error">"Error!"</string>
     <string name="login_required">You must login to proceed or press the \'X\' above to close %s</string>
     <string name="auth_failed">Authentication failed.</string>
     <string name="network_offline">Please check you network connection. You need to be online to use B-Town</string>
@@ -18,5 +18,7 @@
 
 
     <string name="network_not_available_error">Make sure you are connected to internet</string>
+    <string name="login_error">Could not get your login details. A report has been sent to the developer</string>
+    <string name="error_playstore_not_found">Couldn\'t find PlayStore on this device</string>
 
 </resources>

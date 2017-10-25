@@ -243,7 +243,7 @@ class LoginPresenter implements IfLogin.Presenter, GoogleApiClient.OnConnectionF
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (!task.isSuccessful())
-                    view.showLoginError(mContext.getString(R.string.signed_in_err));
+                    view.showLoginError(mContext.getString(R.string.shared_string_error));
                 else
                     view.onFinishActivity();
             }

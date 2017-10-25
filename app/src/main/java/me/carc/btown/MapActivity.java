@@ -47,9 +47,7 @@ public class MapActivity extends BaseActivity implements
         IMap.View,
         SearchDialogFragment.SearchListener,
         WikiPoiSheetDialog.WikiCallback,
-        WikiReadingListDialogFragment.BookmarksCallback
-        /*,
-        RouteDialog.RouteDialogCallback*/ {
+        WikiReadingListDialogFragment.BookmarksCallback {
 
     private static final String TAG = C.DEBUG + Commons.getTag();
 
@@ -61,9 +59,6 @@ public class MapActivity extends BaseActivity implements
 
 
     private IMap.Presenter presenter;
-    //    private Drawer drawer = null;
-//    private AccountHeader drawerHeader = null;
-
 
     private boolean isActive;  // remove this and replace with instanceof 'this'
     private Unbinder unbinder;
@@ -111,8 +106,6 @@ public class MapActivity extends BaseActivity implements
 
         presenter = new MapPresenter(this, this, mMap);
         presenter.initMap(savedInstanceState);
-
-        setupDrawer(savedInstanceState);
     }
 
 
@@ -254,18 +247,7 @@ public class MapActivity extends BaseActivity implements
                     Toast.makeText(MapActivity.this, "Permission denied to read your External storage", Toast.LENGTH_SHORT).show();
                 }
                 break;
-
-            case 101:
-                break;
-
-
-            // other 'case' lines to check for other
-            // permissions this app might request
         }
-    }
-
-    private void setupDrawer(/*Toolbar toolbar, */Bundle savedInstanceState) {
-
     }
 
 
@@ -319,7 +301,7 @@ public class MapActivity extends BaseActivity implements
 
     @Override
     public void enableLocationDependantFab(boolean enable) {
-        if(isActive)
+        if (isActive)
             trackingModeFab.setVisibility(enable ? View.VISIBLE : View.GONE);
     }
 
@@ -452,7 +434,6 @@ public class MapActivity extends BaseActivity implements
     public void showWikiOnMap(BookmarkEntry entry) {
         presenter.onShowWikiOnMap(entry);
     }
-
 
 
     @Override

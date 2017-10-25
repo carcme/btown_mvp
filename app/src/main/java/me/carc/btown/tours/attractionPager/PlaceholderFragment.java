@@ -219,7 +219,7 @@ public class PlaceholderFragment extends Fragment {
             assert nestedScroll != null;
             nestedScroll.setOnScrollChangeListener(onScrollListener);
 
-            buildViews(rootView);
+            buildViews(rootView, C.USER_LANGUAGE.equals("de"));
 
             imageBackDrop.setOnClickListener(onShowMapClickListener);
 
@@ -271,12 +271,8 @@ public class PlaceholderFragment extends Fragment {
         cbTourListener.firebaseUpdateRequired();
     }
 
-    private void getFont() {
-        BaseActivity.hideProgressDialog();
-    }
 
-
-    private void buildViews(View rootView) {
+    private void buildViews(View rootView, boolean germanLanguage) {
         int text = ContextCompat.getColor(getActivity(), R.color.almostBlack);
         ViewUtils.changeFabColour(getActivity(), backFab, R.color.toursBackButtonBackgroundColor);
 
@@ -285,12 +281,12 @@ public class PlaceholderFragment extends Fragment {
         Typeface fontTitle = BaseActivity.getDefaultFont(getActivity());
         Typeface fontText = fontTitle; //Typeface.createFromAsset(getAssets(), "fonts/Roboto-Thin.ttf");
 
-        LinearLayout ll = (LinearLayout) rootView.findViewById(R.id.attraction_layout);
+        LinearLayout ll = rootView.findViewById(R.id.attraction_layout);
 
         cards = new ArrayList<>();
-        cards.add(createInformationExpander(rootView, fontTitle));
+        cards.add(createInformationExpander(rootView, fontTitle, germanLanguage));
 
-        StopInfo info = attractionData.getAttractionStopInfo();
+        StopInfo info = attractionData.getAttractionStopInfo(germanLanguage);
 
         LayoutInflater inf = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
@@ -319,7 +315,7 @@ public class PlaceholderFragment extends Fragment {
             title = Commons.isNull(info.getNextStopTitle()) ? getString(R.string.nextstop_title) : info.getNextStopTitle();
             cards.add(inflateCardView(inf, ll, title, info.getNextStop(), text, fontTitle, fontText));
         }
-        cards.add(inflateInteractCard(inf, ll, "Interact", "", text, fontTitle));
+        cards.add(inflateInteractCard(inf, ll, "Interact", text, fontTitle));
     }
 
     /**
@@ -342,10 +338,10 @@ public class PlaceholderFragment extends Fragment {
         params.setMargins(paddingDp, 0, paddingDp, paddingDp);
         card.setLayoutParams(params);
 
-        final CardView cardView = (CardView) card.findViewById(R.id.my_card_layout);
+        final CardView cardView = card.findViewById(R.id.my_card_layout);
         cardView.setMaxCardElevation(AndroidUtils.getPixelsFromDPs(r, 10));
 
-        TextView descTitle = (TextView) card.findViewById(R.id.mycardtitle);
+        TextView descTitle = card.findViewById(R.id.mycardtitle);
         descTitle.setTypeface(fontTitle, Typeface.BOLD);
         descTitle.setText(title);
         descTitle.setTextColor(textColor);
@@ -356,7 +352,7 @@ public class PlaceholderFragment extends Fragment {
         toggleIcon.setVisibility(View.GONE);
 */
 
-        LinearLayout linear = (LinearLayout) card.findViewById(R.id.descLayout);
+        LinearLayout linear = card.findViewById(R.id.descLayout);
 
         LinearLayout.LayoutParams imageParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -414,6 +410,7 @@ public class PlaceholderFragment extends Fragment {
                 paddingDp = AndroidUtils.getPixelsFromDPs(r, 8);
                 textview.setPadding(paddingDp, 0, paddingDp, paddingDp);
                 textview.setLayoutParams(params);
+                textview.setLineSpacing(0.0f, 1.2f);
                 textview.setGravity(Gravity.CENTER_VERTICAL);
                 if (font != null)
                     textview.setTypeface(font);
@@ -443,9 +440,9 @@ public class PlaceholderFragment extends Fragment {
      * @return the created cardview
      */
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private CardView createInformationExpander(final View rootView, Typeface font) {
+    private CardView createInformationExpander(final View rootView, Typeface font, boolean germanLanguage) {
         // Get ListView object from xml
-        final ListView listView = (ListView) rootView.findViewById(R.id.informationListView);
+        final ListView listView = rootView.findViewById(R.id.informationListView);
 
         items = new ArrayList<>();
 
@@ -458,7 +455,6 @@ public class PlaceholderFragment extends Fragment {
         if (!Commons.isEmpty(attractionData.getCost()))
             items.add(new InfoCard(attractionData.getCost(), R.drawable.ic_dollar));
 
-
         if (!Commons.isEmpty(attractionData.getTel()))
             items.add(new InfoCard(attractionData.getTel(), R.drawable.ic_call));
 
@@ -468,8 +464,8 @@ public class PlaceholderFragment extends Fragment {
         if (!Commons.isEmpty(attractionData.getWebLink()))
             items.add(new InfoCard(attractionData.getWebLink(), R.drawable.ic_web));
 
-        if (!Commons.isEmpty(attractionData.getWiki()))
-            items.add(new InfoCard(attractionData.getWiki(), R.drawable.ic_wiki));
+        if (!Commons.isEmpty(attractionData.getWiki(germanLanguage)))
+            items.add(new InfoCard(attractionData.getWiki(germanLanguage), R.drawable.ic_wiki));
 
         if (!Commons.isEmpty(attractionData.getFacebookPageIdString()))
             items.add(new InfoCard(attractionData.getFacebookPageIdString(), R.drawable.ic_facebook_box));
@@ -538,12 +534,12 @@ public class PlaceholderFragment extends Fragment {
             }
         });
 
-        final CardView informationCard = (CardView) rootView.findViewById(R.id.information_card);
+        final CardView informationCard = rootView.findViewById(R.id.information_card);
         informationCard.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
             @Override
             public boolean onPreDraw() {
                 informationCard.getViewTreeObserver().removeOnPreDrawListener(this);
-                LinearLayout headerInfo = (LinearLayout) rootView.findViewById(R.id.headerInfo);
+                LinearLayout headerInfo = rootView.findViewById(R.id.headerInfo);
                 minHeight = headerInfo.getHeight();
                 minTVHeight = minHeight;
 
@@ -551,7 +547,7 @@ public class PlaceholderFragment extends Fragment {
                 layoutParams.height = minHeight;
                 informationCard.setLayoutParams(layoutParams);
 
-                RelativeLayout infoElement = (RelativeLayout) rootView.findViewById(R.id.layout_information);
+                RelativeLayout infoElement = rootView.findViewById(R.id.layout_information);
                 if (infoElement == null)
                     return false;
                 infoHeight = infoElement.getHeight();
@@ -563,10 +559,10 @@ public class PlaceholderFragment extends Fragment {
         });
 
 
-        final TextView txt = (TextView) rootView.findViewById(R.id.infoTitle);
+        final TextView txt = rootView.findViewById(R.id.infoTitle);
         txt.setTypeface(font, Typeface.BOLD);
 
-        final ImageView icon = (ImageView) rootView.findViewById(R.id.infoExpanderIcon);
+        final ImageView icon = rootView.findViewById(R.id.infoExpanderIcon);
 //        icon.getDrawable().setTint(ContextCompat.getColor(this, R.color.almostBlack));
 
         if (C.HAS_L) {
@@ -662,15 +658,13 @@ public class PlaceholderFragment extends Fragment {
     }
 
     /**
-     * Show the credits card - TODO: what goes in here!
-     *
-     * @param title
-     * @param text
-     * @param textColor
-     * @return
+     * Show the credits card
+     * @param title the title of the card
+     * @param textColor color of text
+     * @return the card to be inserted to layout
      */
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public CardView inflateInteractCard(LayoutInflater inflater, LinearLayout baseLayout, String title, String text,
+    public CardView inflateInteractCard(LayoutInflater inflater, LinearLayout baseLayout, String title,
                                         int textColor, Typeface font) {
 
         View card = inflater.inflate(R.layout.attraction_card_interact_layout, root, false);
@@ -684,19 +678,19 @@ public class PlaceholderFragment extends Fragment {
         params.setMargins(paddingPixel, 0, paddingPixel, paddingDp);
         card.setLayoutParams(params);
 
-        CardView cardView = (CardView) card.findViewById(R.id.interact_card);
+        CardView cardView = card.findViewById(R.id.interact_card);
 
-        TextView titleTxt = (TextView) card.findViewById(R.id.interact_title);
+        TextView titleTxt = card.findViewById(R.id.interact_title);
         titleTxt.setTypeface(font, Typeface.BOLD);
         titleTxt.setTextColor(textColor);
         titleTxt.setText(title);
 
-        Button btnPostcard = (Button) card.findViewById(R.id.btnPostcard);
-        Button btnCheckin = (Button) card.findViewById(R.id.btnCheckin);
-        Button btnComment = (Button) card.findViewById(R.id.btnComment);
-        Button btnCamera = (Button) card.findViewById(R.id.btnCamera);
-        Button btnDonate = (Button) card.findViewById(R.id.btnDonate);
-        Button btnMap = (Button) card.findViewById(R.id.btnMap);
+        Button btnPostcard = card.findViewById(R.id.btnPostcard);
+        Button btnCheckin = card.findViewById(R.id.btnCheckin);
+        Button btnComment = card.findViewById(R.id.btnComment);
+        Button btnCamera = card.findViewById(R.id.btnCamera);
+        Button btnDonate = card.findViewById(R.id.btnDonate);
+        Button btnMap = card.findViewById(R.id.btnMap);
 
 
         btnPostcard.setCompoundDrawablesWithIntrinsicBounds(new IconicsDrawable(getActivity(), FontAwesome.Icon.faw_share_alt_square).color(Color.WHITE).sizeDp(20), null, null, null);
@@ -717,18 +711,19 @@ public class PlaceholderFragment extends Fragment {
         btnMap.setCompoundDrawablesWithIntrinsicBounds(new IconicsDrawable(getActivity(), FontAwesome.Icon.faw_map).color(Color.WHITE).sizeDp(20), null, null, null);
         btnMap.setOnClickListener(onShowMapClickListener);
 
-        btnPostcard.getBackground().setColorFilter(textColor, PorterDuff.Mode.MULTIPLY);
-        btnCheckin.getBackground().setColorFilter(textColor, PorterDuff.Mode.MULTIPLY);
-        btnComment.getBackground().setColorFilter(textColor, PorterDuff.Mode.MULTIPLY);
-        btnCamera.getBackground().setColorFilter(textColor, PorterDuff.Mode.MULTIPLY);
-        btnDonate.getBackground().setColorFilter(textColor, PorterDuff.Mode.MULTIPLY);
-        btnMap.getBackground().setColorFilter(textColor, PorterDuff.Mode.MULTIPLY);
+        int bgColor = ContextCompat.getColor(getActivity(), R.color.interactiveButtonsBgColor);
 
-        // TODO: 5/11/17
+        btnPostcard.getBackground().setColorFilter(bgColor, PorterDuff.Mode.MULTIPLY);
+        btnCheckin.getBackground().setColorFilter(bgColor, PorterDuff.Mode.MULTIPLY);
+        btnComment.getBackground().setColorFilter(bgColor, PorterDuff.Mode.MULTIPLY);
+        btnCamera.getBackground().setColorFilter(bgColor, PorterDuff.Mode.MULTIPLY);
+        btnDonate.getBackground().setColorFilter(bgColor, PorterDuff.Mode.MULTIPLY);
+        btnMap.getBackground().setColorFilter(bgColor, PorterDuff.Mode.MULTIPLY);
+
+
 //        TextView imageSrc = (TextView) card.findViewById(R.id.image_source_link);
-//        imageSrc.setText("TODO: get image src from JSON");
+//        imageSrc.setText(" get image src from JSON");
 
-        // // TODO: 5/8/17
         //ratingBar = (RatingBar)card.findViewById(R.id.rating_bar);
 
         baseLayout.addView(card);
@@ -754,20 +749,6 @@ public class PlaceholderFragment extends Fragment {
         ViewUtils.createAlphaAnimator(backFab, false, getResources()
                 .getInteger(R.integer.gallery_alpha_duration) * 2).start();
         getActivity().onBackPressed();
-
-/*
-            float temp = backFab.getHeight();
-            int duration = getResources().getInteger(R.integer.gallery_alpha_duration);
-
-            ViewUtils.hideView(backFab, duration, (int) temp);
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    backFab.setVisibility(View.GONE);
-                    getActivity().onBackPressed();
-                }
-            }, duration);
-*/
         }
     };
 
@@ -808,7 +789,7 @@ public class PlaceholderFragment extends Fragment {
     private View.OnClickListener onCommentBtnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            cbTourListener.onAddComment(String.valueOf(attractionData.getRating()));
+            cbTourListener.onAddComment(attractionData.getStopName());
         }
     };
 

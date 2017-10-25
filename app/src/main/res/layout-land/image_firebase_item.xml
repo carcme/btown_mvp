@@ -1,0 +1,32 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    android:foreground="@drawable/grey_ripple"
+    android:stateListAnimator="@animator/raise"
+    android:transitionGroup="true">
+
+    <ImageView
+        android:id="@+id/photo"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:adjustViewBounds="true"
+        android:contentDescription="@null"
+        android:scaleType="centerCrop"
+        tools:src="@drawable/placeholder"/>
+
+    <TextView
+        android:id="@+id/author"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:background="@color/gallery_overlay"
+        android:lines="1"
+        android:paddingBottom="@dimen/padding_small"
+        android:paddingEnd="@dimen/padding_normal"
+        android:paddingStart="@dimen/padding_normal"
+        android:paddingTop="@dimen/padding_small"
+        android:textColor="@color/almostWhite"
+        tools:text="Author"/>
+
+</FrameLayout>

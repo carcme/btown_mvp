@@ -7,6 +7,7 @@ import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -43,6 +44,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class CatalogueActivity extends BaseActivity {
 
     private static final String TAG = C.DEBUG + Commons.getTag();
+    public static final String CATALOGUE = "SELECTED_CATALOGUE";
+
     public static final String SERVER_FILE = "SERVER_FILE";
     public static final String JSON_VERSION= "JSON_VERSION";
 
@@ -119,8 +122,10 @@ public class CatalogueActivity extends BaseActivity {
             Call<TourHolderResult> call = service.getTours(BuildConfig.FIREBASE_ALT, BuildConfig.FIREBASE_TOKEN);
 
             call.enqueue(new Callback<TourHolderResult>() {
+
                 @Override
-                public void onResponse(Call<TourHolderResult> call, Response<TourHolderResult> response) {
+                @SuppressWarnings({"ConstantConditions"})
+                public void onResponse(@NonNull Call<TourHolderResult> call, @NonNull Response<TourHolderResult> response) {
 
 
                     ArrayList<TourCatalogue> tours = response.body().tours;
@@ -133,7 +138,7 @@ public class CatalogueActivity extends BaseActivity {
                 }
 
                 @Override
-                public void onFailure(Call<TourHolderResult> call, Throwable t) {
+                public void onFailure(@NonNull Call<TourHolderResult> call, @NonNull Throwable t) {
                     Log.d(TAG, "onResponse: ");
                     setProgressItems(View.GONE);
                 }
@@ -145,14 +150,14 @@ public class CatalogueActivity extends BaseActivity {
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void setupRecycler(ArrayList<TourCatalogue> tours) {
 
-        mAdapter = new ToursAdapter(tours, new DrawableClickListener() {
+        mAdapter = new ToursAdapter(tours, isGermanLanguage(),  new DrawableClickListener() {
 
             @Override
             public void OnClick(View v, Drawable drawable, int pos) {
                 TourCatalogue catalogue = mAdapter.getItem(pos);
                 Holder.set(drawable);
                 Intent intent = new Intent(CatalogueActivity.this, CataloguePreviewActivity.class);
-                intent.putExtra("SELECTED_CATALOGUE", catalogue);
+                intent.putExtra(CATALOGUE, catalogue);
 
                 Bundle options = null;
                 if (C.HAS_L)

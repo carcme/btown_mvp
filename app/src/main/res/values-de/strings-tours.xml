@@ -13,6 +13,11 @@
     <string name="start_the_tour">Starte die Tour</string>
     <string name="first_comment_notification">Schreib den ersten Kommentar</string>
     <string name="sync_comment_later">Poste deinen Kommentar. Er geht online, wenn du wieder Internetzugang hast.</string>
+
+    <string name="comment_usage_hint_title">Ideen für Kommentare</string>
+    <string name="comment_usage_hint">Sag’ anderen, wenn du:\n • eine tolle Bar\n • a ein nettes Fleckchen zum Essen\n • oder einen geilen Insider Tipp entdeckt hast</string>
+
+
     <string name="sign_in_to_post">Logge dich ein, um zu kommentieren.</string>
     <string name="information">Information</string>
 
@@ -41,5 +46,7 @@
     <string name="tour_explorer_title">Tour Explorer</string>
     <string name="tour_explorer_subtitle">Was Berlin zu bieten hat</string>
     <string name="tours_tour_catalogue">Tour Catalogue</string>
+    <string name="top10_coming_soon_title">Kommt demnächst</string>
+    <string name="top10_coming_soon_msg">Wir arbeiten derzeit hart an einer Top 10 Liste Berliner Bars, Restaurants, Insider Tipps und Sehenswürdigkeiten.</string>
 
 </resources>

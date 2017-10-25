@@ -344,28 +344,28 @@ public class SinglePoiOptionsDialog extends BottomSheetDialogFragment {
                 items.add(new InfoCard(node.tags.contactEmail, InfoCard.ItemType.EMAIL, CommunityMaterial.Icon.cmd_email));
 
             if (Commons.isNotNull(node.tags.smoking))
-                items.add(new InfoCard("Smoking: " + node.tags.smoking, InfoCard.ItemType.INFO, CommunityMaterial.Icon.cmd_smoking));
+                items.add(new InfoCard(getString(R.string.poi_res_smoking) + node.tags.smoking, InfoCard.ItemType.INFO, CommunityMaterial.Icon.cmd_smoking));
 
             if (Commons.isNotNull(node.tags.wheelchair))
-                items.add(new InfoCard("Wheelchair: " + node.tags.wheelchair, InfoCard.ItemType.INFO, CommunityMaterial.Icon.cmd_wheelchair_accessibility));
+                items.add(new InfoCard(getString(R.string.poi_res_wheelchair) + node.tags.wheelchair, InfoCard.ItemType.INFO, CommunityMaterial.Icon.cmd_wheelchair_accessibility));
 
             if (Commons.isNotNull(node.tags.wheelchairToilets))
-                items.add(new InfoCard("Wheelchair Toilet Access: " + node.tags.wheelchairToilets, InfoCard.ItemType.INFO, CommunityMaterial.Icon.cmd_wheelchair_accessibility));
+                items.add(new InfoCard(getString(R.string.poi_res_wheelchair_toilet) + node.tags.wheelchairToilets, InfoCard.ItemType.INFO, CommunityMaterial.Icon.cmd_wheelchair_accessibility));
 
             if (Commons.isNotNull(node.tags.takeaway))
-                items.add(new InfoCard("Takeaway: " + node.tags.takeaway, InfoCard.ItemType.INFO, CommunityMaterial.Icon.cmd_information));
+                items.add(new InfoCard(getString(R.string.poi_res_takeaway) + node.tags.takeaway, InfoCard.ItemType.INFO, CommunityMaterial.Icon.cmd_information));
 
             if (Commons.isNotNull(node.tags.delivery))
-                items.add(new InfoCard("Delivery: " + node.tags.delivery, InfoCard.ItemType.INFO, CommunityMaterial.Icon.cmd_information));
+                items.add(new InfoCard(getString(R.string.poi_res_delivery) + node.tags.delivery, InfoCard.ItemType.INFO, CommunityMaterial.Icon.cmd_information));
 
             if (Commons.isNotNull(node.tags.internetAccess))
-                items.add(new InfoCard("Internet Access: " + node.tags.internetAccess, InfoCard.ItemType.INFO, CommunityMaterial.Icon.cmd_wifi));
+                items.add(new InfoCard(getString(R.string.poi_res_internet) + node.tags.internetAccess, InfoCard.ItemType.INFO, CommunityMaterial.Icon.cmd_wifi));
 
             if (Commons.isNotNull(node.tags.operator))
-                items.add(new InfoCard("Operator: " + node.tags.operator, InfoCard.ItemType.INFO, CommunityMaterial.Icon.cmd_human));
+                items.add(new InfoCard(getString(R.string.poi_res_operator) + node.tags.operator, InfoCard.ItemType.INFO, CommunityMaterial.Icon.cmd_human));
 
             if (Commons.isNotNull(node.tags.note))
-                items.add(new InfoCard("Note: " + node.tags.note, InfoCard.ItemType.INFO, CommunityMaterial.Icon.cmd_note));
+                items.add(new InfoCard(getString(R.string.poi_res_note) + node.tags.note, InfoCard.ItemType.INFO, CommunityMaterial.Icon.cmd_note));
 
             if (Commons.isNotNull(node.tags.wikipedia))
                 items.add(new InfoCard(node.tags.wikipedia, InfoCard.ItemType.WIKI, CommunityMaterial.Icon.cmd_wikipedia));
@@ -410,7 +410,10 @@ public class SinglePoiOptionsDialog extends BottomSheetDialogFragment {
                                 }
                                 break;
                             case FACEBOOK:
-                                Toast.makeText(getActivity(), "TODO FACEBOOK::" + item.getData(), Toast.LENGTH_SHORT).show();
+                                intent = new Intent(getActivity(), WikiWebViewActivity.class);
+                                intent.putExtra(WikiWebViewActivity.WIKI_EXTRA_PAGE_TITLE, getActivity().getString(R.string.facebook));
+                                intent.putExtra(WikiWebViewActivity.WIKI_EXTRA_PAGE_URL, "https://www.facebook.com/".concat(item.getData()));
+                                startActivity(intent);
                                 break;
 
                             case CLIPBOARD:

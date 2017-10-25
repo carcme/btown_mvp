@@ -38,6 +38,8 @@ import me.carc.btown.ui.custom.GalleryBottomView;
 public class CataloguePreviewActivity extends BaseActivity implements View.OnClickListener, View.OnTouchListener {
 
     private static final String TAG = C.DEBUG + Commons.getTag();
+    public static final String CATALOGUE_TITLE = "CATALOGUE_TITLE";
+    public static final String ATTRACTIONS_LIST = "ATTRACTIONS_LIST";
 
     private static final int MIN_DISTANCE = 50;
     private final Runnable startRunnable = new Runnable() {
@@ -53,6 +55,7 @@ public class CataloguePreviewActivity extends BaseActivity implements View.OnCli
         }
     };
     private TourCatalogue card;
+    private boolean isGermanLanguage;
 
     @BindView(R.id.root)
     ViewGroup filler;
@@ -87,19 +90,20 @@ public class CataloguePreviewActivity extends BaseActivity implements View.OnCli
         setContentView(R.layout.tours_catalogue_preview_activity);
         ButterKnife.bind(this);
 
+        isGermanLanguage = isGermanLanguage();
+
         calculateImageHeight();
         initializeViews();
 
-        if (getIntent().hasExtra("SELECTED_CATALOGUE")) {
-            card = getIntent().getParcelableExtra("SELECTED_CATALOGUE");
+        if (getIntent().hasExtra(CatalogueActivity.CATALOGUE)) {
+            card = getIntent().getParcelableExtra(CatalogueActivity.CATALOGUE);
 
-            title.setText(card.getCatalogueName());
+            title.setText(card.getCatalogueName(isGermanLanguage));
             collection_Title.setText(title.getText());
-            collectionDescription.setText(card.getCatalogueBrief());
-            summary.setText(card.getCatalogueDesc());
+            collectionDescription.setText(card.getCatalogueBrief(isGermanLanguage));
+            summary.setText(card.getCatalogueDesc(isGermanLanguage));
 
             launchBtn.setOnClickListener(this);
-
 
             catalogueImage.setImageDrawable(Holder.get());
 
@@ -113,7 +117,6 @@ public class CataloguePreviewActivity extends BaseActivity implements View.OnCli
             ViewUtils.changeFabColour(this, backFab, R.color.toursBackButtonBackgroundColor);
         }
     }
-
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void initializeViews() {
@@ -177,8 +180,8 @@ public class CataloguePreviewActivity extends BaseActivity implements View.OnCli
 
     private void launchCollection() {
         Intent intent = new Intent(CataloguePreviewActivity.this, AttractionTabsActivity.class);
-        intent.putExtra("CATALOGUE_TITLE", card.getCatalogueName());
-        intent.putExtra("ATTRACTIONS_LIST", card.getAttractions());
+        intent.putExtra(CATALOGUE_TITLE, card.getCatalogueName(isGermanLanguage));
+        intent.putExtra(ATTRACTIONS_LIST, card.getAttractions());
         startActivity(intent);
     }
 

@@ -1,7 +1,9 @@
 package me.carc.btown.tours.attractionPager;
 
+import android.Manifest;
 import android.annotation.TargetApi;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.ColorFilter;
@@ -42,9 +44,12 @@ import me.carc.btown.BaseActivity;
 import me.carc.btown.R;
 import me.carc.btown.Utils.IntentUtils;
 import me.carc.btown.Utils.ViewUtils;
+import me.carc.btown.camera.CameraActivity;
 import me.carc.btown.common.C;
 import me.carc.btown.common.Commons;
+import me.carc.btown.extras.messaging.CommentsActivity;
 import me.carc.btown.map.sheets.ImageDialog;
+import me.carc.btown.tours.CataloguePreviewActivity;
 import me.carc.btown.tours.data.services.FirebaseImageDownloader;
 import me.carc.btown.tours.model.Attraction;
 import me.carc.btown.ui.custom.LockableViewPager;
@@ -53,6 +58,7 @@ public class AttractionPagerActivity extends BaseActivity implements Placeholder
 
     private static final String TAG = C.DEBUG + Commons.getTag();
     public static final String SCROLL_TO_NEW_INDEX = "SCROLL_TO_NEW_INDEX";
+    public static final String ATTRACTION = "ATTRACTION";
     private static final int RESULT_DETAIL = 10;
     private static final int RESULT_CAMERA_PREVIEW = 101;
 
@@ -98,11 +104,11 @@ public class AttractionPagerActivity extends BaseActivity implements Placeholder
         ButterKnife.bind(this);
 
         Intent intent = getIntent();
-        if (intent.hasExtra("ATTRACTIONS_LIST")) {
-            attractions = intent.getParcelableArrayListExtra("ATTRACTIONS_LIST");
+        if (intent.hasExtra(CataloguePreviewActivity.ATTRACTIONS_LIST)) {
+            attractions = intent.getParcelableArrayListExtra(CataloguePreviewActivity.ATTRACTIONS_LIST);
             int index = intent.getIntExtra("INDEX", 0);
 
-            tourAdapter = new TourPagerAdapter(getSupportFragmentManager(), attractions);
+            tourAdapter = new TourPagerAdapter(getSupportFragmentManager(), attractions, isGermanLanguage());
 
             // Set up the ViewPager with the sections adapter.
             mViewPager.setOffscreenPageLimit(2);
@@ -115,7 +121,7 @@ public class AttractionPagerActivity extends BaseActivity implements Placeholder
         }
 
 //        fabShowMap = (FloatingActionButton) findViewById(R.id.fabMap);
-        fabShowMap.getDrawable().setColorFilter(ContextCompat.getColor(this, R.color.almostWhite), PorterDuff.Mode.MULTIPLY);
+        fabShowMap.getDrawable().setColorFilter(ContextCompat.getColor(this, R.color.white), PorterDuff.Mode.MULTIPLY);
         ViewUtils.changeFabColour(this, fabShowMap, R.color.colorPrimary);
         fabShowMap.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -124,7 +130,7 @@ public class AttractionPagerActivity extends BaseActivity implements Placeholder
             }
         });
 
-        fabCamera.getDrawable().setColorFilter(ContextCompat.getColor(this, R.color.almostWhite), PorterDuff.Mode.MULTIPLY);
+        fabCamera.getDrawable().setColorFilter(ContextCompat.getColor(this, R.color.white), PorterDuff.Mode.MULTIPLY);
         ViewUtils.changeFabColour(this, fabCamera, R.color.colorPrimary);
         fabCamera.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -253,7 +259,6 @@ public class AttractionPagerActivity extends BaseActivity implements Placeholder
 
                 LoginManager.getInstance().logInWithReadPermissions(AttractionPagerActivity.this,
                         Collections.singletonList(C.FACEBOOK_PERMISSIONS) /*Arrays.asList(C.FACEBOOK_PERMISSIONS)*/);
-
             } else {
                 checkinFacebook(id, lat, lng, title, null);
             }
@@ -262,37 +267,31 @@ public class AttractionPagerActivity extends BaseActivity implements Placeholder
 
 
     @Override
-    public void onAddComment(String ratingID) {
+    public void onAddComment(String stopName) {
         Log.d(TAG, "onAddComment: ");
-/*
+
         Intent iComment = new Intent(AttractionPagerActivity.this, CommentsActivity.class);
-        iComment.putExtra(C.EXTRA_MESSAGE_BOARD_CAT, C.MSG_BOARD_CAT_COMMENTS);
+        iComment.putExtra(CommentsActivity.EXTRA_MESSAGE_BOARD_CAT, CommentsActivity.MSG_BOARD_CAT_COMMENTS);
 //            iComment.putExtra(C.EXTRA_MESSAGE_BOARD_ITEM, tourData.getTourName());
-        iComment.putExtra(C.EXTRA_MESSAGE_BOARD_ID, ratingID);
+        iComment.putExtra(CommentsActivity.EXTRA_MESSAGE_BOARD_ID, stopName);
         startActivity(iComment);
-*/
     }
 
 
     @TargetApi(Build.VERSION_CODES.M)
     @Override
     public void onCamera(String location) {
-        Log.d(TAG, "onCamera: ");
-/*
         if (C.HAS_M && checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[]{Manifest.permission.CAMERA}, C.PERMISSION_CAMERA);
             return;
         }
-
-        startActivityForResult(new Intent(AttractionPagerActivity.this, CameraActivity.class), RESULT_CAMERA_PREVIEW);
-*/
+        startActivity(new Intent(this, CameraActivity.class));
     }
 
 
     @Override
     public void onDonate() {
-        Log.d(TAG, "onDonate: ");
-//        showDonateDialog();
+        showDonateDialog();
     }
 
 
@@ -311,7 +310,7 @@ public class AttractionPagerActivity extends BaseActivity implements Placeholder
     @Override
     public void onShowMap(Attraction attractionData) {
         Intent mapIntent = new Intent(AttractionPagerActivity.this, AttractionMapActivity.class);
-        mapIntent.putExtra("ATTRACTION", (Parcelable) attractionData);
+        mapIntent.putExtra(ATTRACTION, (Parcelable) attractionData);
         startActivity(mapIntent);
     }
 

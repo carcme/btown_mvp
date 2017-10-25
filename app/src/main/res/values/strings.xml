@@ -8,9 +8,9 @@
     <!-- Navigation drawer -->
     <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
     <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
-    <string name="menu_transportr">Transportr</string>
-    <string name="menu_public_transport">Public Transport</string>
-    <string name="menu_ubahn_sbahn_plan">S and U Bahn Plan</string>
+    <string name="menu_transportr">Public TransportR</string>
+    <string name="menu_public_transport">Public Transport Schedules</string>
+    <string name="menu_train_route_map">Route Map</string>
 
 
     <string name="no_name_background" translatable="false"> </string>
@@ -36,8 +36,6 @@
     <string name="bookmark_removed">Removed from Reading List</string>
     <string name="history_saved">Added to History</string>
     <string name="history_removed">Removed from History</string>
-    <string name="reading_list_remove_from_list">Remove from %s</string>
-    <string name="reading_list_remove_from_lists">Remove from reading lists</string>
 
 
     <string name="text_close">Close</string>
@@ -79,7 +77,22 @@
     <string name="shared_string_rate">Rate</string>
     <string name="shared_string_language">Language</string>
     <string name="shared_string_feedback">Feedback</string>
+    <string name="shared_string_settings">Settings</string>
+    <string name="shared_string_post">Post</string>
+    <string name="shared_string_your_message_hint">Your message</string>
+    <string name="shared_string_image_uploads">Image Uploads</string>
+    <string name="shared_string_column">Column</string>
+    <string name="shared_string_grid">Grid</string>
+    <string name="shared_string_shuffle">Shuffle</string>
 
+
+    <!--DONATE-->
+    <string name="text_donate_title">Donate</string>
+    <string name="text_donate_subtitle">Show some love</string>
+    <string name="text_donate_progress_title">Connecting&#8230;</string>
+    <string name="text_donate_progress_message">This can take some time. Thanks for your patience</string>
+    <string name="text_donate_cancel">Thanks you, really means a lot and allows me to keep making B-Town better.\n\nIf you could rate us on the Play Store, that would be great.</string>
+    <string name="text_donate_thanks">Thanks you for your support&#8230; come back for new tours on your next visit</string>
 
 
 
@@ -104,7 +117,9 @@
     <string name="google">Google</string>
     <string name="instagram">Instagram</string>
     <string name="install_instagram">Install Instagram</string>
+    <string name="install_transportr">Install TransportR</string>
     <string name="no_instagram">Instagram not detected on device (required). Would you like to install it now?</string>
+    <string name="no_transportr">TransportR not detected on device (required). Would you like to install it now?</string>
 
 
 
@@ -119,6 +134,36 @@
     <string name="enter_your_own_notes">Enter your own notes…</string>
 
 
+
+    <!--SETTINGS-->
+    <string name="pref_theme_title">Theme</string>
+    <string name="pref_theme_light">Light</string>
+    <string name="pref_theme_dark">Dark</string>
+
+    <string name="pref_language_title">Language</string>
+    <string name="system_default">System Default</string>
+    <string name="english">English</string>
+    <string name="german">German</string>
+
+
+
+    <string name="poi_res_smoking">Smoking: </string>
+    <string name="poi_res_wheelchair">Wheelchair: </string>
+    <string name="poi_res_wheelchair_toilet">Wheelchair Toilet Access: </string>
+    <string name="poi_res_takeaway">Takeaway: </string>
+    <string name="poi_res_delivery">Delivery: </string>
+    <string name="poi_res_internet">Internet Access: </string>
+    <string name="poi_res_operator">Owner: </string>
+    <string name="poi_res_note">Note: </string>
+
+
+    <!-- PUBLIC TRANSPORT ROUTE PLAN-->
+    <string name="alert_title_pt_route_map">Route map download</string>
+    <string name="alert_msg_pt_route_map">The public transport route map for Berlin is downloading. Please be patient.  Other city route map will follow. If there is one you would like to see, contact me using the feedback in the menu.</string>
+
+
+
+    <string name="lib_thanks">TODO - remove this and have a proper tab screen with libs used</string>
 
 
     <string name="lorum_ipsum" translatable="false">Lorem ipsum dolor sit amet, faucibus morbi tortor lacus cursus, non libero lacus sapien aenean, justo non congue, id aliquam odio scelerisque augue suspendisse faucibus, vel dolor erat ac. Etiam sapien, odio porttitor dictum lectus consectetuer accumsan eros, iaculis nulla ad nunc, tempor wisi leo ut ut sodales, interdum sed nunc adipiscing molestie dolor mauris. Et nec quis at et, eleifend consectetuer nibh est, est sed. Ac dictumst in neque tempus, nam nonummy dignissim phasellus leo, sollicitudin aspernatur pharetra sed vehicula sed turpis, praesent turpis aenean. Sagittis odio. Mi habitant commodo, curae eleifend velit feugiat et laoreet, suscipit etiam mauris ipsum rutrum nisl et, erat magna. Condimentum eget cupiditate luctus enim, aliquam penatibus augue justo rutrum. In interdum luctus nulla nunc. Rhoncus suspendisse vehicula lacinia, proin quaerat vestibulum magna felis venenatis, voluptatem nobis, urna cras porttitor justo id nec. Suscipit sit, quisque pharetra cras ullamcorper. Nec wisi non tempor posuere in etiam, nunc wisi sit at, vel velit urna diamlorem mauris cum ac. Consectetuer magna suspendisse odio non. Aliquet ipsum, risus semper cubilia odio et nulla, quis semper varius vel. Suspendisse tortor volutpat nunc dapibus. Lacus hac euismod aliquam. Lectus et duis, vitae nibh nascetur tortor magna vitae, quam odio ornare. Imperdiet at rhoncus, turpis vehicula mi. Est magna in amet amet, laoreet condimentum posuere nulla auctor. Suspendisse vitae lectus ipsum consequat, venenatis mauris et hac vestibulum sit etiam, arcu leo augue, augue lectus, in elit justo. Mattis nunc nunc vitae tempus eu, mauris scelerisque nisl varius, enim eu id arcu suspendisse mi quidem, eros lacinia nulla sagittis pulvinar. Eget dapibus curabitur, sed vitae et, etiam arcu. Id lectus vehicula nulla nunc, porttitor ut viverra sapien interdum sagittis consectetuer. Et nulla ornare eleifend vitae, consequat lacus non, ante nisl. Tellus magnis velit pulvinar non luctus, sed fusce sodales magnis massa sed, suscipit amet quis ultricies mauris velit arcu, eget turpis ullamcorper cras suspendisse, ac cras massa et nonummy tincidunt rhoncus. Sed quis lectus, turpis mauris. Vel eu vivamus tincidunt. Nec quam est adipiscing, amet velit, bibendum mauris praesent amet mauris habitasse. Vehicula placerat imperdiet ut consequat. Suspendisse in venenatis nullam, donec perferendis ac, id justo ante mi mi. Habitasse porta risus massa lobortis felis, ligula vulputate, nec luctus massa, pellentesque in pulvinar vestibulum, nulla ipsam. Pretium feugiat, neque arcu quis sed, ut molestie tempus. Nec amet ut platea, dui tellus purus, in vel massa lobortis velit sed tellus, aenean ultricies amet. Lacus felis ornare et porta, id id. Habitant wisi ac mi et, in eu lectus tortor tellus, dis molestie leo rutrum, ut lectus massa per sem nascetur a. Vulputate neque dolor dapibus pharetra mauris sit, quisque tempus pretium amet, adipiscing vel tempus, etiam ac aliquam sed ut quos interdum, ligula neque ante mi fringilla sit. Mus tempor tempor id, at ut eros suspendisse at in, nullam pellentesque, donec vitae integer vitae lorem orci rhoncus, tristique pede. Aliquam aliquip donec alias. Massa aliquet massa est, donec eu nec purus dignissim ultrices. Rutrum volutpat cras nunc amet tellus, maecenas quam pede, vitae bibendum at dolor nibh. Diam tellus adipiscing magnis diam ullamcorper, ut dolor dolor sagittis mi. Aliquam erat, pellentesque vestibulum, at vel faucibus pretium lectus.</string>

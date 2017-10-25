@@ -1,4 +1,4 @@
-package me.carc.btown;
+package me.carc.btown.extras;
 
 import android.content.Context;
 import android.content.ContextWrapper;
@@ -17,6 +17,9 @@ import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import me.carc.btown.App;
+import me.carc.btown.MapActivity;
+import me.carc.btown.R;
 import me.carc.btown.common.C;
 import me.carc.btown.common.Commons;
 

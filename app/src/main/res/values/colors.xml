@@ -46,6 +46,10 @@
     <color name="showcaseSuccessColor">#669900</color>
     <color name="showcaseErrorColor">#D32F2F</color>
 
+    <color name="interactiveButtonsBgColor">@color/md_blue_grey_600</color>
+
+
+    <color name="comments_disabled">#999999</color>
 
 
 
@@ -74,6 +78,9 @@
 
     <color name="accentColorRed">#ec2045</color>
     <item name="gallery_overlay" type="color">#80000000</item>
+    <item name="gallery_overlay_dark" type="color">#A0000000</item>
+
+    <color name="grey_ripple">#8ddd</color>
 
 
 

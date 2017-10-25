@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="56dp"
+    android:background="?attr/selectableItemBackground"
+    android:paddingLeft="@dimen/margin_standard"
+    android:paddingRight="@dimen/margin_standard">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/title"
+        android:ellipsize="end"
+        android:lineSpacingExtra="0sp"
+        android:maxLines="1"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:layout_toStartOf="@+id/description"
+        android:paddingStart="@dimen/size_8"
+        android:paddingEnd="@dimen/size_8"
+        tools:text="Buy me a coffee"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/description"
+        android:ellipsize="end"
+        android:lineSpacingExtra="0sp"
+        android:maxLines="1"
+        android:ems="4"
+        android:textAlignment="textEnd"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:paddingStart="0dp"
+        android:paddingEnd="@dimen/size_8"
+        tools:text="$0.99"/>
+</RelativeLayout>

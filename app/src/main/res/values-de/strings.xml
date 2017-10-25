@@ -2,6 +2,14 @@
 <resources xmlns:tools="http://schemas.android.com/tools"
     tools:shrinkMode="strict" >
 
+    <!--
+    TO TRANSLATE
+        - FAVORITES VIEW
+        - FEEDBACK DIALOG
+        - PUBLIC TRANSPORT ROUTE PLAN
+    -->
+
+
     <string name="app_name">B-Town</string>
 
 
@@ -13,25 +21,25 @@
 
 
     <!-- Navigation drawer -->
-    <string name="menu_transportr">Transportr</string>
-    <string name="menu_public_transport">Öffentliche Verkehrsmittel</string>
-    <string name="menu_ubahn_sbahn_plan">U und S Bahn Plan</string>
+    <string name="menu_transportr">TransportR</string>
+    <string name="menu_public_transport">Fahrpläne der öffentlichen Verkehrsmittel</string>
+    <string name="menu_train_route_map">Liniennetz</string>
 
 
 
     <!--FAVORITES VIEW-->
-    <string name="use_long_press_to_remove_favorite">Taste lange drücken, um Favoriten zu löschen</string>
-    <string name="favorites_list_empty">Beliebteste Orte\n\nAdd new favorite places using the map.\n\nUse the top menu to sort or show them all on the map</string>
-    <string name="history_list_empty">Search History\n\nFind specific places and roads using the top bar… selections are added here.\n\n Press and hold an item for additional options</string>
-    <string name="wiki_bookmark_list_empty">Wikipedia Reading List\n\nYour saved Wikipedia entries will appear here</string>
-    <string name="favorite_saved">Added to Favorites</string>
-    <string name="favorite_removed">Removed from Favorites</string>
-    <string name="bookmark_addded">Added to Reading List</string>
-    <string name="bookmark_removed">Removed from Reading List</string>
-    <string name="history_saved">Added to History</string>
-    <string name="history_removed">Removed from History</string>
-    <string name="reading_list_remove_from_list">Von %s entfernen</string>
-    <string name="reading_list_remove_from_lists">Von den Leselisten entfernen</string>
+    <string name="use_long_press_to_remove_favorite">Lange gedrückt halten, um aus den Favoriten zu löschen.</string>
+    <string name="favorites_list_empty">Beliebteste Orte\n\nFüge neue Locations hinzu, indem du die Karte benutzt. Im oberen Menü kannst du sie sortieren oder auf der Karte anzeigen.</string>
+    <string name="history_list_empty">Suchverlauf\n\nFinde ganz bestimmte Orte und Straßen, indem du die Linkleiste nutzt … Deine Auswahl wird hier hinzugefügt.\n\nFür zusätzliche Optionen halte den Begriff lange gedrückt.</string>
+    <string name="wiki_bookmark_list_empty">Wikipedia Leseliste\n\nDeine gespeicherten Wikipedia-Einträge findest du hier</string>
+    <string name="favorite_saved">Zu Favoriten hinzugefügt</string>
+    <string name="favorite_removed">Aus Favoriten entfernt</string>
+    <string name="bookmark_addded">Zur Leseliste hinzugefügt</string>
+    <string name="bookmark_removed">Von der Leseliste entfernt</string>
+    <string name="history_saved">Zum Suchverlauf hinzugefügt</string>
+    <string name="history_removed">Aus dem Suchverlauf entfernt</string>
+
+
 
 
     <string name="text_close">Schließen</string>
@@ -49,28 +57,45 @@
     <string name="shared_string_share">Teilen</string>
     <string name="shared_string_share_image">Bild teilen</string>
     <string name="shared_string_close">Schließen</string>
-    <string name="shared_string_save">Save</string>
+    <string name="shared_string_save">Speichern</string>
     <string name="shared_string_show_details">Details anzeigen</string>
     <string name="shared_string_io_error">I/O Fehler aufgetreten</string>
     <string name="shared_string_send">Senden</string>
     <string name="shared_string_copy">Kopieren</string>
     <string name="shared_string_location">Standort</string>
     <string name="shared_string_go">Go</string>
-    <string name="shared_my_location">My Location</string>
     <string name="shared_string_selected_lowercase">ausgewählt</string>
     <string name="shared_string_remove">Entfernen</string>
     <string name="shared_string_camera">Kamera</string>
     <string name="shared_string_internet">Link teilen</string>
     <string name="shared_string_browser">Im Browser öffnen</string>
-    <string name="shared_string_show_on_map">Show on Map</string>
-    <string name="shared_string_use_on_home_screen">Use on Home Screen</string>
-    <string name="shared_string_bookmark">Bookmarks</string>
-    <string name="shared_string_options">Options</string>
     <string name="shared_string_help_toggle">Umschalten Hilfe</string>
     <string name="shared_string_info">Info</string>
     <string name="shared_string_rate">Bewerte</string>
     <string name="shared_string_language">Sprache</string>
     <string name="shared_string_feedback">Feedback</string>
+    <string name="shared_string_settings">Einstellungen</string>
+    <string name="shared_string_post">Posten</string>
+    <string name="shared_string_your_message_hint">Deine Nachricht</string>
+    <string name="shared_string_image_uploads">Bild hochgeladen</string>
+    <string name="shared_string_column">Kolumne</string>
+    <string name="shared_string_grid">Raster</string>
+    <string name="shared_string_shuffle">Gemischt</string>
+    <string name="shared_my_location">Meine Location</string>
+    <string name="shared_string_show_on_map">Auf der Karte zeigen</string>
+    <string name="shared_string_use_on_home_screen">Als Home Screen nutzen</string>
+    <string name="shared_string_bookmark">Lesezeichen</string>
+    <string name="shared_string_options">Optionen</string>
+
+    <!--DONATE-->
+    <string name="text_donate_title">Spenden</string>
+    <string name="text_donate_subtitle">Show some love</string>
+    <string name="text_donate_progress_title">Verbinde&#8230;</string>
+    <string name="text_donate_progress_message">Das könnte ein wenig dauern. Danke für deine Geduld</string>
+
+    <string name="text_donate_cancel">Danke. Das bedeutet mir viel, weil es B-Town auf lange Sicht noch besser machen wird.\n\nWenn du jetzt noch eine Bewertung im Playstore abgeben könntest, wäre das großartig.</string>
+    <string name="text_donate_thanks">Vielen Dank für deine Unterstützung&#8230; Komm uns doch einfach mal wieder besuchen für deine nächste Tour</string>
+
 
 
     <!--FEEDBACK DIALOG-->
@@ -83,9 +108,9 @@
     <string name="rating_dialog_suggestions">Sagen Sie uns was Ihnen nicht gefällt und wir arbeiten daran!</string>
 
     <string name="ratings_request_title">Love to know what you think of the app</string>
-    <string name="feedback_request_title">Send Feedback</string>
-    <string name="feedback_request_hint">Tell us where we can improve&#8230;</string>
-    <string name="feedbackChooserTitle">Send Feedback Via</string>
+    <string name="feedback_request_title">Feedback abschicken</string>
+    <string name="feedback_request_hint">Sagen Sie uns, wo wir uns verbessern können&#8230;</string>
+    <string name="feedbackChooserTitle">Schicke Feedback Via</string>
 
 
 
@@ -98,6 +123,8 @@
     <string name="instagram">Instagram</string>
     <string name="install_instagram">Installiere Instagram</string>
     <string name="no_instagram">Instagram nicht gefunden. Möchtest du es jetzt installieren?</string>
+    <string name="install_transportr">Installiere TransportR</string>
+    <string name="no_transportr">TransportR nicht gefunden. Möchtest du es jetzt installieren?</string>
 
 
 
@@ -109,6 +136,38 @@
     <string name="loading">Lade</string>
 
     <string name="enter_your_own_notes">Füge eigene Notizen hinzu…</string>
+
+
+
+    <!--SETTINGS-->
+    <string name="pref_theme_title">Thema</string>
+    <string name="pref_theme_light">Hell</string>
+    <string name="pref_theme_dark">Dunkel</string>
+
+    <string name="pref_language_title">Sprache</string>
+    <string name="system_default">Systemstandard</string>
+    <string name="english">Englisch</string>
+    <string name="german">Deutsch</string>
+
+
+
+    <string name="poi_res_smoking">Rauchen: </string>
+    <string name="poi_res_wheelchair">Rollstuhl: </string>
+    <string name="poi_res_wheelchair_toilet">Rollstuhl-WC-Zugang: </string>
+    <string name="poi_res_takeaway">Wegbringen: </string>
+    <string name="poi_res_delivery">Lieferung: </string>
+    <string name="poi_res_internet">Internet Zugang: </string>
+    <string name="poi_res_operator">Eigentümer: </string>
+    <string name="poi_res_note">Hinweis: </string>
+
+
+    <!-- PUBLIC TRANSPORT ROUTE PLAN-->
+    <string name="alert_title_pt_route_map">Route auf der Karte herunterladen</string>
+    <string name="alert_msg_pt_route_map">Die Liste der Öffentlichen Verkehrsmittel Berlins wird nun heruntergeladen. Bitte habe ein wenig Geduld. Die Maps für andere Karten sind in Arbeit. Wenn du einen Vorschlag hast, bitte schreib mir doch eine Mail. Im Menü findest du die Rubrik Feedback.</string>
+
+    <string name="lib_thanks">TODO - remove this and have a proper tab screen with libs used</string>
+
+
 
 
 </resources>

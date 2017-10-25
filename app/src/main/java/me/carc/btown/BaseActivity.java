@@ -1,19 +1,28 @@
 package me.carc.btown;
 
 import android.annotation.TargetApi;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
+import android.content.ActivityNotFoundException;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentSender;
+import android.content.ServiceConnection;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.os.RemoteException;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
 import android.support.annotation.VisibleForTesting;
 import android.support.design.widget.NavigationView;
 import android.support.v4.content.ContextCompat;
@@ -22,34 +31,60 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.vending.billing.IInAppBillingService;
+import com.bumptech.glide.Glide;
 import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.RatingEvent;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookSdk;
+import com.facebook.Profile;
 import com.facebook.appevents.AppEventsLogger;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import me.carc.btown.Utils.IntentUtils;
 import me.carc.btown.common.C;
 import me.carc.btown.common.CacheDir;
 import me.carc.btown.common.Commons;
 import me.carc.btown.common.TinyDB;
+import me.carc.btown.extras.BackgroundImageDialog;
+import me.carc.btown.extras.PublicTransportPlan;
+import me.carc.btown.login.LoginActivity;
+import me.carc.btown.settings.Preferences;
+import me.carc.btown.settings.SettingsActivity;
 import me.carc.btown.ui.FeedbackDialog;
 import me.carc.btown.ui.RatingDialog;
 
@@ -57,6 +92,18 @@ public class BaseActivity extends AppCompatActivity {
 
     private static final String TAG = C.DEBUG + Commons.getTag();
     private static final String SAVED_HEADER_BACKGROUND = "SAVED_HEADER_BACKGROUND";
+    public static final String FIREBASE_MSG_BOARD_FEEDBACK = "FEEDBACK";
+
+    private static final int RESULT_SETTINGS = 71;
+    private static final int RESULT_LOGIN = 72;
+    private static final int RESULT_DONATE = 73;
+
+    public static final String TRANSPORTR_INTENT = "de.grobox.liberario";
+
+
+    private static IInAppBillingService mBillingService;
+    private static List<PurchaseItem> mPurchaseItems;
+    private String[] mDonateItems;
 
     private AlertDialog calibrateDialog;
 
@@ -90,8 +137,10 @@ public class BaseActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         getBaseFunctions();
+        useLanguage(this);
+        mDonateItems = getResources().getStringArray(R.array.donate_items);
+        super.onCreate(savedInstanceState);
     }
 
     @Override
@@ -99,6 +148,10 @@ public class BaseActivity extends AppCompatActivity {
         super.onResume();
         getApp().setCurrentActivity(this);
         facebookSDKInitialize();
+
+        Intent serviceIntent = new Intent("com.android.vending.billing.InAppBillingService.BIND");
+        serviceIntent.setPackage("com.android.vending");
+        bindService(serviceIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
     }
 
     @Override
@@ -106,6 +159,10 @@ public class BaseActivity extends AppCompatActivity {
         super.onPause();
         hideProgressDialog();
         clearReferences();
+
+        if (mBillingService != null) {
+            unbindService(mServiceConnection);
+        }
     }
 
     @Override
@@ -126,9 +183,50 @@ public class BaseActivity extends AppCompatActivity {
         super.onStop();
     }
 
+
+    private void restart() {
+        try {
+            if (mBillingService != null) {
+                unbindService(mServiceConnection);
+            }
+        } catch (IllegalArgumentException e) { /* EMPTY */ }
+
+        finish();
+        startActivity(new Intent(BaseActivity.this, SplashActivity.class));
+//        super.recreate();
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        switch (requestCode) {
+            case RESULT_SETTINGS:
+                if (resultCode == RESULT_OK) {
+                    if (data.hasExtra("lang")) {
+                        restart();
+                    }
+                }
+                break;
+
+            case RESULT_LOGIN:
+                configureNavView();
+                break;
+
+            case RESULT_DONATE:
+                // comsume the newly purchased item
+                consumeAllIAB();
+
+                if (resultCode == RESULT_OK) {
+                    new android.app.AlertDialog.Builder(this)
+                            .setMessage(getString(R.string.text_donate_thanks))
+                            .setPositiveButton(R.string.text_close, null)
+                            .show();
+                } else {
+                    showDonateDialogErrorCallback(null);
+                }
+                break;
+        }
     }
 
     @Override
@@ -156,6 +254,33 @@ public class BaseActivity extends AppCompatActivity {
         calculateImageHeight();
 
 //      if (defaultFont == null) getFonts();
+    }
+
+    protected static boolean isGermanLanguage() {
+        return C.USER_LANGUAGE.equals("de");
+    }
+
+    protected static void useLanguage(Context context) {
+        String lang = Preferences.getLanguage(context);
+        if (!lang.equals(context.getString(R.string.pref_language_value_default))) {
+            Locale locale;
+            if (lang.contains("_")) {
+                String[] lang_array = lang.split("_");
+                locale = new Locale(lang_array[0], lang_array[1]);
+            } else {
+                locale = new Locale(lang);
+            }
+            Locale.setDefault(locale);
+            Configuration config = context.getResources().getConfiguration();
+            config.locale = locale;
+            context.getResources().updateConfiguration(config, context.getResources().getDisplayMetrics());
+            C.USER_LANGUAGE = config.locale.getLanguage();
+
+        } else {
+            // use default language
+            context.getResources().updateConfiguration(Resources.getSystem().getConfiguration(), context.getResources().getDisplayMetrics());
+            C.USER_LANGUAGE = Resources.getSystem().getConfiguration().locale.getLanguage();
+        }
     }
 
 
@@ -275,11 +400,12 @@ public class BaseActivity extends AppCompatActivity {
      *
      * @param title   The dialog title
      * @param content The dialog text
-     * @param id      The id of app on Playstore
+     * @param packageToInstall The id of app on Playstore
      */
-    public void installExtApp(final String title, final String content, final String id) {
+    public void installExtApp(final String title, final String content, final String packageToInstall) {
         new AlertDialog.Builder(BaseActivity.this)
                 .setTitle(title)
+                .setIcon(R.mipmap.ic_transportr)
                 .setMessage(content)
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
@@ -288,7 +414,7 @@ public class BaseActivity extends AppCompatActivity {
                         // download from android market
                         Intent intent = new Intent(Intent.ACTION_VIEW);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        intent.setData(Uri.parse(C.INTENT_MARKET + id));
+                        intent.setData(Uri.parse(IntentUtils.getUrlWithRef(packageToInstall)));
                         startActivity(intent);
                     }
                 })
@@ -338,6 +464,24 @@ public class BaseActivity extends AppCompatActivity {
     }
 */
 
+    public void showAlertDialog(@StringRes int title, @StringRes int message, @StringRes int btnText) {
+        showAlertDialog(title, message, btnText, -1);
+    }
+
+    public void showAlertDialog(@StringRes int title, @StringRes int message, @StringRes int btnText, @DrawableRes int icon) {
+        AlertDialog.Builder dlg = new AlertDialog.Builder(this);
+        dlg.setTitle(title);
+        dlg.setMessage(message);
+
+        if (btnText != -1)
+            dlg.setPositiveButton(btnText, null);
+
+        if (icon != -1)
+            dlg.setIcon(icon);
+
+        dlg.show();
+    }
+
     public static void hideProgressDialog() {
         if (mProgressDialog != null) {
             mProgressDialog.dismiss();
@@ -372,6 +516,7 @@ public class BaseActivity extends AppCompatActivity {
 
 
     /* SIDE BAR */
+
 
     public
     @DrawableRes
@@ -413,10 +558,8 @@ public class BaseActivity extends AppCompatActivity {
         navigationView.setNavigationItemSelectedListener(navigationViewListener);
 
         View headerLayout = navigationView.getHeaderView(0);
-        TextView mHeaderCity = (TextView) headerLayout.findViewById(R.id.nav_header_city);
-        mHeaderCity.setText("TODO");
 
-        ImageView header = (ImageView) headerLayout.findViewById(R.id.nav_header_background_image);
+        ImageView header = headerLayout.findViewById(R.id.nav_header_background_image);
         header.setImageResource(getBackground());
         header.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -424,7 +567,30 @@ public class BaseActivity extends AppCompatActivity {
                 BackgroundImageDialog.showInstance(getApplicationContext());
             }
         });
+
+        TextView headeUser = headerLayout.findViewById(R.id.nav_header_email);
+
+        ImageView userImage = headerLayout.findViewById(R.id.nav_header_user_image);
+        userImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivityForResult(new Intent(BaseActivity.this, LoginActivity.class), RESULT_LOGIN);
+            }
+        });
+
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        Profile facebookUser = Profile.getCurrentProfile();
+        if (Commons.isNotNull(firebaseUser) || Commons.isNotNull(facebookUser)) {
+            headeUser.setText(facebookUser != null ? facebookUser.getName() : firebaseUser.getDisplayName());
+            Glide.with(this)
+                    .load(facebookUser != null ? facebookUser.getProfilePictureUri(50, 50) : firebaseUser.getPhotoUrl())
+                    .into(userImage);
+        } else {
+            userImage.setImageResource(R.mipmap.ic_launcher_rnd);
+            headeUser.setText(R.string.app_name);
+        }
     }
+
 
     private NavigationView.OnNavigationItemSelectedListener navigationViewListener = new NavigationView.OnNavigationItemSelectedListener() {
         @Override
@@ -438,8 +604,11 @@ public class BaseActivity extends AppCompatActivity {
                     transportPlans();
                     break;
 
-                case R.id.nav_language:
-                    language();
+                case R.id.nav_settings:
+                    settings();
+                    break;
+                case R.id.nav_donate:
+                    showDonateDialog();
                     break;
 
                 case R.id.nav_feedback:
@@ -468,15 +637,23 @@ public class BaseActivity extends AppCompatActivity {
 
 
     public void transportr() {
-        Toast.makeText(this, "TODO - Transportr", Toast.LENGTH_SHORT).show();
+        Intent intent = getPackageManager().getLaunchIntentForPackage(TRANSPORTR_INTENT);
+        if (intent != null) {
+            startActivity(intent);
+        } else {
+            if (Commons.isNetworkAvailable(this))
+                installExtApp(getString(R.string.install_transportr), getString(R.string.no_transportr), TRANSPORTR_INTENT);
+            else
+                showAlertDialog(R.string.shared_string_error, R.string.network_not_available_error, -1);
+        }
     }
 
     public void transportPlans() {
-        Toast.makeText(this, "TODO - Transport Map & Plans", Toast.LENGTH_SHORT).show();
+        startActivity(new Intent(BaseActivity.this, PublicTransportPlan.class));
     }
 
-    public void language() {
-        Toast.makeText(this, "TODO - Language Options", Toast.LENGTH_SHORT).show();
+    public void settings() {
+        startActivityForResult(new Intent(BaseActivity.this, SettingsActivity.class), RESULT_SETTINGS);
     }
 
     private void feedback() {
@@ -512,12 +689,11 @@ public class BaseActivity extends AppCompatActivity {
                     }
                 });
         builder.build().show();
-
     }
 
     private void rate() {
         final RatingDialog ratingDialog = new RatingDialog.Builder(this)
-                .icon(ContextCompat.getDrawable(this, R.mipmap.ic_launcher_round))
+                .icon(ContextCompat.getDrawable(this, R.mipmap.ic_launcher_rnd))
                 .threshold(3)
                 .title(getString(R.string.ratings_request_title))
                 .titleTextColor(R.color.black)
@@ -538,12 +714,8 @@ public class BaseActivity extends AppCompatActivity {
 
                         try {
                             startActivity(IntentUtils.openPlayStore(BaseActivity.this));
-                        } catch (android.content.ActivityNotFoundException ex) {
-
-                            new AlertDialog.Builder(getApplicationContext())
-                                    .setTitle("Error")
-                                    .setMessage("Couldn't find PlayStore on this device")
-                                    .show();
+                        } catch (ActivityNotFoundException ex) {
+                            showAlertDialog(R.string.shared_string_error, R.string.error_playstore_not_found, -1);
                         }
                         dlg.dismiss();
                     }
@@ -559,14 +731,12 @@ public class BaseActivity extends AppCompatActivity {
         ratingDialog.show();
     }
 
-    public static void sendFeedBack(String text){
+    public static void sendFeedBack(String text) {
         String date = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.ENGLISH).format(new Date());
-//        DatabaseReference mDatabase = FirebaseDatabase.getInstance()
-//                .getReference(C.FIREBASE_MSG_BOARD_FEEDBACK);
-//        mDatabase.child(date).setValue(fb);
-        Answers.getInstance().logRating(new RatingEvent().putCustomAttribute("FeedBack", text));
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference(FIREBASE_MSG_BOARD_FEEDBACK);
+        mDatabase.child(date).setValue(text);
+        Answers.getInstance().logRating(new RatingEvent().putCustomAttribute(FIREBASE_MSG_BOARD_FEEDBACK, text));
     }
-
 
     public void shareApp() {
         Intent intent = new Intent(Intent.ACTION_SEND);
@@ -576,7 +746,6 @@ public class BaseActivity extends AppCompatActivity {
         intent.setType("text/plain");
         startActivity(Intent.createChooser(intent, getString(R.string.shared_string_share)));
     }
-
 
     @Override
     public void onBackPressed() {
@@ -594,6 +763,350 @@ public class BaseActivity extends AppCompatActivity {
     protected void closeNavDraw() {
         if (mDrawerLayout != null) {
             mDrawerLayout.closeDrawer(GravityCompat.START);
+        }
+    }
+
+
+
+    /* PURCHASE STUFF */
+
+
+    protected void showDonateDialog() {
+
+        if (mPurchaseItems == null)
+            showProgressDialog(getString(R.string.text_donate_progress_title), getString(R.string.text_donate_progress_message));
+
+        requestItemsForPurchase(new AsyncCallback<List<PurchaseItem>>(this) {
+            @Override
+            public void onError(Throwable throwable) {
+                if (getContext() instanceof BaseActivity && !((BaseActivity) getContext()).isFinishing()) {
+                    BaseActivity context = (BaseActivity) getContext();
+                    hideProgressDialog();
+                    context.showDonateDialogErrorCallback(throwable);
+                }
+            }
+
+            @Override
+            public void onSuccess(List<PurchaseItem> data) {
+                if (getContext() instanceof BaseActivity && !((BaseActivity) getContext()).isFinishing()) {
+                    BaseActivity context = (BaseActivity) getContext();
+                    hideProgressDialog();
+                    context.showDonateDialogSuccessCallback(data);
+                }
+            }
+        });
+    }
+
+    private static ServiceConnection mServiceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            mBillingService = IInAppBillingService.Stub.asInterface(service);
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            mBillingService = null;
+        }
+    };
+
+
+    private void onDonate(PurchaseItem item) {
+        if (item == null || !item.isValid() || mBillingService == null) {
+            return;
+        }
+        try {
+            Bundle buyIntentBundle = mBillingService.getBuyIntent(3, getPackageName(), item.getId(), "inapp", "");
+            PendingIntent pendingIntent = buyIntentBundle.getParcelable("BUY_INTENT");
+            if (pendingIntent != null)
+                startIntentSenderForResult(pendingIntent.getIntentSender(), RESULT_DONATE, new Intent(), 0, 0, 0);
+        } catch (RemoteException | IntentSender.SendIntentException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void requestItemsForPurchase(final AsyncCallback<List<PurchaseItem>> callback) {
+        if (mPurchaseItems != null && mPurchaseItems.size() > 0) {
+            if (callback != null) {
+                callback.onSuccess(mPurchaseItems);
+            }
+            return;
+        }
+        new AsyncTask<IInAppBillingService, Void, AsyncResult<List<PurchaseItem>>>() {
+
+            @Override
+            protected AsyncResult<List<PurchaseItem>> doInBackground(IInAppBillingService... params) {
+                List<PurchaseItem> result = new ArrayList<>();
+                Throwable exception = null;
+                IInAppBillingService billingService = params[0];
+
+                if (billingService == null) {
+                    exception = new Exception("Unknown");
+                } else {
+                    ArrayList<String> skuList = new ArrayList<>(Arrays.asList(mDonateItems));
+                    Bundle querySkus = new Bundle();
+                    querySkus.putStringArrayList("ITEM_ID_LIST", skuList);
+                    try {
+                        Bundle skuDetails = billingService.getSkuDetails(3, getPackageName(), "inapp", querySkus);
+                        int response = skuDetails.getInt("RESPONSE_CODE");
+                        if (response == 0) {
+                            ArrayList<String> responseList = skuDetails.getStringArrayList("DETAILS_LIST");
+                            PurchaseItem purchaseItem;
+                            for (String item : responseList) {
+                                purchaseItem = new PurchaseItem(new JSONObject(item));
+                                if (purchaseItem.isValid()) {
+                                    result.add(purchaseItem);
+                                }
+                            }
+                        }
+                    } catch (RemoteException | JSONException e) {
+                        e.printStackTrace();
+                        exception = e;
+                    }
+                }
+                return new AsyncResult<>(result, exception);
+            }
+
+            @Override
+            protected void onPostExecute(AsyncResult<List<PurchaseItem>> result) {
+                if (!isFinishing() && callback != null) {
+                    Throwable error = result.getError();
+                    if (error == null && (result.getResult() == null || result.getResult().size() == 0)) {
+                        error = new Exception("Unknow");
+                    }
+                    if (error != null) {
+                        callback.onError(error);
+                    } else {
+                        mPurchaseItems = result.getResult();
+                        Collections.sort(mPurchaseItems, new Comparator<PurchaseItem>() {
+                            @Override
+                            public int compare(PurchaseItem lhs, PurchaseItem rhs) {
+                                return (int) ((lhs.getPriceAmountMicros() - rhs.getPriceAmountMicros()) / 1000);
+                            }
+                        });
+                        callback.onSuccess(mPurchaseItems);
+                    }
+                }
+            }
+        }.execute(mBillingService);
+    }
+
+    public void showDonateDialogErrorCallback(Throwable throwable) {
+        showAlertDialog(R.string.shared_string_error, R.string.text_donate_error, -1);
+    }
+
+    private void showDonateDialogSuccessCallback(final List<PurchaseItem> data) {
+
+        PurchaseAdapter adapter = new PurchaseAdapter(this, data);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this)
+                .setTitle(R.string.text_donate_title)
+                .setCancelable(false)
+                .setAdapter(adapter, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        onDonate(data.get(which));
+                    }
+                })
+                .setPositiveButton(R.string.text_close, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        new AlertDialog.Builder(BaseActivity.this)
+                                .setMessage(getString(R.string.text_donate_cancel))
+                                .setPositiveButton(R.string.shared_string_rate, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        rate();
+                                    }
+                                })
+                                .setNegativeButton(R.string.text_close, null)
+                                .show();
+                    }
+                });
+        builder.show();
+    }
+
+
+    public void consumeAllIAB() {
+
+        new AsyncTask<IInAppBillingService, Void, Boolean>() {
+
+            @Override
+            protected Boolean doInBackground(IInAppBillingService... params) {
+                IInAppBillingService billingService = params[0];
+
+                if (billingService != null) {
+                    try {
+                        Bundle ownedItems = billingService.getPurchases(3, getPackageName(), "inapp", null);
+                        int responseCode = ownedItems.getInt("RESPONSE_CODE");
+                        if (responseCode == 0) {
+
+                            ArrayList<String> purchaseDataList = ownedItems.getStringArrayList("INAPP_PURCHASE_DATA_LIST");
+                            if (Commons.isNotNull(purchaseDataList)) {
+                                for (String purchaseData : purchaseDataList) {
+                                    JSONObject o = new JSONObject(purchaseData);
+                                    String purchaseToken = o.optString("token", o.optString("purchaseToken"));
+
+                                    responseCode = billingService.consumePurchase(3, getPackageName(), purchaseToken);
+                                    Log.d(TAG, "Consume IAB: " + responseCode);
+                                }
+                            }
+                        }
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                        return false;
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        return false;
+                    }
+                }
+                return true;
+            }
+
+            @Override
+            protected void onPostExecute(Boolean res) {
+            }
+        }.execute(mBillingService);
+    }
+
+    public static abstract class AsyncCallback<T> {
+
+        public abstract void onError(Throwable throwable);
+
+        public abstract void onSuccess(T data);
+
+        private WeakReference<Context> mContextWeakReference;
+
+        public AsyncCallback(Context context) {
+            mContextWeakReference = new WeakReference<>(context);
+        }
+
+        public Context getContext() {
+            return mContextWeakReference.get();
+        }
+    }
+
+    public static class AsyncResult<T> {
+
+        private Throwable mError;
+
+        private T mResult;
+
+        public AsyncResult(T result, Throwable error) {
+            mResult = result;
+            mError = error;
+        }
+
+        public Throwable getError() {
+            return mError;
+        }
+
+        public T getResult() {
+            return mResult;
+        }
+    }
+
+
+    public static class PurchaseAdapter extends ArrayAdapter<PurchaseItem> {
+
+        @BindView(R.id.description)
+        TextView vDescription;
+
+        @BindView(R.id.title)
+        TextView vTitle;
+
+        private List<PurchaseItem> mItems;
+
+        public PurchaseAdapter(Context context, List<PurchaseItem> items) {
+            super(context, 0);
+            mItems = items == null ? new ArrayList<PurchaseItem>() : items;
+        }
+
+        @Override
+        public int getCount() {
+            return mItems.size();
+        }
+
+        @Override
+        public PurchaseItem getItem(int position) {
+            return mItems.get(position);
+        }
+
+        @Override
+        public
+        @NonNull
+        View getView(int position, View convertView, @NonNull ViewGroup parent) {
+            if (convertView == null) {
+                convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.donate_item, parent, false);
+            }
+            ButterKnife.bind(this, convertView);
+            vTitle.setText(getItem(position).getDescription());
+            vDescription.setText(getItem(position).getPrice());
+            return convertView;
+        }
+    }
+
+    public static class PurchaseItem {
+
+        private String mDescription;
+
+        private String mId;
+
+        private String mPrice;
+
+        private long mPriceAmountMicros;
+
+        private String mPriceCurrencyCode;
+
+        private String mTitle;
+
+        private String mType;
+
+        public PurchaseItem(JSONObject item) {
+            try {
+                if (item != null) {
+                    mId = item.getString("productId");
+                    mType = item.getString("type");
+                    mTitle = item.getString("title");
+                    mDescription = item.getString("description");
+                    mPrice = item.getString("price");
+                    mPriceAmountMicros = item.getLong("price_amount_micros");
+                    mPriceCurrencyCode = item.getString("price_currency_code");
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        public String getDescription() {
+            return mDescription;
+        }
+
+        public String getId() {
+            return mId;
+        }
+
+        public String getPrice() {
+            return mPrice;
+        }
+
+        public long getPriceAmountMicros() {
+            return mPriceAmountMicros;
+        }
+
+        public String getPriceCurrencyCode() {
+            return mPriceCurrencyCode;
+        }
+
+        public String getTitle() {
+            return mTitle;
+        }
+
+        public String getType() {
+            return mType;
+        }
+
+        public boolean isValid() {
+            return !TextUtils.isEmpty(mId);
         }
     }
 }

@@ -15,8 +15,12 @@
     <string name="nextstop_title">Walking distance to next stop?</string>
 
     <string name="start_the_tour">Start the Tour</string>
-    <string name="first_comment_notification">Be the first to comment</string>
+    <string name="first_comment_notification">Be the first to comment.</string>
     <string name="sync_comment_later">Post your comment and it will synchronize when you are online again.</string>
+
+    <string name="comment_usage_hint_title">Ideas for Comments</string>
+    <string name="comment_usage_hint">Let others know if you found:\n • a great bar\n • a nice place to eat\n • something off the usual path</string>
+
     <string name="sign_in_to_post">Sign in to post</string>
     <string name="information">Information</string>
 
@@ -45,6 +49,8 @@
     <string name="tour_explorer_title">Tour Explorer</string>
     <string name="tour_explorer_subtitle">See what Berlin has to offer</string>
     <string name="tours_tour_catalogue">Tour Catalogue</string>
+    <string name="top10_coming_soon_title">Coming Soon</string>
+    <string name="top10_coming_soon_msg">We\'re working hard to bring you a list of some of Berlins Top 10 bars, restaurants, places and attractions</string>
 
 
 </resources>

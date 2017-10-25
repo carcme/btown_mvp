@@ -19,9 +19,9 @@
     <string name="manage_account">Konto verwalten</string>
     <string name="search_no_results_found">Keine Ergebnisse. Bitte erweitere den Suchradius auf der Karte.</string>
 
-    <string name="add_your_comment">Add comment</string>
+    <string name="add_your_comment">Einen Kommentar hinzufügen</string>
     <string name="route_to">Route</string>
-    <string name="more">More</string>
+    <string name="more">Mehr</string>
 
 
     <string name="send_location">Standort senden</string>
@@ -34,13 +34,13 @@
 
 
 
-    <string name="added_to_favorites">Added to Favorites</string>
-    <string name="seaching">Searching…</string>
+    <string name="added_to_favorites">Zu Favoriten hinzugefügt</string>
+    <string name="seaching">Suchen…</string>
     <string name="poi_string_closed">Geschlossen</string>
     <string name="poi_string_open">Offen</string>
-    <string name="sort_by_time">Sort by Time</string>
-    <string name="sort_by_distance">Sort by Distance</string>
-    <string name="show_all_on_map">Show all on Map</string>
+    <string name="sort_by_time">Nach Zeit sortieren</string>
+    <string name="sort_by_distance">Nach Entfernung sortieren</string>
+    <string name="show_all_on_map">Alle auf der Karte zeigen</string>
 
 
 </resources>

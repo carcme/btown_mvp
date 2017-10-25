@@ -1,22 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    android:id="@+id/nav_header.root"
+<RelativeLayout android:id="@+id/nav_header.root"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="160dp">
+    android:layout_height="160dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <ImageView
         android:id="@+id/nav_header.background_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop"
+        android:scaleType="fitXY"
         android:src="@drawable/background_red_swirl"/>
 
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/nav_header.user_image"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_centerVertical="true"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="@dimen/margin_standard"
+        android:src="@mipmap/ic_launcher_rnd"
+        app:civ_circle_background_color="@color/sheet_icon_color" />
+
     <TextView
-        android:id="@+id/nav_header.city"
+        android:id="@+id/nav_header.email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:layout_gravity="bottom|start"
         android:fontFamily="sans-serif"
         android:paddingBottom="@dimen/margin_standard"
@@ -28,4 +39,5 @@
         android:textColor="@color/white"
         android:textSize="22sp"
         tools:text="Some Text Here"/>
-</FrameLayout>
+
+</RelativeLayout>

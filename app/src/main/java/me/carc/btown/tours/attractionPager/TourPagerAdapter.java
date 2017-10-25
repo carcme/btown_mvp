@@ -16,10 +16,12 @@ import me.carc.btown.tours.model.Attraction;
 class TourPagerAdapter extends FragmentStatePagerAdapter {
 
     private ArrayList<Attraction> attractionsData;
+    private boolean isGermanLanguage;
 
-    TourPagerAdapter(FragmentManager fm, ArrayList<Attraction> data) {
+    TourPagerAdapter(FragmentManager fm, ArrayList<Attraction> data, boolean isGermanLanguage) {
         super(fm);
         attractionsData = data;
+        this.isGermanLanguage = isGermanLanguage;
     }
 
     @Override
@@ -34,7 +36,7 @@ class TourPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int index) {
-        return attractionsData.get(index).getAttractionStopInfo().getStopTitle();
+        return attractionsData.get(index).getAttractionStopInfo(isGermanLanguage).getStopTitle();
     }
 
     public Attraction getTourData(int index){

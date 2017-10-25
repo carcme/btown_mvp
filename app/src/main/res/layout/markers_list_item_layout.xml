@@ -48,7 +48,7 @@
         android:layout_alignTop="@+id/textHolder"
         android:layout_alignBottom="@+id/textHolder"
         android:contentDescription="@null"
-        tools:src="@drawable/ic_heart" />
+        tools:src="@mipmap/ic_launcher_rnd" />
 
 
     <RelativeLayout
@@ -56,30 +56,42 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_marginStart="@dimen/margin_small"
-        android:layout_toEndOf="@+id/favListIcon"
-        android:orientation="horizontal">
+        android:layout_toEndOf="@+id/favListIcon">
+
+        <ImageView
+            android:id="@+id/bookmarkMore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:padding="@dimen/margin_tiny"
+            android:background="@drawable/backgroud_round_image_button"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_more" />
+
 
         <me.carc.btown.ui.CompassView
             android:id="@+id/favListNavigationIcon"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_alignParentEnd="true"
+            android:layout_width="50dp"
+            android:layout_height="12dp"
+            android:layout_toStartOf="@+id/bookmarkMore"
+            android:layout_alignTop="@+id/bookmarkMore"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:scaleType="fitCenter"
             app:srcCompat="@drawable/ic_navigation_24dp" />
 
         <TextView
             android:id="@+id/favListDistance"
-            android:layout_width="wrap_content"
-            android:layout_height="24dp"
-            android:layout_marginBottom="@dimen/margin_small"
-            android:layout_toStartOf="@+id/favListNavigationIcon"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/favListNavigationIcon"
+            android:layout_toStartOf="@+id/bookmarkMore"
             android:ellipsize="end"
             android:gravity="center_vertical"
             android:maxLines="1"
             android:textColor="@color/almostBlack"
             android:textSize="15sp"
             tools:text="0.3km" />
+
     </RelativeLayout>
 
 </RelativeLayout>

@@ -108,10 +108,10 @@ public class AttractionTabsStopsFragment extends Fragment {
 
         if(Commons.isNotNull(args)) {
 
-            ArrayList<Attraction> list = args.getParcelableArrayList("ATTRACTIONS_LIST");
+            ArrayList<Attraction> list = args.getParcelableArrayList(CataloguePreviewActivity.ATTRACTIONS_LIST);
 
             recyclerView.setLayoutManager(new MyCustomLayoutManager(recyclerView.getContext()));
-            final TourDataAdapter adapter = new TourDataAdapter(list);
+            final TourDataAdapter adapter = new TourDataAdapter(list, C.USER_LANGUAGE.equals("de"));
             recyclerView.setAdapter(adapter);
             recyclerView.setHasFixedSize(true);
 
@@ -125,10 +125,10 @@ public class AttractionTabsStopsFragment extends Fragment {
                 public void onItemClick(View view, int position) {
                     Log.d(TAG, "onItemClick: ");
 
-                    ArrayList<Attraction> attractions = getArguments().getParcelableArrayList("ATTRACTIONS_LIST");
+                    ArrayList<Attraction> attractions = getArguments().getParcelableArrayList(CataloguePreviewActivity.ATTRACTIONS_LIST);
 
                     Intent intent = new Intent(getActivity(), AttractionPagerActivity.class);
-                    intent.putParcelableArrayListExtra("ATTRACTIONS_LIST", attractions);
+                    intent.putParcelableArrayListExtra(CataloguePreviewActivity.ATTRACTIONS_LIST, attractions);
                     intent.putExtra("INDEX", position);
 
                     startActivityForResult(intent, RESULT_ATTRACTION);

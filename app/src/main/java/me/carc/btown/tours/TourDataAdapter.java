@@ -27,13 +27,14 @@ import me.carc.btown.tours.model.Attraction;
 public class TourDataAdapter extends RecyclerView.Adapter<TourDataAdapter.MyViewHolder> {
 
     private static final String TAG = C.DEBUG + Commons.getTag();
-
+    boolean userDE;
     private final ArrayList<Attraction> mList;
     private StorageReference mCoverImageStorageRef;
 
 
-    public TourDataAdapter(ArrayList<Attraction> list) {
+    public TourDataAdapter(ArrayList<Attraction> list, boolean isGermanLanguage) {
         this.mList = list;
+        this.userDE = isGermanLanguage;
         mCoverImageStorageRef = FirebaseStorage.getInstance().getReference().child("coverImages/");
     }
 
@@ -121,7 +122,7 @@ todo add palette stuff
 //        }
 
         holder.title.setText(String.valueOf(mList.get(pos).getStopName()));
-        holder.summary.setText(mList.get(pos).getBusStop());
+        holder.summary.setText(mList.get(pos).getBusStop(userDE));
 
     }
 

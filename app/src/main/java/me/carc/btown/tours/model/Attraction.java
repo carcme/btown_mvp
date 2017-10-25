@@ -7,7 +7,6 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Locale;
 
 /**
  * Tour attractions holder
@@ -28,12 +27,8 @@ public class Attraction implements Serializable, Parcelable {
     private String busStop;
     @SerializedName("de_busStop")
     private String de_busStop;
-    public String getBusStop() {
-        Locale locale = Locale.getDefault();
-        if(locale.getLanguage().equals("en"))
-            return busStop;
-        else
-            return de_busStop;
+    public String getBusStop(boolean isGerman) {
+        return isGerman ? de_busStop : busStop;
     }
 
     @SerializedName("facebookPageId")
@@ -45,12 +40,8 @@ public class Attraction implements Serializable, Parcelable {
     private String wikiLink;
     @SerializedName("de_wikiLink")
     private String de_wikiLink;
-    public String getWiki() {
-        Locale locale = Locale.getDefault();
-        if(locale.getLanguage().equals("en"))
-            return wikiLink;
-        else
-            return de_wikiLink;
+    public String getWiki(boolean isGerman) {
+        return isGerman ? de_wikiLink : wikiLink;
     }
 
     @SerializedName("web")
@@ -106,12 +97,8 @@ public class Attraction implements Serializable, Parcelable {
     @SerializedName("de_stopInfo")
     private StopInfo de_stopInfo = new StopInfo();
 
-    public StopInfo getAttractionStopInfo() {
-        Locale locale = Locale.getDefault();
-        if(locale.getLanguage().equals("en"))
-            return stopInfo;
-        else
-            return de_stopInfo;
+    public StopInfo getAttractionStopInfo(boolean isGerman) {
+        return isGerman ? de_stopInfo : stopInfo;
     }
 
 

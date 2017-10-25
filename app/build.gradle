@@ -23,8 +23,8 @@ android {
         applicationId 'me.carc.btown'
         minSdkVersion 21
         targetSdkVersion 26
-        versionCode 1
-        versionName "1.0"
+        versionCode 30
+        versionName "2.0.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         android.defaultConfig.vectorDrawables.useSupportLibrary = true
         javaCompileOptions {
@@ -104,6 +104,7 @@ dependencies {
     compile "com.android.support:recyclerview-v7:${supportLibVersion}"
     compile "com.android.support:cardview-v7:${supportLibVersion}"
     compile "com.android.support:palette-v7:${supportLibVersion}"
+    compile "com.android.support:preference-v14:${supportLibVersion}"
     compile "com.android.support.constraint:constraint-layout:${constraintLayoutVersion}"
 
     compile "com.google.android.gms:play-services-auth:${googlePlayServices}"
@@ -114,6 +115,8 @@ dependencies {
 
     compile "com.google.firebase:firebase-core:$firebase"
     compile "com.google.firebase:firebase-auth:$firebase"
+    compile "com.google.firebase:firebase-database:$firebase"
+    compile "com.firebaseui:firebase-ui-database:$firebaseUI"
     compile "com.google.firebase:firebase-storage:$firebase"
     compile "com.firebaseui:firebase-ui-storage:$firebaseUI"
     compile "com.facebook.android:facebook-android-sdk:$facebook"
@@ -141,11 +144,10 @@ dependencies {
     compile 'com.mikepenz:community-material-typeface:1.9.32.2@aar'
 
     compile 'carcme:login-buttons:0.3.0'
-
-    compile 'com.github.lzyzsd:circleprogress:1.2.0@aar'
-
+    compile 'com.github.lzyzsd:circleprogress:1.2.1'
     compile 'com.flaviofaria:kenburnsview:1.0.7'
-
+    compile 'com.davemorrissey.labs:subsampling-scale-image-view:3.7.0'
+    compile 'de.hdodenhof:circleimageview:2.2.0'
 
 
 

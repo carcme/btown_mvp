@@ -61,7 +61,6 @@ public class IntentUtils {
         return marketIntent;
     }
 
-
     /**
      * Send email message
      *

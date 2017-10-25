@@ -49,8 +49,8 @@ public class AttractionMapActivity extends BaseActivity {
         Attraction attraction = null;;
 
         Intent intent = getIntent();
-        if (intent.hasExtra("ATTRACTION")) {
-            attraction = intent.getParcelableExtra("ATTRACTION");
+        if (intent.hasExtra(AttractionPagerActivity.ATTRACTION)) {
+            attraction = intent.getParcelableExtra(AttractionPagerActivity.ATTRACTION);
         } else
             finish();
 

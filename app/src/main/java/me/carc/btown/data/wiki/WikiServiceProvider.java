@@ -17,7 +17,7 @@ public class WikiServiceProvider {
 
     private static WikiApi createService() {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(WikiApi.ENDPOINT_EN)
+                .baseUrl(WikiApi.ENDPOINT)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 

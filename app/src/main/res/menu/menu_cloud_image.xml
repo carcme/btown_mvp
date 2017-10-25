@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+
+<!--
+    <item   android:id="@+id/shuffle"
+            android:icon="@drawable/ic_shuffle"
+            android:orderInCategory="10"
+            android:title="@string/menu_shuffle"
+            app:showAsAction="ifRoom">
+    </item>
+-->
+
+    <item   android:id="@+id/single_grid"
+            android:icon="@drawable/ic_column_single"
+            android:orderInCategory="100"
+            android:title="@string/shared_string_column"
+        app:showAsAction="ifRoom">
+    </item>
+
+    <item   android:id="@+id/multi_grid"
+            android:icon="@drawable/ic_column_multi"
+            android:orderInCategory="101"
+            android:title="@string/shared_string_grid"
+        app:showAsAction="ifRoom">
+    </item>
+
+</menu>

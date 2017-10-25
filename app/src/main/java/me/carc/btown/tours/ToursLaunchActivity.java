@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AlertDialog;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
@@ -118,10 +117,7 @@ public class ToursLaunchActivity extends BaseActivity {
 
     @OnClick(R.id.top10_holder)
     void startTop10() {
-        new AlertDialog.Builder(ToursLaunchActivity.this)
-                .setTitle("Coming Soon")
-                .setMessage("Berlin's Top 10's Lists. We're working hard to bring you some of Berlins Top 10's")
-                .show();
+        showAlertDialog(R.string.top10_coming_soon_title, R.string.top10_coming_soon_msg, -1, R.drawable.ic_timelapse);
 //        flyOut(TOP10);
     }
 
