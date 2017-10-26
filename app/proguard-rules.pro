@@ -17,6 +17,8 @@
 -dontwarn android.arch.util.paging.CountedDataSource
 -dontwarn android.arch.persistence.room.paging.LimitOffsetDataSource
 
+-dontwarn android.arch.**
+
 
 -dontwarn org.osmdroid.tileprovider.modules.NetworkAvailabliltyCheck
 

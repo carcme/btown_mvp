@@ -1,4 +1,4 @@
-package me.carc.btown.map.sheets;
+package me.carc.btown.map.sheets.marker_list;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
@@ -14,14 +14,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
 import org.osmdroid.util.GeoPoint;
-import org.osmdroid.views.overlay.Marker;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.concurrent.Executors;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,11 +33,17 @@ import me.carc.btown.R;
 import me.carc.btown.Utils.MapUtils;
 import me.carc.btown.Utils.ViewUtils;
 import me.carc.btown.common.Commons;
-import me.carc.btown.common.TinyDB;
+import me.carc.btown.common.interfaces.MarkerListListener;
+import me.carc.btown.common.interfaces.SimpleClickListener;
 import me.carc.btown.data.model.OverpassQueryResult;
 import me.carc.btown.data.wiki.WikiQueryPage;
+import me.carc.btown.db.AppDatabase;
+import me.carc.btown.db.bookmark.BookmarkEntry;
+import me.carc.btown.db.favorite.FavoriteEntry;
 import me.carc.btown.map.IconManager;
-import me.carc.btown.map.interfaces.MyClickListener;
+import me.carc.btown.map.sheets.ImageDialog;
+import me.carc.btown.map.sheets.search_context.SearchContextMenu;
+import me.carc.btown.ui.CompassDialog;
 import me.carc.btown.ui.custom.DividerItemDecoration;
 
 /**
@@ -50,11 +57,11 @@ public class MarkerListDialogFragment extends DialogFragment {
     private static final String MY_LNG = "MY_LNG";
     private static final String MARKER_LIST = "MARKER_LIST";
     private MarkerListAdapter adapter;
-    private TinyDB db;
 
+    private GeoPoint myLocation;
     private Unbinder unbinder;
 
-    private static ArrayList<Marker> markersArray;
+    private ArrayList<Object> relatedObjects;
 
     @BindView(R.id.collapsing_toolbar)
     CollapsingToolbarLayout collapsingToolbar;
@@ -81,9 +88,7 @@ public class MarkerListDialogFragment extends DialogFragment {
     List<ImageView> imageViews;
 */
 
-
-
-    public static boolean showInstance(final Context appContext, final GeoPoint currLocation, ArrayList<Marker> markersList) {
+    public static boolean showInstance(final Context appContext, final GeoPoint currLocation, ArrayList<Object> objects) {
 
         AppCompatActivity activity = ((App) appContext).getCurrentActivity();
 
@@ -95,13 +100,12 @@ public class MarkerListDialogFragment extends DialogFragment {
                 bundle.putDouble(MY_LNG, currLocation.getLongitude());
             }
 
-            if (Commons.isNotNull(markersList)) {
-                bundle.putSerializable(MARKER_LIST, markersList);
+            if (Commons.isNotNull(objects)) {
+                bundle.putSerializable(MARKER_LIST, objects);
             }
 
             MarkerListDialogFragment fragment = new MarkerListDialogFragment();
             fragment.setArguments(bundle);
-            markersArray = markersList;
             fragment.show(activity.getSupportFragmentManager(), ID_TAG);
 
             return true;
@@ -111,10 +115,13 @@ public class MarkerListDialogFragment extends DialogFragment {
         }
     }
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRetainInstance(true);
         setStyle(STYLE_NO_FRAME, R.style.Dialog_Fullscreen);
+        setRetainInstance(true);
     }
 
     @Override
@@ -125,41 +132,45 @@ public class MarkerListDialogFragment extends DialogFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.recyclerview_layout, container, false);
-
+        View view = inflater.inflate(R.layout.marker_list_recyclerview_layout, container, false);
         unbinder = ButterKnife.bind(this, view);
-
         view.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.almostWhite));
-
-        db = TinyDB.getTinyDB();
 
         Bundle args = getArguments();
         if (args != null) {
 
+            relatedObjects = (ArrayList<Object>) args.getSerializable(MARKER_LIST);
+
             double lat = args.getDouble(MY_LAT, Double.NaN);
             double lng = args.getDouble(MY_LNG, Double.NaN);
-            GeoPoint myLocation = null;
+            myLocation = null;
             if (!Double.isNaN(lat) && !Double.isNaN(lng))
                 myLocation = new GeoPoint(lat, lng);
 
-
             RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST);
             recyclerView.addItemDecoration(itemDecoration);
-
-            adapter = new MarkerListAdapter(myLocation, buildAdapterList(myLocation), new MyClickListener() {
+            adapter = new MarkerListAdapter(myLocation, buildAdapterList(myLocation), new MarkerListListener() {
                 @Override
-                public void OnClick(View v, int position) {
+                public void onClick(View v, int position) {
                     hide();
-                    ((MapActivity) getActivity()).showPoiDlg(markersArray.get(position).getRelatedObject());
+                    ((MapActivity) getActivity()).showPoiDlg(relatedObjects.get(position));
                 }
 
                 @Override
-                public void OnLongClick(View v, int position) {
+                public void onClickImage(View v, int position) {
+                    showImage(relatedObjects.get(position));
+                }
+
+                @Override
+                public void onClickOverflow(View v, int position) {
+                    showOptions(relatedObjects.get(position));
+                }
+
+                @Override
+                public void onClickCompass(View v, int position) {
+                    showCompass(adapter.getNode(position));
                 }
             });
-
-//            new buildList(myLocation).run();
-
 
             if (recyclerView != null) {
                 recyclerView.setHasFixedSize(true);
@@ -167,22 +178,20 @@ public class MarkerListDialogFragment extends DialogFragment {
                 LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
                 layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
                 recyclerView.setLayoutManager(layoutManager);
-
                 recyclerView.setAdapter(adapter);
             }
-
 
             assert collapsingToolbar != null;
 
             Drawable drawable = ViewUtils.changeIconColor(getContext(), R.drawable.ic_arrow_back, R.color.white);
             toolbar.setNavigationIcon(drawable);
-            toolbar.setOnClickListener(new View.OnClickListener() {
+            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     dismiss();
                 }
             });
-
+            collapsingToolbar.setTitleEnabled(true);
             collapsingToolbar.setCollapsedTitleTextColor(ContextCompat.getColor(getActivity(), R.color.white));
             collapsingToolbar.setExpandedTitleColor(ContextCompat.getColor(getActivity(), R.color.white));
         }
@@ -201,6 +210,74 @@ public class MarkerListDialogFragment extends DialogFragment {
         dismiss();
     }
 
+    private void showCompass(final MarkerListAdapter.PoiAdpaterItem node) {
+        String title = node.name;
+        String subTitle = node.poiType;
+        GeoPoint start = new GeoPoint(node.lat, node.lon);
+        GeoPoint end = myLocation;
+        String dist = node.distance;
+
+        CompassDialog.showInstance(getActivity().getApplicationContext(), title, subTitle, start, end, dist);
+    }
+
+    private void showOptions(final Object obj) {
+
+        SearchContextMenu.show(-1, obj, getActivity().getApplicationContext(), new SimpleClickListener() {
+
+            @Override
+            public void OnClick(final int type) {
+                Executors.newSingleThreadExecutor().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        AppDatabase db = ((App) getActivity().getApplicationContext()).getDB();
+
+                        if (type == SearchContextMenu.POI) {
+                            FavoriteEntry entry = new FavoriteEntry((OverpassQueryResult.Element) obj);
+                            db.favoriteDao().insert(entry);
+
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(getActivity(), getActivity().getText(R.string.favorite_saved), Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        } else if (type == SearchContextMenu.WIKI) {
+                            BookmarkEntry entry = new BookmarkEntry((WikiQueryPage) obj);
+                            db.bookmarkDao().insert(entry);
+
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(getActivity(), getActivity().getText(R.string.bookmark_addded), Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
+                    }
+                });
+            }
+
+
+            @Override
+            public void OnLongClick(int type) {
+
+            }
+        });
+    }
+
+    private void showImage(Object obj) {
+        if (obj instanceof OverpassQueryResult.Element) {
+            OverpassQueryResult.Element element = (OverpassQueryResult.Element) obj;
+            if (Commons.isNotNull(element.tags.image)) {
+                final String httpUrl = "https://www.openstreetmap.org/#map=16/" + element.lat + "/" + ((float) element.lon);
+                ImageDialog.showInstance(getActivity().getApplicationContext(), element.tags.image, httpUrl, element.tags.name, element.tags.getPrimaryType());
+            }
+        } else if (obj instanceof WikiQueryPage) {
+            WikiQueryPage page = (WikiQueryPage) obj;
+            if (Commons.isNotNull(page.thumbUrl())) {
+                ImageDialog.showInstance(getActivity().getApplicationContext(), page.thumbUrl(), page.fullurl(), page.title(), page.extract());
+            }
+        }
+    }
 
     /**
      * Load favorites from shared preferences
@@ -216,10 +293,8 @@ public class MarkerListDialogFragment extends DialogFragment {
 
         boolean doTitle = true;
 
-        for (Marker marker : markersArray) {
+        for (Object obj : relatedObjects) {
             MarkerListAdapter.PoiAdpaterItem item = new MarkerListAdapter.PoiAdpaterItem();
-
-            Object obj = marker.getRelatedObject();
 
             if (obj instanceof OverpassQueryResult.Element) {
                 OverpassQueryResult.Element node = (OverpassQueryResult.Element) obj;
@@ -236,8 +311,8 @@ public class MarkerListDialogFragment extends DialogFragment {
                     imageList.add(node.tags.image);
                 }
 
-                if(doTitle)
-                    toolbar.setTitle(getActivity().getString(R.string.search_tab_category));
+                if (doTitle)
+                    collapsingToolbar.setTitle(getActivity().getString(R.string.search_tab_category));
                 doTitle = false;
 
             } else if (obj instanceof WikiQueryPage) {
@@ -255,13 +330,13 @@ public class MarkerListDialogFragment extends DialogFragment {
                     imageList.add(wiki.thumbUrl());
                 }
 
-                if(doTitle)
-                    toolbar.setTitle(getActivity().getString(R.string.wikipedia));
+                if (doTitle)
+                    collapsingToolbar.setTitle(getActivity().getString(R.string.wikipedia));
                 doTitle = false;
             }
         }
 
-        if(imageList.size() == 0) {
+        if (imageList.size() == 0) {
             imageBackDrop.setImageResource(R.drawable.checkered_background);
             imageBackDrop.setScaleType(ImageView.ScaleType.FIT_XY);
         } else {
@@ -288,82 +363,6 @@ public class MarkerListDialogFragment extends DialogFragment {
 
         return array;
     }
-
-
-    private class buildList implements Runnable {
-
-        GeoPoint location;
-
-        buildList(GeoPoint location) {
-            this.location = location;
-        }
-
-        @Override
-        public void run() {
-            buildIt();
-        }
-
-        private void buildIt() {
-
-
-            ArrayList<MarkerListAdapter.PoiAdpaterItem> array = new ArrayList<>();
-            IconManager im = new IconManager(getActivity());
-
-            ArrayList<String> randomImageList = new ArrayList<>();
-
-            for (Marker marker : markersArray) {
-                MarkerListAdapter.PoiAdpaterItem item = new MarkerListAdapter.PoiAdpaterItem();
-
-                Object obj = marker.getRelatedObject();
-
-                if (obj instanceof OverpassQueryResult.Element) {
-                    OverpassQueryResult.Element node = (OverpassQueryResult.Element) obj;
-                    item.name = node.tags.name;
-                    item.poiType = node.tags.getPrimaryType();
-                    item.icon = im.getRoundedIcon(item.poiType);
-                    item.lat = node.lat;
-                    item.lon = node.lon;
-                    item.distance = getdistance(node, location);
-                    item.image = node.tags.image;
-                    array.add(item);
-
-                    if (!Commons.isEmpty(node.tags.image)) {
-                        randomImageList.add(node.tags.image);
-                    }
-
-                } else if (obj instanceof WikiQueryPage) {
-                    WikiQueryPage wiki = (WikiQueryPage) obj;
-                    item.name = wiki.title();
-                    item.poiType = wiki.description();
-                    item.icon = ContextCompat.getDrawable(getContext(), R.drawable.ic_wiki_map_marker);
-                    item.lat = wiki.getLat();
-                    item.lon = wiki.getLon();
-                    item.distance = getdistance(wiki, location);
-                    item.image = wiki.thumbUrl();
-                    array.add(item);
-
-                    if (!Commons.isEmpty(wiki.thumbUrl())) {
-                        randomImageList.add(wiki.thumbUrl());
-                    }
-                }
-            }
-
-            String randomImageUrl = randomImageList.get(new Random().nextInt(randomImageList.size()));
-
-            if (Commons.isNotNull(randomImageUrl)) {
-                Glide.with(getActivity())
-                        .load(randomImageUrl)
-                        .placeholder(R.drawable.checkered_background)
-                        .into(imageBackDrop);
-            } else {
-                imageBackDrop.setImageResource(R.drawable.checkered_background);
-                imageBackDrop.setScaleType(ImageView.ScaleType.FIT_XY);
-            }
-
-            adapter.updateItems(array);
-        }
-    }
-
 
     private String getdistance(OverpassQueryResult.Element node, GeoPoint location) {
         double d = MapUtils.getDistance(location, node.lat, node.lon);

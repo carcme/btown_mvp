@@ -146,7 +146,7 @@ public class MapActivity extends BaseActivity implements
         view.findViewById(R.id.itemPoint).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ShareDialog.sendMessage(MapActivity.this, MapUtils.buildOsmMapLink(point, mMap.getZoomLevel()));
+                ShareDialog.sendMessage(MapActivity.this, MapUtils.buildOsmMapLink(point, mMap.getMaxZoomLevel()));
                 dlg.dismiss();
             }
         });

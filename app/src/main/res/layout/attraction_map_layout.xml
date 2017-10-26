@@ -13,7 +13,7 @@
         android:scaleType="centerCrop"
         app:layout_collapseMode="pin"
         tools:layout_height="200dp"
-        tools:src="@drawable/placeholder" />
+        tools:src="@drawable/background_brandenburg_tor" />
 
     <org.osmdroid.views.MapView
         android:id="@+id/mapOverlay"

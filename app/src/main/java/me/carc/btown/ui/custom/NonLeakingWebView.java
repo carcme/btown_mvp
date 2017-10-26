@@ -24,6 +24,7 @@ import java.lang.ref.WeakReference;
 public class NonLeakingWebView extends WebView {
 
     public interface WebViewCallback {
+        void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error);
         void onPageStarted(WebView view, String url, Bitmap favicon);
         boolean shouldOverrideUrlLoading(WebView view, String url);
         boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request);  // api 24 ver
@@ -109,7 +110,7 @@ public class NonLeakingWebView extends WebView {
 
         @Override
         public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
-            handler.proceed(); // Ignore SSL certificate errors
+            callback.onReceivedSslError(view, handler, error);
         }
 
         @Override

@@ -35,11 +35,13 @@ public class CompassDialog extends DialogFragment {
     private static final String MY_LNG = "MY_LNG";
     private static final String POI_LAT = "POI_LAT";
     private static final String POI_LNG = "POI_LNG";
+    private static final String DISTANCE = "DISTANCE";
 
     @BindView(R.id.compassTitle) TextView title;
     @BindView(R.id.compassType) TextView type;
     @BindView(R.id.compassArrow) CompassView arrow;
     @BindView(R.id.compassDistance) TextView compassDistance;
+
 
     private GeoPoint poiLocation;
     private Unbinder unbinder;
@@ -47,6 +49,11 @@ public class CompassDialog extends DialogFragment {
 
     public static boolean showInstance(final Context appContext, final String title,
                                        final String subTitle, final GeoPoint start, final GeoPoint end) {
+        return showInstance(appContext, title, subTitle, start, end, "");
+    }
+
+    public static boolean showInstance(final Context appContext, final String title,
+                                       final String subTitle, final GeoPoint start, final GeoPoint end, final String distance) {
 
         AppCompatActivity activity = ((App) appContext).getCurrentActivity();
 
@@ -64,6 +71,9 @@ public class CompassDialog extends DialogFragment {
                 bundle.putDouble(POI_LAT, end.getLatitude());
                 bundle.putDouble(POI_LNG, end.getLongitude());
             }
+            if(!Commons.isEmpty(distance))
+                bundle.putString(DISTANCE, distance);
+
             CompassDialog fragment = new CompassDialog();
             fragment.setArguments(bundle);
             fragment.show(activity.getSupportFragmentManager(), ID_TAG);
@@ -97,6 +107,7 @@ public class CompassDialog extends DialogFragment {
 
             title.setText(args.getString(TITLE));
             type.setText(args.getString(SUBTITLE));
+            compassDistance.setText(args.getString(DISTANCE));
 
             if(myLocation != null && poiLocation!= null)
                 arrow.rotationFromLocations(myLocation, poiLocation, true);

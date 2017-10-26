@@ -123,14 +123,13 @@ public class SearchDialogPresenter implements ISearch.Presenter {
 
     @Override
     public void showLongPressSelectionDialog(int type, Place place) {
-        SearchContextMenu.show(type, place, (MapActivity) mContext, new SimpleClickListener() {
+        SearchContextMenu.show(type, place, mContext.getApplicationContext(), new SimpleClickListener() {
             @Override
             public void OnClick(int type) {
                 switch (type) {
 
                     case SearchDialogFragment.SEARCH_ITEM_FAVORITE:
                         loadFavoriteInternal();
-
                         break;
 
                     case SearchDialogFragment.SEARCH_ITEM_HISTORY:

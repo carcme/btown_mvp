@@ -57,12 +57,12 @@ public class SearchContextDialogFragment extends BottomSheetDialogFragment imple
 
         SearchContextDialogFragment fragment = new SearchContextDialogFragment();
         fragment.menu = menu;
-        fragment.show(menu.getMapActivity().getSupportFragmentManager(), ID_TAG);
+        fragment.show(menu.getCurrentActivity().getSupportFragmentManager(), ID_TAG);
     }
 
     @Override
     public void setupDialog(final Dialog dialog, int style) {
-        View rootView = View.inflate(menu.getMapActivity(), R.layout.share_menu_fragment, null);
+        View rootView = View.inflate(menu.getCurrentActivity(), R.layout.share_menu_fragment, null);
 
         dialog.setContentView(rootView);
 
@@ -72,12 +72,12 @@ public class SearchContextDialogFragment extends BottomSheetDialogFragment imple
         if (behavior != null && behavior instanceof BottomSheetBehavior)
             ((BottomSheetBehavior) behavior).setBottomSheetCallback(mBottomSheetCB);
 
-        ListView listView = (ListView) rootView.findViewById(R.id.list);
+        ListView listView = rootView.findViewById(R.id.list);
         listAdapter = createAdapter();
         listView.setAdapter(listAdapter);
         listView.setOnItemClickListener(this);
 
-        TextView title = (TextView) rootView.findViewById(R.id.header_caption);
+        TextView title = rootView.findViewById(R.id.header_caption);
 
         switch (menu.getCategory()) {
             case SearchDialogFragment.SEARCH_ITEM_FAVORITE:
@@ -86,6 +86,14 @@ public class SearchContextDialogFragment extends BottomSheetDialogFragment imple
 
             case SearchDialogFragment.SEARCH_ITEM_HISTORY:
                 title.setText(R.string.search_tab_history);
+                break;
+
+            case SearchContextMenu.POI:
+                title.setText("Point of Interest");
+                break;
+
+            case SearchContextMenu.WIKI:
+                title.setText(R.string.wikipedia);
                 break;
 
             default:
@@ -102,7 +110,7 @@ public class SearchContextDialogFragment extends BottomSheetDialogFragment imple
     private ArrayAdapter<SearchContextMenu.ContextItem> createAdapter() {
         final List<SearchContextMenu.ContextItem> items = menu.getItems();
         final Context ctx = getActivity().getBaseContext();
-        return new ArrayAdapter<SearchContextMenu.ContextItem>(menu.getMapActivity(), R.layout.share_list_item, items) {
+        return new ArrayAdapter<SearchContextMenu.ContextItem>(menu.getCurrentActivity(), R.layout.share_list_item, items) {
 
             @SuppressLint("InflateParams")
             @Override
@@ -110,13 +118,13 @@ public class SearchContextDialogFragment extends BottomSheetDialogFragment imple
             public View getView(final int position, View convertView, @NonNull ViewGroup parent) {
                 View v = convertView;
                 if (v == null) {
-                    v = menu.getMapActivity().getLayoutInflater().inflate(R.layout.share_list_item, null);
+                    v = menu.getCurrentActivity().getLayoutInflater().inflate(R.layout.share_list_item, null);
                 }
                 final SearchContextMenu.ContextItem item = getItem(position);
-                ImageView icon = (ImageView) v.findViewById(R.id.icon);
+                ImageView icon = v.findViewById(R.id.icon);
                 assert item != null;
                 icon.setImageDrawable(new IconicsDrawable(ctx, item.getIconResourceId()).color(ContextCompat.getColor(ctx, R.color.sheet_heading_text_color)).sizeDp(20));
-                TextView name = (TextView) v.findViewById(R.id.name);
+                TextView name = v.findViewById(R.id.name);
                 name.setText(getContext().getText(item.getTitleResourceId()));
                 return v;
             }

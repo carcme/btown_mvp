@@ -1,4 +1,4 @@
-package me.carc.btown.map.sheets;
+package me.carc.btown.map.sheets.marker_list;
 
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -15,11 +16,12 @@ import org.osmdroid.util.GeoPoint;
 
 import java.util.ArrayList;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import me.carc.btown.BuildConfig;
-import me.carc.btown.common.Commons;
-import me.carc.btown.map.interfaces.MyClickListener;
 import me.carc.btown.R;
 import me.carc.btown.Utils.MapUtils;
+import me.carc.btown.common.Commons;
+import me.carc.btown.common.interfaces.MarkerListListener;
 import me.carc.btown.data.model.OverpassQueryResult;
 import me.carc.btown.data.wiki.WikiQueryPage;
 import me.carc.btown.ui.CompassView;
@@ -33,7 +35,7 @@ public class MarkerListAdapter extends RecyclerView.Adapter<MarkerListAdapter.Po
     private boolean allowUpdates = false;
     private GeoPoint currentLocation;
     private ArrayList<PoiAdpaterItem> items;
-    public MyClickListener onClickListener;
+    public MarkerListListener onClickListener;
 
     private SparseArray<CompassView> compassArray = new SparseArray<>();
     private SparseArray<TextView> distanceArray = new SparseArray<>();
@@ -50,7 +52,7 @@ public class MarkerListAdapter extends RecyclerView.Adapter<MarkerListAdapter.Po
     }
 
 
-    public MarkerListAdapter(GeoPoint loc, ArrayList<PoiAdpaterItem> list, MyClickListener listener) {
+    public MarkerListAdapter(GeoPoint loc, ArrayList<PoiAdpaterItem> list, MarkerListListener listener) {
         currentLocation = loc;
         this.items = list;
         onClickListener = listener;
@@ -90,21 +92,34 @@ public class MarkerListAdapter extends RecyclerView.Adapter<MarkerListAdapter.Po
 
         startUpdates();
 
+
         // Click Handlers
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onClickListener.OnClick(v, holder.getAdapterPosition());
+                onClickListener.onClick(v, holder.getAdapterPosition());
             }
         });
-        holder.mView.setOnLongClickListener(new View.OnLongClickListener() {
+        holder.icon.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onLongClick(View v) {
-                onClickListener.OnLongClick(v, holder.getAdapterPosition());
-                return true;
+            public void onClick(View v) {
+                onClickListener.onClickImage(v, holder.getAdapterPosition());
             }
         });
 
+        holder.more.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClickListener.onClickOverflow(v, holder.getAdapterPosition());
+            }
+        });
+
+        holder.compassHolder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClickListener.onClickCompass(v, holder.getAdapterPosition());
+            }
+        });
     }
 
     public void updateItems(ArrayList<PoiAdpaterItem> list) {
@@ -129,7 +144,7 @@ public class MarkerListAdapter extends RecyclerView.Adapter<MarkerListAdapter.Po
         allowUpdates = false;
     }
 
-    private PoiAdpaterItem getNode(int index) {
+    public PoiAdpaterItem getNode(int index) {
         return items.get(index);
     }
 
@@ -185,21 +200,25 @@ public class MarkerListAdapter extends RecyclerView.Adapter<MarkerListAdapter.Po
 
         View mView;
 
-        ImageView icon;
+        CircleImageView icon;
         TextView name;
         TextView desc;
+        LinearLayout compassHolder;
         TextView distance;
         CompassView direction;
+        ImageView more;
 
         private PoiListHolder(View itemView) {
             super(itemView);
             mView = itemView;
 
-            this.icon = (ImageView) itemView.findViewById(R.id.favListIcon);
-            this.name = (TextView) itemView.findViewById(R.id.favListName);
-            this.desc = (TextView) itemView.findViewById(R.id.favListDesc);
-            this.distance = (TextView) itemView.findViewById(R.id.favListDistance);
-            this.direction = (CompassView) itemView.findViewById(R.id.favListNavigationIcon);
+            this.icon = itemView.findViewById(R.id.favListIcon);
+            this.name = itemView.findViewById(R.id.favListName);
+            this.desc = itemView.findViewById(R.id.favListDesc);
+            this.distance = itemView.findViewById(R.id.favListDistance);
+            this.direction = itemView.findViewById(R.id.favListNavigationIcon);
+            this.compassHolder =itemView.findViewById(R.id.favListcompassHolder);
+            more = itemView.findViewById(R.id.favListMore);
         }
     }
 }

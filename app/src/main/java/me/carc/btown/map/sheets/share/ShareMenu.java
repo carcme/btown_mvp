@@ -28,9 +28,6 @@ public class ShareMenu {
     private String title;
     private String address;
 
-    private static final String KEY_SHARE_MENU_LATLON = "key_share_menu_latlon";
-    private static final String KEY_SHARE_MENU_POINT_TITLE = "key_share_menu_point_title";
-
     public enum ShareItem {
         MESSAGE(FontAwesome.Icon.faw_envelope, R.string.shared_string_send),
         CLIPBOARD(FontAwesome.Icon.faw_clipboard, R.string.shared_string_copy),
@@ -56,13 +53,12 @@ public class ShareMenu {
     }
 
     private ShareMenu(Context context) {
-        mAppContext= context;
+        mAppContext = context;
     }
 
     public AppCompatActivity getActivity() {
         return ((App) mAppContext).getCurrentActivity();
     }
-
 
     public List<ShareItem> getItems() {
         List<ShareItem> list = new LinkedList<>();
@@ -84,21 +80,15 @@ public class ShareMenu {
     }
 
     public static void show(GeoPoint latLon, String title, String address, Context appContext) {
-
-        AppCompatActivity activity = ((App) appContext).getCurrentActivity();
-
         ShareMenu menu = new ShareMenu(appContext);
-
         menu.latLon = latLon;
         menu.title = title;
         menu.address = address;
-
         ShareMenuDialogFragment.showInstance(menu);
     }
 
     public void share(ShareItem item) {
-        // TODO: 13/10/2017 get map zoom level
-        final int zoom = 17;// ((MapActivity) mActivity).getMapView().getZoomLevel();
+        final int zoom = 19; // use maximum zoom - very clear what the poi on the shared map
 
         final String geoUrl = MapUtils.buildGeoUrl(latLon.getLatitude(), latLon.getLongitude(), zoom);
 
@@ -145,13 +135,7 @@ public class ShareMenu {
             case WEB:
                 ShareDialog.sendMessage(getActivity(), wiki);
                 break;
-
         }
 
-    }
-
-    public void saveMenu(Bundle bundle) {
-        bundle.putSerializable(KEY_SHARE_MENU_LATLON, latLon);
-        bundle.putString(KEY_SHARE_MENU_POINT_TITLE, title);
     }
 }

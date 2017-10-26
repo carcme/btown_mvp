@@ -30,6 +30,7 @@ import me.carc.btown.common.Commons;
 
 
 public class ShareMenuDialogFragment extends BottomSheetDialogFragment implements OnItemClickListener {
+
     public static final String ID_TAG = "ShareMenuDialogFragment";
     private static final String TAG = C.DEBUG + Commons.getTag();
 
@@ -52,9 +53,7 @@ public class ShareMenuDialogFragment extends BottomSheetDialogFragment implement
         }
     };
 
-
     public static void showInstance(ShareMenu menu) {
-
 
         ShareMenuDialogFragment fragment = new ShareMenuDialogFragment();
         fragment.menu = menu;
@@ -79,16 +78,10 @@ public class ShareMenuDialogFragment extends BottomSheetDialogFragment implement
         if (behavior != null && behavior instanceof BottomSheetBehavior)
             ((BottomSheetBehavior) behavior).setBottomSheetCallback(mBottomSheetCB);
 
-        ListView listView = (ListView) rootView.findViewById(R.id.list);
+        ListView listView = rootView.findViewById(R.id.list);
         listAdapter = createAdapter();
         listView.setAdapter(listAdapter);
         listView.setOnItemClickListener(this);
-    }
-
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        menu.saveMenu(outState);
     }
 
     private ArrayAdapter<ShareMenu.ShareItem> createAdapter() {
@@ -105,10 +98,10 @@ public class ShareMenuDialogFragment extends BottomSheetDialogFragment implement
                     v = menu.getActivity().getLayoutInflater().inflate(R.layout.share_list_item, null);
                 }
                 final ShareMenu.ShareItem item = getItem(position);
-                ImageView icon = (ImageView) v.findViewById(R.id.icon);
+                ImageView icon = v.findViewById(R.id.icon);
                 assert item != null;
                 icon.setImageDrawable(new IconicsDrawable(ctx, item.getIconResourceId()).color(ContextCompat.getColor(ctx, R.color.sheet_heading_text_color)).sizeDp(20));
-                TextView name = (TextView) v.findViewById(R.id.name);
+                TextView name = v.findViewById(R.id.name);
                 name.setText(getContext().getText(item.getTitleResourceId()));
                 return v;
             }

@@ -124,7 +124,7 @@ public class WikiReadingListDialogFragment extends DialogFragment implements Wik
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.recyclerview_layout, container, false);
+        View view = inflater.inflate(R.layout.marker_list_recyclerview_layout, container, false);
 
         unbinder = ButterKnife.bind(this, view);
 
@@ -160,7 +160,7 @@ public class WikiReadingListDialogFragment extends DialogFragment implements Wik
 
             Drawable drawable = ViewUtils.changeIconColor(getContext(), R.drawable.ic_arrow_back, R.color.white);
             toolbar.setNavigationIcon(drawable);
-            toolbar.setOnClickListener(new View.OnClickListener() {
+            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     dismiss();

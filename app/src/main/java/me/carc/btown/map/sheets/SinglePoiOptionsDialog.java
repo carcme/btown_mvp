@@ -188,7 +188,9 @@ public class SinglePoiOptionsDialog extends BottomSheetDialogFragment {
             assert node != null;
             featureTitle.setText(node.tags.name);
 
-            //// TODO: 10/10/2017  should show the user description if its avaialble (saved item)
+            // TODO: 10/10/2017  should show the user description if its avaialble (saved item)
+            // 1. add field below address for user description.
+            // 2. if has description, show single line and change SAVE button to DESCRIPTION... user can read desc from the button. Also allows user to remove/edit desc
 //            if (!Commons.isEmpty(node.userDescription))
 //                userDesc.setText(Commons.capitalizeFirstLetter(node.userDescription));
 

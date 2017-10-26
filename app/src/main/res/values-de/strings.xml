@@ -32,8 +32,10 @@
     <string name="favorites_list_empty">Beliebteste Orte\n\nFüge neue Locations hinzu, indem du die Karte benutzt. Im oberen Menü kannst du sie sortieren oder auf der Karte anzeigen.</string>
     <string name="history_list_empty">Suchverlauf\n\nFinde ganz bestimmte Orte und Straßen, indem du die Linkleiste nutzt … Deine Auswahl wird hier hinzugefügt.\n\nFür zusätzliche Optionen halte den Begriff lange gedrückt.</string>
     <string name="wiki_bookmark_list_empty">Wikipedia Leseliste\n\nDeine gespeicherten Wikipedia-Einträge findest du hier</string>
+    <string name="favorite_save">Zu Favoriten hinzufügen</string>
     <string name="favorite_saved">Zu Favoriten hinzugefügt</string>
     <string name="favorite_removed">Aus Favoriten entfernt</string>
+    <string name="bookmark_add">Zu Leseliste hinzufügen</string>
     <string name="bookmark_addded">Zur Leseliste hinzugefügt</string>
     <string name="bookmark_removed">Von der Leseliste entfernt</string>
     <string name="history_saved">Zum Suchverlauf hinzugefügt</string>

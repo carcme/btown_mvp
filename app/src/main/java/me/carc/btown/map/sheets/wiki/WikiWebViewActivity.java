@@ -2,17 +2,21 @@ package me.carc.btown.map.sheets.wiki;
 
 import android.Manifest;
 import android.annotation.TargetApi;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.SslErrorHandler;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebHistoryItem;
@@ -106,6 +110,51 @@ public class WikiWebViewActivity extends BaseActivity {
         webView.setListener(new NonLeakingWebView.WebViewCallback() {
 
             @Override
+            public void onReceivedSslError(WebView view, final SslErrorHandler handler, SslError error) {
+
+                int msgRes;
+                switch(error.getPrimaryError()) {
+                    case SslError.SSL_DATE_INVALID:
+                        msgRes = R.string.ssl_date_invalid;
+                        break;
+                    case SslError.SSL_EXPIRED:
+                        msgRes = R.string.ssl_cert_expired;
+                        break;
+                    case SslError.SSL_IDMISMATCH:
+                        msgRes = R.string.ssl_hostname_mismatch;
+                        break;
+                    case SslError.SSL_INVALID:
+                        msgRes = R.string.ssl_generic_error;
+                        break;
+                    case SslError.SSL_NOTYETVALID:
+                        msgRes = R.string.ssl_not_yet_valid;
+                        break;
+                    case SslError.SSL_UNTRUSTED:
+                        msgRes = R.string.ssl_untrusted;
+                        break;
+                    default:
+                        msgRes = R.string.unknown;
+                }
+
+                final AlertDialog.Builder builder = new AlertDialog.Builder(WikiWebViewActivity.this);
+                builder.setMessage(msgRes);
+                builder.setPositiveButton("continue", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        handler.proceed();
+                    }
+                });
+                builder.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        handler.cancel();
+                    }
+                });
+                final AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+
+            @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 progressBar.setVisibility(View.VISIBLE);
             }
@@ -127,18 +176,6 @@ public class WikiWebViewActivity extends BaseActivity {
                     intent.setDataAndType(Uri.parse(url), MIME_TYPE_PDF);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                     startActivity(intent);
-
-/*
-                    progressBar.setVisibility(View.VISIBLE);
-                    allowJavaScript(true);
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            webView.loadUrl(url);
-                        }
-                    }, 300);
-*/
-
                     return true;
                 }
                 return false;

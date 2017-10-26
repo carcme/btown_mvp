@@ -61,11 +61,10 @@ import me.carc.btown.db.bookmark.BookmarkEntry;
 import me.carc.btown.db.favorite.FavoriteEntry;
 import me.carc.btown.db.history.HistoryEntry;
 import me.carc.btown.map.markers.MarkersOverlay;
-import me.carc.btown.map.markers.MyInfoWindow;
 import me.carc.btown.map.overlays.MyDirectedLocationOverlay;
 import me.carc.btown.map.search.SearchDialogFragment;
 import me.carc.btown.map.search.model.Place;
-import me.carc.btown.map.sheets.MarkerListDialogFragment;
+import me.carc.btown.map.sheets.marker_list.MarkerListDialogFragment;
 import me.carc.btown.map.sheets.SinglePoiOptionsDialog;
 import me.carc.btown.map.sheets.WikiPoiSheetDialog;
 import retrofit2.Call;
@@ -280,11 +279,9 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
 
     @Override
     public Bundle getBundle(Bundle bundle) {
-
         bundle.putParcelable(LOCATION, myLocationOverlay.getLocation());
         bundle.putParcelableArrayList(OVERLAY_SINGLE_TAP, mMarkersOverlay.getElemets());
         bundle.putParcelableArrayList(OVERLAY_SEARCH, mSearchOverlay.getElemets());
-
         return bundle;
     }
 
@@ -811,8 +808,16 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
             MarkerListDialogFragment markerList = getMarkerListDialogFragment();
             if (Commons.isNotNull(markerList)) {
                 markerList.show();
-            } else
-                MarkerListDialogFragment.showInstance(mContext.getApplicationContext(), whereAmI(), mSearchOverlay.getItems());
+            } else {
+
+                ArrayList<Object> objects = new ArrayList<>();
+
+                for (Marker marker : mSearchOverlay.getItems()) {
+                    objects.add(marker.getRelatedObject());
+                }
+                MarkerListDialogFragment.showInstance(mContext.getApplicationContext(), whereAmI(), objects);
+//                MarkerListDialogFragment.showInstance(mContext.getApplicationContext(), whereAmI(), mSearchOverlay.getItems());
+            }
         } else {
             view.onCameraLaunch();
         }
@@ -824,7 +829,6 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
         mMarkersOverlay.clear();
 
         if (mSearchOverlay.getSize() > 0) {
-            MyInfoWindow.closeAllInfoWindows(mMap);
             mSearchOverlay.clear();
             view.setListMode(false);
         } else {

@@ -106,6 +106,11 @@ public class PlaceholderFragment extends Fragment {
     CollapsingToolbarLayout collapsingToolbar;
 
     @Nullable
+    @BindView(R.id.catalogueToolbar)
+    Toolbar toolbar;
+
+
+    @Nullable
     @BindView(R.id.nestedScroll)
     NestedScrollView nestedScroll;
 
@@ -190,8 +195,9 @@ public class PlaceholderFragment extends Fragment {
 
         attractionData = getArguments().getParcelable("data");
 
-        final Toolbar toolbar = rootView.findViewById(R.id.catalogueToolbar);
         if (toolbar != null) {
+            Drawable drawable = ViewUtils.changeIconColor(getContext(), R.drawable.ic_arrow_back, R.color.white);
+            toolbar.setNavigationIcon(drawable);
             toolbar.setNavigationOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

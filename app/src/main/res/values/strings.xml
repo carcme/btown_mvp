@@ -30,8 +30,10 @@
     <string name="favorites_list_empty">Favorites Places\n\nAdd new favorite places using the map.\n\nUse the top menu to sort or show them all on the map</string>
     <string name="history_list_empty">Search History\n\nFind specific places and roads using the top bar… selections are added here.\n\n Press and hold an item for additional options</string>
     <string name="wiki_bookmark_list_empty">Wikipedia Reading List\n\nYour saved Wikipedia entries will appear here</string>
+    <string name="favorite_save">Add to Favorites</string>
     <string name="favorite_saved">Added to Favorites</string>
     <string name="favorite_removed">Removed from Favorites</string>
+    <string name="bookmark_add">Add to Reading List</string>
     <string name="bookmark_addded">Added to Reading List</string>
     <string name="bookmark_removed">Removed from Reading List</string>
     <string name="history_saved">Added to History</string>
