@@ -9,7 +9,7 @@ import android.arch.persistence.room.PrimaryKey;
 import java.util.Comparator;
 import java.util.Date;
 
-import me.carc.btown.data.model.OverpassQueryResult;
+import me.carc.btown.data.results.OverpassQueryResult;
 
 /**
  * Favorite entry core data structure

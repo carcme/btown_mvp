@@ -50,6 +50,7 @@ public class C {
     public final static String PREF_ROUTING_VEHICLE = "PREF_ROUTING_VEHICLE";
 
 
+    public static final Integer THUMBNAIL_SIZE = 50;
 
     public static Integer IMAGE_WIDTH;
     public static Integer IMAGE_HEIGHT;

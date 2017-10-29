@@ -1,6 +1,6 @@
 package me.carc.btown.data.route;
 
-import me.carc.btown.data.model.RouteResult;
+import me.carc.btown.data.results.RouteResult;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;

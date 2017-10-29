@@ -1,4 +1,4 @@
-package me.carc.btown.data.model;
+package me.carc.btown.data.results;
 
 import android.arch.persistence.room.Embedded;
 import android.arch.persistence.room.Ignore;
@@ -288,6 +288,7 @@ public class OverpassQueryResult {
 
             @SerializedName("image")
             public String image;
+            public String thumbnail;
 
             @SerializedName("smoking")
             public String smoking;

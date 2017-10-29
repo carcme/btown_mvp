@@ -2,7 +2,7 @@ package me.carc.btown.data.autocomplete;
 
 import java.util.Map;
 
-import me.carc.btown.data.model.AutoCompleteResult;
+import me.carc.btown.data.results.AutoCompleteResult;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.QueryMap;

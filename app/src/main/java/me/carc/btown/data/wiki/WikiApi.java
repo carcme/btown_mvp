@@ -14,8 +14,6 @@ import retrofit2.http.Query;
 public interface WikiApi {
 
     String ENDPOINT = "https://" + C.USER_LANGUAGE + ".wikipedia.org";
-    String ENDPOINT_EN = "https://en.wikipedia.org";
-    String ENDPOINT_DE = "https://de.wikipedia.org";
 
     @GET("w/api.php?format=json&action=query&formatversion=2&redirects=1&prop=info|extracts|coordinates|pageimages|pageterms"
             + "&colimit=20&piprop=thumbnail&pilicense=any&wbptterms=description&exintro=1&inprop=url&&explaintext=1"

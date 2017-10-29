@@ -46,7 +46,8 @@ public class App extends Application {
      */
     public void onCreate() {
         super.onCreate();
-        Fabric.with(this, new Crashlytics());
+        if (BuildConfig.USE_CRASHLYTICS)
+            Fabric.with(this, new Crashlytics());
 
         try {
             LeakCanary.install(this);
@@ -63,7 +64,9 @@ public class App extends Application {
      * Init database
      */
     private AppDatabase initDB() {
-        return Room.databaseBuilder(getApplicationContext(), AppDatabase.class, BTOWN_DATABASE_NAME).build();
+        return Room.databaseBuilder(getApplicationContext(), AppDatabase.class, BTOWN_DATABASE_NAME)
+                .fallbackToDestructiveMigration()
+                .build();
     }
 
     private void registerConnectivityRecver() {

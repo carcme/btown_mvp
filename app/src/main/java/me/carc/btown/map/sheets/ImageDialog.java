@@ -127,6 +127,25 @@ public class ImageDialog extends DialogFragment {
                     .asBitmap()
                     .placeholder(R.drawable.background_glide_placeholder)  // required otherwise load doesn't happen!!
                     .error(R.drawable.no_image)
+//                    .into(new SimpleTarget<Bitmap>() {
+//                        @Override
+//                        public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+//                            image.setImageBitmap(resource);
+//                            if(Commons.isNotNull(imageLoadProgress))
+//                                imageLoadProgress.setVisibility(View.GONE);
+//                        }
+//
+//                        @Override
+//                        public void onLoadFailed(Exception e, Drawable errorDrawable) {
+//                            super.onLoadFailed(e, errorDrawable);
+//                            if(Commons.isNotNull(image)) {
+//                                image.setImageResource(R.drawable.no_image);
+//                                image.setScaleType(ImageView.ScaleType.CENTER);
+//                            }
+//                            if(Commons.isNotNull(imageLoadProgress))
+//                                imageLoadProgress.setVisibility(View.GONE);
+//                        }
+//                    });
                     .into(new BitmapImageViewTarget(image) {
                         @Override
                         public void onResourceReady(final Bitmap bitmap, @Nullable GlideAnimation anim) {
@@ -142,8 +161,10 @@ public class ImageDialog extends DialogFragment {
                             super.onLoadFailed(e, errorDrawable);
 
                             // make sure user hasn't exited while waiting for the image to load!!
-                            if(Commons.isNotNull(image))
+                            if(Commons.isNotNull(image)) {
+//                                image.setImageResource(R.drawable.no_image);
                                 image.setScaleType(ImageView.ScaleType.CENTER);
+                            }
                             if(Commons.isNotNull(imageLoadProgress))
                                 imageLoadProgress.setVisibility(View.GONE);
                         }

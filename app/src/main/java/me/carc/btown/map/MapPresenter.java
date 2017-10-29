@@ -46,10 +46,9 @@ import me.carc.btown.common.Commons;
 import me.carc.btown.common.CompassSensor;
 import me.carc.btown.common.FusedLocation;
 import me.carc.btown.common.TinyDB;
-import me.carc.btown.data.model.OverpassDataTags;
-import me.carc.btown.data.model.OverpassQueryResult;
-import me.carc.btown.data.model.PlaceToOverpass;
-import me.carc.btown.data.overpass.OverpassApi;
+import me.carc.btown.data.results.OverpassDataTags;
+import me.carc.btown.data.results.OverpassQueryResult;
+import me.carc.btown.data.results.PlaceToOverpass;
 import me.carc.btown.data.overpass.OverpassServiceProvider;
 import me.carc.btown.data.overpass.query.QueryGenerator;
 import me.carc.btown.data.wiki.WikiApi;
@@ -64,9 +63,9 @@ import me.carc.btown.map.markers.MarkersOverlay;
 import me.carc.btown.map.overlays.MyDirectedLocationOverlay;
 import me.carc.btown.map.search.SearchDialogFragment;
 import me.carc.btown.map.search.model.Place;
-import me.carc.btown.map.sheets.marker_list.MarkerListDialogFragment;
 import me.carc.btown.map.sheets.SinglePoiOptionsDialog;
 import me.carc.btown.map.sheets.WikiPoiSheetDialog;
+import me.carc.btown.map.sheets.marker_list.MarkerListDialogFragment;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -173,7 +172,10 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
                 compassSensor.enableSensors();
             }
 
-            mMap.invalidate();
+            if (mTrackingMode) {
+                mMap.getController().animateTo(point); //keep the map view centered on current location:
+            } else
+                mMap.invalidate();
         }
 
         public void onConnected(boolean connected) {
@@ -327,9 +329,11 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
 
         // Search Icon Overlay
         mSearchOverlay = new MarkersOverlay(mContext, mMap, OVERLAY_SEARCH);
+/*
         clusterIconD = ResourcesCompat.getDrawable(mContext.getResources(), R.drawable.marker_cluster, null);
         assert clusterIconD != null;
         clusterIcon = ((BitmapDrawable) clusterIconD).getBitmap();
+*/
         mSearchOverlay.setIcon(clusterIcon);
         mSearchOverlay.mAnchorV = Marker.ANCHOR_BOTTOM;
         mSearchOverlay.mTextAnchorU = 0.70f;
@@ -520,6 +524,102 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
      */
     private void findPOI(String query, final boolean singleSearch) {
         view.onLoadStart();
+
+        OverpassServiceProvider overpassServiceProvider = new OverpassServiceProvider();
+        overpassCall = overpassServiceProvider.createAndRunService(query, new OverpassServiceProvider.OverpassCallback() {
+            @Override
+            public void onSucess(OverpassQueryResult result) {
+                overpassSucess(result, singleSearch);
+            }
+
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull Throwable t) {
+                if (!call.isCanceled()) {
+                    showQuickSearch();
+                    view.showSearching(false);
+//                } else {
+//                    view.onLoadFinish();
+
+                    if (!singleSearch)
+                        view.setListMode(false);
+                }
+            }
+        });
+    }
+
+    private void overpassSucess(OverpassQueryResult result, boolean singleSearch) {
+        if (Commons.isNotNull(result) && result.elements.size() > 0) {
+
+            // performing single search, if multi items returned, get one closest the tap point
+            if (singleSearch) {
+                double closestItemLat = 100;
+                double closestItemLng = 100;
+
+                OverpassQueryResult.Element relevantNode = null;
+                for (OverpassQueryResult.Element node : result.elements) {
+                    double currentLat = Math.abs(mTouchPoint.getLatitude() - node.lat);
+                    double currentLng = Math.abs(mTouchPoint.getLongitude() - node.lon);
+
+                    if (currentLat < closestItemLat || currentLng < closestItemLng) {
+                        closestItemLat = currentLat;
+                        closestItemLng = currentLng;
+                        relevantNode = node;
+                    }
+                }
+
+                if (Commons.isNotNull(relevantNode)) {
+                    result.elements.clear();
+                    result.elements.add(relevantNode);
+                }
+            }
+
+            for (OverpassQueryResult.Element element : result.elements) {
+
+                if (Commons.isNotNull(myLocationOverlay.getLocation())) {
+                    // Calculate the distance to the POI
+                    element.distance = MapUtils.getDistance(whereAmI(), element.lat, element.lon);
+                } else
+                    element.distance = 0;
+
+                // Check for wiki image, format URL if found
+                if (!Commons.isEmpty(element.tags.image)) {
+                    // TODO: 13/10/2017 if has image and is wiki link, extract the wiki link from the image url. If no wiki provided, add the new link
+                    if(Commons.isEmpty(element.tags.wikipedia) && element.tags.image.contains("/wiki/"))
+                        element.tags.wikipedia = element.tags.image;
+
+                    if(C.DEBUG_ENABLED) {
+                        if(element.tags.image.contains("Stolperstein")) {
+                            String test = WikiUtils.buildWikiCommonsLink(element.tags.image, C.THUMBNAIL_SIZE);
+                            Log.d(TAG, "overpassSucess: " + test);
+                        }
+                    }
+
+                    element.tags.image = WikiUtils.buildWikiCommonsLink(element.tags.image, C.SCREEN_WIDTH);
+                    element.tags.thumbnail = WikiUtils.buildWikiCommonsLink(element.tags.image, C.THUMBNAIL_SIZE);
+                }
+            }
+
+            // Sort the elements by distance (closest first)
+            Collections.sort(result.elements, new OverpassQueryResult.Element.DistanceComparator());
+
+            // Different overlays for single tap and search functions
+            if (singleSearch) {
+                mMarkersOverlay.updateWithResults(result.elements, "");
+            } else {
+                if (result.elements.size() > 0) {
+                    mSearchOverlay.updateWithResults(result.elements, "");
+                    closeQuickSearch();
+                } else {
+                    showQuickSearch();
+                    view.showUserMsg(R.string.search_no_results_found);
+                }
+            }
+        }
+
+        view.onLoadFinish();
+    }
+
+/*
         OverpassApi service = OverpassServiceProvider.get();
         overpassCall = service.interpreter(query);
         overpassCall.enqueue(new Callback<OverpassQueryResult>() {
@@ -609,7 +709,7 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
             }
         });
     }
-
+*/
     @Override
     public void onShowWikiOnMap(BookmarkEntry entry) {
         WikiQueryPage page = new WikiQueryPage();

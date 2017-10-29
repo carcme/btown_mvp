@@ -16,7 +16,7 @@ import java.util.ArrayList;
 
 import me.carc.btown.R;
 import me.carc.btown.Utils.MapUtils;
-import me.carc.btown.data.model.OverpassQueryResult;
+import me.carc.btown.data.results.OverpassQueryResult;
 import me.carc.btown.data.wiki.WikiQueryPage;
 import me.carc.btown.common.interfaces.WikiBookmarkClickListener;
 

@@ -28,9 +28,9 @@ import me.carc.btown.common.C;
 import me.carc.btown.common.Commons;
 import me.carc.btown.data.autocomplete.AutoCompleteApi;
 import me.carc.btown.data.autocomplete.AutoCompleteServiceProvider;
-import me.carc.btown.data.model.AutoCompleteResult;
-import me.carc.btown.data.model.OverpassQueryResult;
-import me.carc.btown.data.model.PlaceToOverpass;
+import me.carc.btown.data.results.AutoCompleteResult;
+import me.carc.btown.data.results.OverpassQueryResult;
+import me.carc.btown.data.results.PlaceToOverpass;
 import me.carc.btown.db.AppDatabase;
 import me.carc.btown.db.bookmark.BookmarkEntry;
 import me.carc.btown.db.favorite.FavoriteEntry;
@@ -165,6 +165,8 @@ public class SearchDialogPresenter implements ISearch.Presenter {
         AutoCompleteApi service = AutoCompleteServiceProvider.get();
         Call<AutoCompleteResult> call = service.autoComplete(map);
         call.enqueue(new Callback<AutoCompleteResult>() {
+
+            @SuppressWarnings({"ConstantConditions"})
             @Override
             public void onResponse(@NonNull Call<AutoCompleteResult> call, @NonNull Response<AutoCompleteResult> response) {
 
@@ -402,7 +404,7 @@ public class SearchDialogPresenter implements ISearch.Presenter {
                 activity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        ArrayList<BookmarkEntry> arrayList = new ArrayList<BookmarkEntry>(list);
+                        ArrayList<BookmarkEntry> arrayList = new ArrayList<>(list);
 
                         WikiReadingListDialogFragment.showInstance(mContext.getApplicationContext(), myLocation, arrayList);
                         view.onShowProgressBar(false);

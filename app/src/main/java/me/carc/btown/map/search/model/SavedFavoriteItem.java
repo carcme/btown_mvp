@@ -1,6 +1,6 @@
 package me.carc.btown.map.search.model;
 
-import me.carc.btown.data.model.OverpassQueryResult;
+import me.carc.btown.data.results.OverpassQueryResult;
 
 /**
  * Created by Carc.me on 18.10.16.

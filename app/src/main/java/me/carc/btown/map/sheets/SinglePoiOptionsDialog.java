@@ -50,7 +50,7 @@ import me.carc.btown.Utils.OpeningHoursParser;
 import me.carc.btown.Utils.WikiUtils;
 import me.carc.btown.common.C;
 import me.carc.btown.common.Commons;
-import me.carc.btown.data.model.OverpassQueryResult;
+import me.carc.btown.data.results.OverpassQueryResult;
 import me.carc.btown.data.reverse.ReverseLookupLoader;
 import me.carc.btown.db.AppDatabase;
 import me.carc.btown.db.favorite.FavoriteEntry;
@@ -229,7 +229,7 @@ public class SinglePoiOptionsDialog extends BottomSheetDialogFragment {
             }
 
             Glide.with(getActivity())
-                    .load(node.tags.image)
+                    .load(node.tags.thumbnail)
                     .asBitmap()
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .placeholder(R.drawable.background_image_blank)

@@ -9,7 +9,7 @@ import java.lang.ref.WeakReference;
 
 import me.carc.btown.common.C;
 import me.carc.btown.common.Commons;
-import me.carc.btown.data.model.ReverseResult;
+import me.carc.btown.data.results.ReverseResult;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

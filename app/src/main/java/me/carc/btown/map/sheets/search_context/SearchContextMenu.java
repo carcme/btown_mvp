@@ -15,7 +15,7 @@ import java.util.concurrent.Executors;
 import me.carc.btown.App;
 import me.carc.btown.R;
 import me.carc.btown.common.interfaces.SimpleClickListener;
-import me.carc.btown.data.model.OverpassQueryResult;
+import me.carc.btown.data.results.OverpassQueryResult;
 import me.carc.btown.data.wiki.WikiQueryPage;
 import me.carc.btown.db.AppDatabase;
 import me.carc.btown.db.favorite.FavoriteEntry;

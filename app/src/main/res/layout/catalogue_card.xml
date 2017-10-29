@@ -33,6 +33,7 @@
                 android:id="@+id/catalogueTitle"
                 style="@style/Card_Title"
                 android:transitionName="@string/catalogue_title"
+                android:fontFamily="serif"
                 tools:ignore="UnusedAttribute"
                 tools:text="Heading here"/>
         </FrameLayout>

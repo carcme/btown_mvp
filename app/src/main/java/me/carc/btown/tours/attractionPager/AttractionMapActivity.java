@@ -104,7 +104,7 @@ public class AttractionMapActivity extends BaseActivity {
                 Marker poi = new Marker(mapView);
                 poi.setPosition(geoAttractionPoint);
                 poi.setTitle(data.getStopName());
-                poi.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_star_yellow, null));
+                poi.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_btown_map_marker, null));
                 mPoiMarkers.add(poi);
 
                 mapView.getController().animateTo(geoAttractionPoint);

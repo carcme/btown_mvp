@@ -1,4 +1,4 @@
-package me.carc.btown.data.model;
+package me.carc.btown.data.results;
 
 import java.util.HashMap;
 

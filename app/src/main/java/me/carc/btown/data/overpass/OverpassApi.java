@@ -1,6 +1,6 @@
 package me.carc.btown.data.overpass;
 
-import me.carc.btown.data.model.OverpassQueryResult;
+import me.carc.btown.data.results.OverpassQueryResult;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;

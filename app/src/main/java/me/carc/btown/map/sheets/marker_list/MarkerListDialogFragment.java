@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import org.osmdroid.util.GeoPoint;
 
@@ -35,7 +36,7 @@ import me.carc.btown.Utils.ViewUtils;
 import me.carc.btown.common.Commons;
 import me.carc.btown.common.interfaces.MarkerListListener;
 import me.carc.btown.common.interfaces.SimpleClickListener;
-import me.carc.btown.data.model.OverpassQueryResult;
+import me.carc.btown.data.results.OverpassQueryResult;
 import me.carc.btown.data.wiki.WikiQueryPage;
 import me.carc.btown.db.AppDatabase;
 import me.carc.btown.db.bookmark.BookmarkEntry;
@@ -114,7 +115,6 @@ public class MarkerListDialogFragment extends DialogFragment {
             return false;
         }
     }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -216,7 +216,6 @@ public class MarkerListDialogFragment extends DialogFragment {
         GeoPoint start = new GeoPoint(node.lat, node.lon);
         GeoPoint end = myLocation;
         String dist = node.distance;
-
         CompassDialog.showInstance(getActivity().getApplicationContext(), title, subTitle, start, end, dist);
     }
 
@@ -255,7 +254,6 @@ public class MarkerListDialogFragment extends DialogFragment {
                     }
                 });
             }
-
 
             @Override
             public void OnLongClick(int type) {
@@ -304,7 +302,7 @@ public class MarkerListDialogFragment extends DialogFragment {
                 item.lat = node.lat;
                 item.lon = node.lon;
                 item.distance = getdistance(node, location);
-                item.image = node.tags.image;
+                item.thumb = node.tags.thumbnail;
                 array.add(item);
 
                 if (!Commons.isEmpty(node.tags.image)) {
@@ -323,7 +321,7 @@ public class MarkerListDialogFragment extends DialogFragment {
                 item.lat = wiki.getLat();
                 item.lon = wiki.getLon();
                 item.distance = getdistance(wiki, location);
-                item.image = wiki.thumbUrl();
+                item.thumb = wiki.thumbUrl();
                 array.add(item);
 
                 if (!Commons.isEmpty(wiki.thumbUrl())) {
@@ -345,6 +343,8 @@ public class MarkerListDialogFragment extends DialogFragment {
             Glide.with(getActivity())
                     .load(randomImageUrl)
                     .placeholder(R.drawable.checkered_background)
+                    .error(R.drawable.no_image)
+                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .into(imageBackDrop);
             imageBackDrop.setVisibility(View.VISIBLE);
 /*
@@ -360,7 +360,6 @@ public class MarkerListDialogFragment extends DialogFragment {
             }
 */
         }
-
         return array;
     }
 
@@ -380,6 +379,4 @@ public class MarkerListDialogFragment extends DialogFragment {
                 adapter.rotationUpdate(myLocation, dir);
         }
     }
-
-
 }

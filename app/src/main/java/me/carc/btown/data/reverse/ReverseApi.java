@@ -1,6 +1,6 @@
 package me.carc.btown.data.reverse;
 
-import me.carc.btown.data.model.ReverseResult;
+import me.carc.btown.data.results.ReverseResult;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;

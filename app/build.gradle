@@ -32,30 +32,40 @@ android {
                 arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
             }
         }
+        resConfigs "en","de"
     }
     buildTypes {
         debug {
-            minifyEnabled false
-            shrinkResources false
-            zipAlignEnabled false
+            minifyEnabled true
+            shrinkResources true
+            zipAlignEnabled true
             useProguard true
+            buildConfigField "boolean", "USE_CRASHLYTICS", "false"
+            buildConfigField "String", "FABRIC_apiSecret", getPrivateKey("FABRIC_apiSecret")
+
             buildConfigField "String", "FIREBASE_ENDPOINT", getPrivateKey("FIREBASE_ENDPOINT")
             buildConfigField "String", "FIREBASE_ALT", getPrivateKey("FIREBASE_ALT")
             buildConfigField "String", "FIREBASE_TOKEN", getPrivateKey("FIREBASE_TOKEN")
+
             buildConfigField "String", "GOOGLE_SERVER_KEY", getPrivateKey("GOOGLE_SERVER_KEY")
             buildConfigField "String", "GRAPHHOPPER_API_KEY", getPrivateKey("GRAPHHOPPER_API_KEY")
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         release {
             minifyEnabled true
-            shrinkResources true
+            shrinkResources false
             zipAlignEnabled true
             useProguard true
+            buildConfigField "boolean", "USE_CRASHLYTICS", "true"
+            buildConfigField "String", "FABRIC_apiSecret", getPrivateKey("FABRIC_apiSecret")
+
             buildConfigField "String", "FIREBASE_ENDPOINT", getPrivateKey("FIREBASE_ENDPOINT")
             buildConfigField "String", "FIREBASE_ALT", getPrivateKey("FIREBASE_ALT")
             buildConfigField "String", "FIREBASE_TOKEN", getPrivateKey("FIREBASE_TOKEN")
+
             buildConfigField "String", "GOOGLE_SERVER_KEY", getPrivateKey("GOOGLE_SERVER_KEY")
             buildConfigField "String", "GRAPHHOPPER_API_KEY", getPrivateKey("GRAPHHOPPER_API_KEY")
+
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }

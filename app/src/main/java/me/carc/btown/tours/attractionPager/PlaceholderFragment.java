@@ -63,7 +63,6 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import me.carc.btown.BaseActivity;
 import me.carc.btown.R;
 import me.carc.btown.Utils.AndroidUtils;
 import me.carc.btown.Utils.ImageUtils;
@@ -284,7 +283,8 @@ public class PlaceholderFragment extends Fragment {
 
         ((TextView) rootView.findViewById(R.id.infoTitle)).setTextColor(text);
 
-        Typeface fontTitle = BaseActivity.getDefaultFont(getActivity());
+
+        Typeface fontTitle = Typeface.create("serif", Typeface.NORMAL);/*BaseActivity.getDefaultFont(getActivity());*/
         Typeface fontText = fontTitle; //Typeface.createFromAsset(getAssets(), "fonts/Roboto-Thin.ttf");
 
         LinearLayout ll = rootView.findViewById(R.id.attraction_layout);

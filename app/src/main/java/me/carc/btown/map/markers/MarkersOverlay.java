@@ -24,7 +24,7 @@ import me.carc.btown.R;
 import me.carc.btown.Utils.ImageUtils;
 import me.carc.btown.common.C;
 import me.carc.btown.common.Commons;
-import me.carc.btown.data.model.OverpassQueryResult;
+import me.carc.btown.data.results.OverpassQueryResult;
 import me.carc.btown.map.IconManager;
 import me.carc.btown.tours.model.POIs;
 

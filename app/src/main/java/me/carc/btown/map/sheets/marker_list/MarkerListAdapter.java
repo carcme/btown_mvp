@@ -22,7 +22,7 @@ import me.carc.btown.R;
 import me.carc.btown.Utils.MapUtils;
 import me.carc.btown.common.Commons;
 import me.carc.btown.common.interfaces.MarkerListListener;
-import me.carc.btown.data.model.OverpassQueryResult;
+import me.carc.btown.data.results.OverpassQueryResult;
 import me.carc.btown.data.wiki.WikiQueryPage;
 import me.carc.btown.ui.CompassView;
 
@@ -48,7 +48,7 @@ public class MarkerListAdapter extends RecyclerView.Adapter<MarkerListAdapter.Po
         double lon;
         String distance;
         Drawable icon;
-        String image;
+        String thumb;
     }
 
 
@@ -77,10 +77,11 @@ public class MarkerListAdapter extends RecyclerView.Adapter<MarkerListAdapter.Po
         holder.distance.setText(item.distance);
         distanceArray.put(pos, holder.distance);
 
-        if(Commons.isNotNull(item.image)) {
+        if(Commons.isNotNull(item.thumb)) {
             Glide.with(holder.mView.getContext())
-                    .load(item.image)
-                    .placeholder(R.drawable.checkered_background)
+                    .load(item.thumb)
+//                    .placeholder(R.drawable.checkered_background)
+                    .error(R.drawable.no_image)
                     .into(holder.icon);
         } else
             holder.icon.setImageDrawable(item.icon);

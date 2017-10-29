@@ -12,7 +12,6 @@ import android.content.IntentSender;
 import android.content.ServiceConnection;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -283,31 +282,35 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
-
+/*
     private static Typeface defaultFont;
     private static Typeface fancyFont;
     private static Typeface blockFont;
 
+
     public static Typeface getDefaultFont(Context appContext) {
         if (defaultFont == null)
-            defaultFont = Typeface.createFromAsset(appContext.getAssets(), "fonts/Roboto-Light.ttf");
+            defaultFont = Typeface.createFromAsset(appContext.getAssets(), "fonts/Roboto-Light.ttf"); // replace this with wikipedia font instead
         return defaultFont;
     }
+*/
 
 
+/*
     static Typeface getFancyFont(Context appContext) {
         if (fancyFont == null)
             fancyFont = Typeface.createFromAsset(appContext.getAssets(), "fonts/Satisfy-Regular.ttf");
         return fancyFont;
     }
-
-
-    public static Typeface getBlockFont(Context appContext) {
+*/
+/*    public static Typeface getBlockFont(Context appContext) {
         if (blockFont == null)
             blockFont = Typeface.createFromAsset(appContext.getAssets(), "fonts/diplomatasc-regular.ttf");
         return blockFont;
     }
+*/
 
+/*
     private void getFonts() {
 
         new AsyncTask<Void, Void, Boolean>() {
@@ -325,6 +328,7 @@ public class BaseActivity extends AppCompatActivity {
             }
         }.execute();
     }
+*/
 
 
     /**
