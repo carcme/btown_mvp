@@ -88,6 +88,8 @@
     <string name="shared_string_use_on_home_screen">Als Home Screen nutzen</string>
     <string name="shared_string_bookmark">Lesezeichen</string>
     <string name="shared_string_options">Optionen</string>
+    <string name="shared_string_about">Über</string>
+
 
     <!--DONATE-->
     <string name="text_donate_title">Spenden</string>
@@ -142,15 +144,47 @@
 
 
     <!--SETTINGS-->
+    <string name="pref_display">Anzeige</string>
+
     <string name="pref_theme_title">Thema</string>
     <string name="pref_theme_light">Hell</string>
     <string name="pref_theme_dark">Dunkel</string>
+
+    <string name="pref_show_tours_title">Show Tours</string>
+    <string name="pref_tours_summary_show">Show tours button on map</string>
+    <string name="pref_tours_summary_hide">Hide tours button on map</string>
+
 
     <string name="pref_language_title">Sprache</string>
     <string name="system_default">Systemstandard</string>
     <string name="english">Englisch</string>
     <string name="german">Deutsch</string>
 
+    <string name="tab_libraries">Bibliotheken</string>
+    <string name="tab_devs">Entwickler</string>
+
+    <string name="about_top">© 2017 Carc\nFreie Software Lizenz: GPLv3</string>
+
+    <string name="about"><![CDATA[
+<p>The idea of B-Town came while travelling and wanting something that would give insider tips for various cities. If you have any suggestions of what you\'d like to see, let me know via the feedback button</p>
+<p>Use the app to get details of your area, whether you\'re interested in local bars, restaurtants or sightseeing and included Wikipedia lookups to make it easy those to find extra places you may be interested in. I plan to include FourSquare support in the near future.</p>
+<p>OpenStreetMap is updated daily by contributors all over the world… although I can\'t guarantee the correctness of their data. </p>
+
+]]></string>
+
+    <string name="about_bottom">
+    <![CDATA[
+<p>If you find any issues with B-Town, please report them at <a href="%2$s">the issue tracker</a>.</p>
+<p><b>Donations</b> options are listed on <a href="%3$s">the Transportr website</a>.</p>
+]]>
+</string>
+
+
+    <string name="visit_website">Webseite</string>
+
+    <string name="maintainer">Koordinator</string>
+    <string name="contributors">Beitragende</string>
+    <string name="translators">Übersetzer</string>
 
 
     <string name="poi_res_smoking">Rauchen: </string>

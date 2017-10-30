@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <group
+        android:id="@+id/nav_menu_extras"
+        android:checkableBehavior="none">
+        <item
+            android:id="@+id/nav_transportr"
+            android:icon="@drawable/ic_transportr_app"
+            android:title="@string/menu_public_transport"
+            />
+    </group>
+
+    <group
+        android:id="@+id/nav_menu_settings"
+        android:checkableBehavior="none">
+        <item
+            android:id="@+id/nav_donate"
+            android:icon="@drawable/ic_donate"
+            android:title="@string/donate"/>
+    </group>
+
+    <group
+        android:id="@+id/nav_menu_communication"
+        android:checkableBehavior="none">
+
+        <item
+            android:id="@+id/nav_settings"
+            android:icon="@drawable/ic_settings_box"
+            android:title="@string/shared_string_settings"/>
+
+    </group>
+
+
+
+</menu>

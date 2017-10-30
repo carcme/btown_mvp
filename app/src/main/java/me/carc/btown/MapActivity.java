@@ -41,6 +41,7 @@ import me.carc.btown.map.search.model.Place;
 import me.carc.btown.map.sheets.WikiPoiSheetDialog;
 import me.carc.btown.map.sheets.share.ShareDialog;
 import me.carc.btown.map.sheets.wiki.WikiReadingListDialogFragment;
+import me.carc.btown.settings.Preferences;
 import me.carc.btown.tours.ToursLaunchActivity;
 
 public class MapActivity extends BaseActivity implements
@@ -56,6 +57,7 @@ public class MapActivity extends BaseActivity implements
     public static final String PREFKEY_NEVER_ASK_GPS = "PREFKEY_NEVER_ASK_GPS";
 
     public static final int RESULT_GPS_REQ = 4009;
+    public static final int RESULT_CAMERA  = 4010;
 
 
     private IMap.Presenter presenter;
@@ -191,6 +193,11 @@ public class MapActivity extends BaseActivity implements
         super.onResume();
         isActive = true;
         presenter.start();
+
+        if(Preferences.showTours(this))
+            fabTours.setVisibility(View.VISIBLE);
+        else
+            fabTours.setVisibility(View.GONE);
     }
 
     @Override
@@ -216,6 +223,9 @@ public class MapActivity extends BaseActivity implements
                 if (((LocationManager) getSystemService(Context.LOCATION_SERVICE)).isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                     presenter.onUpdateLocation();
                 }
+                break;
+
+            case RESULT_CAMERA:
                 break;
         }
     }
@@ -410,7 +420,7 @@ public class MapActivity extends BaseActivity implements
 
     @Override
     public void onCameraLaunch() {
-        startActivity(new Intent(MapActivity.this, CameraActivity.class));
+        startActivityForResult(new Intent(MapActivity.this, CameraActivity.class), RESULT_CAMERA);
     }
 
     public void showPoiDlg(Object obj) {

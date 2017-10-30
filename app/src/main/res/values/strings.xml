@@ -4,6 +4,9 @@
 
     <string name="app_name">B-Town</string>
     <string name="feedback_email" translatable="false">carcmedev@gmail.com</string>
+    <string name="website" translatable="false">https://carcmedev.github.io/btown/index.html</string>
+    <string name="bugtracker" translatable="false">https://github.com/carcme/btown_mvp/issues</string>
+
 
     <!-- Navigation drawer -->
     <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
@@ -86,6 +89,7 @@
     <string name="shared_string_column">Column</string>
     <string name="shared_string_grid">Grid</string>
     <string name="shared_string_shuffle">Shuffle</string>
+    <string name="shared_string_about">About</string>
 
 
     <!--DONATE-->
@@ -138,14 +142,46 @@
 
 
     <!--SETTINGS-->
+    <string name="pref_display">Display</string>
+
     <string name="pref_theme_title">Theme</string>
     <string name="pref_theme_light">Light</string>
     <string name="pref_theme_dark">Dark</string>
+
+    <string name="pref_show_tours_title">Show Tours</string>
+    <string name="pref_tours_summary_show">Show tours button on map</string>
+    <string name="pref_tours_summary_hide">Hide tours button on map</string>
+
 
     <string name="pref_language_title">Language</string>
     <string name="system_default">System Default</string>
     <string name="english">English</string>
     <string name="german">German</string>
+
+    <string name="tab_libraries">Libraries</string>
+    <string name="tab_devs">Developers</string>
+
+    <string name="about_top">© 2017 Marc Bampton\nFree Software License: GPLv3</string>
+
+    <string name="about"><![CDATA[
+<p>The idea of B-Town came while travelling and wanting something that would give insider tips for various cities. If you have any suggestions of what you\'d like to see, let me know via the feedback button</p>
+<p>Use the app to get details of your area, whether you\'re interested in local bars, restaurtants or sightseeing and included Wikipedia lookups to make it easy those to find extra places you may be interested in. I plan to include FourSquare support in the near future.</p>
+<p>OpenStreetMap is updated daily by contributors all over the world… although I can\'t guarantee the correctness of their data. </p>
+
+]]></string>
+
+    <string name="about_bottom">
+    <![CDATA[
+<p>If you find any issues with B-Town, please report them at <a href="%2$s">the issue tracker</a>.</p>
+<p><b>Donations</b> options are listed on <a href="%3$s">the Transportr website</a>.</p>
+]]>
+</string>
+
+    <string name="visit_website">Website</string>
+
+    <string name="maintainer">Maintainer</string>
+    <string name="contributors">Contributors</string>
+    <string name="translators">Translators</string>
 
 
 
@@ -162,6 +198,8 @@
     <!-- PUBLIC TRANSPORT ROUTE PLAN-->
     <string name="alert_title_pt_route_map">Route map download</string>
     <string name="alert_msg_pt_route_map">The public transport route map for Berlin is downloading. Please be patient.  Other city route map will follow. If there is one you would like to see, contact me using the feedback in the menu.</string>
+
+
 
 
 

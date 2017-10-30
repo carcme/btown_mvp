@@ -759,6 +759,8 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
                 try {
                     List<WikiQueryPage> pages = response.body().query().pages();
 
+                    clearLayers(true);
+
                     // Get the distances
                     for (WikiQueryPage page : pages) {
                         WikiQueryPage.Coordinates p = page.coordinates().get(0);

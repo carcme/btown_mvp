@@ -5,15 +5,18 @@
 -dontnote com.google.vending.licensing.**
 -dontnote com.android.vending.licensing.**
 
+#-keep class **.R$*
+#-keepclassmembers class **.R$* { public static <fields>; }
+
 -keep class .R
 -keep class **.R$* { <fields>; }
--keep class **.R$*
--keepclassmembers class **.R$* { public static <fields>; }
+-keepclasseswithmembers class **.R$* { public static final int define_*; }
 
 -dontwarn butterknife.internal.**
 -keep class **$$ViewInjector { *; }
 -keepnames class * { @butterknife.InjectView *;}
 
+-dontnote com.mikepenz.fastadapter.items.**
 
 
 -dontwarn okio.**
@@ -24,6 +27,10 @@
 
 -dontwarn com.squareup.okhttp.**
 -dontwarn javax.annotation.**
+
+
+-keepattributes Signature
+
 
 -dontwarn android.arch.util.paging.CountedDataSource
 -dontwarn android.arch.persistence.room.paging.LimitOffsetDataSource

@@ -1,7 +1,7 @@
 package me.carc.btown.settings;
 
+import android.app.Activity;
 import android.os.Bundle;
-import android.preference.PreferenceActivity;
 import android.view.MenuItem;
 
 import me.carc.btown.R;
@@ -12,7 +12,7 @@ import me.carc.btown.R;
  * Created by bamptonm on 24/10/17.
  */
 
-public class SettingsActivity extends PreferenceActivity {
+public class SettingsActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,7 +23,7 @@ public class SettingsActivity extends PreferenceActivity {
             getActionBar().setTitle(getString(R.string.shared_string_settings));
         }
 
-        getFragmentManager().beginTransaction().replace(android.R.id.content, new SettingsFragment()).commit();
+        getFragmentManager().beginTransaction().replace(android.R.id.content, new SettingsPagerFragment()).commit();
     }
 
     @Override

@@ -19,11 +19,9 @@ public class CommentMessage implements Parcelable, Serializable {
     private long date;
     private String photoUrl;
 
-
-    // EMPTY CONSTRUCTOR REQUIRED TO UPLOAD TO FIREBASE
+    // EMPTY CONSTRUCTOR REQUIRED BY FIREBASE
     public CommentMessage() {
     }
-
 
     public CommentMessage(String text, String name, String photoUrl) {
         this.text = text;

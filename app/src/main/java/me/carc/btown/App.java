@@ -46,7 +46,7 @@ public class App extends Application {
      */
     public void onCreate() {
         super.onCreate();
-        if (BuildConfig.USE_CRASHLYTICS)
+//        if (BuildConfig.USE_CRASHLYTICS)
             Fabric.with(this, new Crashlytics());
 
         try {

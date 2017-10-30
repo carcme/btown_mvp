@@ -11,11 +11,34 @@
         <item name="android:itemTextAppearance">@style/OverflowMenu.MenuTextStyle</item>
 
         <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
+
+        <item name="android:dialogTheme">@style/DialogTheme</item>
+        <item name="android:alertDialogTheme">@style/DialogTheme</item>
+
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
     <style name="ActionBarPopupThemeOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+
+
+    <style name="PreferencesTheme" parent="SettingsTheme">
+        <item name="android:textColorPrimary">@color/colorPrimary</item>
+        <item name="android:textColorSecondary">@color/colorPrimaryDark</item>
+        <item name="android:textColorTertiary">@color/colorAccent</item>
+    </style>
+
+    <style name="DialogTheme" parent="Theme.AppCompat.Dialog">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowAnimationStyle">@style/DialogAnimation</item>
+    </style>
+
+    <style name="DialogAnimation" parent="@android:style/Animation.Dialog">
+        <item name="android:windowEnterAnimation">@anim/scale_up</item>
+        <item name="android:windowExitAnimation">@anim/scale_down</item>
+    </style>
 
 
     <style name="OverflowMenu.MenuTextStyle" parent="style/Base.Widget.AppCompat.ActionButton.Overflow">

@@ -3,7 +3,6 @@ package me.carc.btown;
 import android.annotation.TargetApi;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
-import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -44,31 +43,24 @@ import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.vending.billing.IInAppBillingService;
 import com.bumptech.glide.Glide;
-import com.crashlytics.android.answers.Answers;
-import com.crashlytics.android.answers.RatingEvent;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookSdk;
 import com.facebook.Profile;
 import com.facebook.appevents.AppEventsLogger;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.ref.WeakReference;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -83,9 +75,8 @@ import me.carc.btown.extras.BackgroundImageDialog;
 import me.carc.btown.extras.PublicTransportPlan;
 import me.carc.btown.login.LoginActivity;
 import me.carc.btown.settings.Preferences;
+import me.carc.btown.settings.SendFeedback;
 import me.carc.btown.settings.SettingsActivity;
-import me.carc.btown.ui.FeedbackDialog;
-import me.carc.btown.ui.RatingDialog;
 
 public class BaseActivity extends AppCompatActivity {
 
@@ -192,7 +183,6 @@ public class BaseActivity extends AppCompatActivity {
 
         finish();
         startActivity(new Intent(BaseActivity.this, SplashActivity.class));
-//        super.recreate();
     }
 
     @Override
@@ -251,8 +241,6 @@ public class BaseActivity extends AppCompatActivity {
             cacheDir = new CacheDir(this);
 
         calculateImageHeight();
-
-//      if (defaultFont == null) getFonts();
     }
 
     protected static boolean isGermanLanguage() {
@@ -281,55 +269,6 @@ public class BaseActivity extends AppCompatActivity {
             C.USER_LANGUAGE = Resources.getSystem().getConfiguration().locale.getLanguage();
         }
     }
-
-/*
-    private static Typeface defaultFont;
-    private static Typeface fancyFont;
-    private static Typeface blockFont;
-
-
-    public static Typeface getDefaultFont(Context appContext) {
-        if (defaultFont == null)
-            defaultFont = Typeface.createFromAsset(appContext.getAssets(), "fonts/Roboto-Light.ttf"); // replace this with wikipedia font instead
-        return defaultFont;
-    }
-*/
-
-
-/*
-    static Typeface getFancyFont(Context appContext) {
-        if (fancyFont == null)
-            fancyFont = Typeface.createFromAsset(appContext.getAssets(), "fonts/Satisfy-Regular.ttf");
-        return fancyFont;
-    }
-*/
-/*    public static Typeface getBlockFont(Context appContext) {
-        if (blockFont == null)
-            blockFont = Typeface.createFromAsset(appContext.getAssets(), "fonts/diplomatasc-regular.ttf");
-        return blockFont;
-    }
-*/
-
-/*
-    private void getFonts() {
-
-        new AsyncTask<Void, Void, Boolean>() {
-
-            @Override
-            protected Boolean doInBackground(Void... params) {
-                defaultFont = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/Roboto-Light.ttf");
-                fancyFont = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/Satisfy-Regular.ttf");
-                blockFont = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/diplomatasc-regular.ttf");
-                return true;
-            }
-
-            @Override
-            protected void onPostExecute(Boolean res) {
-            }
-        }.execute();
-    }
-*/
-
 
     /**
      * Display image on 2/3 of screen
@@ -402,8 +341,8 @@ public class BaseActivity extends AppCompatActivity {
     /**
      * Prompt to install from Playstore
      *
-     * @param title   The dialog title
-     * @param content The dialog text
+     * @param title            The dialog title
+     * @param content          The dialog text
      * @param packageToInstall The id of app on Playstore
      */
     public void installExtApp(final String title, final String content, final String packageToInstall) {
@@ -507,9 +446,8 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     public void showProgressDialog(CharSequence title, CharSequence message) {
-        if (isFinishing()) {
+        if (isFinishing())
             return;
-        }
         hideProgressDialog();
 
         mProgressDialog = new ProgressDialog(this);
@@ -525,23 +463,17 @@ public class BaseActivity extends AppCompatActivity {
     public
     @DrawableRes
     int getBackground() {
-        int bg = R.drawable.background_jewish_memorial;
-        try {
-            bg = TinyDB.getTinyDB().getInt(SAVED_HEADER_BACKGROUND, bg);
-        } catch (NullPointerException e) {
-            Log.d(TAG, "getBackground: " + e.getLocalizedMessage());
-        }
-        return bg;
+        return TinyDB.getTinyDB().getInt(SAVED_HEADER_BACKGROUND, R.drawable.background_blue);
     }
 
     public void setBackgroundImage(@DrawableRes int imageRes) {
-        ImageView header = (ImageView) findViewById(R.id.nav_header_background_image);
+        ImageView header = findViewById(R.id.nav_header_background_image);
         header.setImageResource(imageRes);
         db.putInt(SAVED_HEADER_BACKGROUND, imageRes);
     }
 
     private void setupNavDrawer() {
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerLayout = findViewById(R.id.drawer_layout);
 
         if (mDrawerLayout == null) {
             return;
@@ -558,8 +490,13 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     private void configureNavView() {
-        NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
+        NavigationView navigationView = findViewById(R.id.navigation_view);
         navigationView.setNavigationItemSelectedListener(navigationViewListener);
+
+        if (!Preferences.showTours(this)) {
+            navigationView.getMenu().clear();
+            navigationView.inflateMenu(R.menu.menu_drawer_no_tours);
+        }
 
         View headerLayout = navigationView.getHeaderView(0);
 
@@ -611,27 +548,11 @@ public class BaseActivity extends AppCompatActivity {
                 case R.id.nav_settings:
                     settings();
                     break;
+
                 case R.id.nav_donate:
                     showDonateDialog();
                     break;
 
-                case R.id.nav_feedback:
-                    feedback();
-                    break;
-
-                case R.id.nav_rate:
-                    rate();
-                    break;
-
-                case R.id.nav_share:
-                    shareApp();
-                    break;
-/*
-                case R.id.nav_debug_clear_json:
-                    db.remove(CatalogueActivity.JSON_VERSION);
-                    db.remove(CatalogueActivity.SERVER_FILE);
-                    break;
-*/
             }
 
             mDrawerLayout.closeDrawer(GravityCompat.START);
@@ -658,97 +579,6 @@ public class BaseActivity extends AppCompatActivity {
 
     public void settings() {
         startActivityForResult(new Intent(BaseActivity.this, SettingsActivity.class), RESULT_SETTINGS);
-    }
-
-    private void feedback() {
-
-        FeedbackDialog.Builder builder = new FeedbackDialog.Builder(this);
-        builder.titleTextColor(R.color.black);
-
-        builder.formTitle(getString(R.string.shared_string_feedback));
-        builder.formHint(getString(R.string.add_your_comment));
-        // Allow empty comments
-        builder.allowEmpty(true);
-
-        // Positive button
-        builder.submitBtnText(getString(R.string.shared_string_send));
-        builder.positiveBtnTextColor(R.color.positiveBtnTextColor);
-        builder.positiveBtnBgColor(R.drawable.button_selector_positive);
-        builder.onSumbitClick(
-                new FeedbackDialog.Builder.FeedbackDialogFormListener() {
-                    @Override
-                    public void onFormSubmitted(String feedback) {
-
-                        String subject = getString(R.string.shared_string_feedback) + " - " + getString(R.string.app_name);
-                        Intent sendMessage = IntentUtils.sendEmail(getString(R.string.feedback_email), subject, feedback);
-                        try {
-                            startActivity(Intent.createChooser(sendMessage, "Send feedback"));
-                        } catch (android.content.ActivityNotFoundException e) {
-                            Toast.makeText(BaseActivity.this, "Email app not found", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-
-                    @Override
-                    public void onFormCancel() {
-                    }
-                });
-        builder.build().show();
-    }
-
-    private void rate() {
-        final RatingDialog ratingDialog = new RatingDialog.Builder(this)
-                .icon(ContextCompat.getDrawable(this, R.mipmap.ic_launcher_rnd))
-                .threshold(3)
-                .title(getString(R.string.ratings_request_title))
-                .titleTextColor(R.color.black)
-                .formTitle(getString(R.string.feedback_request_title))
-                .formHint(getString(R.string.feedback_request_hint))
-                .formSubmitText(getString(R.string.rating_dialog_submit))
-                .formCancelText(getString(R.string.rating_dialog_cancel))
-                .ratingBarColor(R.color.colorAccent)
-
-                .positiveButtonTextColor(R.color.colorAccent)
-                .positiveButtonBackgroundColor(R.drawable.button_selector_positive)
-
-                .negativeButtonTextColor(R.color.colorPrimaryDark)
-                .negativeButtonBackgroundColor(R.drawable.button_selector_negative)
-                .onThresholdCleared(new RatingDialog.Builder.RatingThresholdClearedListener() {
-                    @Override
-                    public void onThresholdCleared(RatingDialog dlg, float rating, boolean thresholdCleared) {
-
-                        try {
-                            startActivity(IntentUtils.openPlayStore(BaseActivity.this));
-                        } catch (ActivityNotFoundException ex) {
-                            showAlertDialog(R.string.shared_string_error, R.string.error_playstore_not_found, -1);
-                        }
-                        dlg.dismiss();
-                    }
-                })
-
-                .onRatingBarFormSumbit(new RatingDialog.Builder.RatingDialogFormListener() {
-                    @Override
-                    public void onFormSubmitted(String feedback) {
-                        sendFeedBack(feedback);
-                    }
-                }).build();
-
-        ratingDialog.show();
-    }
-
-    public static void sendFeedBack(String text) {
-        String date = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.ENGLISH).format(new Date());
-        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference(FIREBASE_MSG_BOARD_FEEDBACK);
-        mDatabase.child(date).setValue(text);
-        Answers.getInstance().logRating(new RatingEvent().putCustomAttribute(FIREBASE_MSG_BOARD_FEEDBACK, text));
-    }
-
-    public void shareApp() {
-        Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setAction(Intent.ACTION_SEND);
-        intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name));
-        intent.putExtra(Intent.EXTRA_TEXT, "https://play.google.com/store/apps/details?id=" + getPackageName());
-        intent.setType("text/plain");
-        startActivity(Intent.createChooser(intent, getString(R.string.shared_string_share)));
     }
 
     @Override
@@ -919,7 +749,7 @@ public class BaseActivity extends AppCompatActivity {
                                 .setPositiveButton(R.string.shared_string_rate, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        rate();
+                                        new SendFeedback(BaseActivity.this, SendFeedback.TYPE_RATE);
                                     }
                                 })
                                 .setNegativeButton(R.string.text_close, null)

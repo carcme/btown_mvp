@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "945031657116-ivecr58dmoa75m29o2mfcdp16ve4g27b.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "me.carc.btown",
+            "certificate_hash": "f24799dec44c4c12d09ceb2a519a07e93da41e3a"
+          }
+        },
+        {
           "client_id": "945031657116-0dtfa78friabae8cetnnbkdmkjbdqcl7.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -127,10 +135,62 @@
       },
       "oauth_client": [
         {
+          "client_id": "945031657116-2v31n049nt2a7e4uun4lltacdfhmek3c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "me.carc.btown_map",
+            "certificate_hash": "e90a3c25146497d2b68e12d5f426537209122a9b"
+          }
+        },
+        {
           "client_id": "945031657116-bth1enr1s39tqtvk2fvubnu930466rdl.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "me.carc.btown_map",
+            "certificate_hash": "f24799dec44c4c12d09ceb2a519a07e93da41e3a"
+          }
+        },
+        {
+          "client_id": "945031657116-kegskucia3s17p7p6lg5fdsnbeuslbe7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC9RuX6Ix5CxhIv2vyvUmIDYGsnuGCbKBk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "945031657116-kegskucia3s17p7p6lg5fdsnbeuslbe7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:945031657116:android:bc3794ecd13dca7e",
+        "android_client_info": {
+          "package_name": "me.carc.btown.map"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "945031657116-9ksq2qv0pd5dum4qltffg69u1anmguub.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "me.carc.btown.map",
             "certificate_hash": "f24799dec44c4c12d09ceb2a519a07e93da41e3a"
           }
         },

@@ -87,6 +87,7 @@
             android:theme="@style/SettingsTheme"/>
 
 
+
         <activity
             android:name="me.carc.btown.extras.messaging.CommentsActivity"
             android:label="@string/app_name"

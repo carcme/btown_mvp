@@ -1,5 +1,6 @@
 package me.carc.btown.extras.messaging;
 
+import android.support.annotation.Keep;
 import android.util.Log;
 
 import com.bumptech.glide.Priority;
@@ -29,6 +30,7 @@ import me.carc.btown.common.Commons;
  *         .into(iv);
  * </pre>
  */
+@Keep
 public class FirebaseImageLoader implements StreamModelLoader<StorageReference> {
 
     private static final String TAG = C.DEBUG + Commons.getTag();

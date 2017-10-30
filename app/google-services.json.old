@@ -1,0 +1,167 @@
+{
+  "project_info": {
+    "project_number": "945031657116",
+    "firebase_url": "https://btown-901e0.firebaseio.com",
+    "project_id": "btown-901e0",
+    "storage_bucket": "btown-901e0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:945031657116:android:9c5fd8a48aae2aea",
+        "android_client_info": {
+          "package_name": "me.carc.btown"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "945031657116-0dtfa78friabae8cetnnbkdmkjbdqcl7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "me.carc.btown",
+            "certificate_hash": "f233370440216f6e4d521b8c30fece0e25a58e93"
+          }
+        },
+        {
+          "client_id": "945031657116-fm167prg3cp2vsvfl8kf1s4ahho7ko2a.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "me.carc.btown",
+            "certificate_hash": "41e7137de19464ac21088629c56df8ae281dafe6"
+          }
+        },
+        {
+          "client_id": "945031657116-aku9eunldfkf8qp0jq7dbmc4528g4qhs.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "me.carc.btown",
+            "certificate_hash": "e90a3c25146497d2b68e12d5f426537209122a9b"
+          }
+        },
+        {
+          "client_id": "945031657116-9n97fbg2q3j85ak3o1mbocog3k0fr85i.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "me.carc.btown",
+            "certificate_hash": "2bc35f3bf693f6db22ee69380c508a23a44d9b59"
+          }
+        },
+        {
+          "client_id": "945031657116-kegskucia3s17p7p6lg5fdsnbeuslbe7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC9RuX6Ix5CxhIv2vyvUmIDYGsnuGCbKBk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "945031657116-kegskucia3s17p7p6lg5fdsnbeuslbe7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:945031657116:android:0fa493cc3104e0ce",
+        "android_client_info": {
+          "package_name": "me.carc.btowntoursmvp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "945031657116-shlcf85g1qdq4568vukvo5ls01899ohl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "me.carc.btowntoursmvp",
+            "certificate_hash": "f24799dec44c4c12d09ceb2a519a07e93da41e3a"
+          }
+        },
+        {
+          "client_id": "945031657116-kegskucia3s17p7p6lg5fdsnbeuslbe7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC9RuX6Ix5CxhIv2vyvUmIDYGsnuGCbKBk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "945031657116-kegskucia3s17p7p6lg5fdsnbeuslbe7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:945031657116:android:6c646a0d6eb62822",
+        "android_client_info": {
+          "package_name": "me.carc.btown_map"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "945031657116-bth1enr1s39tqtvk2fvubnu930466rdl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "me.carc.btown_map",
+            "certificate_hash": "f24799dec44c4c12d09ceb2a519a07e93da41e3a"
+          }
+        },
+        {
+          "client_id": "945031657116-kegskucia3s17p7p6lg5fdsnbeuslbe7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC9RuX6Ix5CxhIv2vyvUmIDYGsnuGCbKBk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "945031657116-kegskucia3s17p7p6lg5fdsnbeuslbe7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

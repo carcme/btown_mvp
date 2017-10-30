@@ -334,12 +334,8 @@ public class MarkerListDialogFragment extends DialogFragment {
             }
         }
 
-        if (imageList.size() == 0) {
-            imageBackDrop.setImageResource(R.drawable.checkered_background);
-            imageBackDrop.setScaleType(ImageView.ScaleType.FIT_XY);
-        } else {
+        if (imageList.size() > 0) {
             String randomImageUrl = imageList.get(new Random().nextInt(imageList.size()));
-
             Glide.with(getActivity())
                     .load(randomImageUrl)
                     .placeholder(R.drawable.checkered_background)
@@ -348,7 +344,6 @@ public class MarkerListDialogFragment extends DialogFragment {
                     .into(imageBackDrop);
             imageBackDrop.setVisibility(View.VISIBLE);
 /*
-        } else {
             readingListHeaderImageContainer.setVisibility(View.VISIBLE);
 
             for (int i = 0; i < imageList.size() && i < imageViews.size(); ++i) {

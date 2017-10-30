@@ -18,13 +18,12 @@ repositories {
 android {
     compileSdkVersion 26
     buildToolsVersion "26.0.2"
-
     defaultConfig {
         applicationId 'me.carc.btown'
         minSdkVersion 21
         targetSdkVersion 26
-        versionCode 31
-        versionName "2.0.1"
+        versionCode 33
+        versionName "2.0.3"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         android.defaultConfig.vectorDrawables.useSupportLibrary = true
         javaCompileOptions {
@@ -32,7 +31,7 @@ android {
                 arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
             }
         }
-        resConfigs "en","de"
+        resConfigs "en", "de"
     }
     buildTypes {
         debug {
@@ -72,6 +71,15 @@ android {
     dexOptions {
         jumboMode true
     }
+    productFlavors {
+        map {
+            minSdkVersion 21
+            applicationId 'me.carc.btown.map'
+            targetSdkVersion 26
+            versionCode 1
+            versionName '0.0.1'
+        }
+    }
 }
 
 // Get your own key at https://graphhopper.com/#directions-api and copy it to 'local.properties'
@@ -101,28 +109,24 @@ ext {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-
     compile "com.android.support:appcompat-v7:${supportLibVersion}"
     compile "com.android.support:design:${supportLibVersion}"
     compile "com.android.support:support-v4:${supportLibVersion}"
+    compile "com.android.support:support-v13:${supportLibVersion}"
     compile "com.android.support:customtabs:${supportLibVersion}"
     compile "com.android.support:recyclerview-v7:${supportLibVersion}"
     compile "com.android.support:cardview-v7:${supportLibVersion}"
     compile "com.android.support:palette-v7:${supportLibVersion}"
     compile "com.android.support:preference-v14:${supportLibVersion}"
     compile "com.android.support.constraint:constraint-layout:${constraintLayoutVersion}"
-
     compile "com.google.android.gms:play-services-auth:${googlePlayServices}"
     compile "com.google.android.gms:play-services-location:${googlePlayServices}"
-
     compile "com.jakewharton:butterknife:$butterknife"
     annotationProcessor "com.jakewharton:butterknife-compiler:$butterknife"
-
     compile "com.google.firebase:firebase-core:$firebase"
     compile "com.google.firebase:firebase-auth:$firebase"
     compile "com.google.firebase:firebase-database:$firebase"
@@ -130,42 +134,37 @@ dependencies {
     compile "com.google.firebase:firebase-storage:$firebase"
     compile "com.firebaseui:firebase-ui-storage:$firebaseUI"
     compile "com.facebook.android:facebook-android-sdk:$facebook"
-
     compile "org.osmdroid:osmdroid-android:$osmdroid"
-
     compile "com.github.bumptech.glide:glide:$glide"
-
     compile "com.squareup.retrofit2:retrofit:$retrofit"
     compile "com.squareup.retrofit2:converter-gson:$retrofit"
     compile "com.squareup.okhttp3:logging-interceptor:$okhttp"
     compile "com.google.code.gson:gson:$gsonVersion"
-
     compile "android.arch.persistence.room:runtime:$roomVersion"
     annotationProcessor "android.arch.persistence.room:compiler:$roomVersion"
-//    androidTestImplementation "android.arch.persistence.room:testing:$roomVersion"
+    //    androidTestImplementation "android.arch.persistence.room:testing:$roomVersion"
 
-//    compile "com.evernote:android-job:$evernotejob"
+    //    compile "com.evernote:android-job:$evernotejob"
 
-//    compile 'com.mikepenz:fontawesome-typeface:4.7.0.1@aar'
-//    compile 'com.mikepenz:materialdrawer:5.8.1'
+    //    compile 'com.mikepenz:fontawesome-typeface:4.7.0.1@aar'
+
+    //    compile 'com.mikepenz:materialdrawer:5.8.1'
     compile 'com.mikepenz:iconics-core:2.9.3@aar'
     compile 'com.mikepenz:iconics-views:2.9.3@aar'
     compile 'com.mikepenz:fontawesome-typeface:4.4.0.1@aar'
     compile 'com.mikepenz:community-material-typeface:1.9.32.2@aar'
-
+    compile('com.mikepenz:aboutlibraries:5.9.8@aar') {
+        transitive = true
+    }
+    compile 'com.mikepenz:fastadapter:2.6.3@aar'
     compile 'carcme:login-buttons:0.3.0'
     compile 'com.github.lzyzsd:circleprogress:1.2.1'
     compile 'com.flaviofaria:kenburnsview:1.0.7'
     compile 'com.davemorrissey.labs:subsampling-scale-image-view:3.7.0'
     compile 'de.hdodenhof:circleimageview:2.2.0'
-
-
-
     debugCompile "com.squareup.leakcanary:leakcanary-android:$leakcanary"
     releaseCompile "com.squareup.leakcanary:leakcanary-android-no-op:$leakcanary"
-
     compile 'pub.devrel:easypermissions:1.0.0'
-
     testCompile 'junit:junit:4.12'
     compile('com.crashlytics.sdk.android:crashlytics:2.7.0@aar') {
         transitive = true;

@@ -1,6 +1,7 @@
 package me.carc.btown.map.sheets.search_context;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
@@ -14,6 +15,7 @@ import java.util.concurrent.Executors;
 
 import me.carc.btown.App;
 import me.carc.btown.R;
+import me.carc.btown.Utils.WikiUtils;
 import me.carc.btown.common.interfaces.SimpleClickListener;
 import me.carc.btown.data.results.OverpassQueryResult;
 import me.carc.btown.data.wiki.WikiQueryPage;
@@ -23,6 +25,7 @@ import me.carc.btown.db.history.HistoryEntry;
 import me.carc.btown.map.search.SearchDialogFragment;
 import me.carc.btown.map.search.model.Place;
 import me.carc.btown.map.sheets.share.ShareMenu;
+import me.carc.btown.map.sheets.wiki.WikiWebViewActivity;
 
 /**
  * Display search list options in bottomsheet
@@ -47,6 +50,7 @@ public class SearchContextMenu {
         DELETE_ITEM(CommunityMaterial.Icon.cmd_delete, R.string.shared_string_delete),
         DELETE_All(CommunityMaterial.Icon.cmd_delete_sweep, R.string.shared_string_delete_all),
         ADD_FAVORITE(CommunityMaterial.Icon.cmd_content_save, R.string.favorite_save),
+        VIEW_WIKI_ENTRY(CommunityMaterial.Icon.cmd_wikipedia, R.string.wikipedia),
         ADD_BOOKMARK(CommunityMaterial.Icon.cmd_content_save, R.string.bookmark_add),
         SHARE(CommunityMaterial.Icon.cmd_share_variant, R.string.shared_string_share);
 
@@ -117,10 +121,10 @@ public class SearchContextMenu {
         if (category == POI)
             list.add(SearchContextMenu.ContextItem.ADD_FAVORITE);
 
-        else if (category == WIKI)
+        else if (category == WIKI) {
+            list.add(SearchContextMenu.ContextItem.VIEW_WIKI_ENTRY);
             list.add(SearchContextMenu.ContextItem.ADD_BOOKMARK);
-
-        else if(category == SearchDialogFragment.SEARCH_ITEM_HISTORY || category == SearchDialogFragment.SEARCH_ITEM_FAVORITE) {
+        } else if(category == SearchDialogFragment.SEARCH_ITEM_HISTORY || category == SearchDialogFragment.SEARCH_ITEM_FAVORITE) {
             list.add(ContextItem.DELETE_ITEM);
             list.add(ContextItem.DELETE_All);
         }
@@ -150,6 +154,13 @@ public class SearchContextMenu {
             case ADD_BOOKMARK:
                 addToDatabase();
                 //addItem();
+                break;
+
+            case VIEW_WIKI_ENTRY:
+                Intent intent = new Intent(getCurrentActivity(), WikiWebViewActivity.class);
+                intent.putExtra(WikiWebViewActivity.WIKI_EXTRA_PAGE_TITLE, getCurrentActivity().getString(R.string.wikipedia));
+                intent.putExtra(WikiWebViewActivity.WIKI_EXTRA_PAGE_URL, WikiUtils.createWikiLink(address));
+                getCurrentActivity().startActivity(intent);
                 break;
 
             case SHARE:

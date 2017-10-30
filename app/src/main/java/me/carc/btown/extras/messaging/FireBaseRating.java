@@ -2,6 +2,7 @@ package me.carc.btown.extras.messaging;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.Keep;
 
 import java.io.Serializable;
 
@@ -10,6 +11,7 @@ import java.io.Serializable;
  * <p/>
  * Firebase rating values holder
  */
+@Keep
 public class FireBaseRating implements Parcelable, Serializable {
 
     private int cummalative;
