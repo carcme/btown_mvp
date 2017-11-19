@@ -187,7 +187,7 @@ public class SearchDialogPresenter implements ISearch.Presenter {
                         element.extent = feature.properties.extent;
                         element.distance = MapUtils.getDistance(mapCenter, element.lat, element.lon);
 
-                        if (element.distance < SEARCH_RADIUS) {
+//                        if (element.distance < SEARCH_RADIUS) {
                             element.tags.name = feature.properties.name;
                             element.id = feature.properties.osm_id;
 
@@ -227,7 +227,9 @@ public class SearchDialogPresenter implements ISearch.Presenter {
 
                             places.add(place);
                         }
-                    }
+
+                    Collections.sort(places, new MapUtils.DistanceComparator(true));
+//                    }
                 } catch (NullPointerException e) {
                     return;
                 }

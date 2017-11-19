@@ -143,7 +143,8 @@ public abstract class QuickSearchListFragment extends BaseListFragment {
 
     public void updateListAdapter(List<Place> listItems) {
         if (mylistAdapter != null) {
-            mylistAdapter.addItems(listItems);
+            mylistAdapter.setListItems
+                    (listItems);
         }
         bugFixShowHide();
     }

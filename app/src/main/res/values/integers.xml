@@ -5,4 +5,7 @@
     <integer name="gallery_alpha_duration">200</integer>
     <integer name="anim_alpha_duration_millis">300</integer>
 
+    <integer name="venue_photo_grid_columns">3</integer>
+
+
 </resources>

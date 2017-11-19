@@ -14,9 +14,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
-
-import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
@@ -28,7 +25,6 @@ import me.carc.btown.R;
 import me.carc.btown.Utils.Holder;
 import me.carc.btown.common.C;
 import me.carc.btown.common.Commons;
-import me.carc.btown.common.TinyDB;
 import me.carc.btown.common.interfaces.DrawableClickListener;
 import me.carc.btown.tours.adapters.ToursAdapter;
 import me.carc.btown.tours.data.FirebaseService;
@@ -49,8 +45,6 @@ public class CatalogueActivity extends BaseActivity {
     public static final String SERVER_FILE = "SERVER_FILE";
     public static final String JSON_VERSION= "JSON_VERSION";
 
-
-
     private ToursAdapter mAdapter;
 
     @BindView(R.id.catalogue_recycler)
@@ -60,8 +54,8 @@ public class CatalogueActivity extends BaseActivity {
     @BindView(R.id.toursToolbar)
     Toolbar toolbar;
 
-    @BindView(R.id.inventoryProgressLayout)
-    RelativeLayout progressLayout;
+    @BindView(R.id.inventoryProgressBar)
+    ProgressBar progressLayout;
 
     @BindView(R.id.appBarProgressBar)
     ProgressBar appBarProgressBar;
@@ -72,11 +66,14 @@ public class CatalogueActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        supportPostponeEnterTransition();
         setContentView(R.layout.tours_catalogue_activity);
         ButterKnife.bind(this);
 
         // set up UI and collections
         setupUI(savedInstanceState);
+
+        supportStartPostponedEnterTransition();
 
         // Display the collections
         getJsonCollections();
@@ -104,9 +101,9 @@ public class CatalogueActivity extends BaseActivity {
 
         setProgressItems(View.VISIBLE);
 
-        final Gson gson = new Gson();
-        String json = TinyDB.getTinyDB().getString(SERVER_FILE);
-        TourHolderResult serverFile = gson.fromJson(json, TourHolderResult.class);
+//        String json = TinyDB.getTinyDB().getString(SERVER_FILE);
+
+        TourHolderResult serverFile = ToursLaunchActivity.jsonPreLoad;
 
         if(Commons.isNotNull(serverFile)){
             ArrayList<TourCatalogue> tours = serverFile.tours;

@@ -5,7 +5,7 @@
     android:id="@+id/main_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/gallery_overlay"
+    android:background="@color/tintStandard"
     android:fitsSystemWindows="true"
     tools:context=".tours.attractionPager.AttractionPagerActivity">
 
@@ -13,7 +13,7 @@
         android:id="@+id/appbar"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="@color/gallery_overlay"
+        android:background="@color/tintStandard"
         android:fitsSystemWindows="true"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         tools:background="@color/attractionBackgroundColor"
@@ -26,7 +26,7 @@
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
             android:fontFamily="serif"
-            app:contentScrim="@color/gallery_overlay"
+            app:contentScrim="@color/tintStandard"
             app:expandedTitleMarginEnd="64dp"
             app:expandedTitleMarginStart="16dp"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"

@@ -72,6 +72,77 @@
             android:textSize="16sp" />
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/itemFsqSearch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/margin_standard"
+            android:layout_marginRight="@dimen/margin_standard"
+            android:contentDescription="@null"
+            android:tint="@color/sheet_icon_color"
+            app:srcCompat="@drawable/ic_foursquare" />
+
+        <TextView
+            style="@style/RtlAwareTextView"
+            android:layout_width="0dp"
+            android:layout_height="54dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/margin_standard"
+            android:paddingRight="@dimen/margin_standard"
+            android:text="FourSquare Search"
+            android:textColor="@color/primary_text_color"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/itemFsqExplore"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground">
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/margin_standard"
+            android:layout_marginRight="@dimen/margin_standard"
+            android:contentDescription="@null"
+            android:tint="@color/sheet_icon_color"
+            app:srcCompat="@drawable/ic_foursquare" />
+
+        <TextView
+            style="@style/RtlAwareTextView"
+            android:layout_width="0dp"
+            android:layout_height="54dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/margin_standard"
+            android:paddingRight="@dimen/margin_standard"
+            android:text="FourSquare Explore"
+            android:textColor="@color/primary_text_color"
+            android:textSize="16sp" />
+
+
+        <ImageView
+            android:id="@+id/itemFsqExploreMore"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@drawable/backgroud_round_image_button"
+            android:contentDescription="@null"
+            android:padding="@dimen/margin_standard"
+            android:src="@drawable/ic_more"
+            android:visibility="gone"
+            tools:visibility="visible"/>
+
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/itemFood"
@@ -129,6 +200,7 @@
             android:textColor="@color/primary_text_color"
             android:textSize="16sp" />
     </LinearLayout>
+
 
     <View
         android:layout_width="match_parent"

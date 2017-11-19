@@ -4,6 +4,7 @@ import android.app.WallpaperManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -13,7 +14,6 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.PopupMenu;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -39,8 +39,8 @@ import butterknife.Unbinder;
 import me.carc.btown.App;
 import me.carc.btown.R;
 import me.carc.btown.Utils.FileUtils;
-import me.carc.btown.common.C;
 import me.carc.btown.common.Commons;
+import me.carc.btown.common.TinyDB;
 import me.carc.btown.ui.TouchImageView;
 import okhttp3.Call;
 import okhttp3.OkHttpClient;
@@ -54,7 +54,6 @@ import okhttp3.Response;
 
 public class ImageDialog extends DialogFragment {
 
-    private static final String TAG = C.DEBUG + Commons.getTag();
     public static final String ID_TAG = "ImageDialog";
     public static final int ACTIVITY_CROP  = 101;
     public static final int ACTIVITY_SHARE = 102;
@@ -63,6 +62,8 @@ public class ImageDialog extends DialogFragment {
     private static final String PAGE_URL = "PAGE_URL";
     private static final String TITLE = "TITLE";
     private static final String SUBTITLE = "SUBTITLE";
+
+    private static final String SAVED_SCALE_TYPE = "SAVED_SCALE_TYPE";
 
     private Unbinder unbinder;
 
@@ -125,27 +126,8 @@ public class ImageDialog extends DialogFragment {
             Glide.with(getActivity())
                     .load(imageUrl)
                     .asBitmap()
-                    .placeholder(R.drawable.background_glide_placeholder)  // required otherwise load doesn't happen!!
+                    .placeholder(R.drawable.checkered_background)  // required otherwise load doesn't happen!!
                     .error(R.drawable.no_image)
-//                    .into(new SimpleTarget<Bitmap>() {
-//                        @Override
-//                        public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-//                            image.setImageBitmap(resource);
-//                            if(Commons.isNotNull(imageLoadProgress))
-//                                imageLoadProgress.setVisibility(View.GONE);
-//                        }
-//
-//                        @Override
-//                        public void onLoadFailed(Exception e, Drawable errorDrawable) {
-//                            super.onLoadFailed(e, errorDrawable);
-//                            if(Commons.isNotNull(image)) {
-//                                image.setImageResource(R.drawable.no_image);
-//                                image.setScaleType(ImageView.ScaleType.CENTER);
-//                            }
-//                            if(Commons.isNotNull(imageLoadProgress))
-//                                imageLoadProgress.setVisibility(View.GONE);
-//                        }
-//                    });
                     .into(new BitmapImageViewTarget(image) {
                         @Override
                         public void onResourceReady(final Bitmap bitmap, @Nullable GlideAnimation anim) {
@@ -169,6 +151,19 @@ public class ImageDialog extends DialogFragment {
                                 imageLoadProgress.setVisibility(View.GONE);
                         }
                     });
+
+
+            int scale = TinyDB.getTinyDB().getInt(SAVED_SCALE_TYPE, ImageView.ScaleType.CENTER_CROP.ordinal());
+            switch (scale){
+                case 3:
+                    image.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                    break;
+
+                case 6:
+                    image.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                    break;
+            }
+
         } else
             dismiss();
 
@@ -186,6 +181,8 @@ public class ImageDialog extends DialogFragment {
             image.setScaleType(ImageView.ScaleType.FIT_CENTER);
         } else
             image.setScaleType(ImageView.ScaleType.CENTER_CROP);
+
+        TinyDB.getTinyDB().putInt(SAVED_SCALE_TYPE, image.getScaleType().ordinal());
     }
 
 
@@ -266,7 +263,7 @@ public class ImageDialog extends DialogFragment {
                             FileUtils.copyInputStreamToFile(response.body().byteStream(), file);
 
                             //get the contentUri for this file and start the intent
-                            Uri contentUri = FileProvider.getUriForFile(getActivity(), "me.carc.btownmvp.fileprovider", file);
+                            Uri contentUri = FileProvider.getUriForFile(getActivity(), getString(R.string.file_provider), file);
 
                             if (set) {
                                 //Home screen it
@@ -287,7 +284,8 @@ public class ImageDialog extends DialogFragment {
                             }
 
                         } catch (Exception ex) {
-                            Log.e("BTOWN::", ex.toString());
+                            Commons.Toast(getActivity(), R.string.operation_error, Color.RED, Toast.LENGTH_SHORT);
+                            imageLoadProgress.setVisibility(View.GONE);
                         }
                     }
                 }

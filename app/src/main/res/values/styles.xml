@@ -2,36 +2,53 @@
     tools:shrinkMode="strict" >
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppTheme" parent="Base.Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
 
-        <item name="android:itemTextAppearance">@style/OverflowMenu.MenuTextStyle</item>
-
-        <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
+        <!--<item name="android:itemTextAppearance">@style/OverflowMenu.MenuTextStyle</item>-->
 
         <item name="android:dialogTheme">@style/DialogTheme</item>
         <item name="android:alertDialogTheme">@style/DialogTheme</item>
 
+        <item name="android:windowAnimationStyle">@style/DialogActivity</item>
+
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="android:windowContentOverlay">@null</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
-    <style name="ActionBarPopupThemeOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+    <style name="AppTheme.AppBarOverlay" parent="Base.ThemeOverlay.AppCompat.Dark.ActionBar"/>
+    <style name="AppTheme.PopupOverlay" parent="Base.ThemeOverlay.AppCompat.Light"/>
+    <style name="ActionBarPopupThemeOverlay" parent="Base.ThemeOverlay.AppCompat.Light"/>
 
 
     <style name="PreferencesTheme" parent="SettingsTheme">
         <item name="android:textColorPrimary">@color/colorPrimary</item>
         <item name="android:textColorSecondary">@color/colorPrimaryDark</item>
         <item name="android:textColorTertiary">@color/colorAccent</item>
+
+        <item name="preferenceTheme">@style/preferenceFragmentListStyle</item>
     </style>
+
+    <style name="preferenceFragmentListStyle" parent="PreferenceThemeOverlay">
+        <item name="android:textColorPrimary">@color/colorPrimary</item>
+        <item name="android:textColorSecondary">@color/colorPrimaryDark</item>
+        <item name="android:textColorTertiary">@color/colorAccent</item>
+
+        <item name="preferenceFragmentListStyle">@style/PreferenceFragmentList</item>
+    </style>
+
 
     <style name="DialogTheme" parent="Theme.AppCompat.Dialog">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:textColorPrimary">@color/primary_text_color</item>
+        <item name="android:textColorSecondary">@color/secondary_text_color</item>
+
         <item name="android:windowAnimationStyle">@style/DialogAnimation</item>
     </style>
 
@@ -40,19 +57,37 @@
         <item name="android:windowExitAnimation">@anim/scale_down</item>
     </style>
 
+    <style name="DialogAnimationSlide" parent="@android:style/Animation.Dialog">
+        <item name="android:windowEnterAnimation">@anim/slide_in_left</item>
+        <item name="android:windowExitAnimation">@anim/fade_out</item>
+    </style>
 
+    <style name="DialogActivity" parent="@android:style/Animation.Activity">
+        <item name="android:windowEnterAnimation">@anim/slide_in_right</item>
+    </style>
+
+
+
+
+<!--
     <style name="OverflowMenu.MenuTextStyle" parent="style/Base.Widget.AppCompat.ActionButton.Overflow">
         <item name="android:textColor">@color/overflowMenuTextColor</item>
+        <item name="android:background">@android:color/transparent</item>
         <item name="android:textStyle">normal</item>
         <item name="android:textSize">15sp</item>
     </style>
 
+-->
 
-    <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
+    <style name="SplashTheme" parent="Base.Theme.AppCompat">
         <item name="android:windowBackground">@drawable/splash_screen</item>
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
     </style>
 
-    <style name="SettingsTheme" parent="style/Theme.AppCompat.Light">
+    <style name="SettingsTheme" parent="Base.Theme.AppCompat.Light">
         <item name="colorAccent">@color/colorAccent</item>
 
         <item name="android:windowNoTitle">false</item>
@@ -75,6 +110,24 @@
         <item name="android:windowTranslucentStatus">true</item>
         <item name="windowActionModeOverlay">true</item>
     </style>
+
+    <style name="ImageDetails">
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">true</item>
+
+        <!-- Navigation menu List item hightlight -->
+        <item name="android:colorControlActivated">@color/tintLight</item>
+
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="windowActionBarOverlay">true</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+
+
+        <item name="android:itemBackground">@color/tintLight</item>
+        <!--<item name="android:itemTextAppearance">@style/OverflowMenu.MenuTextStyle</item>-->
+    </style>
+
 
 
     <style name="PoiItemDialog" parent="Theme.Design.Light.BottomSheetDialog">
@@ -132,6 +185,40 @@
 
 
 
+
+
+    <style name="FourSquareCardTitle">
+
+        <item name="android:fontFamily">serif</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:textColor">@color/card_title_text_color</item>
+
+        <item name="android:gravity">center_vertical|left</item>
+        <item name="android:layout_gravity">bottom</item>
+
+        <item name="android:paddingLeft">16dp</item>
+        <item name="android:paddingRight">16dp</item>
+        <item name="android:paddingTop">24dp</item>
+        <item name="android:paddingBottom">12dp</item>
+    </style>
+
+    <style name="FourSquareCardInfoText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+
+        <item name="android:textStyle">normal</item>
+        <item name="android:textSize">@dimen/small_list_text_size</item>
+        <item name="android:textColor">@color/card_title_text_color</item>
+
+        <item name="android:gravity">center_vertical|left</item>
+        <item name="android:layout_gravity">bottom</item>
+
+        <item name="android:paddingLeft">@dimen/margin_standard</item>
+        <item name="android:paddingRight">@dimen/margin_standard</item>
+        <item name="android:paddingTop">@dimen/margin_tiny</item>
+        <item name="android:paddingBottom">@dimen/margin_standard</item>
+    </style>
 
 
     <style name="Card_Title">

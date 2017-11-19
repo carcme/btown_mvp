@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/margin_standard">
+
+    <ImageView
+        android:id="@+id/tipsUserPhoto"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:contentDescription="@null"
+        android:scaleType="centerCrop"
+        android:textColor="@color/venueImageTextColor"
+        tools:src="@drawable/no_image"/>
+
+    <me.carc.btown.ui.custom.CapitalisedTextView
+        android:id="@+id/tipsUserName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_tiny"
+        android:layout_toEndOf="@+id/tipsUserPhoto"
+        android:textColor="@color/venueImageTextColor"
+        tools:text="UserName"/>
+
+    <TextView
+        android:id="@+id/tipsDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:textColor="@color/venueImageTextColor"
+        android:textSize="@dimen/tiny_list_text_size"
+        tools:text="12th Dec 1235"/>
+
+    <me.carc.btown.ui.custom.CapitalisedTextView
+        android:id="@+id/tipsTip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tipsUserName"
+        android:layout_marginStart="@dimen/margin_tiny"
+        android:layout_toEndOf="@id/tipsUserPhoto"
+        android:autoLink="web"
+        android:textColorLink="@color/colorAccent"
+        tools:text="@string/lorum_ipsum_short"
+        />
+
+    <ImageView
+        android:id="@+id/tipsTipPhoto"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/image_height"
+        android:layout_below="@+id/tipsTip"
+        android:layout_marginStart="@dimen/margin_tiny"
+        android:layout_marginTop="@dimen/margin_small"
+        android:layout_toEndOf="@id/tipsUserPhoto"
+        android:contentDescription="@null"
+        android:scaleType="centerCrop"
+        android:textColor="@color/venueImageTextColor"
+        android:visibility="gone"
+        tools:src="@drawable/no_image"
+        tools:visibility="visible"/>
+
+    <include
+        layout="@layout/divider_faded"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="@dimen/margin_large"
+        android:layout_below="@+id/tipsTipPhoto"/>
+
+</RelativeLayout>

@@ -54,7 +54,10 @@ public class PoiMoreRecyclerAdapter extends RecyclerView.Adapter<PoiMoreRecycler
 
             case WEB:
             case WIKI:
-                holder.infoText.setAutoLinkMask(Linkify.WEB_URLS);
+            case FACEBOOK:
+            case TWITTER:
+            case INSTAGRAM:
+                holder.infoText.setAutoLinkMask(Linkify.ALL);
                 break;
 
             case PHONE:
@@ -95,7 +98,7 @@ public class PoiMoreRecyclerAdapter extends RecyclerView.Adapter<PoiMoreRecycler
         ViewHolder(View v) {
             super(v);
 
-            infoText = (CapitalisedTextView ) v.findViewById(R.id.infoText);
+            infoText = v.findViewById(R.id.infoText);
         }
     }
 }

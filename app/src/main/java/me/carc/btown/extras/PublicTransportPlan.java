@@ -135,7 +135,8 @@ public class PublicTransportPlan extends BaseActivity implements SubsamplingScal
 
         hideProgressDialog();
 
-        Answers.getInstance().logRating(new RatingEvent().putCustomAttribute(ANSWERS_PLAN_OPEN, ANSWERS_PLAN_OPEN));
+        if (me.carc.btown.BuildConfig.USE_CRASHLYTICS)
+            Answers.getInstance().logRating(new RatingEvent().putCustomAttribute(ANSWERS_PLAN_OPEN, ANSWERS_PLAN_OPEN));
     }
 
     private void showError(String source, Exception e) {

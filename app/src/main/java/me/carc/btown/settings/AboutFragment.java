@@ -33,6 +33,7 @@ import android.widget.TextView;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import me.carc.btown.BuildConfig;
 import me.carc.btown.R;
 
 public class AboutFragment extends Fragment {
@@ -50,6 +51,9 @@ public class AboutFragment extends Fragment {
             versionName = "?.?";
         }
 
+        if(BuildConfig.DEBUG)
+            versionName += " " + BuildConfig.BUILD_TYPE;
+
         // add app name and version
         TextView aboutApp = (TextView) view.findViewById(R.id.aboutApp);
         aboutApp.setText(getResources().getString(R.string.app_name) + "  " + versionName);
@@ -58,7 +62,7 @@ public class AboutFragment extends Fragment {
         TextView t = (TextView) view.findViewById(R.id.aboutTextView);
         t.setText(Html.fromHtml(
                 getString(R.string.about) +
-                        String.format(getString(R.string.about_bottom), getString(R.string.website), getString(R.string.bugtracker), getString(R.string.website) + "#donate")
+                        String.format(getString(R.string.about_bottom), getString(R.string.website), getString(R.string.bugtracker))
         ));
 
         // make links in about text clickable

@@ -18,7 +18,7 @@
         android:strokeColor="#000"
         android:strokeLineCap="butt"
         android:strokeLineJoin="miter"
-        android:strokeWidth="1" />
+        android:strokeWidth="0.2" />
 
     <!--LETTER todo add letter here-->
 

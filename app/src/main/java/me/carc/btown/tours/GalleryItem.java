@@ -1,7 +1,6 @@
 package me.carc.btown.tours;
 
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.support.v7.graphics.Palette;
 
 import java.io.File;
@@ -25,7 +24,6 @@ public class GalleryItem implements Serializable {
     private String title;
     private String desc;
     private Bitmap bm;
-    private Drawable drawableImage;
     private int cardColor;
 
     transient private ArrayList<Palette.Swatch> swatches = new ArrayList<>();
@@ -37,14 +35,6 @@ public class GalleryItem implements Serializable {
 
     public void setBitmap(Bitmap bm) {
         this.bm = bm;
-    }
-
-    public Drawable getDrawableImage() {
-        return drawableImage;
-    }
-
-    public void setDrawableImage(Drawable drawableImage) {
-        this.drawableImage = drawableImage;
     }
 
     public boolean hasCachedFile() {

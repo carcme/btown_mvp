@@ -6,7 +6,6 @@ import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
 import android.app.WallpaperManager;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -18,6 +17,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
@@ -46,7 +46,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.carc.btown.BaseActivity;
 import me.carc.btown.R;
+import me.carc.btown.Utils.AndroidUtils;
 import me.carc.btown.Utils.FileUtils;
+import me.carc.btown.Utils.IntentUtils;
 import me.carc.btown.Utils.ViewUtils;
 import me.carc.btown.common.C;
 import me.carc.btown.common.Commons;
@@ -62,6 +64,10 @@ import okhttp3.Response;
 public class AttractionShowcaseImageActivity extends BaseActivity {
     private static final String TAG = C.DEBUG + Commons.getTag();
 
+    private static final String TEXT_COLOR = "TEXT_COLOR";
+    private static final String RGB = "RGB";
+
+
     private static final int ACTIVITY_CROP = 13451;
     private static final int ACTIVITY_SHARE = 13452;
 
@@ -70,6 +76,7 @@ public class AttractionShowcaseImageActivity extends BaseActivity {
     private static final int ANIMATION_DURATION_LONG = 450;
     private static final int ANIMATION_DURATION_EXTRA_LONG = 850;
 
+    private RetainedFragment mRetainedFragment;
 
     private GalleryItem galleryItem;
     private Animation mProgressFabAnimation;
@@ -115,34 +122,39 @@ public class AttractionShowcaseImageActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+//        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.attraction_showcase_activity);
         ButterKnife.bind(this);
 
-        showcaseRoot.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
 
-        Log.d(TAG, "onCreate: ");
+        // find the retained fragment on activity restarts
+        FragmentManager fm = getSupportFragmentManager();
+        mRetainedFragment = (RetainedFragment) fm.findFragmentByTag(RetainedFragment.ID_TAG);
 
-        // Recover items from the intent
-        if (getIntent().hasExtra("INDEX")) {
+
+        // create the fragment and data the first time
+        if (mRetainedFragment == null && getIntent().hasExtra("INDEX")) {
             final int pos = getIntent().getIntExtra("INDEX", 0);
             galleryItem = AttractionTabsActivity.galleryItems.get(pos);
-        }
+
+            // add the fragment
+            mRetainedFragment = new RetainedFragment();
+            fm.beginTransaction().add(mRetainedFragment, RetainedFragment.ID_TAG).commit();
+            // load data from a data source or perform any calculation
+            mRetainedFragment.setGalleryItem(galleryItem);
+        } else
+            galleryItem = mRetainedFragment.getGalleryItem();
+
+
 
         //check if we already had the colors during click
-        int swatch_title_text_color = galleryItem.getSwatch().getTitleTextColor();
-        int swatch_rgb = galleryItem.getSwatch().getRgb();
+        int swatch_title_text_color = galleryItem.getSwatch() != null ? galleryItem.getSwatch().getTitleTextColor() : -1;
+        int swatch_rgb = galleryItem.getSwatch() != null ? galleryItem.getSwatch().getRgb() : -1;
 
         mDrawablePhoto = new IconicsDrawable(this, FontAwesome.Icon.faw_backward).color(Color.WHITE).sizeDp(24);
         mDrawableClose = new IconicsDrawable(this, FontAwesome.Icon.faw_times).color(Color.WHITE).sizeDp(24);
         mDrawableSuccess = new IconicsDrawable(this, FontAwesome.Icon.faw_check).color(Color.WHITE).sizeDp(24);
         mDrawableError = new IconicsDrawable(this, FontAwesome.Icon.faw_exclamation).color(Color.WHITE).sizeDp(24);
-
 
         // Fab button
         fabBackButton.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_back_white)); //mDrawablePhoto
@@ -164,36 +176,51 @@ public class AttractionShowcaseImageActivity extends BaseActivity {
         // Title container
         ViewUtils.configuredHideYView(captionsFrame);
 
-        // Define toolbar as the shared element
-//        final Toolbar toolbar = (Toolbar) findViewById(R.id.activity_detail_toolbar);
-//        setSupportActionBar(toolbar);
-
         //get the imageHeader and set the coverImage
         int padding = 10;
-        ViewUtils.setViewHeight(showcaseImage, C.SCREEN_HEIGHT - captionsFrame.getLayoutParams().height - padding, false);
+
+
         Bitmap imageCoverBitmap = galleryItem.getBitmap();
 
-        //safety check to prevent nullPointer in the palette if the detailActivity was in the background for too long
+        //safety check to prevent nullPointer in the palette if the activity was in the background for too long
         if (Commons.isNotNull(imageCoverBitmap)) {
+            if (AndroidUtils.isPortrait(this)) {
+                ViewUtils.setViewHeight(showcaseImage, C.SCREEN_HEIGHT - captionsFrame.getLayoutParams().height - padding, false);
+            } else
+                ViewUtils.setViewHeight(showcaseImage, C.SCREEN_WIDTH - captionsFrame.getLayoutParams().height - padding, false);
+
             showcaseImage.setImageBitmap(imageCoverBitmap);
             showcaseImage.setScrollPosition(0.5f, 0.5f);
-            setColors(swatch_title_text_color, swatch_rgb);
+            showcaseImage.setTransitionName("GALLERY_IMAGE");
         }
 
-        showcaseImage.setTransitionName("GALLERY_IMAGE");
-        // Add a listener to get noticed when the transition ends to animate the fab button
-        getWindow().getSharedElementEnterTransition().addListener(new CustomTransitionListener() {
-            @Override
-            public void onTransitionEnd(Transition transition) {
-                super.onTransitionEnd(transition);
-                animateActivityStart();
-            }
-        });
 
+        // start the transition animations
+        if (Commons.isNull(savedInstanceState))
+            getWindow().getSharedElementEnterTransition().addListener(new CustomTransitionListener() {
+                @Override
+                public void onTransitionEnd(Transition transition) {
+                    super.onTransitionEnd(transition);
+                    animateActivityStart();
+                }
+            });
+        else
+            animateActivityStart();
+
+
+        // set the colors
         if (swatch_rgb != -1 && swatch_title_text_color != -1) {
             setColors(swatch_title_text_color, swatch_rgb);
         } else
             setColors(ContextCompat.getColor(this, R.color.almostWhite), ContextCompat.getColor(this, R.color.colorPrimary));
+
+        // allow back on title bar touch
+        showcaseRoot.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
     }
 
     private View.OnClickListener onFabShareButtonListener = new View.OnClickListener() {
@@ -381,7 +408,7 @@ public class AttractionShowcaseImageActivity extends BaseActivity {
         } else {
             //Share it
             // TODO: 20/10/2017 set the message
-            final String pageUrl = "TODO: 20/10/2017 set the message";
+            final String pageUrl = "B-Town Tours - " + galleryItem.getTitle() + "\n" + IntentUtils.getUrlWithRef(getPackageName());
 
             Intent shareIntent = new Intent(Intent.ACTION_SEND);
             shareIntent.setData(contentUri);
@@ -746,6 +773,10 @@ public class AttractionShowcaseImageActivity extends BaseActivity {
     private void back() {
         try {
             super.onBackPressed();
+
+            FragmentManager fm = getSupportFragmentManager();
+            fm.beginTransaction().remove(mRetainedFragment).commit();
+
         } catch (Exception e) { /*empty*/ }
     }
 

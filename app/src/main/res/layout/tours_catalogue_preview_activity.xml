@@ -45,7 +45,7 @@
                     xmlns:app="http://schemas.android.com/apk/res-auto"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/gallery_overlay"
+                    android:background="@color/tintStandard"
                     android:fillViewport="true"
                     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 

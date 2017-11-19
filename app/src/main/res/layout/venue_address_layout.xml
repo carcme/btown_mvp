@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/venueAddressLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+
+            <ImageView
+                android:id="@+id/venueAddressMap"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:contentDescription="@null"
+                android:scaleType="fitEnd"
+                tools:src="@drawable/static_map"/>
+
+            <ImageView
+                android:id="@+id/venueMapOverlay"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="Get directions to here"
+                android:scaleType="centerCrop"
+                android:src="@drawable/gradient_transparent"/>
+
+        </FrameLayout>
+
+        <RelativeLayout
+            android:id="@+id/addressContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_standard">
+
+            <LinearLayout
+                android:id="@+id/descLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_standard"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top"
+                    android:src="@drawable/ic_format_quote"/>
+
+                <TextView
+                    android:id="@+id/venueDescription"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textColor="@color/almostBlack"
+                    android:text="@string/lorum_ipsum_short"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/venueAddressTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/descLayout"
+                android:layout_marginStart="@dimen/margin_standard"
+                android:fontFamily="serif"
+                android:text="Address"
+                android:textColor="@color/sheet_icon_color"
+                android:textSize="@dimen/default_list_text_size_large"
+                />
+
+            <TextView
+                android:id="@+id/venueAddress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/venueAddressTitle"
+                android:layout_marginStart="@dimen/margin_standard"
+                android:textColor="@color/almostBlack"
+                android:textSize="@dimen/small_list_text_size"
+                tools:text="Some addrees somewhere\nSecond Line\nThird Line"
+                />
+
+        </RelativeLayout>
+
+        <View
+            android:id="@+id/addressDivider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/addressContainer"
+            android:layout_marginBottom="@dimen/margin_small"
+            android:layout_marginEnd="144dp"
+            android:layout_marginStart="@dimen/margin_standard"
+            android:layout_marginTop="@dimen/margin_small"
+            android:background="@color/grey_300"/>
+
+        <RelativeLayout
+            android:id="@+id/hoursContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/addressDivider">
+
+            <TextView
+                android:id="@+id/venueHoursTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_standard"
+                android:fontFamily="serif"
+                android:text="Hours"
+                android:textColor="@color/sheet_icon_color"
+                android:textSize="@dimen/default_list_text_size_large"
+                />
+
+            <TextView
+                android:id="@+id/venueHours"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/venueHoursTitle"
+                android:layout_marginStart="@dimen/margin_standard"
+                android:textColor="@color/almostBlack"
+                android:textSize="@dimen/small_list_text_size"
+                tools:text="Never Open"
+                />
+
+            <TextView
+                android:id="@+id/venueOpeningTimes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/venueHours"
+                android:layout_alignTop="@+id/venueHours"
+                android:layout_marginStart="@dimen/margin_small"
+                android:layout_toEndOf="@id/venueHours"
+                android:gravity="center"
+                android:textColor="@color/almostBlack"
+                android:textSize="@dimen/small_list_text_size"
+                tools:text="12 - midnight "
+                />
+
+        </RelativeLayout>
+
+
+        <View
+            android:id="@+id/hoursDivider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/hoursContainer"
+            android:layout_marginBottom="@dimen/margin_small"
+            android:layout_marginEnd="80dp"
+            android:layout_marginStart="@dimen/margin_standard"
+            android:layout_marginTop="@dimen/margin_small"
+            android:background="@color/grey_300"/>
+
+        <RelativeLayout
+            android:id="@+id/categoryContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/margin_standard"
+            android:layout_below="@id/hoursDivider">
+
+            <TextView
+                android:id="@+id/venueCategoryTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_standard"
+                android:fontFamily="serif"
+                android:text="Category"
+                android:textColor="@color/sheet_icon_color"
+                android:textSize="@dimen/default_list_text_size_large"
+                />
+
+            <TextView
+                android:id="@+id/venueCategory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/venueCategoryTitle"
+                android:layout_marginStart="@dimen/margin_standard"
+                android:textColor="@color/almostBlack"
+                android:textSize="@dimen/small_list_text_size"
+                android:text="@string/unknown"/>
+
+
+        </RelativeLayout>
+
+
+    </RelativeLayout>
+
+</LinearLayout>

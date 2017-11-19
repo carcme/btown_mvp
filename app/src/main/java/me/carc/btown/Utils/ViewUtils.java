@@ -7,6 +7,7 @@ import android.animation.ObjectAnimator;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
@@ -71,6 +72,13 @@ public class ViewUtils {
 
     public static void setViewHeight(View view, int height, boolean layout) {
         view.getLayoutParams().height = height;
+        if (layout) {
+            view.requestLayout();
+        }
+    }
+
+    public static void setViewWidth(View view, int width, boolean layout) {
+        view.getLayoutParams().width = width;
         if (layout) {
             view.requestLayout();
         }
@@ -383,6 +391,13 @@ public class ViewUtils {
     public static Drawable changeIconColor(Context context, @DrawableRes int res, @ColorRes int color) {
         Drawable mDrawable = ContextCompat.getDrawable(context, res);
         int mColor = ContextCompat.getColor(context, color);
+        mDrawable.setColorFilter(new PorterDuffColorFilter(mColor, PorterDuff.Mode.MULTIPLY));
+        return mDrawable;
+    }
+
+    public static Drawable changeIconColor(Context context, @DrawableRes int res, String color) {
+        Drawable mDrawable = ContextCompat.getDrawable(context, res);
+        int mColor = Color.parseColor("#" + color);
         mDrawable.setColorFilter(new PorterDuffColorFilter(mColor, PorterDuff.Mode.MULTIPLY));
         return mDrawable;
     }

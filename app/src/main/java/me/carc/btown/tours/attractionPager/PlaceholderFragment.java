@@ -524,7 +524,7 @@ public class PlaceholderFragment extends Fragment {
 
                     case R.drawable.ic_wiki:
                         intent = new Intent(getActivity(), WikiWebViewActivity.class);
-                        intent.putExtra(WikiWebViewActivity.WIKI_EXTRA_PAGE_TITLE, getActivity().getString(R.string.facebook));
+                        intent.putExtra(WikiWebViewActivity.WIKI_EXTRA_PAGE_TITLE, getActivity().getString(R.string.wikipedia));
                         intent.putExtra(WikiWebViewActivity.WIKI_EXTRA_PAGE_URL, WikiUtils.createWikiLink(item.getData()));
                         startActivity(intent);
                         break;

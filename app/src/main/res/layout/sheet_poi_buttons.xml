@@ -6,6 +6,7 @@
     android:orientation="horizontal"
     android:weightSum="4">
 
+
     <Button
         android:id="@+id/featureSave"
         style="?android:attr/buttonBarButtonStyle"
@@ -17,6 +18,7 @@
         android:text="@string/shared_string_save"
         android:textColor="@color/buttonTextColor"
         />
+    <include layout="@layout/divider_faded_vert"/>
 
     <Button
         android:id="@+id/featurePin"
@@ -31,6 +33,7 @@
         android:text="Pin"
         tools:ignore="String"/>
 
+
     <Button
         android:id="@+id/featureShare"
         style="?android:attr/buttonBarButtonStyle"
@@ -43,6 +46,7 @@
         android:textColor="@color/buttonTextColor"
         />
 
+    <include layout="@layout/divider_faded_vert"/>
 
     <Button
         android:id="@+id/featureGoogle"
@@ -56,6 +60,7 @@
         android:textColor="@color/buttonTextColor"
         />
 
+    <include layout="@layout/divider_faded_vert"/>
     <Button
         android:id="@+id/featureMore"
         style="?android:attr/buttonBarButtonStyle"

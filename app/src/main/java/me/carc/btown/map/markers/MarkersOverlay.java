@@ -181,7 +181,7 @@ public class MarkersOverlay extends RadiusMarkerClusterer {
             super.onPostExecute(drawable);
             if (Commons.isNotNull(destination)) {
                 if (Commons.isNull(drawable))
-                    destination.setIcon(ResourcesCompat.getDrawable(res, R.drawable.ic_place, null));
+                    destination.setIcon(ResourcesCompat.getDrawable(res, R.drawable.btown_round_place_icon, null));
                 destination.setPosition(point);
                 destination.setTitle(title);
                 // Make this separate from the clusters
@@ -222,7 +222,7 @@ public class MarkersOverlay extends RadiusMarkerClusterer {
 
                 if(iconRes == 0) {
                     //tour map point of interest
-                    poi.setIcon(ResourcesCompat.getDrawable(res, R.drawable.ic_place, null));
+                    poi.setIcon(ResourcesCompat.getDrawable(res, R.drawable.btown_round_place_icon, null));
                 } else {
                     Drawable icon = ResourcesCompat.getDrawable(res, iconRes, null);
                     if(icon != null) {
@@ -277,12 +277,16 @@ public class MarkersOverlay extends RadiusMarkerClusterer {
                 for (OverpassQueryResult.Element node : nodes) {
                     Marker poiMarker = new Marker(map);
 
+                    if(node.tags.isIcon) {
+                        // TODO: 16/11/2017 use the icon supplied - may need to save the FSQ icon to store somewhere
+                    }
+
                     String primaryType = node.tags.getPrimaryType();
 
                     Drawable icon = iconManager.getRoundedIcon(primaryType);
 
                     if (Commons.isNull(icon)) {
-                        icon = ContextCompat.getDrawable(mContext, R.drawable.ic_place);
+                        icon = ContextCompat.getDrawable(mContext, R.drawable.btown_round_place_icon);
                     }
 
                         // Filer entries with incomplete information

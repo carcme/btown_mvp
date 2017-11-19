@@ -22,6 +22,7 @@
     <string name="error_playstore_not_found">Couldn\'t find PlayStore on this device</string>
 
 
+    <!--TODO-->
 
     <string name="ssl_date_invalid" translatable="false">The date of the certificate is invalid</string>
     <string name="ssl_cert_expired" translatable="false">The certificate has expired</string>

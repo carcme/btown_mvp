@@ -1,9 +1,17 @@
 package me.carc.btown.common;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.support.annotation.ColorInt;
+import android.support.annotation.StringRes;
 import android.support.v7.appcompat.BuildConfig;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
@@ -13,6 +21,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Pattern;
+
+import me.carc.btown.R;
 
 /**
  * Common functions used throughout the app
@@ -32,6 +42,25 @@ public class Commons {
             }
         }
         return tag;
+    }
+
+    public static void Toast(Context context, @StringRes int resId, @ColorInt int bgColor, int duration) {
+
+        final View v = ((LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE))
+                .inflate(R.layout.custom_toast, null);
+
+        TextView tv = v.findViewById(R.id.toastMsg);
+        tv.setText(resId);
+        tv.setTextColor(Color.WHITE);
+
+        Drawable background = context.getDrawable(R.drawable.toast_background);
+        background.setTint(bgColor);
+        tv.setBackground(background);
+
+        final Toast toast = new Toast(context);
+        toast.setDuration(duration);
+        toast.setView(v);
+        toast.show();
     }
 
     public static boolean isNetworkAvailable(Context context) {

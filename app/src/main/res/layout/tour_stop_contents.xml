@@ -44,5 +44,21 @@
             tools:text="Summary - here is some long text to show what it looks like in there. There could be some much text soe this is a test" />
 
     </LinearLayout>
+<!--
+    <com.github.lzyzsd.circleprogress.DonutProgress
+        android:id="@+id/foursquDetailsRating"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        app:donut_circle_starting_degree="270"
+        app:donut_finished_stroke_width="3dp"
+        app:donut_finished_color="@color/colorAccent"
+        app:donut_unfinished_stroke_width="1dp"
+        app:donut_unfinished_color="@color/almostWhite"
+        app:donut_text_size="12sp"
+        app:donut_text="8.8"
+        app:donut_max="10"
+        app:donut_progress="6.8"
+        />
+-->
 
 </LinearLayout>

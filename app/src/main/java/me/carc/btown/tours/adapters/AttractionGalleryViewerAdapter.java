@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -70,62 +71,56 @@ public class AttractionGalleryViewerAdapter extends RecyclerView.Adapter<Attract
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
 
-        final int pos = holder.getAdapterPosition();
-        GalleryItem item = AttractionTabsActivity.galleryItems.get(pos);
+        GalleryItem galleryItem = AttractionTabsActivity.galleryItems.get(position);
+        holder.gallleryTitle.setText(galleryItem.getTitle());
 
-        holder.gallleryTitle.setText(item.getTitle());
-
-        if (item.hasCachedFile() && Commons.isNull(item.getBitmap())) {
+        if (galleryItem.hasCachedFile() && Commons.isNull(galleryItem.getBitmap())) {
             Glide.with(holder.mView.getContext())
-                    .load(item.getCachedFile())
+                    .load(galleryItem.getCachedFile())
                     .asBitmap()
                     .into(new BitmapImageViewTarget(holder.gallleryImage) {
                         @Override
                         public void onResourceReady(final Bitmap bitmap, GlideAnimation anim) {
                             super.onResourceReady(bitmap, anim);
-
                             new Palette.Builder(bitmap).generate(new Palette.PaletteAsyncListener() {
                                 @Override
                                 public void onGenerated(Palette palette) {
-                                    GalleryItem gallery = AttractionTabsActivity.galleryItems.get(pos);
 
                                     if (!bitmap.isRecycled()) {
                                         if (palette != null) {
                                             Palette.Swatch s = palette.getVibrantSwatch();
-                                            if (s == null) {
+                                            if (s == null)
                                                 s = palette.getDarkVibrantSwatch();
-                                            }
-                                            if (s == null) {
+                                            if (s == null)
                                                 s = palette.getLightVibrantSwatch();
-                                            }
-                                            if (s == null) {
+                                            if (s == null)
                                                 s = palette.getMutedSwatch();
-                                            }
 
+                                            GalleryItem gallery = AttractionTabsActivity.galleryItems.get(position);
                                             holder.gallleryTitle.setTextColor(s.getTitleTextColor());
                                             holder.imageDesc.setTextColor(s.getTitleTextColor());
                                             ViewUtils.animateViewColor(holder.imageTextContainer, mDefaultBackgroundColor, s.getRgb());
                                             gallery.setBitmap(bitmap);
                                             gallery.setSwatch(s);
-                                            AttractionTabsActivity.galleryItems.put(pos, gallery);
+                                            AttractionTabsActivity.galleryItems.put(position, gallery);
                                         }
-                                    }
+                                    } else
+                                        Log.d(TAG, "onGenerated: BITMAP RECYCLED");
                                 }
                             });
                         }
                     });
-        } else if (Commons.isNotNull(item.getSwatch())) {
-            Glide.with(holder.mView.getContext())
-                    .load(item.getCachedFile())
-                    .into(holder.gallleryImage);
-
-            holder.gallleryTitle.setTextColor(item.getSwatch().getTitleTextColor());
-            holder.imageDesc.setTextColor(item.getSwatch().getTitleTextColor());
-            ViewUtils.animateViewColor(holder.imageTextContainer, mDefaultBackgroundColor, item.getSwatch().getRgb());
+        } else if (Commons.isNotNull(galleryItem.getSwatch()) && Commons.isNotNull(galleryItem.getBitmap())) {
+            // Already cached the data
+            holder.gallleryImage.setImageBitmap(galleryItem.getBitmap());
+            holder.gallleryTitle.setTextColor(galleryItem.getSwatch().getTitleTextColor());
+            holder.imageDesc.setTextColor(galleryItem.getSwatch().getTitleTextColor());
+            ViewUtils.animateViewColor(holder.imageTextContainer, mDefaultBackgroundColor, galleryItem.getSwatch().getRgb());
         } else {
+            // hmmm... something interesting!! Get the image from the server again :/
             Glide.with(holder.mView.getContext())
                     .using(new FirebaseImageLoader())
-                    .load(mCoverImageStorageRef.child(item.getFilename()))
+                    .load(mCoverImageStorageRef.child(galleryItem.getFilename()))
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .into(holder.gallleryImage);
         }

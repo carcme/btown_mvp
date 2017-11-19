@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/margin_standard"
+    android:layout_marginEnd="@dimen/margin_standard"
+    android:layout_marginStart="@dimen/margin_standard">
+
+    <TextView
+        android:id="@+id/venuePopularReasonRating"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/sheet_icon_color"
+        tools:text="Rating based on xx visitors"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_small"
+        android:layout_below="@+id/venuePopularReasonRating"
+        android:gravity="center_horizontal">
+
+
+        <com.github.lzyzsd.circleprogress.DonutProgress
+            android:id="@+id/venuePopularBarChart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/margin_standard"
+            app:donut_circle_starting_degree="270"
+            app:donut_finished_stroke_width="5dp"
+            app:donut_max="100"
+            app:donut_progress="0"
+            app:donut_text="@string/shared_string_none"
+            app:donut_unfinished_color="@color/almostWhite"
+            app:donut_unfinished_stroke_width="2dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/venuePopularReasonSummary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/margin_tiny"
+                android:textColor="@color/sheet_icon_color"
+                tools:text="Reason Summary"/>
+
+            <TextView
+                android:id="@+id/venuePopularPeopleHere"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/margin_tiny"
+                android:textColor="@color/sheet_icon_color"
+                tools:text="One other person is here"/>
+
+            <TextView
+                android:id="@+id/venuePopularLikes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/margin_tiny"
+                android:textColor="@color/sheet_icon_color"
+                tools:text="101 Likes"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

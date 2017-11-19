@@ -11,12 +11,16 @@ import me.carc.btown.BuildConfig;
 
 public class C {
     public static final boolean DEBUG_ENABLED = BuildConfig.DEBUG;
+
+    public static final boolean INC_TOP_LISTS = BuildConfig.DEBUG;
+
     public static final String DEBUG = "DEAD:";
 
     public static final boolean HAS_K = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
     public static final boolean HAS_L = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP;
     public static final boolean HAS_M = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M;
     public static final boolean HAS_N = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N;
+    public static final boolean HAS_O = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O;
 
     // PERMISSION REQUESTS
     public static final int PERMISSION_LOCATION = 200;

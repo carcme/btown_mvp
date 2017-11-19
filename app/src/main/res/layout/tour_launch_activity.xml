@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/imageSrcFrame"
-    android:background="@color/black"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/backgroundHolder"
+    android:background="@android:color/transparent"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true">
 
         <RelativeLayout
             android:id="@+id/tours_holder"
@@ -27,7 +30,7 @@
                 android:layout_height="60dp"
                 android:layout_centerInParent="true"
                 android:contentDescription="Check out the Tours"
-                android:src="@drawable/ic_burger_menu"/>
+                android:src="@drawable/ic_tours"/>
 
         </RelativeLayout>
 
@@ -45,7 +48,7 @@
                 android:layout_height="60dp"
                 android:layout_centerInParent="true"
                 android:contentDescription="Top 10 Lists"
-                android:src="@drawable/ic_heart"
+                android:src="@drawable/ic_lightbulb_on"
                 android:tint="@color/white"/>
 
         </RelativeLayout>
@@ -61,8 +64,8 @@
 
         <ImageView
             android:id="@+id/loginIcon"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_centerInParent="true"
             android:contentDescription="Login and other options"
             android:src="@drawable/ic_person_outline"
@@ -70,39 +73,16 @@
 
     </RelativeLayout>
 
+    <ProgressBar
+        android:id="@+id/preLoadProgress"
+        android:layout_width="122dp"
+        android:layout_height="122dp"
+        android:layout_centerInParent="true"
+        android:indeterminate="false"
+        android:progressDrawable="@drawable/progress_bar_circular"
+        android:background="@drawable/circle_shape"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:max="100"
+        android:progress="0" />
+
 </RelativeLayout>
-
-<!--
-    <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="me.carc.btown_map.tours.ToursLaunchActivity">
-
-    <Button
-        android:id="@+id/showLogout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Log out!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.499" />
-
-    <Button
-        android:id="@+id/showTours"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Tours!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
-        app:layout_constraintVertical_bias="0.593" />
-
-</android.support.constraint.ConstraintLayout>
--->

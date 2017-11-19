@@ -232,9 +232,14 @@ public class SinglePoiOptionsDialog extends BottomSheetDialogFragment {
                     .load(node.tags.thumbnail)
                     .asBitmap()
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                    .placeholder(R.drawable.background_image_blank)
+                    .placeholder(R.drawable.checkered_background)
                     .error(node.iconId)
                     .into(featureIcon);
+
+            if(node.tags.isIcon) {
+                featureIcon.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.rating_background));
+                featureIcon.getBackground().setTint(ContextCompat.getColor(getActivity(), R.color.tintLight));
+            }
 
             new SetupMore(node).run();
 
@@ -333,7 +338,7 @@ public class SinglePoiOptionsDialog extends BottomSheetDialogFragment {
                 items.add(new InfoCard(hours.getOriginalFormatted(), InfoCard.ItemType.NONE, FontAwesome.Icon.faw_clock_o));
             }
 
-            if (Commons.isNotNull(node.tags.cuisine))
+            if (!Commons.isEmpty(node.tags.cuisine))
                 items.add(new InfoCard(node.tags.cuisine, InfoCard.ItemType.NONE, CommunityMaterial.Icon.cmd_food_fork_drink));
 
             if (Commons.isNotNull(node.tags.contactPhone))
@@ -344,6 +349,15 @@ public class SinglePoiOptionsDialog extends BottomSheetDialogFragment {
 
             if (Commons.isNotNull(node.tags.contactEmail))
                 items.add(new InfoCard(node.tags.contactEmail, InfoCard.ItemType.EMAIL, CommunityMaterial.Icon.cmd_email));
+
+            if (Commons.isNotNull(node.tags.facebook))
+                items.add(new InfoCard("https://www.facebook.com/".concat(node.tags.facebook), InfoCard.ItemType.FACEBOOK, CommunityMaterial.Icon.cmd_facebook));
+
+            if (Commons.isNotNull(node.tags.instagram))
+                items.add(new InfoCard("https://www.instagram.com/".concat(node.tags.instagram), InfoCard.ItemType.INSTAGRAM, CommunityMaterial.Icon.cmd_instagram));
+
+            if (Commons.isNotNull(node.tags.twitter))
+                items.add(new InfoCard("https://twitter.com/".concat(node.tags.twitter), InfoCard.ItemType.TWITTER, CommunityMaterial.Icon.cmd_twitter));
 
             if (Commons.isNotNull(node.tags.smoking))
                 items.add(new InfoCard(getString(R.string.poi_res_smoking) + node.tags.smoking, InfoCard.ItemType.INFO, CommunityMaterial.Icon.cmd_smoking));
@@ -411,12 +425,31 @@ public class SinglePoiOptionsDialog extends BottomSheetDialogFragment {
                                     startActivity(IntentUtils.callPhone(item.getData()));
                                 }
                                 break;
+/*
                             case FACEBOOK:
+                                Intent facebookIntent = SocialMediaUtils.getFacebookPageIntent(getActivity(), item.getData());
+                                if(Commons.isNotNull(facebookIntent))
+                                    startActivity(facebookIntent);
+                                else {
+                                    intent = new Intent(getActivity(), WikiWebViewActivity.class);
+                                    intent.putExtra(WikiWebViewActivity.WIKI_EXTRA_PAGE_TITLE, getActivity().getString(R.string.facebook));
+                                    intent.putExtra(WikiWebViewActivity.WIKI_EXTRA_PAGE_URL, item.getData());
+                                    startActivity(intent);
+                                }
+                                break;
+                            case INSTAGRAM:
                                 intent = new Intent(getActivity(), WikiWebViewActivity.class);
-                                intent.putExtra(WikiWebViewActivity.WIKI_EXTRA_PAGE_TITLE, getActivity().getString(R.string.facebook));
-                                intent.putExtra(WikiWebViewActivity.WIKI_EXTRA_PAGE_URL, "https://www.facebook.com/".concat(item.getData()));
+                                intent.putExtra(WikiWebViewActivity.WIKI_EXTRA_PAGE_TITLE, getActivity().getString(R.string.instagram));
+                                intent.putExtra(WikiWebViewActivity.WIKI_EXTRA_PAGE_URL, "https://www.instagram.com/".concat(item.getData()));
                                 startActivity(intent);
                                 break;
+                            case TWITTER:
+                                intent = new Intent(getActivity(), WikiWebViewActivity.class);
+                                intent.putExtra(WikiWebViewActivity.WIKI_EXTRA_PAGE_TITLE, getActivity().getString(R.string.twitter));
+                                intent.putExtra(WikiWebViewActivity.WIKI_EXTRA_PAGE_URL, "https://twitter.com/".concat(item.getData().replace("@", "")));
+                                startActivity(intent);
+                                break;
+*/
 
                             case CLIPBOARD:
                                 AndroidUtils.copyToClipboard(getActivity(), item.getData());
@@ -438,6 +471,7 @@ public class SinglePoiOptionsDialog extends BottomSheetDialogFragment {
             }
         }
     }
+
 
     @Override
     public void onDismiss(DialogInterface dialog) {
@@ -500,10 +534,11 @@ public class SinglePoiOptionsDialog extends BottomSheetDialogFragment {
     void thumbnailClick() {
         try {
             OverpassQueryResult.Element element = (OverpassQueryResult.Element) getArguments().getSerializable(ITEM);
-            if (Commons.isNotNull(element)) {
+            if (Commons.isNotNull(element) && Commons.isNotNull(element.tags.image)) {
                 final String httpUrl = "https://www.openstreetmap.org/#map=16/" + element.lat + "/" + ((float) element.lon);
                 ImageDialog.showInstance(getActivity().getApplicationContext(), element.tags.image, httpUrl, element.tags.name, element.tags.getPrimaryType());
-            }
+            } else
+                Toast.makeText(getContext(), "No Image Available", Toast.LENGTH_SHORT).show();
 
         } catch (NullPointerException e) {
             Log.d(TAG, "setupDialog ERROR: " + e.getLocalizedMessage());

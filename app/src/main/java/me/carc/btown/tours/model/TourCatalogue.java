@@ -2,6 +2,7 @@ package me.carc.btown.tours.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.Keep;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -12,7 +13,7 @@ import me.carc.btown.common.Commons;
 /**
  * Created by bamptonm on 16/10/2017.
  */
-
+@Keep
 public class TourCatalogue implements Parcelable {
 
     @SerializedName("id")

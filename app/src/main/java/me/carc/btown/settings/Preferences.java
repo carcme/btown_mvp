@@ -43,6 +43,7 @@ public class Preferences {
 		return settings.getBoolean(TOURS, true);
 	}
 
+
 	public static boolean exitOnBack(Context context) {
 		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
 

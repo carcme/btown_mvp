@@ -2,6 +2,7 @@ package me.carc.btown.tours.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.Keep;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -10,7 +11,7 @@ import java.io.Serializable;
 /**
  * Created by bamptonm on 16/10/2017.
  */
-
+@Keep
 public class POIs implements Serializable, Parcelable {
     @SerializedName("title")
     public String title;

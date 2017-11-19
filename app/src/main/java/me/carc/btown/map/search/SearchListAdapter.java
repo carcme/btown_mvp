@@ -123,11 +123,11 @@ public class SearchListAdapter extends ArrayAdapter<Place> {
 			view = convertView;
 		}
 
-		ImageView imageView = (ImageView) view.findViewById(R.id.imageView);
-		TextView title = (TextView) view.findViewById(R.id.title);
-		TextView subtitle = (TextView) view.findViewById(R.id.subtitle);
-        TextView distance = (TextView) view.findViewById(R.id.distance);
-        TextView timestamp = (TextView) view.findViewById(R.id.timestamp);
+		ImageView imageView = view.findViewById(R.id.imageView);
+		TextView title = view.findViewById(R.id.title);
+		TextView subtitle = view.findViewById(R.id.subtitle);
+        TextView distance = view.findViewById(R.id.distance);
+        TextView timestamp = view.findViewById(R.id.timestamp);
 
         assert place != null;
         if(place.getIconRes() != 0 || !Commons.isEmpty(place.getOsmKey()))  {
@@ -136,10 +136,13 @@ public class SearchListAdapter extends ArrayAdapter<Place> {
                 Log.d(TAG, "getView: ");
             
             Drawable drawable = iconManager.getRoundedIcon(place.getOsmKey());
-            if(Commons.isNull(drawable))
+            if(Commons.isNull(drawable) && place.getIconRes() != 0)
                 drawable = ContextCompat.getDrawable(ctx, place.getIconRes());
 
-            imageView.setImageDrawable(drawable);
+            if(Commons.isNotNull(drawable))
+                imageView.setImageDrawable(drawable);
+            else
+                imageView.setImageResource(R.drawable.no_image);  // todo find better default/fall back icon
             imageView.setVisibility(View.VISIBLE);
         } else
             imageView.setVisibility(View.INVISIBLE);
@@ -175,7 +178,6 @@ public class SearchListAdapter extends ArrayAdapter<Place> {
         } else{
             timestamp.setVisibility(View.INVISIBLE);
         }
-		// todo add bearing arrow
 
 		return view;
 	}

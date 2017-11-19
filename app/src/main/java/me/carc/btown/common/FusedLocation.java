@@ -1,17 +1,14 @@
 package me.carc.btown.common;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
+import android.hardware.GeomagneticField;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.provider.Settings;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -27,35 +24,37 @@ import pub.devrel.easypermissions.EasyPermissions;
  * Interface for using Google's FusedLocationAPI.
  */
 public class FusedLocation implements ConnectionCallbacks, OnConnectionFailedListener, com.google.android.gms.location.LocationListener {
+
+    private static final String TAG = FusedLocation.class.getName();
+
     public interface Callback {
         void onConnected(boolean connected);
+
+        void onLastKnownLocation(Location location);
+
         void onLocationChanged(Location location);
     }
+
     private Callback mCallback = null;
 
+    public static final long STANDARD_UPDATE_INTERVAL = C.TIME_ONE_SECOND * 30;
+    public static final long TRACKING_UPDATE_INTERVAL = C.TIME_ONE_SECOND * 5;
+    private static final long FASTEST_UPDATE = C.TIME_ONE_SECOND * 5;
+    private static final long MAX_WAIT_TIME = STANDARD_UPDATE_INTERVAL;
 
-    private static final String TAG = C.DEBUG + Commons.getTag();
+    private static final String AGPS_LAST_DOWNLOAD_DATE = "AGPS_LAST_DOWNLOAD_DATE";
+    private static final long AGPS_REDOWNLOAD_DELAY = 20 * 60 * 60 * 1000; // 20 hours
+    private static final long BASE_CORRECTION_VALUE = 360;
 
-    /**
-     * The desired interval for location updates. Inexact. Updates may be more or less frequent.
-     */
-    private static final long UPDATE_INTERVAL_IN_MILLISECONDS = 1000;
-    /**
-     * The fastest rate for active location updates. Exact. Updates will never be more frequent
-     * than this value.
-     */
-    private static final long FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS = UPDATE_INTERVAL_IN_MILLISECONDS / 2;
-
-    /**
-     * Stores parameters for requests to the FusedLocationProviderApi.
-     */
-    private LocationRequest mLocationRequest;
     /**
      * Provides the entry point to Google Play services.
      */
-    private GoogleApiClient mGoogleApiClient;
     private Context mContext;
+    private GoogleApiClient mGoogleApiClient;
     private Location mCurrentLocation = null;
+    private LocationRequest mLocationRequest;
+    private float previousCorrectionValue = BASE_CORRECTION_VALUE;
+    private long mLastLocationMillis;
     private int PRIORITY = LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY;
     private boolean inProgress = false;
 
@@ -63,9 +62,17 @@ public class FusedLocation implements ConnectionCallbacks, OnConnectionFailedLis
     public FusedLocation(Context c, Callback callback) {
         this.mContext = c;
         this.mCallback = callback;
+
         buildGoogleApiClient();
         if (canGetLocation())
             mGoogleApiClient.connect();
+
+        //force an updated check for internet connectivity here before destroying A-GPS-data
+        if (System.currentTimeMillis() - TinyDB.getTinyDB().getLong(AGPS_LAST_DOWNLOAD_DATE, 0L) > AGPS_REDOWNLOAD_DELAY) {
+            if (Commons.isNetworkAvailable(mContext)) {
+                redownloadAGPS();
+            }
+        }
     }
 
     /**
@@ -76,21 +83,12 @@ public class FusedLocation implements ConnectionCallbacks, OnConnectionFailedLis
     public void getCurrentLocation(int maxTries) {
         chooseNetworkGps();
         buildGoogleApiClient();
-                inProgress = true;
+        inProgress = true;
         if (canGetLocation())
             mGoogleApiClient.connect();
     }
 
-    /**
-     * Checks FusedLocation's last known location and checks to see if the the time the location was sampled
-     * and the accuracy of the sample is within specified limits.
-     * Otherwise, it sets up fusedlocation updates and tries to get a fresh gps sample.
-     *
-     * @param diffTime    - The maximum time, in milliseconds, that may have elapsed since the last sample.
-     * @param minAccuracy - The minimum accuracy, in meters, that is required of the last sample.
-     */
-
-    public void getLastKnownLocation(long diffTime, float minAccuracy) {
+    public void getLastKnownLocation() {
         chooseNetworkGps();
         buildGoogleApiClient();
         inProgress = true;
@@ -103,7 +101,7 @@ public class FusedLocation implements ConnectionCallbacks, OnConnectionFailedLis
     }
 
     private synchronized void buildGoogleApiClient() {
-        if(Commons.isNull(mGoogleApiClient)) {
+        if (Commons.isNull(mGoogleApiClient)) {
             mGoogleApiClient = new GoogleApiClient.Builder(mContext)
                     .addConnectionCallbacks(this)
                     .addOnConnectionFailedListener(this)
@@ -114,19 +112,27 @@ public class FusedLocation implements ConnectionCallbacks, OnConnectionFailedLis
     }
 
     private void createLocationRequest() {
-        mLocationRequest = new LocationRequest();
+        mLocationRequest = LocationRequest.create()
+                .setPriority(PRIORITY)
+                .setInterval(STANDARD_UPDATE_INTERVAL)
+                .setFastestInterval(FASTEST_UPDATE)
+                .setMaxWaitTime(MAX_WAIT_TIME);
+    }
 
-        // Sets the desired interval for active location updates. This interval is
-        // inexact. You may not receive updates at all if no location sources are available, or
-        // you may receive them slower than requested. You may also receive updates faster than
-        // requested if other applications are requesting location at a faster interval.
-        mLocationRequest.setInterval(UPDATE_INTERVAL_IN_MILLISECONDS);
+    public void updateLocationRequest(boolean tracking) {
+        stopLocationUpdates(false);
 
-        // Sets the fastest rate for active location updates. This interval is exact, and your
-        // application will never receive updates faster than this value.
-        mLocationRequest.setFastestInterval(FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS);
+        mLocationRequest = LocationRequest.create()
+                .setPriority(tracking ? LocationRequest.PRIORITY_HIGH_ACCURACY : LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY)
+                .setInterval(tracking ? TRACKING_UPDATE_INTERVAL : STANDARD_UPDATE_INTERVAL)
+                .setFastestInterval(FASTEST_UPDATE)
+                .setMaxWaitTime(MAX_WAIT_TIME);
 
-        mLocationRequest.setPriority(PRIORITY);
+        startLocationUpdates();
+    }
+
+    public LocationRequest getLocationRequest() {
+        return mLocationRequest;
     }
 
     /**
@@ -134,11 +140,8 @@ public class FusedLocation implements ConnectionCallbacks, OnConnectionFailedLis
      */
     @SuppressWarnings({"MissingPermission"})
     public void startLocationUpdates() {
-        // The final argument to {@code requestLocationUpdates()} is a LocationListener
-        // (http://developer.android.com/reference/com/google/android/gms/location/LocationListener.html).
-
         if (EasyPermissions.hasPermissions(mContext, Manifest.permission.ACCESS_FINE_LOCATION)) {
-            if(mGoogleApiClient.isConnected())
+            if (mGoogleApiClient.isConnected())
                 LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
         }
     }
@@ -146,17 +149,15 @@ public class FusedLocation implements ConnectionCallbacks, OnConnectionFailedLis
     /**
      * Removes location updates from the FusedLocationApi.
      */
+
     public void stopLocationUpdates() {
-        // It is a good practice to remove location requests when the activity is in a paused or
-        // stopped state. Doing so helps battery performance and is especially
-        // recommended in applications that request frequent location updates.
+        stopLocationUpdates(true);
+    }
 
-        // The final argument to {@code requestLocationUpdates()} is a LocationListener
-        // (http://developer.android.com/reference/com/google/android/gms/location/LocationListener.html).
-        if(mGoogleApiClient.isConnected())
+    private void stopLocationUpdates(boolean resetGoogleApi) {
+        if (mGoogleApiClient.isConnected())
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
-
-        reset();
+        reset(resetGoogleApi);
     }
 
     /**
@@ -164,18 +165,14 @@ public class FusedLocation implements ConnectionCallbacks, OnConnectionFailedLis
      */
     @Override
     public void onLocationChanged(Location location) {
-//        numTries++;
-        if (mCurrentLocation == null)
-            mCurrentLocation = location;
-        else if (mCurrentLocation.getAccuracy() > location.getAccuracy()) {
-            mCurrentLocation = location;
-        }
-        mCallback.onLocationChanged(mCurrentLocation);
+        mCurrentLocation = location;
+        mCallback.onLocationChanged(location);
         chooseNetworkGps();
+        mLastLocationMillis = SystemClock.elapsedRealtime();
     }
 
     public Location getLocation() {
-            return mCurrentLocation;
+        return mCurrentLocation;
     }
 
     /**
@@ -184,21 +181,13 @@ public class FusedLocation implements ConnectionCallbacks, OnConnectionFailedLis
     @SuppressWarnings({"MissingPermission"})
     @Override
     public void onConnected(@Nullable Bundle connectionHint) {
-        Log.i(TAG, "Connected to GoogleApiClient");
-
-        // If the initial location was never previously requested, we use
-        // FusedLocationApi.getLastKnownLocation() to get it. If it was previously requested, we store
-        // its value in the Bundle and check for it in onCreate(). We
-        // do not request it again unless the user specifically requests location updates by pressing
-        // the Start Updates button.
-        //
         if (EasyPermissions.hasPermissions(mContext, Manifest.permission.ACCESS_FINE_LOCATION)) {
-             mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+            mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
             if (mCurrentLocation != null) {
-                mCallback.onLocationChanged(mCurrentLocation);
-                startLocationUpdates();
-            } else {
-                startLocationUpdates();
+                mCallback.onLastKnownLocation(mCurrentLocation);
+//                startLocationUpdates();
+//            } else {
+//                startLocationUpdates();
             }
         }
         mCallback.onConnected(true);
@@ -206,8 +195,6 @@ public class FusedLocation implements ConnectionCallbacks, OnConnectionFailedLis
 
     @Override
     public void onConnectionSuspended(int cause) {
-        // The connection to Google Play services was lost for some reason. We call connect() to
-        // attempt to re-establish the connection.
         Log.i(TAG, "Connection suspended");
         mCallback.onConnected(false);
         mGoogleApiClient.connect();
@@ -215,52 +202,50 @@ public class FusedLocation implements ConnectionCallbacks, OnConnectionFailedLis
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult result) {
-        // Refer to the javadoc for ConnectionResult to see what error codes might be returned in
-        // onConnectionFailed.
         Log.i(TAG, "Connection failed: ConnectionResult.getErrorCode() = " + result.getErrorCode());
         mCallback.onConnected(false);
     }
 
-    /**
-     * Function to show settings alert dialog
-     * On pressing Settings button will lauch Settings Options
-     */
-    public void showSettingsAlert() {
-        if (!(mContext instanceof Activity)) {
-            return; //only show dialog if called from activity.
-        }
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext);
-
-        // Setting Dialog Title
-        alertDialog.setTitle("GPS settings");
-
-        // Setting Dialog Message
-        alertDialog.setMessage("GPS is not enabled. " +
-                "This app uses GPS. Do you want to go to settings menu?");
-
-        // On pressing Settings button
-        alertDialog.setPositiveButton("Settings", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                mContext.startActivity(intent);
-            }
-        });
-
-        // on pressing cancel button
-        alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-
-        // Showing Alert Message
-        alertDialog.show();
-    }
-
-    private void reset() {
+    private void reset(boolean resetGoogleApi) {
         mCurrentLocation = null;
         inProgress = false;
-        mGoogleApiClient.disconnect();
+        if(resetGoogleApi) {
+            mGoogleApiClient.disconnect();
+            mGoogleApiClient = null;
+        }
+    }
+
+
+    public void redownloadAGPS() {
+        TinyDB db = TinyDB.getTinyDB();
+        try {
+            final LocationManager service = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
+            service.sendExtraCommand(LocationManager.GPS_PROVIDER, "delete_aiding_data", null);
+            Bundle bundle = new Bundle();
+            service.sendExtraCommand("gps", "force_xtra_injection", bundle);
+            service.sendExtraCommand("gps", "force_time_injection", bundle);
+            db.putLong(AGPS_LAST_DOWNLOAD_DATE, System.currentTimeMillis());
+        } catch (Exception e) {
+            db.putLong(AGPS_LAST_DOWNLOAD_DATE, 0L);
+            e.printStackTrace();
+        }
+    }
+
+
+    public float calcGeoMagneticCorrection(float val) {
+        if (previousCorrectionValue == BASE_CORRECTION_VALUE && mCurrentLocation != null) {
+            GeomagneticField gf = new GeomagneticField(
+                    (float) mCurrentLocation.getLatitude(),
+                    (float) mCurrentLocation.getLongitude(),
+                    (float) mCurrentLocation.getAltitude(),
+                    System.currentTimeMillis());
+
+            previousCorrectionValue = gf.getDeclination();
+        }
+        if (previousCorrectionValue != BASE_CORRECTION_VALUE) {
+            val += previousCorrectionValue;
+        }
+        return val;
     }
 
     public boolean canGetLocation() {
@@ -275,7 +260,7 @@ public class FusedLocation implements ConnectionCallbacks, OnConnectionFailedLis
         return ((LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE)).isProviderEnabled(LocationManager.GPS_PROVIDER);
     }
 
-    private void chooseNetworkGps() {
+    private int chooseNetworkGps() {
         if (isGPSEnabled()) {
             PRIORITY = LocationRequest.PRIORITY_HIGH_ACCURACY;
         } else if (isNetworkEnabled()) {
@@ -283,6 +268,7 @@ public class FusedLocation implements ConnectionCallbacks, OnConnectionFailedLis
         } else {
             PRIORITY = LocationRequest.PRIORITY_NO_POWER;
         }
+        return PRIORITY;
     }
 
     public boolean isInProgress() {

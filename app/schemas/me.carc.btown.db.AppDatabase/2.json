@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 2,
-    "identityHash": "a58c8217164656516dfd9b9dd64e1739",
+    "identityHash": "521589616088a3231bf8b38ade772d9a",
     "entities": [
       {
         "tableName": "FavoriteEntry",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`osmId` INTEGER, `timestamp` INTEGER, `latitude` REAL, `longtitude` REAL, `displayName` TEXT, `address` TEXT, `userComment` TEXT, `iconStr` TEXT, `iconInt` INTEGER, `type` TEXT, `id` INTEGER, `lat` REAL, `lon` REAL, `distance` REAL, `userDescription` TEXT, `iconId` INTEGER, `aerialway` TEXT, `aeroway` TEXT, `amenity` TEXT, `barrier` TEXT, `boundary` TEXT, `building` TEXT, `craft` TEXT, `emergency` TEXT, `geological` TEXT, `highway` TEXT, `historic` TEXT, `landuse` TEXT, `leisure` TEXT, `man_made` TEXT, `military` TEXT, `natural` TEXT, `office` TEXT, `place` TEXT, `power` TEXT, `public_transport` TEXT, `railway` TEXT, `route` TEXT, `shop` TEXT, `sport` TEXT, `tourism` TEXT, `waterway` TEXT, `healthcare` TEXT, `entrance` TEXT, `memorial` TEXT, `name` TEXT, `phone` TEXT, `contactPhone` TEXT, `contactEmail` TEXT, `website` TEXT, `fax` TEXT, `contactWebsite` TEXT, `source` TEXT, `sourceName` TEXT, `sourceRef` TEXT, `url` TEXT, `addressCity` TEXT, `addressPostCode` TEXT, `addressSuburb` TEXT, `addressStreet` TEXT, `addressHouseNumber` TEXT, `wheelchair` TEXT, `wheelchairToilets` TEXT, `wheelchairDescription` TEXT, `openingHours` TEXT, `internetAccess` TEXT, `fee` TEXT, `operator` TEXT, `collectionTimes` TEXT, `takeaway` TEXT, `delivery` TEXT, `outdoor_seating` TEXT, `religion` TEXT, `denomination` TEXT, `image` TEXT, `thumbnail` TEXT, `smoking` TEXT, `note` TEXT, `cuisine` TEXT, `wikipedia` TEXT, `wikidata` TEXT, `nudism` TEXT, `cycleway` TEXT, `comment` TEXT, `height` TEXT, PRIMARY KEY(`osmId`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`osmId` INTEGER, `timestamp` INTEGER, `latitude` REAL, `longtitude` REAL, `displayName` TEXT, `address` TEXT, `userComment` TEXT, `iconStr` TEXT, `iconInt` INTEGER, `type` TEXT, `id` INTEGER, `lat` REAL, `lon` REAL, `distance` REAL, `userDescription` TEXT, `iconId` INTEGER, `aerialway` TEXT, `aeroway` TEXT, `amenity` TEXT, `barrier` TEXT, `boundary` TEXT, `building` TEXT, `craft` TEXT, `emergency` TEXT, `geological` TEXT, `highway` TEXT, `historic` TEXT, `landuse` TEXT, `leisure` TEXT, `man_made` TEXT, `military` TEXT, `natural` TEXT, `office` TEXT, `place` TEXT, `power` TEXT, `public_transport` TEXT, `railway` TEXT, `route` TEXT, `shop` TEXT, `sport` TEXT, `tourism` TEXT, `waterway` TEXT, `healthcare` TEXT, `entrance` TEXT, `memorial` TEXT, `name` TEXT, `phone` TEXT, `contactPhone` TEXT, `contactEmail` TEXT, `website` TEXT, `facebook` TEXT, `instagram` TEXT, `twitter` TEXT, `fax` TEXT, `contactWebsite` TEXT, `source` TEXT, `sourceName` TEXT, `sourceRef` TEXT, `url` TEXT, `addressCity` TEXT, `addressPostCode` TEXT, `addressSuburb` TEXT, `addressStreet` TEXT, `addressHouseNumber` TEXT, `wheelchair` TEXT, `wheelchairToilets` TEXT, `wheelchairDescription` TEXT, `openingHours` TEXT, `internetAccess` TEXT, `fee` TEXT, `operator` TEXT, `collectionTimes` TEXT, `takeaway` TEXT, `delivery` TEXT, `outdoor_seating` TEXT, `religion` TEXT, `denomination` TEXT, `image` TEXT, `thumbnail` TEXT, `smoking` TEXT, `note` TEXT, `cuisine` TEXT, `wikipedia` TEXT, `wikidata` TEXT, `nudism` TEXT, `cycleway` TEXT, `comment` TEXT, `height` TEXT, PRIMARY KEY(`osmId`))",
         "fields": [
           {
             "fieldPath": "osmId",
@@ -256,6 +256,21 @@
           {
             "fieldPath": "osmPojo.tags.website",
             "columnName": "website",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "osmPojo.tags.facebook",
+            "columnName": "facebook",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "osmPojo.tags.instagram",
+            "columnName": "instagram",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "osmPojo.tags.twitter",
+            "columnName": "twitter",
             "affinity": "TEXT"
           },
           {
@@ -445,7 +460,7 @@
       },
       {
         "tableName": "HistoryEntry",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`osmId` INTEGER, `timestamp` INTEGER, `latitude` REAL, `longtitude` REAL, `displayName` TEXT, `address` TEXT, `userComment` TEXT, `iconStr` TEXT, `iconInt` INTEGER, `type` TEXT, `id` INTEGER, `lat` REAL, `lon` REAL, `distance` REAL, `userDescription` TEXT, `iconId` INTEGER, `aerialway` TEXT, `aeroway` TEXT, `amenity` TEXT, `barrier` TEXT, `boundary` TEXT, `building` TEXT, `craft` TEXT, `emergency` TEXT, `geological` TEXT, `highway` TEXT, `historic` TEXT, `landuse` TEXT, `leisure` TEXT, `man_made` TEXT, `military` TEXT, `natural` TEXT, `office` TEXT, `place` TEXT, `power` TEXT, `public_transport` TEXT, `railway` TEXT, `route` TEXT, `shop` TEXT, `sport` TEXT, `tourism` TEXT, `waterway` TEXT, `healthcare` TEXT, `entrance` TEXT, `memorial` TEXT, `name` TEXT, `phone` TEXT, `contactPhone` TEXT, `contactEmail` TEXT, `website` TEXT, `fax` TEXT, `contactWebsite` TEXT, `source` TEXT, `sourceName` TEXT, `sourceRef` TEXT, `url` TEXT, `addressCity` TEXT, `addressPostCode` TEXT, `addressSuburb` TEXT, `addressStreet` TEXT, `addressHouseNumber` TEXT, `wheelchair` TEXT, `wheelchairToilets` TEXT, `wheelchairDescription` TEXT, `openingHours` TEXT, `internetAccess` TEXT, `fee` TEXT, `operator` TEXT, `collectionTimes` TEXT, `takeaway` TEXT, `delivery` TEXT, `outdoor_seating` TEXT, `religion` TEXT, `denomination` TEXT, `image` TEXT, `thumbnail` TEXT, `smoking` TEXT, `note` TEXT, `cuisine` TEXT, `wikipedia` TEXT, `wikidata` TEXT, `nudism` TEXT, `cycleway` TEXT, `comment` TEXT, `height` TEXT, PRIMARY KEY(`osmId`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`osmId` INTEGER, `timestamp` INTEGER, `latitude` REAL, `longtitude` REAL, `displayName` TEXT, `address` TEXT, `userComment` TEXT, `iconStr` TEXT, `iconInt` INTEGER, `type` TEXT, `id` INTEGER, `lat` REAL, `lon` REAL, `distance` REAL, `userDescription` TEXT, `iconId` INTEGER, `aerialway` TEXT, `aeroway` TEXT, `amenity` TEXT, `barrier` TEXT, `boundary` TEXT, `building` TEXT, `craft` TEXT, `emergency` TEXT, `geological` TEXT, `highway` TEXT, `historic` TEXT, `landuse` TEXT, `leisure` TEXT, `man_made` TEXT, `military` TEXT, `natural` TEXT, `office` TEXT, `place` TEXT, `power` TEXT, `public_transport` TEXT, `railway` TEXT, `route` TEXT, `shop` TEXT, `sport` TEXT, `tourism` TEXT, `waterway` TEXT, `healthcare` TEXT, `entrance` TEXT, `memorial` TEXT, `name` TEXT, `phone` TEXT, `contactPhone` TEXT, `contactEmail` TEXT, `website` TEXT, `facebook` TEXT, `instagram` TEXT, `twitter` TEXT, `fax` TEXT, `contactWebsite` TEXT, `source` TEXT, `sourceName` TEXT, `sourceRef` TEXT, `url` TEXT, `addressCity` TEXT, `addressPostCode` TEXT, `addressSuburb` TEXT, `addressStreet` TEXT, `addressHouseNumber` TEXT, `wheelchair` TEXT, `wheelchairToilets` TEXT, `wheelchairDescription` TEXT, `openingHours` TEXT, `internetAccess` TEXT, `fee` TEXT, `operator` TEXT, `collectionTimes` TEXT, `takeaway` TEXT, `delivery` TEXT, `outdoor_seating` TEXT, `religion` TEXT, `denomination` TEXT, `image` TEXT, `thumbnail` TEXT, `smoking` TEXT, `note` TEXT, `cuisine` TEXT, `wikipedia` TEXT, `wikidata` TEXT, `nudism` TEXT, `cycleway` TEXT, `comment` TEXT, `height` TEXT, PRIMARY KEY(`osmId`))",
         "fields": [
           {
             "fieldPath": "osmId",
@@ -695,6 +710,21 @@
           {
             "fieldPath": "osmPojo.tags.website",
             "columnName": "website",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "osmPojo.tags.facebook",
+            "columnName": "facebook",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "osmPojo.tags.instagram",
+            "columnName": "instagram",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "osmPojo.tags.twitter",
+            "columnName": "twitter",
             "affinity": "TEXT"
           },
           {
@@ -949,7 +979,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"a58c8217164656516dfd9b9dd64e1739\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"521589616088a3231bf8b38ade772d9a\")"
     ]
   }
 }

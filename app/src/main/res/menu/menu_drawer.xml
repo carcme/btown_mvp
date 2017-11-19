@@ -13,6 +13,11 @@
             android:id="@+id/nav_transport_maps"
             android:icon="@drawable/ic_subway"
             android:title="@string/menu_train_route_map"/>
+
+        <item
+            android:id="@+id/nav_translate"
+            android:icon="@drawable/ic_translate"
+            android:title="@string/menu_translate"/>
     </group>
 
     <group

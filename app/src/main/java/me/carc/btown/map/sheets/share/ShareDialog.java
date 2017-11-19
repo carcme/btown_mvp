@@ -215,5 +215,6 @@ public class ShareDialog {
     public static void sendToClipboard(Context context, String text) {
         ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Activity.CLIPBOARD_SERVICE);
         clipboard.setText(text);
+        Toast.makeText(context, R.string.shared_string_copied_to_clipboard, Toast.LENGTH_SHORT).show();
     }
 }

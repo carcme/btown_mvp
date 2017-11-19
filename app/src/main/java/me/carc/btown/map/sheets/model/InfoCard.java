@@ -25,6 +25,8 @@ public class InfoCard implements Serializable {
         WEB,
         WIKI,
         FACEBOOK,
+        INSTAGRAM,
+        TWITTER,
         CLIPBOARD
     }
 

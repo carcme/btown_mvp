@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/tourCardView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardBackgroundColor="@color/colorPrimary"
+    app:cardCornerRadius="@dimen/card_corner_radius"
+    app:cardElevation="@dimen/card_elevation">
+
+    <FrameLayout
+        android:id="@+id/mainFrame"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:animateLayoutChanges="true"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <ImageView
+            android:id="@+id/backgroundImage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:contentDescription="@null"
+            android:scaleType="fitStart"
+            android:transitionName="imageCover"
+            tools:ignore="UnusedAttribute"
+            tools:src="@drawable/background_blue"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/margin_standard"
+            android:layout_gravity="bottom"
+            android:background="@color/tintDark"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <TextView
+                    android:id="@+id/headingTitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="serif"
+                    android:textColor="@color/card_title_text_color"
+                    android:textSize="24sp"
+                    android:transitionName="@string/catalogue_title"
+                    tools:ignore="UnusedAttribute"
+                    tools:text="Heading here"/>
+
+                <TextView
+                    android:id="@+id/headingStops"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:drawablePadding="@dimen/margin_tiny"
+                    android:drawableStart="@drawable/ic_list"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    tools:text="132"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/bottomText"
+                style="@style/FourSquareCardInfoText"
+                android:ellipsize="end"
+                android:padding="0dp"
+                tools:text="@string/fourSquareMaxText"/>
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+</android.support.v7.widget.CardView>

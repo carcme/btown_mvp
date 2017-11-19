@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/venueAppbar"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:fitsSystemWindows="true"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        tools:layout_height="200dp"
+        tools:ignore="Suspicious0dp">
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/venueCollapsingToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
+            android:fontFamily="serif"
+            app:contentScrim="@color/tintStandard"
+            app:expandedTitleMarginEnd="32dp"
+            app:expandedTitleMarginStart="16dp"
+            app:statusBarScrim="@android:color/transparent"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+
+            <com.flaviofaria.kenburnsview.KenBurnsView
+                android:id="@+id/venueHeaderImage"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:scaleType="centerCrop"
+                app:layout_collapseMode="pin"
+                android:adjustViewBounds="true"
+                tools:layout_height="200dp"
+                tools:src="@drawable/no_image"
+                tools:ignore="Suspicious0dp"
+                />
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/venueToolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@android:color/transparent"
+                app:layout_collapseMode="pin"
+                app:layout_scrollFlags="scroll|enterAlwaysCollapsed|snap"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+        </android.support.design.widget.CollapsingToolbarLayout>
+
+    </android.support.design.widget.AppBarLayout>
+
+
+    <android.support.design.widget.TabLayout
+        android:id="@+id/venueTabs"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_gravity="bottom"
+        android:background="?attr/colorPrimary"
+        app:layout_anchor="@+id/venueAppbar"
+        app:layout_anchorGravity="bottom"
+        app:tabTextColor="@color/sheet_icon_color"
+        app:tabSelectedTextColor="@color/white"
+        app:tabGravity="fill"
+        app:tabMode="fixed" />
+
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/venueViewpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        />
+
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/venueFab"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        app:layout_anchor="@id/venueViewpager"
+        app:layout_anchorGravity="bottom|right|end"
+        android:src="@drawable/ic_back_white"
+        android:layout_margin="@dimen/fab_margin"
+        android:clickable="true"/>
+
+</android.support.design.widget.CoordinatorLayout>

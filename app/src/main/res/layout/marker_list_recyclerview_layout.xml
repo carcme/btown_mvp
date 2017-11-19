@@ -19,7 +19,7 @@
             android:filterTouchesWhenObscured="true"
             android:fitsSystemWindows="true"
             android:fontFamily="serif"
-            app:contentScrim="@color/gallery_overlay"
+            app:contentScrim="@color/tintStandard"
             app:expandedTitleMarginEnd="64dp"
             app:expandedTitleMarginStart="16dp"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"

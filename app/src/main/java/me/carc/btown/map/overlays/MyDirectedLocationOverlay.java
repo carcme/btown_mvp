@@ -12,8 +12,6 @@ import org.osmdroid.views.overlay.mylocation.DirectedLocationOverlay;
 import java.util.Date;
 
 import me.carc.btown.Utils.ImageUtils;
-import me.carc.btown.common.C;
-import me.carc.btown.common.Commons;
 
 /**
  * Add features to overlay - modified from CompassView
@@ -21,8 +19,6 @@ import me.carc.btown.common.Commons;
  */
 
 public class MyDirectedLocationOverlay extends DirectedLocationOverlay {
-
-    private static final String TAG = C.DEBUG + Commons.getTag();
 
     static final public float TIME_DELTA_THRESHOLD = 0.5f;    // maximum time difference between iterations, s
     static final public float ANGLE_DELTA_THRESHOLD = 0.1f;    // minimum rotation change to be redrawn, deg

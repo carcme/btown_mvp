@@ -10,6 +10,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -17,6 +18,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.Toolbar;
@@ -27,7 +29,6 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import org.osmdroid.util.GeoPoint;
 
@@ -230,6 +231,7 @@ public class SearchDialogFragment extends DialogFragment implements ISearch.View
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         setShowsDialog(true);
+        getDialog().getWindow().getAttributes().windowAnimations = R.style.DialogAnimationSlide;
     }
 
     @Override
@@ -259,7 +261,14 @@ public class SearchDialogFragment extends DialogFragment implements ISearch.View
         getDialog().show();
         updateClearButtonVisibility(true);
         progressBar.setVisibility(GONE);
-        Toast.makeText(getActivity(), R.string.search_no_results_found, Toast.LENGTH_LONG).show();
+//        Toast.makeText(getActivity(), R.string.search_no_results_found, Toast.LENGTH_LONG).show();
+        showMsg(R.string.search_no_results_found);
+    }
+
+    private void showMsg(@StringRes int msg){
+        new AlertDialog.Builder(getActivity())
+                .setMessage(msg)
+                .show();
     }
 
     @SuppressWarnings("unused")
@@ -272,9 +281,15 @@ public class SearchDialogFragment extends DialogFragment implements ISearch.View
         dismiss();
     }
 
+
     @Override
     public void onStart() {
         super.onStart();
+
+        // safety check
+        if (Commons.isNull(getDialog()))
+            return;
+
         if (!show)
             closeSearch();
         presenter.setSearchHint(searchEditText.length());

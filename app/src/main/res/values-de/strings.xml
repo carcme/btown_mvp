@@ -2,14 +2,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools"
     tools:shrinkMode="strict" >
 
-    <!--
-    TO TRANSLATE
-        - FAVORITES VIEW
-        - FEEDBACK DIALOG
-        - PUBLIC TRANSPORT ROUTE PLAN
-    -->
-
-
     <string name="app_name">B-Town</string>
 
 
@@ -24,6 +16,7 @@
     <string name="menu_transportr">TransportR</string>
     <string name="menu_public_transport">Fahrpläne der öffentlichen Verkehrsmittel</string>
     <string name="menu_train_route_map">Liniennetz</string>
+    <string name="menu_translate">Übersetzer</string>
 
 
 
@@ -89,6 +82,14 @@
     <string name="shared_string_bookmark">Lesezeichen</string>
     <string name="shared_string_options">Optionen</string>
     <string name="shared_string_about">Über</string>
+    <string name="shared_string_thankyou">Danke!</string>
+    <string name="shared_string_copied_to_clipboard">In die Zwischenablage kopiert</string>
+    <string name="shared_string_loading">Lade</string>
+    <string name="shared_string_none">Keine</string>
+
+    <!--TODO-->
+    <string name="shared_string_phone">Phone</string>
+    <string name="shared_string_web">Web</string>
 
 
     <!--DONATE-->
@@ -121,13 +122,11 @@
 
 
     <!--PRODUCT NAMES AND TEXTS-->
-    <string name="wikipedia">Wikipedia</string>
-    <string name="facebook">Facebook</string>
-    <string name="google">Google</string>
-    <string name="instagram">Instagram</string>
     <string name="install_instagram">Installiere Instagram</string>
     <string name="no_instagram">Instagram nicht gefunden. Möchtest du es jetzt installieren?</string>
     <string name="install_transportr">Installiere TransportR</string>
+    <string name="install_translate">Installiere Translator</string>
+    <string name="no_translate">Google Übersetzer nicht gefunden. Möchtest du es jetzt installieren?</string>
     <string name="no_transportr">TransportR nicht gefunden. Möchtest du es jetzt installieren?</string>
 
 
@@ -137,10 +136,16 @@
     <!--SIGN IN STUFF-->
     <string name="sign_out">Ausloggen</string>
     <string name="sign_in_with" formatted="false">Anmelden mit %s</string>
-    <string name="loading">Lade</string>
 
     <string name="enter_your_own_notes">Füge eigene Notizen hinzu…</string>
 
+
+    <!--PERMISSIONS-->
+    <string name="rationale_storage">B-Town wird beendet</string>
+    <string name="permission_rejected_msg">B-Town braucht deine Zustimmung unbedingt, um zu funktionieren. Wir hoffen, du lässt dich überzeugen und stimmst beim nächsten Mal zu.</string>
+    <string name="enable_gps_request">Bitte aktiviere GPS</string>
+    <string name="no_gps">Kein GPS</string>
+    <string name="rationale_camera">Wir brauchen Zugang zu Deiner Kamera, damit du Bilder machen kannst.</string>
 
 
     <!--SETTINGS-->
@@ -165,6 +170,7 @@
 
     <string name="about_top">© 2017 Carc\nFreie Software Lizenz: GPLv3</string>
 
+    <!--TODO-->
     <string name="about"><![CDATA[
 <p>The idea of B-Town came while travelling and wanting something that would give insider tips for various cities. If you have any suggestions of what you\'d like to see, let me know via the feedback button</p>
 <p>Use the app to get details of your area, whether you\'re interested in local bars, restaurtants or sightseeing and included Wikipedia lookups to make it easy those to find extra places you may be interested in. I plan to include FourSquare support in the near future.</p>
@@ -175,7 +181,6 @@
     <string name="about_bottom">
     <![CDATA[
 <p>If you find any issues with B-Town, please report them at <a href="%2$s">the issue tracker</a>.</p>
-<p><b>Donations</b> options are listed on <a href="%3$s">the Transportr website</a>.</p>
 ]]>
 </string>
 
@@ -202,7 +207,6 @@
     <string name="alert_msg_pt_route_map">Die Liste der Öffentlichen Verkehrsmittel Berlins wird nun heruntergeladen. Bitte habe ein wenig Geduld. Die Maps für andere Karten sind in Arbeit. Wenn du einen Vorschlag hast, bitte schreib mir doch eine Mail. Im Menü findest du die Rubrik Feedback.</string>
 
     <string name="lib_thanks">TODO - remove this and have a proper tab screen with libs used</string>
-
 
 
 

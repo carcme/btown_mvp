@@ -134,6 +134,7 @@ public class AttractionTabsGalleryFragment extends Fragment {
 
                 @Override
                 public void onItemLongClick(View view, int position) { /* DO NOTHING */ }
+
             }));
         }
     }

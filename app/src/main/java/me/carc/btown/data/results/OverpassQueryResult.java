@@ -214,6 +214,15 @@ public class OverpassQueryResult {
             @SerializedName("website")
             public String website;
 
+            @SerializedName("facebook")
+            public String facebook;
+
+            @SerializedName("instagram")
+            public String instagram;
+
+            @SerializedName("twitter")
+            public String twitter;
+
             @SerializedName("fax")
             public String fax;
 
@@ -289,6 +298,7 @@ public class OverpassQueryResult {
             @SerializedName("image")
             public String image;
             public String thumbnail;
+            public boolean isIcon;
 
             @SerializedName("smoking")
             public String smoking;

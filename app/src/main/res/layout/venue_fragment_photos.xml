@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    tools:context=".tours.top_pick_lists.VenueTabsActivity">
+
+
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/venuePhotosNestedScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:scrollbars="none">
+
+        <RelativeLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/venuePhotoGrid"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="@dimen/grid_item_spacing"
+                android:clipToPadding="false"
+                android:scrollbars="vertical"
+                android:scrollbarStyle="insideOverlay"
+                android:orientation="vertical"
+                app:layoutManager="android.support.v7.widget.GridLayoutManager"
+                app:spanCount="@integer/venue_photo_grid_columns"/>
+
+            <Button
+                android:id="@+id/photoLoadMore"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/venuePhotoGrid"
+                android:padding="@dimen/margin_standard"
+                android:fontFamily="serif"
+                android:textColor="@color/colorAccent"
+                tools:text="Load More (123)"/>
+
+
+        </RelativeLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:indeterminate="true"/>
+
+    <TextView
+        android:id="@+id/emptyPhotos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_gravity="bottom"
+        android:layout_margin="@dimen/margin_standard"
+        android:drawableTop="@drawable/ic_photo_large"
+        android:gravity="center"
+        android:text="There are no Photos for this venue"
+        android:textColor="@color/sheet_icon_color"
+        android:textSize="20sp"
+        android:visibility="gone"
+        tools:visibility="visible" />
+
+
+
+</RelativeLayout>

@@ -100,7 +100,7 @@ public class IconManager {
             Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
             return new BitmapDrawable(res, ImageUtils.resizeBitmap(res, bitmap, 50, 50));
         } catch (NullPointerException e) {
-            return ResourcesCompat.getDrawable(res, R.drawable.ic_place, null);
+            return ResourcesCompat.getDrawable(res, R.drawable.btown_round_place_icon, null);
         }
     }
 

@@ -17,7 +17,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.SslErrorHandler;
-import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebHistoryItem;
 import android.webkit.WebResourceRequest;
@@ -47,8 +46,10 @@ public class WikiWebViewActivity extends BaseActivity {
     public static final String WIKI_EXTRA_PAGE_TITLE = "WIKI_EXTRA_PAGE_TITLE";
     public static final String WIKI_EXTRA_PAGE_SUBHEADING = "WIKI_EXTRA_PAGE_SUBHEADING";
     public static final String WIKI_EXTRA_PAGE_URL = "WIKI_EXTRA_PAGE_URL";
+    public static final String DISABLE_JS = "DISABLE_JS";
 
 
+    private static final String HTTPS_GOOGLE  = "comgooglemaps://?q";
     private static final String HTTPS_COMMONS = "https://upload.wikimedia.org/wikipedia/commons/";
     private static final String WIKIPEDIA = "wikipedia";
 
@@ -91,6 +92,7 @@ public class WikiWebViewActivity extends BaseActivity {
         assert getSupportActionBar() != null;
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        boolean disableJS = false;
         Intent intent = getIntent();
         if (Commons.isNotNull(intent) && Commons.isNull(savedInstanceState)) {
             if (intent.hasExtra(WIKI_EXTRA_PAGE_URL)) {
@@ -104,6 +106,10 @@ public class WikiWebViewActivity extends BaseActivity {
 
             if (intent.hasExtra(WIKI_EXTRA_PAGE_SUBHEADING)) {
                 getSupportActionBar().setSubtitle(intent.getStringExtra(WIKI_EXTRA_PAGE_SUBHEADING));
+            }
+
+            if (intent.hasExtra(DISABLE_JS)) {
+                disableJS = intent.getBooleanExtra(DISABLE_JS, false);
             }
         }
 
@@ -184,24 +190,10 @@ public class WikiWebViewActivity extends BaseActivity {
             @Override
             public void onPageFinished(WebView view, String url) {
                 progressBar.setVisibility(View.GONE);
-
-                // skip facebook sub-headings for now - am using page ID which does nothing for the user
-/*                if(!getSupportActionBar().getTitle().equals(getString(R.string.facebook))) {
-                    String title = url.substring(url.lastIndexOf("/") + 1, url.length()).replace("_", " ");
-                    try {
-                        getSupportActionBar().setSubtitle(URLDecoder.decode(title, URL_ENCODING));
-                    } catch (UnsupportedEncodingException e) {
-                        getSupportActionBar().setSubtitle(title);
-                    }
-                }
-*/
             }
         });
 
         webView.setWebChromeClient(new WebChromeClient() {
-            //For Android 4.1
-            public void openFileChooser(ValueCallback<Uri> uploadMsg, String acceptType, String capture) {
-            }
 
             @Override
             public void onReceivedTitle(WebView view, String title) {
@@ -219,6 +211,9 @@ public class WikiWebViewActivity extends BaseActivity {
             if(BuildConfig.DEBUG)
                 Toast.makeText(this, "JAVA SCRIPT ENABLED", Toast.LENGTH_SHORT).show();
         }
+
+//        if(disableJS)
+//            allowJavaScript(false);
 
         // Load the URL
         if (Commons.isNotNull(savedInstanceState)) {
@@ -279,6 +274,9 @@ public class WikiWebViewActivity extends BaseActivity {
 
         } else if(isLinkTelephoneType(hitTestType, url)) {
             return true;
+
+        } else if(isGoogleLink(url)) {
+            return true;
         }
         return false;
     }
@@ -319,14 +317,24 @@ public class WikiWebViewActivity extends BaseActivity {
      */
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private boolean isLinkTelephoneType(int type, String url) {
-         if(type == WebView.HitTestResult.PHONE_TYPE) {
-             if (C.HAS_M && checkSelfPermission(Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                 requestPermissions(new String[]{Manifest.permission.CALL_PHONE}, C.PERMISSION_CALL_PHONE);
-                 return false;
-             }
-             startActivity(IntentUtils.callPhone(Commons.replace(url, TEL)));
-             return true;
-         }
+        if(type == WebView.HitTestResult.PHONE_TYPE) {
+            if (C.HAS_M && checkSelfPermission(Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{Manifest.permission.CALL_PHONE}, C.PERMISSION_CALL_PHONE);
+                return false;
+            }
+            startActivity(IntentUtils.callPhone(Commons.replace(url, TEL)));
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Check if Google link from 4SQ menu item - ignore if so (we already give the location and directions
+     */
+    private boolean isGoogleLink(String url) {
+        if(url.startsWith(HTTPS_GOOGLE)) {
+            return false;
+        }
         return false;
     }
 

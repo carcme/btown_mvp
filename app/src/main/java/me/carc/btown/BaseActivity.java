@@ -22,6 +22,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.annotation.VisibleForTesting;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
@@ -29,6 +31,8 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -55,6 +59,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.osmdroid.util.GeoPoint;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -89,11 +94,14 @@ public class BaseActivity extends AppCompatActivity {
     private static final int RESULT_DONATE = 73;
 
     public static final String TRANSPORTR_INTENT = "de.grobox.liberario";
+    public static final String TRANSLATE_INTENT  = "com.google.android.apps.translate";
 
 
     private static IInAppBillingService mBillingService;
     private static List<PurchaseItem> mPurchaseItems;
     private String[] mDonateItems;
+
+    private GeoPoint currentLocation;
 
     private AlertDialog calibrateDialog;
 
@@ -243,6 +251,16 @@ public class BaseActivity extends AppCompatActivity {
         calculateImageHeight();
     }
 
+
+    protected GeoPoint getCurrentLocation(GeoPoint point) {
+        return currentLocation;
+    }
+
+    protected void setCurrentLocation(GeoPoint point) {
+        currentLocation = point;
+    }
+
+
     protected static boolean isGermanLanguage() {
         return C.USER_LANGUAGE.equals("de");
     }
@@ -338,17 +356,38 @@ public class BaseActivity extends AppCompatActivity {
     }
 
 
+    protected void removeToolBarFlags(Toolbar toolbar){
+        AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams) toolbar.getLayoutParams();
+        params.setScrollFlags(0);
+    }
+
+
+    protected void scrollHider(RecyclerView rv, final FloatingActionButton fab){
+        rv.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if(dy>0)
+                    fab.hide();
+                else
+                    fab.show();
+            }
+        });
+    }
+
+
     /**
      * Prompt to install from Playstore
      *
      * @param title            The dialog title
      * @param content          The dialog text
+     * @param resId            The dialog icon
      * @param packageToInstall The id of app on Playstore
      */
-    public void installExtApp(final String title, final String content, final String packageToInstall) {
+    public void installExtApp(final String title, final String content, int resId,  final String packageToInstall) {
         new AlertDialog.Builder(BaseActivity.this)
                 .setTitle(title)
-                .setIcon(R.mipmap.ic_transportr)
+                .setIcon(resId)
                 .setMessage(content)
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
@@ -442,7 +481,7 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     public void showProgressDialog() {
-        showProgressDialog(getString(R.string.loading));
+        showProgressDialog(getString(R.string.shared_string_loading));
     }
 
     public void showProgressDialog(CharSequence title, CharSequence message) {
@@ -463,7 +502,7 @@ public class BaseActivity extends AppCompatActivity {
     public
     @DrawableRes
     int getBackground() {
-        return TinyDB.getTinyDB().getInt(SAVED_HEADER_BACKGROUND, R.drawable.background_blue);
+        return TinyDB.getTinyDB().getInt(SAVED_HEADER_BACKGROUND, R.drawable.background_jewish_memorial);
     }
 
     public void setBackgroundImage(@DrawableRes int imageRes) {
@@ -545,6 +584,10 @@ public class BaseActivity extends AppCompatActivity {
                     transportPlans();
                     break;
 
+                case R.id.nav_translate:
+                    translate();
+                    break;
+
                 case R.id.nav_settings:
                     settings();
                     break;
@@ -567,7 +610,19 @@ public class BaseActivity extends AppCompatActivity {
             startActivity(intent);
         } else {
             if (Commons.isNetworkAvailable(this))
-                installExtApp(getString(R.string.install_transportr), getString(R.string.no_transportr), TRANSPORTR_INTENT);
+                installExtApp(getString(R.string.install_transportr), getString(R.string.no_transportr), R.mipmap.ic_transportr, TRANSPORTR_INTENT);
+            else
+                showAlertDialog(R.string.shared_string_error, R.string.network_not_available_error, -1);
+        }
+    }
+
+    public void translate() {
+        Intent intent = getPackageManager().getLaunchIntentForPackage(TRANSLATE_INTENT);
+        if (intent != null) {
+            startActivity(intent);
+        } else {
+            if (Commons.isNetworkAvailable(this))
+                installExtApp(getString(R.string.install_translate), getString(R.string.no_translate), R.drawable.ic_translate, TRANSLATE_INTENT);
             else
                 showAlertDialog(R.string.shared_string_error, R.string.network_not_available_error, -1);
         }

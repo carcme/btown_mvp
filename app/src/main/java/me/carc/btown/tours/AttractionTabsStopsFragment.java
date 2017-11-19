@@ -8,7 +8,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,13 +18,13 @@ import me.carc.btown.R;
 import me.carc.btown.common.C;
 import me.carc.btown.common.Commons;
 import me.carc.btown.common.interfaces.ToursScrollListener;
+import me.carc.btown.tours.adapters.TourDataAdapter;
 import me.carc.btown.tours.attractionPager.AttractionPagerActivity;
 import me.carc.btown.tours.model.Attraction;
 import me.carc.btown.ui.custom.MyCustomLayoutManager;
 import me.carc.btown.ui.custom.MyRecyclerItemClickListener;
 
 import static me.carc.btown.BaseActivity.hideProgressDialog;
-
 
 public class AttractionTabsStopsFragment extends Fragment {
 
@@ -64,7 +63,7 @@ public class AttractionTabsStopsFragment extends Fragment {
         if(C.HAS_M)
             rv.addOnScrollListener(onScrollListener);
         else
-            rv.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            rv.addOnScrollListener(new RecyclerView.OnScrollListener() {
                 @Override
                 public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                     super.onScrollStateChanged(recyclerView, newState);
@@ -102,10 +101,7 @@ public class AttractionTabsStopsFragment extends Fragment {
     }
 
     private void setupRecyclerView(final RecyclerView recyclerView) {
-        Log.d(TAG, "setupRecyclerView: ");
-
         Bundle args = getArguments();
-
         if(Commons.isNotNull(args)) {
 
             ArrayList<Attraction> list = args.getParcelableArrayList(CataloguePreviewActivity.ATTRACTIONS_LIST);
@@ -123,8 +119,6 @@ public class AttractionTabsStopsFragment extends Fragment {
                     recyclerView, new MyRecyclerItemClickListener.OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, int position) {
-                    Log.d(TAG, "onItemClick: ");
-
                     ArrayList<Attraction> attractions = getArguments().getParcelableArrayList(CataloguePreviewActivity.ATTRACTIONS_LIST);
 
                     Intent intent = new Intent(getActivity(), AttractionPagerActivity.class);
@@ -150,8 +144,6 @@ public class AttractionTabsStopsFragment extends Fragment {
             case RESULT_ATTRACTION:
                 hideProgressDialog();
                 if (resultCode == Activity.RESULT_OK) {
-                    Log.d(TAG, "onActivityResult: ");
-
                     int storyIndex = data.getIntExtra(AttractionPagerActivity.SCROLL_TO_NEW_INDEX, -1);
                     if (-1 != storyIndex)
                         rv.smoothScrollToPosition(storyIndex);

@@ -14,11 +14,13 @@ import me.carc.btown.R;
  */
 @Keep
 public class PhotoViewHolder extends RecyclerView.ViewHolder {
+    public View mView;
     public TextView author;
     public ImageView photo;
 
     public PhotoViewHolder(View v) {
         super(v);
+        mView = v;
         author = itemView.findViewById(R.id.author);
         photo = itemView.findViewById(R.id.photo);
     }

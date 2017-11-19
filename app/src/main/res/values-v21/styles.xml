@@ -33,5 +33,12 @@
         <item name="android:windowIsTranslucent">true</item>
     </style>
 
+    <style name="AppTheme.ShowCaseGallery" parent="AppTheme.FullScrnActivity">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowAnimationStyle">@null</item>  <!--Override the other defined transitions-->
+    </style>
+
 
 </resources>

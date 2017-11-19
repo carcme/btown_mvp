@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="@dimen/margin_standard"
+    android:layout_marginStart="@dimen/margin_standard"
+    android:orientation="horizontal"
+    android:paddingBottom="@dimen/margin_small"
+    android:paddingTop="@dimen/margin_small">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/searchIcon"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/rating_background"
+        android:backgroundTint="@color/tintStandard"
+        android:contentDescription="@null"
+        android:scaleType="centerCrop"/>
+
+    <RelativeLayout
+        android:id="@+id/textHolder"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:layout_weight="1">
+
+        <me.carc.btown.ui.custom.CapitalisedTextView
+            android:id="@+id/searchTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:ellipsize="end"
+            android:gravity="center_vertical|top"
+            android:maxLines="1"
+            android:textSize="@dimen/default_list_text_size"
+            tools:text="@string/lorum_ipsum"/>
+
+        <me.carc.btown.ui.custom.CapitalisedTextView
+            android:id="@+id/searchDesc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/searchTitle"
+            android:layout_marginStart="8dp"
+            android:ellipsize="end"
+            android:gravity="center_vertical|bottom"
+            android:maxLines="1"
+            android:textSize="@dimen/tiny_list_text_size"
+            tools:text="@string/lorum_ipsum"
+            android:layout_alignParentBottom="true"/>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/ratingText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|end"
+            android:background="@drawable/rating_background"
+            android:gravity="center|top"
+            android:minWidth="22dp"
+            android:padding="@dimen/margin_tiny"
+            android:text="---"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/tiny_list_text_size"
+            tools:backgroundTint="@color/tintLight"
+            tools:ignore="UnusedAttribute"/>
+
+        <TextView
+            android:id="@+id/searchDistance"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center|bottom"
+            android:ellipsize="end"
+            android:gravity="bottom"
+            android:maxLines="1"
+            android:paddingStart="@dimen/margin_tiny"
+            android:paddingEnd="0dp"
+            android:textSize="@dimen/tiny_list_text_size"
+            tools:text="12.3km"/>
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/searchMore"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:background="@drawable/backgroud_round_image_button"
+        android:contentDescription="@null"
+        android:padding="@dimen/margin_tiny"
+        android:src="@drawable/ic_more"
+        android:visibility="gone"/>
+
+</LinearLayout>

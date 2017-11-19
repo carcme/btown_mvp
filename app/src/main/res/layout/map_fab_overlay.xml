@@ -166,4 +166,7 @@
     </LinearLayout>
 
 
+    <include layout="@layout/debug_location_overlay"/>
+
+
 </android.support.design.widget.CoordinatorLayout>

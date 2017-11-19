@@ -55,13 +55,15 @@ public class RatingDialog extends AppCompatDialog implements RatingBar.OnRatingB
 
     public RatingDialog(Context context, Builder builder) {
         super(context);
+
+        getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
         this.context = context;
         this.builder = builder;
 
         this.session = builder.session;
         this.threshold = builder.threshold;
     }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

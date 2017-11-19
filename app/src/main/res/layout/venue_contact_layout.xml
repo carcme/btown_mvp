@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <Button
+        android:id="@+id/venuePhoneCall"
+        style="?android:attr/buttonBarButtonStyle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:contentDescription="@string/shared_string_phone"
+        android:drawableTop="@drawable/ic_call"
+        android:text="@string/shared_string_phone"
+        android:textColor="@color/buttonTextColor"
+        />
+
+    <include
+        android:id="@+id/venuePhoneDiv"
+        layout="@layout/divider_faded_vert"/>
+
+    <Button
+        android:id="@+id/venueWebsite"
+        style="?android:attr/buttonBarButtonStyle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:contentDescription="@string/shared_string_web"
+        android:drawableTop="@drawable/ic_web"
+        android:text="@string/shared_string_web"
+        android:textColor="@color/buttonTextColor"
+        tools:ignore="String"/>
+
+    <include
+        android:id="@+id/venueWebDiv"
+        layout="@layout/divider_faded_vert"/>
+
+
+    <Button
+        android:id="@+id/venueDirections"
+        style="?android:attr/buttonBarButtonStyle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:contentDescription="@string/route_to"
+        android:drawableTop="@drawable/ic_google_maps"
+        android:text="@string/route_to"
+        android:textColor="@color/buttonTextColor"
+        tools:ignore="String"/>
+
+    <include
+        android:id="@+id/venueRouteDiv"
+        layout="@layout/divider_faded_vert"/>
+
+
+    <Button
+        android:id="@+id/venueShare"
+        style="?android:attr/buttonBarButtonStyle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:contentDescription="@string/shared_string_share"
+        android:drawableTop="@drawable/ic_menu_share"
+        android:text="@string/shared_string_share"
+        android:textColor="@color/buttonTextColor"
+        />
+
+
+</LinearLayout>

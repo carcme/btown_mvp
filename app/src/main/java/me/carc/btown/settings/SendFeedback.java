@@ -4,6 +4,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+import android.widget.Toast;
 
 import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.RatingEvent;
@@ -35,28 +36,25 @@ public class SendFeedback {
     public static final String FIREBASE_MSG_BOARD_FEEDBACK = "FEEDBACK";
 
 
-    private Context mContext;
-
     public SendFeedback(Context ctx, int type) {
-        mContext = ctx;
         if(type == TYPE_FEEDBACK) {
-            feedback();
+            feedback(ctx);
         }  else if(type == TYPE_RATE) {
-            rate();
+            rate(ctx);
         }
     }
 
-    private void feedback() {
+    private void feedback(final Context ctx) {
 
-        FeedbackDialog.Builder builder = new FeedbackDialog.Builder(mContext);
+        FeedbackDialog.Builder builder = new FeedbackDialog.Builder(ctx);
         builder.titleTextColor(R.color.black);
 
-        builder.formTitle(mContext.getString(R.string.shared_string_feedback));
-        builder.formHint(mContext.getString(R.string.add_your_comment));
+        builder.formTitle(ctx.getString(R.string.shared_string_feedback));
+        builder.formHint(ctx.getString(R.string.add_your_comment));
         builder.allowEmpty(false);
 
         // Positive button
-        builder.submitBtnText(mContext.getString(R.string.shared_string_send));
+        builder.submitBtnText(ctx.getString(R.string.shared_string_send));
         builder.positiveBtnTextColor(R.color.positiveBtnTextColor);
         builder.positiveBtnBgColor(R.drawable.button_selector_positive);
         builder.onSumbitClick(
@@ -64,6 +62,7 @@ public class SendFeedback {
                     @Override
                     public void onFormSubmitted(String feedback) {
                         sendFeedBack(feedback);
+                        Toast.makeText(ctx, R.string.shared_string_thankyou, Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
@@ -74,16 +73,16 @@ public class SendFeedback {
     }
 
 
-    private void rate() {
-        final RatingDialog ratingDialog = new RatingDialog.Builder(mContext)
-                .icon(ContextCompat.getDrawable(mContext, R.mipmap.ic_launcher_rnd))
+    private void rate(final Context ctx) {
+        final RatingDialog ratingDialog = new RatingDialog.Builder(ctx)
+                .icon(ContextCompat.getDrawable(ctx, R.mipmap.ic_launcher_rnd))
                 .threshold(3)
-                .title(mContext.getString(R.string.ratings_request_title))
+                .title(ctx.getString(R.string.ratings_request_title))
                 .titleTextColor(R.color.black)
-                .formTitle(mContext.getString(R.string.feedback_request_title))
-                .formHint(mContext.getString(R.string.feedback_request_hint))
-                .formSubmitText(mContext.getString(R.string.rating_dialog_submit))
-                .formCancelText(mContext.getString(R.string.rating_dialog_cancel))
+                .formTitle(ctx.getString(R.string.feedback_request_title))
+                .formHint(ctx.getString(R.string.feedback_request_hint))
+                .formSubmitText(ctx.getString(R.string.rating_dialog_submit))
+                .formCancelText(ctx.getString(R.string.rating_dialog_cancel))
                 .ratingBarColor(R.color.colorAccent)
 
                 .positiveButtonTextColor(R.color.colorAccent)
@@ -96,9 +95,9 @@ public class SendFeedback {
                     public void onThresholdCleared(RatingDialog dlg, float rating, boolean thresholdCleared) {
 
                         try {
-                            mContext.startActivity(IntentUtils.openPlayStore(mContext));
+                            ctx.startActivity(IntentUtils.openPlayStore(ctx));
                         } catch (ActivityNotFoundException ex) {
-                            AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                            AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
                             builder.setTitle(R.string.shared_string_error);
                             builder.setMessage(R.string.error_playstore_not_found);
                             dlg.show();
@@ -112,6 +111,7 @@ public class SendFeedback {
                     @Override
                     public void onFormSubmitted(String feedback) {
                         sendFeedBack(feedback);
+                        Toast.makeText(ctx, R.string.shared_string_thankyou, Toast.LENGTH_SHORT).show();
                     }
                 }).build();
 
@@ -119,10 +119,11 @@ public class SendFeedback {
     }
 
 
-    public static void sendFeedBack(String text) {
+    private static void sendFeedBack(String text) {
         String date = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.ENGLISH).format(new Date());
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference(FIREBASE_MSG_BOARD_FEEDBACK);
         mDatabase.child(date).setValue(text);
-        Answers.getInstance().logRating(new RatingEvent().putCustomAttribute(FIREBASE_MSG_BOARD_FEEDBACK, text));
+        if (me.carc.btown.BuildConfig.USE_CRASHLYTICS)
+            Answers.getInstance().logRating(new RatingEvent().putCustomAttribute(FIREBASE_MSG_BOARD_FEEDBACK, text));
     }
 }

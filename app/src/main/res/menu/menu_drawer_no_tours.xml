@@ -9,6 +9,10 @@
             android:icon="@drawable/ic_transportr_app"
             android:title="@string/menu_public_transport"
             />
+        <item
+            android:id="@+id/nav_translate"
+            android:icon="@drawable/ic_translate"
+            android:title="@string/menu_translate"/>
     </group>
 
     <group

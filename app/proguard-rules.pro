@@ -1,4 +1,10 @@
-
+# Strip `Log.v`, `Log.d`, and `Log.i` statements, leave `Log.w` and `Log.e` intact.
+-assumenosideeffects class android.util.Log {
+    public static boolean isLoggable(java.lang.String, int);
+    public static int v(...);
+    public static int d(...);
+    public static int i(...);
+}
 
 
 -keep class com.android.vending.billing.**
@@ -39,6 +45,7 @@
 
 # OSM specific
 -dontwarn org.osmdroid.tileprovider.modules.NetworkAvailabliltyCheck
+
 
 # Keep data classes
 -keepclassmembers class me.carc.btown.data.** { <fields>; }

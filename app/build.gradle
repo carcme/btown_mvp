@@ -22,8 +22,8 @@ android {
         applicationId 'me.carc.btown'
         minSdkVersion 21
         targetSdkVersion 26
-        versionCode 33
-        versionName "2.0.3"
+        versionCode 38
+        versionName "2.0.8"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         android.defaultConfig.vectorDrawables.useSupportLibrary = true
         javaCompileOptions {
@@ -32,12 +32,13 @@ android {
             }
         }
         resConfigs "en", "de"
+        multiDexEnabled true
     }
     buildTypes {
         debug {
             minifyEnabled true
-            shrinkResources true
-            zipAlignEnabled true
+            shrinkResources false
+            zipAlignEnabled false
             useProguard true
             buildConfigField "boolean", "USE_CRASHLYTICS", "false"
             buildConfigField "String", "FABRIC_apiSecret", getPrivateKey("FABRIC_apiSecret")
@@ -46,8 +47,13 @@ android {
             buildConfigField "String", "FIREBASE_ALT", getPrivateKey("FIREBASE_ALT")
             buildConfigField "String", "FIREBASE_TOKEN", getPrivateKey("FIREBASE_TOKEN")
 
+            buildConfigField "String", "FOURSQ_ID", getPrivateKey("FOURSQUARECLIENTID")
+            buildConfigField "String", "FOURSQ_SECRET", getPrivateKey("FOURSQUARECLIENTSECRET")
+            buildConfigField "String", "FOURSQUARE_BTOWN_LISTS_ID", getPrivateKey("FOURSQUARE_BTOWN_LISTS_ID")
+
             buildConfigField "String", "GOOGLE_SERVER_KEY", getPrivateKey("GOOGLE_SERVER_KEY")
             buildConfigField "String", "GRAPHHOPPER_API_KEY", getPrivateKey("GRAPHHOPPER_API_KEY")
+
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         release {
@@ -62,6 +68,10 @@ android {
             buildConfigField "String", "FIREBASE_ALT", getPrivateKey("FIREBASE_ALT")
             buildConfigField "String", "FIREBASE_TOKEN", getPrivateKey("FIREBASE_TOKEN")
 
+            buildConfigField "String", "FOURSQ_ID", getPrivateKey("FOURSQUARECLIENTID")
+            buildConfigField "String", "FOURSQ_SECRET", getPrivateKey("FOURSQUARECLIENTSECRET")
+            buildConfigField "String", "FOURSQUARE_BTOWN_LISTS_ID", getPrivateKey("FOURSQUARE_BTOWN_LISTS_ID")
+
             buildConfigField "String", "GOOGLE_SERVER_KEY", getPrivateKey("GOOGLE_SERVER_KEY")
             buildConfigField "String", "GRAPHHOPPER_API_KEY", getPrivateKey("GRAPHHOPPER_API_KEY")
 
@@ -71,15 +81,34 @@ android {
     dexOptions {
         jumboMode true
     }
+/*
     productFlavors {
-        map {
+        maptour {
+            applicationId "me.carc.btown"
             minSdkVersion 21
+            targetSdkVersion 26
+            versionCode 34
+            versionName "2.0.4"
+            testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+            android.defaultConfig.vectorDrawables.useSupportLibrary = true
+            javaCompileOptions {
+                annotationProcessorOptions {
+                    arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
+                }
+            }
+            resValue "string", "app_name", "B-Town"
+            resConfigs "en", "de"
+        }
+        map {
             applicationId 'me.carc.btown.map'
+            minSdkVersion 21
             targetSdkVersion 26
             versionCode 1
             versionName '0.0.1'
+            resValue "string", "app_name", "B-Town Map"
         }
     }
+*/
 }
 
 // Get your own key at https://graphhopper.com/#directions-api and copy it to 'local.properties'
@@ -113,6 +142,8 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+    compile 'com.android.support:multidex:1.0.1'
+
     compile "com.android.support:appcompat-v7:${supportLibVersion}"
     compile "com.android.support:design:${supportLibVersion}"
     compile "com.android.support:support-v4:${supportLibVersion}"

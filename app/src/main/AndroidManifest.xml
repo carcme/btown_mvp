@@ -10,6 +10,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
 
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -19,6 +20,8 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <!-- ENABLE CALL ATTRACTION -->
     <uses-permission android:name="android.permission.CALL_PHONE" />
+    <!-- SOME FEATURES REQUIRED FOR WIKI BROWSER -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
 
     <application
@@ -29,6 +32,8 @@
         android:roundIcon="@mipmap/ic_launcher_rnd"
         android:supportsRtl="true"
         android:theme="@style/SplashTheme">
+        <!--android:theme="@style/AppTheme.FullScrnActivity">-->
+        <!--<activity android:name="me.carc.btown.tours.top_pick_lists.FourSquareListsActivity">-->
         <activity android:name="me.carc.btown.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -128,6 +133,49 @@
         </activity>
 
 
+
+
+        <activity
+            android:name="me.carc.btown.tours.top_pick_lists.FourSquareSearchResultActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MapActivity" />
+        </activity>
+
+        <activity
+            android:name="me.carc.btown.tours.top_pick_lists.FourSquareListsActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.FullScrnActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".tours.ToursLaunchActivity" />
+        </activity>
+
+        <activity
+            android:name="me.carc.btown.tours.top_pick_lists.FourSquareListDetailsActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".tours.top_pick_lists.FourSquareListsActivity" />
+        </activity>
+
+        <activity
+            android:name="me.carc.btown.tours.top_pick_lists.VenueTabsActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.FullScrnActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".tours.top_pick_lists.FourSquareListDetailsActivity" />
+        </activity>
+
+
+
         <activity
             android:name="me.carc.btown.tours.CatalogueActivity"
             android:label="@string/app_name"
@@ -167,14 +215,14 @@
         <activity
             android:name="me.carc.btown.tours.AttractionShowcaseImageActivity"
             android:label="@string/app_name"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.FullScrnActivity">
+            android:theme="@style/AppTheme.ShowCaseGallery">
         </activity>
+            <!--android:screenOrientation="portrait"-->
 
         <activity
             android:name="me.carc.btown.tours.attractionPager.AttractionMapActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.FullScrnActivity">
+            android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".tours.attractionPager.AttractionPagerActivity" />

@@ -50,7 +50,7 @@ public class OpeningHoursParser {
      */
     private static String endOfDay = "24:00";
 
-    private static String[] getTwoLettersStringArray(String[] strings) {
+    public static String[] getTwoLettersStringArray(String[] strings) {
         String[] newStrings = new String[strings.length];
         for (int i = 0; i < strings.length; i++) {
             if (strings[i] != null) {
@@ -64,7 +64,7 @@ public class OpeningHoursParser {
         return newStrings;
     }
 
-    private static int getDayIndex(int i) {
+    public static int getDayIndex(int i) {
         switch (i) {
             case 0:
                 return Calendar.MONDAY;

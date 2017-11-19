@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item>
+        <rotate
+            android:fromDegrees="0"
+            android:toDegrees="0"
+            android:pivotX="50%"
+            android:pivotY="50%"
+            android:drawable="@drawable/ic_btown_map_marker" />
+    </item>
+    <item
+        android:top="4dp"
+        android:right="10dp"
+        android:bottom="16dp"
+        android:left="10dp">
+        <shape
+            android:shape="oval">
+            <solid android:color="@color/md_yellow_700" />
+        </shape>
+    </item>
+
+<!--
+    <item
+        android:top="1dp"
+        android:right="8dp"
+        android:bottom="14dp"
+        android:left="8dp"
+        android:drawable="@drawable/ic_times_white">
+    </item>
+-->
+
+
+</layer-list>

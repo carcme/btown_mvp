@@ -31,6 +31,9 @@ public class FeedbackDialog extends AppCompatDialog implements View.OnClickListe
 
     private FeedbackDialog(Context context, Builder builder) {
         super(context);
+
+        getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
         this.context = context;
         this.builder = builder;
     }
@@ -51,6 +54,7 @@ public class FeedbackDialog extends AppCompatDialog implements View.OnClickListe
 
         init();
     }
+
 
     private void init() {
 

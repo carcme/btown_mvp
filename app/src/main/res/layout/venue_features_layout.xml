@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/venueFeaturesContainer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="@dimen/margin_standard"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/venueFeaturesTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="serif"
+        android:text="Features"
+        android:textColor="@color/sheet_icon_color"
+        android:textSize="@dimen/default_list_text_size_large"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/venueFeaturesList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:nestedScrollingEnabled="false"
+        app:spanCount="2"
+        tools:listitem="@layout/venue_features_item"
+        tools:visibility="gone"
+        />
+
+
+    <LinearLayout
+        android:id="@+id/venueFeaturesMenuContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="@dimen/margin_small"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <include
+            layout="@layout/divider_faded"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"/>
+
+        <TextView
+            android:id="@+id/venueFeaturesMenuTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="serif"
+            android:paddingTop="@dimen/margin_small"
+            android:text="Menu"
+            android:textColor="@color/sheet_icon_color"
+            android:textSize="@dimen/default_list_text_size_large"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="@dimen/margin_tiny"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_standard"
+                android:text="Food"
+                android:textSize="@dimen/small_list_text_size"
+                />
+
+            <TextView
+                android:id="@+id/venueFeaturesMenuItemFood"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_standard"
+                android:layout_weight="1"
+                android:gravity="end"
+                android:textSize="@dimen/small_list_text_size"
+                tools:text="Brunch, Happy Hour and more"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="@dimen/margin_tiny"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_standard"
+                android:text="Drinks"
+                android:textSize="@dimen/small_list_text_size"/>
+
+            <TextView
+                android:id="@+id/venueFeaturesMenuItemDrinks"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_standard"
+                android:layout_weight="1"
+                android:gravity="end"
+                android:textSize="@dimen/small_list_text_size"
+                tools:text="Full bar, Cocktails"/>
+
+        </LinearLayout>
+
+        <include
+            layout="@layout/divider_faded"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/venueFeaturesMenuBtn"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="@dimen/margin_standard"
+                android:text="View menu"
+                android:visibility="gone"
+                tools:visibility="visible"/>
+
+            <include layout="@layout/divider_faded_vert"/>
+
+            <Button
+                android:id="@+id/venueFeaturesReserveBtn"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="@dimen/margin_standard"
+                android:text="Reserve "
+                android:visibility="gone"
+                tools:visibility="visible"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <include
+        layout="@layout/divider_faded"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
+
+</LinearLayout>

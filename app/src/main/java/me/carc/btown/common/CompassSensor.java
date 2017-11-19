@@ -6,6 +6,8 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
+import java.util.List;
+
 import me.carc.btown.Utils.MapUtils;
 
 import static android.content.Context.SENSOR_SERVICE;
@@ -45,7 +47,41 @@ public class CompassSensor implements SensorEventListener {
         initSensors();
     }
 
+    private void getSensorList() {
+        SensorManager sensorManager = (SensorManager)mContext.getSystemService(Context.SENSOR_SERVICE);
+
+        List<Sensor> sensors = sensorManager.getSensorList(Sensor.TYPE_ALL);
+
+        StringBuilder strLog = new StringBuilder();
+        int iIndex = 1;
+        for (Sensor item : sensors) {
+            strLog.append(iIndex + ".");
+            strLog.append(" Sensor Type - " + item.getType() + "\r\n");
+            strLog.append(" Sensor Name - " + item.getName() + "\r\n");
+            strLog.append(" Sensor Version - " + item.getVersion() + "\r\n");
+            strLog.append(" Sensor Vendor - " + item.getVendor() + "\r\n");
+            strLog.append(" Maximum Range - " + item.getMaximumRange() + "\r\n");
+            strLog.append(" Minimum Delay - " + item.getMinDelay() + "\r\n");
+            strLog.append(" Power - " + item.getPower() + "\r\n");
+            strLog.append(" Resolution - " + item.getResolution() + "\r\n");
+            strLog.append("\r\n");
+            iIndex++;
+        }
+        System.out.println(strLog.toString());
+    }
+
+    public static boolean hasCompass(Context context) {
+        SensorManager sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
+        List<Sensor> sensors = sensorManager.getSensorList(Sensor.TYPE_ALL);
+        for (Sensor sensor : sensors) {
+            if(sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD)
+                return true;
+        }
+        return false;
+    }
+
     private void initSensors() {
+        getSensorList();
         mSensorManager = (SensorManager) mContext.getSystemService(SENSOR_SERVICE);
         accelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         magnetometer = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);

@@ -37,7 +37,7 @@
 
 
     <color name="buttonTextColor">#263238</color>
-    <color name="overflowMenuTextColor">#0000FF</color>
+    <color name="overflowMenuTextColor">#FFFFFF</color>
 
     <color name="imageWithoutPaletteColor">#1C1D23</color>
     <color name="textWithoutPaletteColor">#ffeae1da</color>
@@ -51,6 +51,8 @@
 
     <color name="comments_disabled">#999999</color>
 
+    <color name="toastBackgroundColor">#DDFFFFFF</color>
+    <color name="toastErrorColor">#FFCC0000</color>
 
 
     <color name="md_blue_grey_50">#ffeceff1</color>
@@ -65,7 +67,6 @@
     <color name="md_blue_grey_900">#263238</color>
 
 
-
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
     <color name="almostWhite">#EEEEEE</color>
@@ -77,8 +78,10 @@
     <color name="grey_500">#9E9E9E</color>
 
     <color name="accentColorRed">#ec2045</color>
-    <item name="gallery_overlay" type="color">#80000000</item>
-    <item name="gallery_overlay_dark" type="color">#A0000000</item>
+
+    <color name="tintLight">#22000000</color>
+    <color name="tintStandard">#80000000</color>
+    <color name="tintDark">#A0000000</color>
 
     <color name="grey_ripple">#8ddd</color>
 
@@ -110,7 +113,9 @@
 
     <color name="paper_color">#FFF</color>
 
-    <color name="primary_text_color">#000</color>
+    <color name="primary_text_color">#212121</color>
+    <color name="secondary_text_color">#757575</color>
+
     <color name="menu_icon_color">@color/black54</color>
     <color name="material_theme_border_color">@color/black12</color>
 
@@ -134,5 +139,19 @@
     <color name="catalogue_preview_text_color">#FFF</color>
     <color name="attractionBackgroundColor">#0D47A1</color>
 
+
+    <color name="venueImageTextColor">#ddd</color>
+
+
+    <!-- Referenced from the Foursquare Brand Guide: https://foursquare.com/about/logos -->
+    <color name="FSQStrawberry">#E6092C</color>
+    <color name="FSQMacCheese">#FF6701</color>
+    <color name="FSQOrange">#FF9600</color>
+    <color name="FSQBanana">#FFC800</color>
+    <color name="FSQLime">#C5DE35</color>
+    <color name="FSQGuacamole">#73CF42</color>
+    <color name="FSQKale">#00B551</color>
+
+    <color name="FSQColor">#f94877</color>
 
 </resources>

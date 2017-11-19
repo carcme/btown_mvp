@@ -130,6 +130,12 @@ public class CompassDialog extends DialogFragment {
     }
 
     @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        getDialog().getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+    }
+
+    @Override
     public void onDestroyView() {
         unbinder.unbind();
         super.onDestroyView();

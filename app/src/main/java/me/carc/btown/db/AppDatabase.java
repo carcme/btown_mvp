@@ -16,7 +16,7 @@ import me.carc.btown.db.history.HistoryEntry;
  * Created by bamptonm on 04/10/2017.
  */
 
-@Database(entities = {FavoriteEntry.class, HistoryEntry.class, BookmarkEntry.class}, version = 2)
+@Database(entities = {FavoriteEntry.class, HistoryEntry.class, BookmarkEntry.class}, version = 4)
 public abstract class AppDatabase extends RoomDatabase {
     public abstract FavoriteDao favoriteDao();
     public abstract HistoryDao historyDao();

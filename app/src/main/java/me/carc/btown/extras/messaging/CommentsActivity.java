@@ -51,17 +51,17 @@ public class CommentsActivity extends BaseActivity {
 
 
     public static final String EXTRA_MESSAGE_BOARD_CAT = "EXTRA_MESSAGE_BOARD_CAT";
-    public static final String EXTRA_MESSAGE_BOARD_ID  = "EXTRA_MESSAGE_BOARD_ID";
-    public static final String EXTRA_MESSAGE_BOARD_ITEM  = "EXTRA_MESSAGE_BOARD_ITEM";
+    public static final String EXTRA_MESSAGE_BOARD_ID = "EXTRA_MESSAGE_BOARD_ID";
+    public static final String EXTRA_MESSAGE_BOARD_ITEM = "EXTRA_MESSAGE_BOARD_ITEM";
 
-    public static final String MSG_BOARD_CAT_COMMENTS  = "COMMENT_BOARD";
-    public static final String MSG_BOARD_CAT_DISCUSS   = "DISCUSS_BOARD";
-    public static final String MSG_BOARD_CAT_RATING    = "RATING_BOARD";
+    public static final String MSG_BOARD_CAT_COMMENTS = "COMMENT_BOARD";
+    public static final String MSG_BOARD_CAT_DISCUSS = "DISCUSS_BOARD";
+    public static final String MSG_BOARD_CAT_RATING = "RATING_BOARD";
 
     public static final int DEFAULT_MSG_LENGTH_LIMIT = 100;
 
     public static final String MESSAGE_SENT_EVENT = "message_sent";
-    public static final String RATING_SENT_EVENT  = "rating_sent";
+    public static final String RATING_SENT_EVENT = "rating_sent";
 
     public static final String ANSWERS_CUSTOM_KEY = "CommentsActivity";
 
@@ -172,7 +172,8 @@ public class CommentsActivity extends BaseActivity {
         } else {
             progressBar.setVisibility(View.GONE);
             showAlertDialog(R.string.shared_string_error, R.string.login_error, -1);
-            Answers.getInstance().logCustom(new CustomEvent(C.ANSWERS_ERROR).putCustomAttribute(ANSWERS_CUSTOM_KEY, "Login Error"));
+            if (me.carc.btown.BuildConfig.USE_CRASHLYTICS)
+                Answers.getInstance().logCustom(new CustomEvent(C.ANSWERS_ERROR).putCustomAttribute(ANSWERS_CUSTOM_KEY, "Login Error"));
             return;
         }
         setupRecyclerView();
@@ -300,9 +301,9 @@ public class CommentsActivity extends BaseActivity {
         recyclerView.setAdapter(mFirebaseAdapter);
 
         // show usage hint if 1st time using comments (or debugging)
-        if(!db.getBoolean("COMMENTS_SHOW_HINT") || C.DEBUG_ENABLED) {
+        if (!db.getBoolean("COMMENTS_SHOW_HINT") || C.DEBUG_ENABLED) {
             showAlertDialog(R.string.comment_usage_hint_title, R.string.comment_usage_hint, -1, R.drawable.ic_menu_share);
-            if(BuildConfig.DEBUG)
+            if (BuildConfig.DEBUG)
                 Toast.makeText(this, "Show usage hint if 1st time using comments (or debugging)", Toast.LENGTH_SHORT).show();
             db.putBoolean("COMMENTS_SHOW_HINT", true);
         }
@@ -319,10 +320,11 @@ public class CommentsActivity extends BaseActivity {
         firstCommentTV.setVisibility(View.GONE);
         firstCommentImage.setVisibility(View.GONE);
 
-        Answers.getInstance().logShare(new ShareEvent()
-                .putContentId("ANSWERS_CUSTOM_KEY")
-                .putContentName("Comment")
-                .putContentType(msgBoard));
+        if (me.carc.btown.BuildConfig.USE_CRASHLYTICS)
+            Answers.getInstance().logShare(new ShareEvent()
+                    .putContentId("ANSWERS_CUSTOM_KEY")
+                    .putContentName("Comment")
+                    .putContentType(msgBoard));
     }
 
     @Override

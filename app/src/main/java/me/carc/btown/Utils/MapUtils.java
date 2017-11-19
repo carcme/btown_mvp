@@ -42,7 +42,37 @@ public class MapUtils {
 
     public static String buildOsmMapLink(GeoPoint point, int zoom) {
         return "https://www.openstreetmap.org/#map=" + zoom + "/" + ((float) point.getLatitude()) + "/" + ((float) point.getLongitude());
-     }
+    }
+
+    /**
+     * Build a static map image
+     * @param point GeoPoint get the lat and long values
+     * @param size  String size of image (eg 300x300)
+     * @param zoom  int zoom lvl
+     * @return
+     */
+    public static String buildStaticOsmMapImage(GeoPoint point, String size, int zoom) {
+        return buildStaticOsmMapImage(point.getLatitude(), point.getLongitude(), size, zoom);
+    }
+
+    /**
+     * Build a static map image
+     * @param lat   String lat
+     * @param lon   String long
+     * @param size  String size of image (eg 300x300)
+     * @param zoom  int zoom lvl
+     * @return
+     */
+    public static String buildStaticOsmMapImage(double lat, double lon, String size, int zoom) {
+        return "http://staticmap.openstreetmap.de/staticmap.php?center=" + lat + "," + lon
+                + "&zoom=" + zoom +"&size="+ size + "&maptype=mapnik&markers=" + lat + "," + lon + ",red-pushpin";
+    }
+
+    public static String buildStaticOsmMapImageMarkerRight(double lat, double lon, String size, int zoom) {
+        return "http://staticmap.openstreetmap.de/staticmap.php?center=" + lat + "," + (lon - 0.002)
+                + "&zoom=" + zoom +"&size="+ size + "&maptype=mapnik&markers=" + lat + "," + lon + ",red-pushpin";
+    }
+
 
     public static String getFormattedDistance(double meters) {
         double mainUnitInMeters = 1000;

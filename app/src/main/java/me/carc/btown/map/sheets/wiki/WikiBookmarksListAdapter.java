@@ -149,10 +149,10 @@ public class WikiBookmarksListAdapter extends RecyclerView.Adapter<WikiBookmarks
             super(itemView);
             mView = itemView;
 
-            this.thumbnail = (ImageView) itemView.findViewById(R.id.bookmarkThumb);
-            this.title = (TextView) itemView.findViewById(R.id.bookmarkTitle);
-            this.desc = (TextView) itemView.findViewById(R.id.bookmarkSubtitle);
-            this.more = (ImageView) itemView.findViewById(R.id.bookmarkMore);
+            this.thumbnail = itemView.findViewById(R.id.bookmarkThumb);
+            this.title = itemView.findViewById(R.id.bookmarkTitle);
+            this.desc = itemView.findViewById(R.id.bookmarkSubtitle);
+            this.more = itemView.findViewById(R.id.bookmarkMore);
         }
     }
 }

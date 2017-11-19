@@ -1,0 +1,18 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/catalogue_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:transitionName="@string/catalogue_transition"
+        tools:ignore="UnusedAttribute"
+        tools:listitem="@layout/tour_stop_recycler_list_item"/>
+
+</RelativeLayout>

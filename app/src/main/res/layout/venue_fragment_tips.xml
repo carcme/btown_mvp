@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".tours.top_pick_lists.VenueTabsActivity">
+
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/venueTipsNestedScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:scrollbars="none">
+
+        <RelativeLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/venueTipsRecycleView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:scrollbars="vertical"
+                android:scrollbarStyle="insideOverlay"
+                android:orientation="vertical"/>
+
+            <Button
+                android:id="@+id/tipsLoadMore"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/venueTipsRecycleView"
+                android:padding="@dimen/margin_standard"
+                android:fontFamily="serif"
+                android:textColor="@color/colorAccent"
+                tools:text="Load More (123)"/>
+
+        </RelativeLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
+    <TextView
+        android:id="@+id/emptyTips"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_gravity="bottom"
+        android:layout_margin="@dimen/margin_standard"
+        android:drawableTop="@drawable/ic_comment_large"
+        android:gravity="center"
+        android:text="There are no Tips for this venue"
+        android:textColor="@color/sheet_icon_color"
+        android:textSize="20sp"
+        android:visibility="gone"
+        tools:visibility="visible" />
+
+    <ProgressBar
+        android:id="@+id/tipsProgressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:indeterminate="true"/>
+
+</RelativeLayout>

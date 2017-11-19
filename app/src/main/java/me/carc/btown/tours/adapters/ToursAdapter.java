@@ -24,7 +24,6 @@ import me.carc.btown.common.interfaces.DrawableClickListener;
 import me.carc.btown.tours.CatalogueActivity;
 import me.carc.btown.tours.model.TourCatalogue;
 
-
 /**
  * A custom adapter to use with the RecyclerView widget.
  */
@@ -72,7 +71,7 @@ public class ToursAdapter extends RecyclerView.Adapter<ToursAdapter.CatalogueVie
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .into(holder.catalogueImage);
 */
-        if(!C.HAS_M) {
+        if (!C.HAS_M) {
             int colorRes = R.color.card_text_color;
             if (C.HAS_L) {
                 Drawable[] drawables = holder.time.getCompoundDrawablesRelative();
@@ -133,19 +132,19 @@ public class ToursAdapter extends RecyclerView.Adapter<ToursAdapter.CatalogueVie
             super(itemView);
 
             mView = itemView;
-            this.card = (CardView) itemView.findViewById(R.id.tourCardView);
+            this.card = itemView.findViewById(R.id.tourCardView);
 
             // enable long press on cardview
-            itemView.setOnCreateContextMenuListener((CatalogueActivity)itemView.getContext());
+            itemView.setOnCreateContextMenuListener((CatalogueActivity) itemView.getContext());
 
-            this.catalogueImage = (ImageView) itemView.findViewById(R.id.catalogueImage);
-            this.catalogueTitle = (TextView) itemView.findViewById(R.id.catalogueTitle);
-            this.supportingText = (TextView) itemView.findViewById(R.id.supportingText);
+            this.catalogueImage = itemView.findViewById(R.id.catalogueImage);
+            this.catalogueTitle = itemView.findViewById(R.id.catalogueTitle);
+            this.supportingText = itemView.findViewById(R.id.supportingText);
 
-            this.time = (TextView) itemView.findViewById(R.id.clock);
-            this.rating = (TextView) itemView.findViewById(R.id.rating);
-            this.stops = (TextView) itemView.findViewById(R.id.stops);
-            this.distance = (TextView) itemView.findViewById(R.id.distance);
+            this.time = itemView.findViewById(R.id.clock);
+            this.rating = itemView.findViewById(R.id.rating);
+            this.stops = itemView.findViewById(R.id.stops);
+            this.distance = itemView.findViewById(R.id.distance);
         }
     }
 }

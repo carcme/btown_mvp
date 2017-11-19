@@ -49,19 +49,19 @@ public class NonLeakingWebView extends WebView {
 */
 
     public NonLeakingWebView(Context context) {
-        super(context.getApplicationContext());
+        super(context);
         client = new PdfWebViewClient((Activity) context);
         setWebViewClient(client);
     }
 
     public NonLeakingWebView(Context context, AttributeSet attrs) {
-        super(context.getApplicationContext(), attrs);
+        super(context, attrs);
         client = new PdfWebViewClient((Activity) context);
         setWebViewClient(client);
     }
 
     public NonLeakingWebView(Context context, AttributeSet attrs, int defStyle) {
-        super(context.getApplicationContext(), attrs, defStyle);
+        super(context, attrs, defStyle);
         client = new PdfWebViewClient((Activity) context);
         setWebViewClient(client);
     }
@@ -98,8 +98,7 @@ public class NonLeakingWebView extends WebView {
                 final Activity activity = activityRef.get();
                 if (activity != null)
                     return true;
-            }
-            catch (RuntimeException ignored) { /*EMPTY*/ }
+            } catch (RuntimeException ignored) { /*EMPTY*/ }
             return false;
         }
 
@@ -125,7 +124,7 @@ public class NonLeakingWebView extends WebView {
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
             if (callback != null && activityValid()) {
-                if(isPdfUrl(url)) {
+                if (isPdfUrl(url)) {
                     view.stopLoading();
                     return callback.loadPdfUrl(url);
                 } else {
@@ -140,7 +139,7 @@ public class NonLeakingWebView extends WebView {
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
             if (callback != null && activityValid())
-                if(isPdfUrl(request.getUrl().toString())) {
+                if (isPdfUrl(request.getUrl().toString())) {
                     view.stopLoading();
                     return callback.loadPdfUrl(request.getUrl().toString());
                 } else {

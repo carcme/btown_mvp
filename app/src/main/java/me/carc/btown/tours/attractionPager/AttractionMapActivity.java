@@ -6,6 +6,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.content.res.ResourcesCompat;
+import android.support.v7.widget.Toolbar;
 import android.view.ViewTreeObserver;
 import android.widget.TextView;
 
@@ -33,12 +34,17 @@ public class AttractionMapActivity extends BaseActivity {
 
     private final int PRE_PAN_DURATION = 1000;
 
-    public static final String INDEX = "INDEX";
+    public static final String TITLE    = "TITLE";
+    public static final String GEOPOINT = "GEOPOINT";
+
+    public MarkersOverlay mPoiMarkers;
 
     @BindView(R.id.attractionsMmap)
     MapView mapView;
     @BindView(R.id.distanceIndicatorTours)
     TextView distance;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,24 +52,29 @@ public class AttractionMapActivity extends BaseActivity {
         setContentView(R.layout.attraction_map_activity);
         ButterKnife.bind(this);
 
-        Attraction attraction = null;;
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
         Intent intent = getIntent();
         if (intent.hasExtra(AttractionPagerActivity.ATTRACTION)) {
-            attraction = intent.getParcelableExtra(AttractionPagerActivity.ATTRACTION);
-        } else
-            finish();
-
-        if(Commons.isNotNull(attraction))
+            Attraction attraction = intent.getParcelableExtra(AttractionPagerActivity.ATTRACTION);
+            getSupportActionBar().setTitle(attraction.getStopName());
             configureMap(true, attraction);
-        else
+        } else if (intent.hasExtra(TITLE) && intent.hasExtra(GEOPOINT)) {
+            getSupportActionBar().setTitle(getIntent().getStringExtra(TITLE));
+            configureMap(true, null);
+        } else
             finish();
     }
 
+    @Override
+    public void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+    }
 
-    public MarkersOverlay mPoiMarkers;
     private void initMarkers() {
-
         //POI markers:
         mPoiMarkers = new MarkersOverlay(this, mapView, "POIs");
 
@@ -78,8 +89,11 @@ public class AttractionMapActivity extends BaseActivity {
     }
 
     private void configureMap(boolean enableControls, final Attraction data) {
-
-        final GeoPoint geoAttractionPoint = new GeoPoint(data.getLocation().lat, data.getLocation().lon);
+        final GeoPoint geoAttractionPoint;
+        if(Commons.isNotNull(data))
+            geoAttractionPoint = new GeoPoint(data.getLocation().lat, data.getLocation().lon);
+        else
+            geoAttractionPoint = getIntent().getParcelableExtra(GEOPOINT);
 
         mapView.getController().setZoom(16);
         mapView.getController().setCenter(geoAttractionPoint);
@@ -96,15 +110,16 @@ public class AttractionMapActivity extends BaseActivity {
                 initMarkers();
 
                 // add pois to map
-                ArrayList<POIs> pois = data.getPOIs();
-                if(Commons.isNotNull(pois))
-                    mPoiMarkers.addTourPOIs(pois, getResources(), getPackageName());
-
+                if(Commons.isNotNull(data)) {
+                    ArrayList<POIs> pois = data.getPOIs();
+                    if (Commons.isNotNull(pois))
+                        mPoiMarkers.addTourPOIs(pois, getResources(), getPackageName());
+                }
                 //tour map point of interest
                 Marker poi = new Marker(mapView);
                 poi.setPosition(geoAttractionPoint);
-                poi.setTitle(data.getStopName());
-                poi.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_btown_map_marker, null));
+                poi.setTitle(data != null ? data.getStopName() : getIntent().getStringExtra(TITLE));
+                poi.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.btown_marker_icon, null));
                 mPoiMarkers.add(poi);
 
                 mapView.getController().animateTo(geoAttractionPoint);
@@ -121,6 +136,7 @@ public class AttractionMapActivity extends BaseActivity {
             mPoiMarkers.getItems().clear();
             mPoiMarkers.clear();
             mPoiMarkers = null;
+
         }
         mapView = null;
         super.onDestroy();
