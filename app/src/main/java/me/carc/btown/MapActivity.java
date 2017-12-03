@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -17,14 +16,11 @@ import android.support.v4.view.GravityCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.google.android.gms.location.LocationRequest;
 
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
@@ -114,6 +110,7 @@ public class MapActivity extends BaseActivity implements
     @BindView(R.id.fab_location)
     FloatingActionButton trackingModeFab;
 
+/*
 
 
     // DEBUG STUFF
@@ -133,32 +130,39 @@ public class MapActivity extends BaseActivity implements
 
     @Override
     public void showLocationSettings(GeoPoint point, LocationRequest locationRequest, Location location) {
-        proximityBtn.setVisibility(View.VISIBLE);
 
-        StringBuilder builder = new StringBuilder();
+        if(BuildConfig.DEBUG) {
+           proximityBtn.setVisibility(View.VISIBLE);
 
-        builder.append("Accuracy: ").append(location.getAccuracy()).append("\n");
-        builder.append("Bearing: ").append(location.getBearing()).append("\n");
-        if(C.HAS_O)
-            builder.append("AccuracyDegrees: ").append(String.valueOf(location.getBearingAccuracyDegrees())).append("\n");
-        builder.append("Speed: ").append(String.valueOf(location.getSpeed())).append("\n");
-        builder.append("Displacement: ").append(locationRequest.getSmallestDisplacement()).append("\n");
-        builder.append("Interval: ").append(locationRequest.getInterval()).append("\n");
-        builder.append("MaxWaitTime: ").append(locationRequest.getMaxWaitTime()).append("\n");
-        builder.append("Counter: ").append(String.valueOf(dbgLocationUpdateCounter++)).append("\n");
+            StringBuilder builder = new StringBuilder();
 
-        if(dbgPoint != null) {
-            builder.append("OPoint: ").append(dbgPoint.getLatitude() + " " + dbgPoint.getLongitude()).append("\n");
-            builder.append("NPoint: ").append(point.getLatitude() + " " + point.getLongitude()).append("\n");
+            builder.append("Accuracy: ").append(location.getAccuracy()).append("\n");
+            builder.append("Bearing: ").append(location.getBearing()).append("\n");
+            if (C.HAS_O)
+                builder.append("AccuracyDegrees: ").append(String.valueOf(location.getBearingAccuracyDegrees())).append("\n");
+            builder.append("Speed: ").append(String.valueOf(location.getSpeed())).append("\n");
+            builder.append("Displacement: ").append(locationRequest.getSmallestDisplacement()).append("\n");
+            builder.append("Interval: ").append(locationRequest.getInterval()).append("\n");
+            builder.append("MaxWaitTime: ").append(locationRequest.getMaxWaitTime()).append("\n");
+            builder.append("Counter: ").append(String.valueOf(dbgLocationUpdateCounter++)).append("\n");
+
+            if (dbgPoint != null) {
+                builder.append("OPoint: ").append(dbgPoint.getLatitude() + " " + dbgPoint.getLongitude()).append("\n");
+                builder.append("NPoint: ").append(point.getLatitude() + " " + point.getLongitude()).append("\n");
+            }
+
+            builder.append("TimeDiff: ").append((double) (System.currentTimeMillis() - dbgLocationUpdateTime) / 1000);
+
+            dbgLocationUpdateTime = System.currentTimeMillis();
+            dbgPoint = point;
+            debugText.setVisibility(View.VISIBLE);
+            debugText.setText(builder.toString());
+        } else {
+            proximityBtn.setVisibility(View.GONE);
+            debugText.setVisibility(View.GONE);
         }
-
-        builder.append("TimeDiff: ").append((double) (System.currentTimeMillis() - dbgLocationUpdateTime) / 1000);
-
-        dbgLocationUpdateTime = System.currentTimeMillis();
-        dbgPoint = point;
-        debugText.setVisibility(View.VISIBLE);
-        debugText.setText(builder.toString());
     }
+*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

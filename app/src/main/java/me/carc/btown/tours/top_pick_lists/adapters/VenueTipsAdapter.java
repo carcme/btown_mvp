@@ -60,7 +60,8 @@ public class VenueTipsAdapter extends RecyclerView.Adapter<VenueTipsAdapter.TipH
         }
 
         holder.userName.setText(tip.getUser().getFullName());
-        holder.date.setText(Commons.readableDate(tip.getCreatedAt() * 1000));
+        holder.date.setText(String.valueOf(pos));
+//        holder.date.setText(Commons.readableDate(tip.getCreatedAt() * 1000));
         holder.tipText.setText(tip.getText());
 
         if (Commons.isNotNull(tip.getPhotourl())) {

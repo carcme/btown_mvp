@@ -1,9 +1,6 @@
 package me.carc.btown.map;
 
-import android.location.Location;
 import android.os.Bundle;
-
-import com.google.android.gms.location.LocationRequest;
 
 import org.osmdroid.util.GeoPoint;
 
@@ -43,7 +40,7 @@ public interface IMap {
         void showFsqSExploreResults(String header, ArrayList<ExploreItem> results);
 
 
-        void showLocationSettings(GeoPoint point, LocationRequest locationRequest, Location location);
+//        void showLocationSettings(GeoPoint point, LocationRequest locationRequest, Location location);
     }
 
     interface Presenter extends BasePresenter {
@@ -71,7 +68,7 @@ public interface IMap {
         void showFsqVenues(ArrayList<VenueResult> venues);
         void showFsqList(ListItems items);
 
-        void debugBtn();
+//        void debugBtn();
 
         Bundle getBundle(Bundle outstate);
     }

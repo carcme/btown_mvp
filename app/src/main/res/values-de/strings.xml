@@ -52,7 +52,7 @@
     <string name="shared_string_share">Teilen</string>
     <string name="shared_string_share_image">Bild teilen</string>
     <string name="shared_string_close">Schließen</string>
-    <string name="shared_string_save">Speichern</string>
+    <string name="shared_string_save">Sichern</string>
     <string name="shared_string_show_details">Details anzeigen</string>
     <string name="shared_string_io_error">I/O Fehler aufgetreten</string>
     <string name="shared_string_send">Senden</string>
@@ -90,6 +90,7 @@
     <!--TODO-->
     <string name="shared_string_phone">Phone</string>
     <string name="shared_string_web">Web</string>
+    <string name="shared_string_unknown">Unknown</string>
 
 
     <!--DONATE-->
@@ -112,7 +113,7 @@
     <string name="rating_dialog_cancel">Abbrechen</string>
     <string name="rating_dialog_suggestions">Sagen Sie uns was Ihnen nicht gefällt und wir arbeiten daran!</string>
 
-    <string name="ratings_request_title">Love to know what you think of the app</string>
+    <string name="ratings_request_title">Wir wollen gerne wissen, wie Du die App findest</string>
     <string name="feedback_request_title">Feedback abschicken</string>
     <string name="feedback_request_hint">Sagen Sie uns, wo wir uns verbessern können&#8230;</string>
     <string name="feedbackChooserTitle">Schicke Feedback Via</string>
@@ -131,7 +132,7 @@
 
 
 
-    <string name="strShareBody">"B-Town | Maps and Tours for Tourist and Locals"</string>
+    <string name="strShareBody">"B-Town | Karten und Touren für Touristen und Berliner"</string>
 
     <!--SIGN IN STUFF-->
     <string name="sign_out">Ausloggen</string>
@@ -155,10 +156,9 @@
     <string name="pref_theme_light">Hell</string>
     <string name="pref_theme_dark">Dunkel</string>
 
-    <string name="pref_show_tours_title">Show Tours</string>
-    <string name="pref_tours_summary_show">Show tours button on map</string>
-    <string name="pref_tours_summary_hide">Hide tours button on map</string>
-
+    <string name="pref_show_tours_title">Zeige Touren</string>
+    <string name="pref_tours_summary_show">Zeige das Tour Icon auf der Karte</string>
+    <string name="pref_tours_summary_hide">Verstecke das Tour Icon auf der Karte </string>
 
     <string name="pref_language_title">Sprache</string>
     <string name="system_default">Systemstandard</string>
@@ -170,20 +170,14 @@
 
     <string name="about_top">© 2017 Carc\nFreie Software Lizenz: GPLv3</string>
 
-    <!--TODO-->
+
     <string name="about"><![CDATA[
-<p>The idea of B-Town came while travelling and wanting something that would give insider tips for various cities. If you have any suggestions of what you\'d like to see, let me know via the feedback button</p>
-<p>Use the app to get details of your area, whether you\'re interested in local bars, restaurtants or sightseeing and included Wikipedia lookups to make it easy those to find extra places you may be interested in. I plan to include FourSquare support in the near future.</p>
-<p>OpenStreetMap is updated daily by contributors all over the world… although I can\'t guarantee the correctness of their data. </p>
+        <p>Die Idee für B-Town kam mir, als ich selbst auf Reisen war und mir wünschte, jemand könne mir schnell und einfach Insider-Tipps für einzelne Städte geben. Wenn Du Vorschläge für uns hast, schicke Sie uns bitte über das Feedback-Ikon.</p>
+        <p>Nutze die App, um Details über Deine Gegend zu finden. Ganz egal, ob Du Dich für beliebte Bars, Restaurants oder interessante Touren interessierst. Auf der Karte kannst du zudem einzelne Orte mit Wikipedia-Einträgen nachschlagen.</p>
+        <p>OpenStreetMap wird täglich von seinen weltweiten Nutzern auf den neuesten Stand gebracht…Dennoch kann ich leider nicht, die Korrektheit aller Daten garantieren.</p>
+    ]]></string>
 
-]]></string>
-
-    <string name="about_bottom">
-    <![CDATA[
-<p>If you find any issues with B-Town, please report them at <a href="%2$s">the issue tracker</a>.</p>
-]]>
-</string>
-
+    <string name="about_bottom"><![CDATA[<p>Wenn Dir Fehler in B-Town auffallen, melde diese bitte bei<a href="%2$s">the issue tracker</a>.</p>]]></string>
 
     <string name="visit_website">Webseite</string>
 
@@ -203,8 +197,8 @@
 
 
     <!-- PUBLIC TRANSPORT ROUTE PLAN-->
-    <string name="alert_title_pt_route_map">Route auf der Karte herunterladen</string>
-    <string name="alert_msg_pt_route_map">Die Liste der Öffentlichen Verkehrsmittel Berlins wird nun heruntergeladen. Bitte habe ein wenig Geduld. Die Maps für andere Karten sind in Arbeit. Wenn du einen Vorschlag hast, bitte schreib mir doch eine Mail. Im Menü findest du die Rubrik Feedback.</string>
+    <string name="alert_title_pt_route_map">Karte herunterladen</string>
+    <string name="alert_msg_pt_route_map">%s wird heruntergeladen. Bitte haben Sie Geduld. Wenn Sie eine neue Karte wünschen, lassen Sie es mich wissen, indem Sie das obige Feedback verwenden.</string>
 
     <string name="lib_thanks">TODO - remove this and have a proper tab screen with libs used</string>
 

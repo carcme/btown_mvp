@@ -37,8 +37,7 @@
         <RelativeLayout
             android:id="@+id/addressContainer"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_standard">
+            android:layout_height="wrap_content">
 
             <LinearLayout
                 android:id="@+id/descLayout"
@@ -181,7 +180,7 @@
                 android:layout_marginStart="@dimen/margin_standard"
                 android:textColor="@color/almostBlack"
                 android:textSize="@dimen/small_list_text_size"
-                android:text="@string/unknown"/>
+                android:text="@string/shared_string_unknown"/>
 
 
         </RelativeLayout>

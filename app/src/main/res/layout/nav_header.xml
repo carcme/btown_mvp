@@ -20,7 +20,7 @@
         android:layout_centerVertical="true"
         android:layout_gravity="center_vertical"
         android:layout_marginStart="@dimen/margin_standard"
-        android:src="@mipmap/ic_launcher_rnd"
+        android:src="@mipmap/ic_launcher_skyline_rnd_blue"
         app:civ_circle_background_color="@color/sheet_icon_color" />
 
     <TextView

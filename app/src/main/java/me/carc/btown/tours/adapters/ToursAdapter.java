@@ -3,13 +3,10 @@ package me.carc.btown.tours.adapters;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.storage.FirebaseStorage;
@@ -21,13 +18,13 @@ import me.carc.btown.R;
 import me.carc.btown.common.C;
 import me.carc.btown.common.CacheDir;
 import me.carc.btown.common.interfaces.DrawableClickListener;
-import me.carc.btown.tours.CatalogueActivity;
+import me.carc.btown.common.viewHolders.CatalogueViewHolder;
 import me.carc.btown.tours.model.TourCatalogue;
 
 /**
  * A custom adapter to use with the RecyclerView widget.
  */
-public class ToursAdapter extends RecyclerView.Adapter<ToursAdapter.CatalogueViewHolder> {
+public class ToursAdapter extends RecyclerView.Adapter<CatalogueViewHolder> {
 
     private ArrayList<TourCatalogue> tours;
     private StorageReference mCoverImageStorageRef;
@@ -113,7 +110,7 @@ public class ToursAdapter extends RecyclerView.Adapter<ToursAdapter.CatalogueVie
     public TourCatalogue getItem(int position) {
         return tours.get(position);
     }
-
+/*
     static class CatalogueViewHolder extends RecyclerView.ViewHolder {
 
         View mView;
@@ -147,4 +144,5 @@ public class ToursAdapter extends RecyclerView.Adapter<ToursAdapter.CatalogueVie
             this.distance = itemView.findViewById(R.id.distance);
         }
     }
+*/
 }

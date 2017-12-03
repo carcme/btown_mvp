@@ -7,11 +7,10 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.crashlytics.android.answers.Answers;
-import com.crashlytics.android.answers.BuildConfig;
 import com.crashlytics.android.answers.RatingEvent;
 import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
@@ -31,14 +30,14 @@ import me.carc.btown.Utils.FileUtils;
 import me.carc.btown.common.C;
 import me.carc.btown.common.CacheDir;
 import me.carc.btown.common.Commons;
+import me.carc.btown.settings.SendFeedback;
 
 public class PublicTransportPlan extends BaseActivity implements SubsamplingScaleImageView.OnImageEventListener {
 
     private static final String TAG = C.DEBUG + Commons.getTag();
-    public static final String ANSWERS_PLAN_OPEN= "U_S_BAHN_PLAN_OPENED";
+    public static final String ANSWERS_PLAN_OPEN = "U_S_BAHN_PLAN_OPENED";
 
     public static final String FIREBASE_DIR = "resource";
-    public static final String FIREBASE_FILE = "berlin_transport_map.png";
 
 
     @BindView(R.id.transportMapView)
@@ -57,21 +56,30 @@ public class PublicTransportPlan extends BaseActivity implements SubsamplingScal
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setTitle(getString(R.string.menu_train_route_map));
         }
 
         showProgressDialog();
 
-        String planPath = CacheDir.getCacheDir().cacheDirAsStr() + "/" + FIREBASE_FILE;
+        String firebaseFile = "";
+        String title = "";
+
+        if (getIntent().hasExtra("MAP_ID")) {
+            firebaseFile = getIntent().getStringExtra("MAP_ID");
+            title = getString(getIntent().getIntExtra("MAP_DESC", R.string.menu_train_route_map));
+            getSupportActionBar().setTitle(title);
+        }
+
+        // is file already downloaded and saved?
+        String planPath = CacheDir.getCacheDir().cacheDirAsStr() + "/" + firebaseFile;
         if (FileUtils.checkValidFilePath(planPath)) {
             imageView.setImage(ImageSource.uri(planPath));
-
+            imageView.setOnImageEventListener(this);
         } else {
             new AlertDialog.Builder(this)
                     .setTitle(R.string.alert_title_pt_route_map)
                     .setIcon(R.drawable.ic_download)
                     .setCancelable(false)
-                    .setMessage(R.string.alert_msg_pt_route_map)
+                    .setMessage(String.format(getString(R.string.alert_msg_pt_route_map), title))
                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -81,19 +89,8 @@ public class PublicTransportPlan extends BaseActivity implements SubsamplingScal
                     .show();
 
             // get the tranport plan
-            downloadFirebaseImage(FIREBASE_DIR, FIREBASE_FILE);
+            downloadFirebaseImage(FIREBASE_DIR, firebaseFile);
         }
-        imageView.setOnImageEventListener(this);
-
-
-        //// TODO: 24/10/2017 add  click or touch listener to catch clicks on map... show info on each stop
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(BuildConfig.DEBUG)
-                    Log.d(TAG, "onClick: ");
-            }
-        });
     }
 
     /**
@@ -110,6 +107,7 @@ public class PublicTransportPlan extends BaseActivity implements SubsamplingScal
                     @Override
                     public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
                         imageView.setImage(ImageSource.uri(localFile.toString()));
+                        imageView.setOnImageEventListener(PublicTransportPlan.this);
 
                     }
                 }).addOnFailureListener(new OnFailureListener() {
@@ -128,8 +126,8 @@ public class PublicTransportPlan extends BaseActivity implements SubsamplingScal
     @Override
     public void onImageLoaded() {
 
-        imageView.setDebug(C.DEBUG_ENABLED);
         imageView.setScaleAndCenter(1f, new PointF(imageView.getSWidth() / 2, imageView.getSHeight() / 2));
+        imageView.setMinimumScaleType(SubsamplingScaleImageView.SCALE_TYPE_CENTER_CROP);
         imageView.setMinScale(0.6f);
         imageView.setDoubleTapZoomStyle(SubsamplingScaleImageView.ZOOM_FOCUS_CENTER);
 
@@ -142,24 +140,35 @@ public class PublicTransportPlan extends BaseActivity implements SubsamplingScal
     private void showError(String source, Exception e) {
         new AlertDialog.Builder(this)
                 .setTitle("Error in " + source)
-                .setMessage(e != null ? e.getLocalizedMessage() :getString(R.string.network_not_available_error))
+                .setMessage(e != null ? e.getLocalizedMessage() : getString(R.string.network_not_available_error))
                 .show();
     }
 
     @Override
     public void onPreviewLoadError(Exception e) {
+        Log.d(TAG, "onPreviewLoadError: " + e.getLocalizedMessage());
     }
 
     @Override
     public void onImageLoadError(Exception e) {
+        Log.d(TAG, "onImageLoadError: " + e.getLocalizedMessage());
     }
 
     @Override
     public void onTileLoadError(Exception e) {
+        Log.d(TAG, "onTileLoadError: " + e.getLocalizedMessage());
     }
 
     @Override
     public void onPreviewReleased() {
+        Log.d(TAG, "onPreviewReleased: ");
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_plans, menu);
+        return true;
     }
 
     @Override
@@ -168,6 +177,11 @@ public class PublicTransportPlan extends BaseActivity implements SubsamplingScal
             case android.R.id.home:
                 onBackPressed();
                 break;
+
+            case R.id.menu_feedback:
+                new SendFeedback(this, SendFeedback.TYPE_FEEDBACK);
+                break;
+
         }
         return true;
     }

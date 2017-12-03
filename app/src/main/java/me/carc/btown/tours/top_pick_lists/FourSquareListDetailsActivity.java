@@ -4,7 +4,6 @@ import android.annotation.TargetApi;
 import android.content.Intent;
 import android.graphics.Color;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -29,6 +28,7 @@ import java.util.Comparator;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import me.carc.btown.App;
 import me.carc.btown.BaseActivity;
 import me.carc.btown.R;
 import me.carc.btown.Utils.MapUtils;
@@ -45,7 +45,6 @@ import me.carc.btown.tours.top_pick_lists.adapters.ListDetailsAdapter;
 import me.carc.btown.ui.custom.MyCustomLayoutManager;
 import me.carc.btown.ui.custom.MyRecyclerItemClickListener;
 import pub.devrel.easypermissions.AfterPermissionGranted;
-import pub.devrel.easypermissions.EasyPermissions;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -81,7 +80,7 @@ public class FourSquareListDetailsActivity extends BaseActivity {
 
         setupUI(savedInstanceState);
 
-        if(getIntent().hasExtra(FourSquareListsActivity.EXTRA_LISTS)){
+        if (getIntent().hasExtra(FourSquareListsActivity.EXTRA_LISTS)) {
             ListItems items = getIntent().getParcelableExtra(FourSquareListsActivity.EXTRA_LISTS);
             toolbar.setTitle(getIntent().getStringExtra(FourSquareListsActivity.EXTRA_TITLE));
             sortList(items.getItemsListItems());
@@ -117,7 +116,7 @@ public class FourSquareListDetailsActivity extends BaseActivity {
     private void sortList(ArrayList<ItemsListItem> items) {
         GeoPoint point = getLastLocation();
 
-        if(Commons.isNotNull(point)) {
+        if (Commons.isNotNull(point)) {
             for (ItemsListItem item : items) {
                 me.carc.btown.data.all4squ.entities.Location toWhere = item.getVenue().getLocation();
                 double d = MapUtils.getDistance(point, toWhere.getLat(), toWhere.getLng());
@@ -126,7 +125,7 @@ public class FourSquareListDetailsActivity extends BaseActivity {
             }
             Collections.sort(items, new DistanceComparator());
         }
-        setupRecyclerView(items);
+        setupRecyclerView(items, point);
     }
 
 
@@ -146,12 +145,12 @@ public class FourSquareListDetailsActivity extends BaseActivity {
         }
     }
 
-    private void setupRecyclerView(ArrayList<ItemsListItem> items) {
-        if(Commons.isNotNull(items)) {
+    private void setupRecyclerView(ArrayList<ItemsListItem> items, GeoPoint mapLocation) {
+        if (Commons.isNotNull(items)) {
 
             recyclerView.setLayoutManager(new MyCustomLayoutManager(recyclerView.getContext()));
 
-            final ListDetailsAdapter adapter = new ListDetailsAdapter(items, getLastLocation());
+            final ListDetailsAdapter adapter = new ListDetailsAdapter(items, mapLocation);
             recyclerView.setAdapter(adapter);
             recyclerView.setHasFixedSize(true);
 
@@ -178,14 +177,17 @@ public class FourSquareListDetailsActivity extends BaseActivity {
                         public void onResponse(@NonNull Call<FourSquResult> call, @NonNull Response<FourSquResult> response) {
 
                             FourSquResult body = response.body();
-                            VenueResult resp = body.getResponse().getVenueResult();
+                            if (Commons.isNotNull(body) && Commons.isNotNull(body.getResponse())) {
+                                VenueResult resp = body.getResponse().getVenueResult();
 
-                            if(Commons.isNotNull(resp)) {
-                                Intent intent = new Intent(FourSquareListDetailsActivity.this, VenueTabsActivity.class);
-                                intent.putExtra(VenueTabsActivity.EXTRA_VENUE_URL, item.getVenue().getVenueUrl());
-                                intent.putExtra(VenueTabsActivity.EXTRA_VENUE, (Parcelable) resp);
-                                startActivityForResult(intent, RESULT_SHOW_ITEM);
-                                progressLayout.setVisibility(View.GONE);
+                                if (Commons.isNotNull(resp)) {
+                                    Intent intent = new Intent(FourSquareListDetailsActivity.this, VenueTabsActivity.class);
+                                    intent.putExtra(VenueTabsActivity.EXTRA_VENUE_URL, item.getVenue().getVenueUrl());
+                                    intent.putExtra(VenueTabsActivity.EXTRA_VENUE, (Parcelable) resp);
+                                    startActivityForResult(intent, RESULT_SHOW_ITEM);
+                                    progressLayout.setVisibility(View.GONE);
+                                } else
+                                    showError();
                             } else
                                 showError();
                         }
@@ -209,15 +211,7 @@ public class FourSquareListDetailsActivity extends BaseActivity {
     @AfterPermissionGranted(C.PERMISSION_LOCATION)
     @SuppressWarnings({"MissingPermission"})
     private GeoPoint getLastLocation() {
-
-        Location location = null;
-
-        if (EasyPermissions.hasPermissions(this, android.Manifest.permission.ACCESS_FINE_LOCATION)) {
-            LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-            location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            if (location == null)
-                location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-        }
+        Location location = ((App) getApplication()).getBTownLocation().getLatestLocation();
         return location != null ? new GeoPoint(location.getLatitude(), location.getLongitude()) : null;
     }
 
@@ -226,8 +220,8 @@ public class FourSquareListDetailsActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
             case RESULT_SHOW_ITEM:
-                if(resultCode == RESULT_OK) {
-                    if(data.hasExtra(VenueTabsActivity.EXTRA_VENUE)) {
+                if (resultCode == RESULT_OK) {
+                    if (data.hasExtra(VenueTabsActivity.EXTRA_VENUE)) {
                         setResult(RESULT_OK, data);
                         finish();
                     }

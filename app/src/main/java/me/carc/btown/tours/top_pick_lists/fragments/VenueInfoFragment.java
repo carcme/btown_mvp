@@ -51,7 +51,9 @@ import me.carc.btown.data.all4squ.FourSquareServiceProvider;
 import me.carc.btown.data.all4squ.entities.Attributes;
 import me.carc.btown.data.all4squ.entities.Category;
 import me.carc.btown.data.all4squ.entities.GroupsAttribute;
+import me.carc.btown.data.all4squ.entities.GroupsTip;
 import me.carc.btown.data.all4squ.entities.ItemsAttribute;
+import me.carc.btown.data.all4squ.entities.ItemsGroupsTip;
 import me.carc.btown.data.all4squ.entities.Location;
 import me.carc.btown.data.all4squ.entities.Menu;
 import me.carc.btown.data.all4squ.entities.Open;
@@ -231,8 +233,26 @@ public class VenueInfoFragment extends Fragment {
 
         private void populateMore() {
 
-            if(!Commons.isEmpty(venue.getDescription()))
+            // todo check for both en and de lang options in the B-Town tips
+            String btownComment = "";
+            try {
+                if(venue.getTips().getGroupsTips().size() > 0) {
+                    for (GroupsTip grpTip : venue.getTips().getGroupsTips()) {
+                        for (ItemsGroupsTip tip : grpTip.getItemsGroupsTips()) {
+                            if(tip.getUser().getFirstName().equals(getString(R.string.app_name))){
+                                btownComment = tip.getText();
+                                btownComment = btownComment + " - " + getString(R.string.app_name);
+                                break;
+                            }
+                        }
+                    }
+                }
+            } catch (Exception e) { /*IGNORE*/  }
+
+            if(Commons.isEmpty(btownComment))
                 venueDescription.setText(venue.getDescription());
+            else if(!Commons.isEmpty(venue.getDescription()))
+                venueDescription.setText(btownComment);
             else
                 descLayout.setVisibility(View.GONE);
 
@@ -274,7 +294,6 @@ public class VenueInfoFragment extends Fragment {
 
         final double dLat = venue.getLocation().getLat();
         final double dLon = venue.getLocation().getLng();
-
 
         ViewTreeObserver viewTreeObserver = venueAddressLayout.getViewTreeObserver();
         if (viewTreeObserver.isAlive()) {
@@ -331,6 +350,7 @@ public class VenueInfoFragment extends Fragment {
             venueFeaturesReserveBtn.setVisibility(View.VISIBLE);
         }
     }
+
 
 
     private void populatePopular(VenueResult venue) {
@@ -450,9 +470,9 @@ public class VenueInfoFragment extends Fragment {
             public void onResponse(@NonNull Call<FourSquResult> call, @NonNull Response<FourSquResult> response) {
 
                 FourSquResult body = response.body();
-                Menu menu = body.getResponse().getMenu();
 
-                if (Commons.isNotNull(menu)) {
+                if (Commons.isNotNull(body) && Commons.isNotNull(body.getResponse())) {
+                    Menu menu = body.getResponse().getMenu();
 
                     Intent intent = IntentUtils.launchWeb(menu.getProvider().getAttributionLink());
 /*

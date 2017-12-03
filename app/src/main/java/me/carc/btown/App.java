@@ -12,6 +12,7 @@ import com.squareup.leakcanary.LeakCanary;
 import io.fabric.sdk.android.Fabric;
 import me.carc.btown.common.Commons;
 import me.carc.btown.common.NetworkChangeReceiver;
+import me.carc.btown.common.location.BTownLocation;
 import me.carc.btown.db.AppDatabase;
 
 /** Application class for BTown
@@ -22,14 +23,18 @@ public class App extends Application {
 
     private static final String BTOWN_DATABASE_NAME = "btown.db";
 
+    private BTownLocation mBTownLocation;
     private AppDatabase database;
     private NetworkChangeReceiver networkChangeReceiver;
-    private AppCompatActivity mCurrentActivity = null;
+        private AppCompatActivity mCurrentActivity = null;
 
 
     public AppCompatActivity getCurrentActivity() {
         return mCurrentActivity;
     }
+
+
+    public BTownLocation getBTownLocation() {return mBTownLocation;}
 
     public void setCurrentActivity(AppCompatActivity mCurrentActivity) {
         this.mCurrentActivity = mCurrentActivity;
@@ -57,6 +62,8 @@ public class App extends Application {
 
         database = initDB();
 
+        mBTownLocation = new BTownLocation(this);
+
         registerConnectivityRecver();
     }
 
@@ -80,6 +87,7 @@ public class App extends Application {
 
     @Override
     public void onTerminate() {
+        mBTownLocation.closeLocationProvider();
         super.onTerminate();
         try { unregisterReceiver(networkChangeReceiver);
         }catch (IllegalArgumentException e) { /*EMPTY*/ }

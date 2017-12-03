@@ -48,8 +48,6 @@ public abstract class OnItemSelectedListener implements RecyclerView.OnItemTouch
         return false;
     }
 
-
-
     @Override
     public final void onTouchEvent(RecyclerView rv, MotionEvent e) {
         throw new UnsupportedOperationException("Not implemented");

@@ -34,12 +34,14 @@
                 style="@style/Card_Title"
                 android:transitionName="@string/catalogue_title"
                 android:fontFamily="serif"
+                android:drawablePadding="@dimen/margin_standard"
                 tools:ignore="UnusedAttribute"
                 tools:text="Heading here"/>
         </FrameLayout>
 
 
         <LinearLayout
+            android:id="@+id/iconsHolder"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="end"

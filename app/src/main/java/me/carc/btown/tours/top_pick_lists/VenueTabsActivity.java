@@ -348,7 +348,7 @@ public class VenueTabsActivity extends BaseActivity implements
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_fsq_list, menu);
+        getMenuInflater().inflate(R.menu.menu_fsq_venue, menu);
         return true;
     }
 
@@ -361,7 +361,7 @@ public class VenueTabsActivity extends BaseActivity implements
                 finish();
                 break;
 
-            case R.id.menu_show_all:
+            case R.id.menu_show_on_map:
                 setResult(RESULT_OK, getIntent());
                 finish();
                 break;

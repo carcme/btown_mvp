@@ -43,8 +43,9 @@ import me.carc.btown.Utils.WikiUtils;
 import me.carc.btown.common.C;
 import me.carc.btown.common.Commons;
 import me.carc.btown.common.CompassSensor;
-import me.carc.btown.common.FusedLocation;
 import me.carc.btown.common.TinyDB;
+import me.carc.btown.common.interfaces.LocationCallback;
+import me.carc.btown.common.location.BTownLocation;
 import me.carc.btown.data.all4squ.FourSquResult;
 import me.carc.btown.data.all4squ.FourSquareApi;
 import me.carc.btown.data.all4squ.FourSquareServiceProvider;
@@ -115,7 +116,7 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
     private Context mContext;
     private MapView mMap;
     private final IMap.View view;
-    private FusedLocation fusedLocation;
+    private BTownLocation btLocation;
     private CompassSensor compassSensor;
 
     private GeoPoint mLocation;
@@ -136,17 +137,20 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
         view.setPresenter(this);
     }
 
+/*
     @Override
     public void debugBtn() {
     }
+*/
 
     @Override
     public void onUpdateLocation() {
-        fusedLocation = new FusedLocation(mContext, onLocationChanged);
+        btLocation.setCallback(onLocationChanged);
+
         compassSensor.enableSensors();
     }
 
-    private FusedLocation.Callback onLocationChanged = new FusedLocation.Callback() {
+    private LocationCallback onLocationChanged = new LocationCallback() {
 
         @Override
         public void onLocationChanged(Location location) {
@@ -162,13 +166,11 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
         @Override
         public void onLastKnownLocation(Location location) {
             updateLocationOverlay(location);    // update the location overlay
-            if (!compassSensor.isEnabled())
-                compassSensor.enableSensors();
         }
 
         public void onConnected(boolean connected) {
             if (connected) {
-                fusedLocation.startLocationUpdates(); //  start location updates
+                btLocation.startLocationUpdates();
             } else {
                 compassSensor.disableSensors();
                 view.enableLocationDependantFab(false);
@@ -176,10 +178,19 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
         }
     };
 
+//    boolean SHOW_DEBUG = false;  // change this to show location info on map screen
+
     private void updateLocationOverlay(Location location) {
         mLocation = new GeoPoint(location.getLatitude(), location.getLongitude());
-        if(C.DEBUG_ENABLED)
-            view.showLocationSettings(mLocation, fusedLocation.getLocationRequest(), location);
+/*        if(BuildConfig.DEBUG && SHOW_DEBUG) {
+            btLocation.setCallback(onLocationChanged);
+            view.showLocationSettings(mLocation, btLocation.getLocationRequest(), location);
+        }
+*/
+
+        if (!compassSensor.isEnabled())
+            compassSensor.enableSensors();
+
         if (!myLocationOverlay.isEnabled())
             myLocationOverlay.setEnabled(true);
 
@@ -212,8 +223,7 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
                 deg += 90;
 
             if (myLocationOverlay.isEnabled()) {
-
-                fusedLocation.calcGeoMagneticCorrection(deg);
+                btLocation.calcGeoMagneticCorrection(deg);
 
                 SinglePoiOptionsDialog poiDlg = getPoiDialog();
                 if (Commons.isNotNull(poiDlg)) {
@@ -243,18 +253,19 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
 
         compassSensor = new CompassSensor(mContext, onCompassCallback);
 
-        fusedLocation = new FusedLocation(mContext, onLocationChanged);
-        if (!fusedLocation.canGetLocation()) {
+        btLocation = ((App)mContext.getApplicationContext()).getBTownLocation();
+        btLocation.setCallback(onLocationChanged);
+        if (!btLocation.canGetLocation()) {
             view.enableLocationDependantFab(false);
             view.requestGpsEnable();
         } else {
-            compassSensor.enableSensors();
+            btLocation.getCurrentLocation();
         }
     }
 
     @Override
     public void stop() {
-        fusedLocation.stopLocationUpdates();
+        btLocation.pauseLocationUpdates();
         compassSensor.disableSensors();
 
         if (Commons.isNotNull(overpassCall)) overpassCall.cancel();
@@ -920,7 +931,9 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
                 case MotionEvent.ACTION_MOVE:
                     if (mTrackingMode) {
                         mTrackingMode = false;
-                        fusedLocation.updateLocationRequest(false);
+                        BTownLocation loc = ((App)mContext.getApplicationContext()).getBTownLocation();
+                        loc.updateLocationRequest(false);
+                        btLocation.updateLocationRequest(false);
                         view.setTrackingMode(false);
                         bAllowReturnLocation = false;
                         browsingLocation = null;
@@ -1064,7 +1077,8 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
 
     private void updateUIWithTrackingMode() {
 
-        fusedLocation.updateLocationRequest(mTrackingMode);
+        btLocation.updateLocationRequest(mTrackingMode);
+
         view.setTrackingMode(mTrackingMode);
 
         if (mTrackingMode) {

@@ -98,6 +98,7 @@
 
     <string name="shared_string_phone">Phone</string>
     <string name="shared_string_web">Web</string>
+    <string name="shared_string_unknown">Unknown</string>
 
 
 
@@ -184,7 +185,7 @@
 
     <string name="about"><![CDATA[
 <p>The idea of B-Town came while travelling and wanting something that would give insider tips for various cities. If you have any suggestions of what you\'d like to see, let me know via the feedback button</p>
-<p>Use the app to get details of your area, whether you\'re interested in local bars, restaurtants or sightseeing and included Wikipedia lookups to make it easy those to find extra places you may be interested in. I plan to include FourSquare support in the near future.</p>
+<p>Use the app to get details of your area, whether you\'re interested in local bars, restaurtants or sightseeing and included Wikipedia lookups to make it easy those to find extra places you may be interested in.</p>
 <p>OpenStreetMap is updated daily by contributors all over the world… although I can\'t guarantee the correctness of their data. </p>
 
 ]]></string>
@@ -214,8 +215,8 @@
 
 
     <!-- PUBLIC TRANSPORT ROUTE PLAN-->
-    <string name="alert_title_pt_route_map">Route map download</string>
-    <string name="alert_msg_pt_route_map">The public transport route map for Berlin is downloading. Please be patient.  Other city route map will follow. If there is one you would like to see, contact me using the feedback in the menu.</string>
+    <string name="alert_title_pt_route_map">Map download</string>
+    <string name="alert_msg_pt_route_map">%s is downloading. Please be patient. If you want a new map, let me know using the feedback above.</string>
 
 
 

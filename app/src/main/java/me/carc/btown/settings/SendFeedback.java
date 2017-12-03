@@ -75,7 +75,7 @@ public class SendFeedback {
 
     private void rate(final Context ctx) {
         final RatingDialog ratingDialog = new RatingDialog.Builder(ctx)
-                .icon(ContextCompat.getDrawable(ctx, R.mipmap.ic_launcher_rnd))
+                .icon(ContextCompat.getDrawable(ctx, R.mipmap.ic_launcher_skyline_rnd_blue))
                 .threshold(3)
                 .title(ctx.getString(R.string.ratings_request_title))
                 .titleTextColor(R.color.black)

@@ -55,10 +55,6 @@
 
 
     <!-- FOUR SQUARE-->
-
     <string name="load_more_photos" formatted="false">Load More ( %d )</string>
-
-    <string name="pre_load_data_done">Data pre-load complete</string>
-
 
 </resources>

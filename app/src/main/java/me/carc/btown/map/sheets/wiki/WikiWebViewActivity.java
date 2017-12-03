@@ -21,6 +21,7 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebHistoryItem;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -71,8 +72,12 @@ public class WikiWebViewActivity extends BaseActivity {
     @BindView(R.id.wikiActivityToolbar)
     Toolbar toolbar;
 
+/*
     @BindView(R.id.nonLeakWebView)
     NonLeakingWebView webView;
+*/
+    @BindView(R.id.web_container)
+    FrameLayout mWebContainer;
 
     @BindView(R.id.wikiActivityProgressBar)
     ProgressBar progressBar;
@@ -80,6 +85,8 @@ public class WikiWebViewActivity extends BaseActivity {
     @BindView(R.id.wikiMoreBtn)
     ImageView wikiMoreBtn;
 
+    // removed this from the xml and add programmically - should remove the webview memory leaks <fingerscrossed>
+    NonLeakingWebView webView;
 
 
     @Override
@@ -87,6 +94,9 @@ public class WikiWebViewActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wiki_webview);
         ButterKnife.bind(this);
+
+        webView = new NonLeakingWebView(this);
+        mWebContainer.addView(webView);
 
         setSupportActionBar(toolbar);
         assert getSupportActionBar() != null;
@@ -361,6 +371,7 @@ public class WikiWebViewActivity extends BaseActivity {
 
     @Override
     protected void onDestroy() {
+        mWebContainer.removeAllViews();
         try {
             if (Commons.isNotNull(webView)) {
                 webView.removeAllViews();

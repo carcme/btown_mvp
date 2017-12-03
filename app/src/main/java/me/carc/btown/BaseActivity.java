@@ -78,6 +78,7 @@ import me.carc.btown.common.Commons;
 import me.carc.btown.common.TinyDB;
 import me.carc.btown.extras.BackgroundImageDialog;
 import me.carc.btown.extras.PublicTransportPlan;
+import me.carc.btown.extras.PublicTransportPlanExtra;
 import me.carc.btown.login.LoginActivity;
 import me.carc.btown.settings.Preferences;
 import me.carc.btown.settings.SendFeedback;
@@ -566,7 +567,7 @@ public class BaseActivity extends AppCompatActivity {
                     .load(facebookUser != null ? facebookUser.getProfilePictureUri(50, 50) : firebaseUser.getPhotoUrl())
                     .into(userImage);
         } else {
-            userImage.setImageResource(R.mipmap.ic_launcher_rnd);
+            userImage.setImageResource(R.mipmap.ic_launcher_skyline_rnd_blue);
             headeUser.setText(R.string.app_name);
         }
     }
@@ -581,7 +582,10 @@ public class BaseActivity extends AppCompatActivity {
                     break;
 
                 case R.id.nav_transport_maps:
-                    transportPlans();
+                    if(BuildConfig.DEBUG)
+                        transportPlansExtra();
+                    else
+                        transportPlans();
                     break;
 
                 case R.id.nav_translate:
@@ -626,6 +630,10 @@ public class BaseActivity extends AppCompatActivity {
             else
                 showAlertDialog(R.string.shared_string_error, R.string.network_not_available_error, -1);
         }
+    }
+
+    public void transportPlansExtra() {
+        startActivity(new Intent(BaseActivity.this, PublicTransportPlanExtra.class));
     }
 
     public void transportPlans() {

@@ -40,10 +40,12 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-
+/**
+ * Populate the tips list - use initial 12 (?) from the venue query and offer option to load more.
+ * todo if user pages away, possible part of the list is lost/skipped and not shown - fix it after Egypt holiday :)
+ */
 public class VenueTipsFragment extends Fragment {
     private static final String TAG = C.DEBUG + Commons.getTag();
-    public static final String PREFKEY_SAVED_TOUR_NOTES = "PREFKEY_SAVED_TOUR_NOTES";
 
     public static final int TIPS_LIMIT = 30;
     private int TIPS_OFFSET = 0;
@@ -131,7 +133,7 @@ public class VenueTipsFragment extends Fragment {
         ArrayList<GroupsTip> groups = args.getParcelableArrayList(VenueTabsActivity.EXTRA_TIPS);
 
         if (groups.size() > 1)
-            Log.d(TAG, "populateGrid: Check this - have more than one group");
+            Log.d(TAG, "populateGrid: Check this - have more than one group and not sure what other groups are!");
 
         mAdapter = new VenueTipsAdapter(filterByLanguage(groups));
         venueTipsRV.setAdapter(mAdapter);
@@ -157,7 +159,7 @@ public class VenueTipsFragment extends Fragment {
             tipsLoadMore.setVisibility(View.GONE);
         } else {
             tipsLoadMore.setText(String.format(getString(R.string.load_more_photos), TIPS_TOTAL_AVAILABLE - TIPS_OFFSET));
-            tipsLoadMore.setTag(mAdapter.getItemCount());
+            tipsLoadMore.setTag(TIPS_TOTAL_AVAILABLE);
             emptyTips.setVisibility(View.GONE);
         }
 
@@ -193,7 +195,7 @@ public class VenueTipsFragment extends Fragment {
             String venueId = args.getString(VenueTabsActivity.EXTRA_VENUE_ID);
 
             FourSquareApi service = FourSquareServiceProvider.get();
-            Call<FourSquResult> listsCall = service.getVenueTips(venueId, "recent", TIPS_LIMIT, TIPS_OFFSET);
+            Call<FourSquResult> listsCall = service.getVenueTips(venueId, "popular", TIPS_LIMIT, TIPS_OFFSET);
 
             listsCall.enqueue(new Callback<FourSquResult>() {
                 @SuppressWarnings({"ConstantConditions"})
@@ -203,25 +205,8 @@ public class VenueTipsFragment extends Fragment {
                     FourSquResult body = response.body();
 
                     try {
-                        // TODO: 11/11/2017   Problem
-
                         GroupsTip grpTips = body.getResponse().getTips();
-
                         new SetupMore(grpTips).run();
-
-
-/*
-                        mAdapter.updateTipList(grpTips.getItemsGroupsTips());
-                        TIPS_OFFSET = mAdapter.getItemCount();
-
-                        if (TIPS_OFFSET >= (int) tipsLoadMore.getTag())
-                            tipsLoadMore.setVisibility(View.GONE);
-                        else {
-                            int remainingImageCount = (int) tipsLoadMore.getTag() - TIPS_OFFSET;
-                            tipsLoadMore.setText(String.format(getString(R.string.load_more_photos), remainingImageCount));
-                        }
-*/
-
 
                     } catch (Exception e) {
                         Commons.Toast(getActivity(), R.string.operation_error, Color.RED, Toast.LENGTH_SHORT);
@@ -246,12 +231,13 @@ public class VenueTipsFragment extends Fragment {
         SetupMore(GroupsTip grpTips) {
             this.grpTips = grpTips;
 
+            // get the fragment array
             ArrayList<GroupsTip> groups = getArguments().getParcelableArrayList(VenueTabsActivity.EXTRA_TIPS);
             for (GroupsTip grp : groups) {
                 if(grp.getName().equals("All tips"))
                     grp.getItemsGroupsTips().addAll(grpTips.getItemsGroupsTips());
             }
-            // update the list
+            // update the fragment array
             getArguments().putParcelableArrayList(VenueTabsActivity.EXTRA_TIPS, groups);
         }
 
@@ -261,6 +247,9 @@ public class VenueTipsFragment extends Fragment {
         }
 
         private void populateMore() {
+
+            // TODO: 21/11/2017 filter the language again - create arraylist and add grpTips to it then send to filterByLanguage
+
             mAdapter.updateTipList(grpTips.getItemsGroupsTips());
             TIPS_OFFSET = mAdapter.getItemCount();
 

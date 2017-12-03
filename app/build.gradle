@@ -7,6 +7,8 @@ buildscript {
         classpath 'io.fabric.tools:gradle:1.+'
     }
 }
+
+
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 
@@ -22,8 +24,8 @@ android {
         applicationId 'me.carc.btown'
         minSdkVersion 21
         targetSdkVersion 26
-        versionCode 38
-        versionName "2.0.8"
+        versionCode 42
+        versionName "2.1.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         android.defaultConfig.vectorDrawables.useSupportLibrary = true
         javaCompileOptions {
@@ -135,6 +137,8 @@ ext {
 //    evernotejob = '1.2.0'
 
     leakcanary = '1.5.4'
+    robolectric = '3.5.1'
+    mockito = '2.12.0'
 }
 
 dependencies {
@@ -165,7 +169,9 @@ dependencies {
     compile "com.google.firebase:firebase-storage:$firebase"
     compile "com.firebaseui:firebase-ui-storage:$firebaseUI"
     compile "com.facebook.android:facebook-android-sdk:$facebook"
+
     compile "org.osmdroid:osmdroid-android:$osmdroid"
+
     compile "com.github.bumptech.glide:glide:$glide"
     compile "com.squareup.retrofit2:retrofit:$retrofit"
     compile "com.squareup.retrofit2:converter-gson:$retrofit"
@@ -191,11 +197,13 @@ dependencies {
     compile 'carcme:login-buttons:0.3.0'
     compile 'com.github.lzyzsd:circleprogress:1.2.1'
     compile 'com.flaviofaria:kenburnsview:1.0.7'
-    compile 'com.davemorrissey.labs:subsampling-scale-image-view:3.7.0'
+    compile 'com.davemorrissey.labs:subsampling-scale-image-view:3.9.0'
     compile 'de.hdodenhof:circleimageview:2.2.0'
     debugCompile "com.squareup.leakcanary:leakcanary-android:$leakcanary"
     releaseCompile "com.squareup.leakcanary:leakcanary-android-no-op:$leakcanary"
     compile 'pub.devrel:easypermissions:1.0.0'
+    testCompile "org.robolectric:robolectric:$robolectric"
+    testCompile "org.mockito:mockito-core:$mockito"
     testCompile 'junit:junit:4.12'
     compile('com.crashlytics.sdk.android:crashlytics:2.7.0@aar') {
         transitive = true;
