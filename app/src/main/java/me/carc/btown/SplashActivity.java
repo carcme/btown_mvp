@@ -8,15 +8,12 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 
-import com.facebook.Profile;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-
 import java.util.List;
 
 import me.carc.btown.common.C;
 import me.carc.btown.common.Commons;
 import me.carc.btown.tours.data.services.FirebaseImageDownloader;
+import me.carc.btown.ui.front_page.FrontPageActivity;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
@@ -30,27 +27,18 @@ public class SplashActivity extends BaseActivity implements EasyPermissions.Perm
 
     private static final String TAG = C.DEBUG + Commons.getTag();
 
-//    private final int SPLASH_DISPLAY_LENGTH = 500;
+//    private FirebaseAuth auth;
+//    private FirebaseAuth.AuthStateListener authListener;
 
-    private FirebaseAuth auth;
-    private FirebaseAuth.AuthStateListener authListener;
-
-
-    private boolean bugFixFlag = true;
     private boolean hasStorage = false;
     private boolean hasLocation = false;
-    private boolean hasUser = false;
-    private boolean attemptedLogin = false;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //Facebook
-
+/*
         auth = FirebaseAuth.getInstance();
-
         authListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -65,10 +53,15 @@ public class SplashActivity extends BaseActivity implements EasyPermissions.Perm
                 }
             }
         };
+*/
+
+        if (Commons.isNetworkAvailable(SplashActivity.this)) {
+            Intent getImagesIntent = new Intent(SplashActivity.this, FirebaseImageDownloader.class);
+            startService(getImagesIntent);
+        }
 
         if(C.HAS_L) {
             storage();
-            location();
         } else {
             hasStorage = true;
             hasLocation = true;
@@ -83,7 +76,9 @@ public class SplashActivity extends BaseActivity implements EasyPermissions.Perm
                 public void run() {
 
                     //Create an intent that will start the main activity.
-                    Intent intent = new Intent(SplashActivity.this, MapActivity.class);
+//                    Intent intent = new Intent(SplashActivity.this, MapActivity.class);
+                    Intent intent = new Intent(SplashActivity.this, FrontPageActivity.class);
+
                     SplashActivity.this.startActivity(intent);
 
                     //Finish splash activity so user cant go back to it.
@@ -92,37 +87,45 @@ public class SplashActivity extends BaseActivity implements EasyPermissions.Perm
                     //Apply splash exit (fade out) and main entry (fade in) animation transitions.
                     overridePendingTransition(R.anim.main_fade_in, R.anim.splash_fade_out);
                 }
-            }, 500);
+            }, 100);
+        } else if(!hasStorage){
+            storage();
+        } else {
+            location();
         }
     }
 
     @AfterPermissionGranted(C.PERMISSION_STORAGE)
     public void storage() {
-        if (EasyPermissions.hasPermissions(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-            hasStorage = true;
-            launchNextActivity();
-        } else {
-            // Ask for one permission
-            EasyPermissions.requestPermissions(SplashActivity.this, getString(R.string.rationale_storage),
-                    C.PERMISSION_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        if(!hasStorage) {
+            if (EasyPermissions.hasPermissions(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                hasStorage = true;
+                launchNextActivity();
+            } else {
+                // Ask for one permission
+                EasyPermissions.requestPermissions(SplashActivity.this, getString(R.string.rationale_storage),
+                        C.PERMISSION_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            }
         }
     }
 
     @AfterPermissionGranted(C.PERMISSION_LOCATION)
     public void location() {
-        if (EasyPermissions.hasPermissions(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
-            hasLocation = true;
-            launchNextActivity();
-        } else {
-            // Ask for one permission
-            EasyPermissions.requestPermissions(SplashActivity.this, getString(R.string.rationale_storage),
-                    C.PERMISSION_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION);
+        if(!hasLocation) {
+            if (EasyPermissions.hasPermissions(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+                hasLocation = true;
+                launchNextActivity();
+            } else {
+                // Ask for one permission
+                EasyPermissions.requestPermissions(SplashActivity.this, getString(R.string.rationale_storage),
+                        C.PERMISSION_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION);
+            }
         }
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
     }
 
@@ -153,15 +156,15 @@ public class SplashActivity extends BaseActivity implements EasyPermissions.Perm
     @Override
     public void onStart() {
         super.onStart();
-        auth.addAuthStateListener(authListener);
+//        auth.addAuthStateListener(authListener);
     }
 
     @Override
     public void onStop() {
         super.onStop();
 
-        if (authListener != null) {
-            auth.removeAuthStateListener(authListener);
-        }
+//        if (authListener != null) {
+//            auth.removeAuthStateListener(authListener);
+//        }
     }
 }
