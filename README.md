@@ -10,6 +10,7 @@ App is on the [Play Store](https://play.google.com/store/apps/details?id=me.carc
 
 
 #### ToDo List
+- [x] New version of OsmDroid Map Libaray 
 - [x] Integrated tours
 - [x] Login activity
 - [x] All web activity directed to wiki web view except PDF... launch intent chooser instead
