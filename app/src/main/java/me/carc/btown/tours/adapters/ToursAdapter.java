@@ -87,13 +87,13 @@ public class ToursAdapter extends RecyclerView.Adapter<CatalogueViewHolder> {
             }
         }
 
-        holder.catalogueImage.setOnClickListener(new View.OnClickListener() {
+        holder.card.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onClickListener.OnClick(v, holder.catalogueImage.getDrawable(), holder.getAdapterPosition());
             }
         });
-        holder.catalogueImage.setOnLongClickListener(new View.OnLongClickListener() {
+        holder.card.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 onClickListener.OnLongClick(v, holder.getAdapterPosition());

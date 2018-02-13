@@ -135,7 +135,6 @@ public class AttractionTabsActivity extends BaseActivity implements
     private void setupViewPager(ArrayList<Attraction> attractions) {
         adapter = new MyFragmentPagerAdapter(getSupportFragmentManager());
 
-
         Bundle bundle = null;
         if (Commons.isNotNull(attractions)) {
             bundle = new Bundle();

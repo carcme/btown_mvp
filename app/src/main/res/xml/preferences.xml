@@ -2,6 +2,21 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory
+        android:key="pref_key_location"
+        android:title="@string/shared_string_location">
+
+        <CheckBoxPreference
+            android:width="24dp"
+            android:height="24dp"
+            android:defaultValue="true"
+            android:key="pref_key_use_gps"
+            android:summary="@string/pref_location_use_gps_best_accuracy"
+            android:title="@string/pref_location_use_gps_title" />
+
+    </PreferenceCategory>
+
+
+    <PreferenceCategory
         android:key="pref_key_display"
         android:title="@string/pref_display">
 

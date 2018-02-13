@@ -1,8 +1,10 @@
 package me.carc.btown.login;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.StringRes;
+import android.support.v7.app.AlertDialog;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -24,6 +26,7 @@ import me.carc.btown.BaseActivity;
 import me.carc.btown.R;
 import me.carc.btown.common.C;
 import me.carc.btown.common.Commons;
+import me.carc.btown.map.sheets.wiki.WikiWebViewActivity;
 
 
 public class LoginActivity extends BaseActivity implements IfLogin.View {
@@ -31,10 +34,13 @@ public class LoginActivity extends BaseActivity implements IfLogin.View {
     private static final String TAG = C.DEBUG + Commons.getTag();
     private static final int RC_SIGN_IN = 9001;
 
+    private static final String SHOWN_RATIONAL = "SHOWN_RATIONAL";  // show reason for sign in
+
     public static final int GOOGLE_BUTTON = 1;
     public static final int FACEBOOK_BUTTON = 2;
 
     private IfLogin.Presenter presenter;
+    private CallbackManager callbackManager;
 
     @BindView(R.id.googleBtn)
     GooglePlusButton googleBtn;
@@ -50,8 +56,6 @@ public class LoginActivity extends BaseActivity implements IfLogin.View {
     public void setPresenter(IfLogin.Presenter presenter) {
         this.presenter = presenter;
     }
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +75,7 @@ public class LoginActivity extends BaseActivity implements IfLogin.View {
         Profile fbProfile = Profile.getCurrentProfile();
         facebookBtn.setText(fbProfile == null ? String.format(getString(R.string.sign_in_with), getString(R.string.facebook)) : getString(R.string.sign_out));
         callbackManager = CallbackManager.Factory.create();
+
         LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
@@ -79,7 +84,6 @@ public class LoginActivity extends BaseActivity implements IfLogin.View {
 
             @Override
             public void onCancel() {
-                Toast.makeText(getApplicationContext(), getString(android.R.string.cancel), Toast.LENGTH_LONG).show();
             }
 
             @Override
@@ -87,13 +91,42 @@ public class LoginActivity extends BaseActivity implements IfLogin.View {
                 Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
-
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         presenter.start();
+
+        if(!db.getBoolean(SHOWN_RATIONAL)) {
+            new AlertDialog.Builder(this)
+                    .setTitle(R.string.signin_rational_title)
+                    .setIcon(R.drawable.ic_person_outline)
+                    .setCancelable(false)
+                    .setMessage(R.string.signin_rational_msg)
+                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            db.putBoolean(SHOWN_RATIONAL, true);
+                            dialog.dismiss();
+                        }
+                    })
+                    .setNegativeButton(R.string.privacy_policy, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            showPrivacyPolicy();
+                        }
+                    })
+                    .show();
+        }
+
+    }
+
+    @OnClick(R.id.privacyPolicy)
+    public void showPrivacyPolicy() {
+        Intent intent = new Intent(LoginActivity.this, WikiWebViewActivity.class);
+        intent.putExtra(WikiWebViewActivity.WIKI_EXTRA_PAGE_URL, getString(R.string.privacy_policy_link));
+        startActivity(intent);
     }
 
     @Override

@@ -5,4 +5,29 @@
     <string name="quick_guide">Kurzanleitung</string>
     <string name="help_string_image_dialog_viewer">Einmal berühren, um Maßstab zu ändern. Zweimal berühren, um den Zoom zu nutzen. Zum Beenden auf den Text unten drücken.</string>
 
+
+    <!--Sign In and Privacy Policy-->
+    <string name="signin_rational_title">Warum Einloggen</string>
+    <string name="signin_rational_msg">Eine Registrierung verschafft Dir Zutritt zu allen Touren und neuen Top Berlin Listen.\n\nADiese würde ich gerne so privat, wie nur irgend möglich halten, da die Recherche viel Zeit und Herzblut gekostet hat.n\nDu wirst nie ungewünschte E-Mails von B-Town erhalten. Versprochen!</string>
+    <string name="privacy_policy">Datenschutz Richtlinien</string>
+    <string name="privacy_policy_link">https://carcmedev.github.io/btown/privacy_de.html</string>
+
+
+    <string name="help_intro">Willkommen bei B-Town\n\nIch hoffe, die App bringt Euch viel Freude. Wenn Ihr Verbesserungs-Vorschläge habt, lasst sie uns einfach in der Feedback-Sektion zukommen.\n\nHalte die Taste einfach gedrückt, um weitere Optionen anzuzeigen.</string>
+    <string name="help_search">Finde einfach alles\nEssen, Trinken, historische Sehenswürdigkeiten, Wikipedia-Einträge und neueste Trends auf der Karte\n\nHier kannst du auch Deine Favoriten, Chronik und gespeicherten Wikipedia-Einträge finden</string>
+    <string name="help_tracking">Finde Dich auf der Karte zurecht und aktiviere Deine Standort-Funktion\n\nDrücke die Rückwärts-Funktion, um wieder zu Deinem Ausgangspunkt zu kommen oder berühre die Karte, um die Standort-Funktion zu deaktivieren</string>
+    <string name="help_camera">Schnellzugang zur Kamera\n\nWenn bei Deiner Suche zahlreiche Ergebnisse gefunden wurden, klicke hier, um die gesamte Liste anzuzeigen</string>
+    <string name="help_menu">Zeige das Navigations-Menü\n\nDas Menü findest Du auch, wenn Du den linken Bildrand zur Mitte ziehst</string>
+
+    <string name="help_pin_drop">Den Pin gedrückt halten, um ihn zu entfernen. Oder nutze den Popup, um alle Pins zu entfernen</string>
+
+    <string name="help_tours">Zeige B-Town Touren\nHast du Freunde zu Besuch…Unternimm‘ mit ihnen eine Erkundungstour durch Berlin\n\nWir werden bald neue Touren hinzufügen</string>
+
+    <string name="help_fsq_explore_item">Drücken, um Adresse, Öffnungszeiten, Tipps, Bewertungen und Fotos zu sehen</string>
+    <string name="help_fsq_explore_map_all">Füge eine Stecknadel hinzu, wenn dir eine Location besonders gut gefällt</string>
+    <string name="help_fsq_explore_close">Stecknadeln verwerfen und die Seite schließen</string>
+
+    <!--TO TRANSLATE-->
+
+
 </resources>

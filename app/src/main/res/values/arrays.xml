@@ -97,7 +97,7 @@
         -->
         <!--Adult-->
         <item>Adult:Entertainment for the discerning ladies and gentlemen:amenity=brothel:amenity=casino:amenity=gambling:amenity=stripclub:amenity=swingerclub:amenity=sauna:leisure=sauna:leisure=adult_gaming_centre:shop=massage:shop=erotic</item>
-        <item>Nightlife:Dance the night away:amenity=nightclub::leisure=dance</item>
+        <item>Nightlife:Dance the night away:amenity=nightclub:leisure=dance</item>
 
         <!--shopping-->
         <!--		<item>Shopping:Department Store &amp; Mall:shop=department_store:shop=mall</item>-->

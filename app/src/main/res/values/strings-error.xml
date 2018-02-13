@@ -24,6 +24,9 @@
 
     <!--TODO-->
 
+    <string name="error_image_load_failed">The image failed to load.</string>
+
+
     <string name="ssl_date_invalid" translatable="false">The date of the certificate is invalid</string>
     <string name="ssl_cert_expired" translatable="false">The certificate has expired</string>
     <string name="ssl_hostname_mismatch" translatable="false">Hostname mismatch</string>

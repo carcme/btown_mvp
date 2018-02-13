@@ -15,6 +15,7 @@ import android.graphics.drawable.TransitionDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
@@ -401,10 +402,23 @@ public class AttractionShowcaseImageActivity extends BaseActivity {
         Uri contentUri = FileProvider.getUriForFile(AttractionShowcaseImageActivity.this, getString(R.string.file_provider), file);
 
         if (set) {
-            //Home screen it
-            Intent intent = WallpaperManager.getInstance(AttractionShowcaseImageActivity.this).getCropAndSetWallpaperIntent(contentUri);
-            //startActivityForResult to stop the progress bar
-            startActivityForResult(intent, ACTIVITY_CROP);
+            try {
+                //Home screen it
+                Intent intent = WallpaperManager.getInstance(AttractionShowcaseImageActivity.this).getCropAndSetWallpaperIntent(contentUri);
+                //startActivityForResult to stop the progress bar
+                startActivityForResult(intent, ACTIVITY_CROP);
+            }catch (IllegalArgumentException e) {
+                // Seems to be an Oreo bug - fall back to using the bitmap instead
+                Bitmap bitmap = null;
+                try {
+                    bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), contentUri);
+                    WallpaperManager.getInstance(AttractionShowcaseImageActivity.this).setBitmap(bitmap);
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+                animateCompleteFirst();
+            }
+
         } else {
             //Share it
             // TODO: 20/10/2017 set the message

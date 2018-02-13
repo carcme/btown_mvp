@@ -91,8 +91,6 @@ public class PlaceholderFragment extends Fragment {
 
     int minTVHeight, minHeight, infoHeight;
 
-    private StorageReference mCoverImageStorageRef;
-
     private Attraction attractionData;
     private ArrayList<CardView> cards;
     private ArrayList<InfoCard> items;
@@ -207,9 +205,8 @@ public class PlaceholderFragment extends Fragment {
 
         if (AndroidUtils.isPortrait(getContext())) {
 
-            mCoverImageStorageRef = FirebaseStorage.getInstance().getReference().child("coverImages/");
-
-            loadImage();
+            new LoadHeaderImage().run();
+            //loadImage();
 
             ViewUtils.setViewHeight(appbar, C.IMAGE_HEIGHT, true);
             ViewUtils.setViewHeight(imageBackDrop, C.IMAGE_HEIGHT, false);
@@ -233,7 +230,8 @@ public class PlaceholderFragment extends Fragment {
             Window w = getActivity().getWindow();
             w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
 
-            loadImage();
+            new LoadHeaderImage().run();
+            //loadImage();
 
             ViewUtils.setViewHeight(imageBackDrop, ImageSize.SCREEN[1], false);
         }
@@ -241,48 +239,53 @@ public class PlaceholderFragment extends Fragment {
         return rootView;
     }
 
-    private void loadImage() {
+    private class LoadHeaderImage implements Runnable {
 
-        // see if we have a local version
-        for(int i = 0; i < AttractionTabsActivity.galleryItems.size(); i++) {
-            int key = AttractionTabsActivity.galleryItems.keyAt(i);
-            // get the object by the key.
-            GalleryItem item = AttractionTabsActivity.galleryItems.get(key);
-            if(item.getFilename().equals(attractionData.getImage())) {
-                Glide.with(this)
-                        .load(item.getCachedFile())
-                        .into(new SimpleTarget<GlideDrawable>() {
-                            @Override
-                            public void onLoadFailed(Exception e, Drawable errorDrawable) {
-                                super.onLoadFailed(e, errorDrawable);
-
-                                // NO LOCAL VERSION FOUND - Load the image from Firebase
-                                Glide.with(getActivity())
-                                        .using(new FirebaseImageLoader())
-                                        .load(mCoverImageStorageRef.child(attractionData.getImage()))
-                                        .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                                        .into(imageBackDrop);
-                            }
-
-                            @Override
-                            public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
-                                imageBackDrop.setImageDrawable(resource);
-                            }
-                        });
-                return;
-            }
+        @Override
+        public void run() {
+            loadImage();
         }
 
-        cbTourListener.firebaseUpdateRequired();
-    }
+        private void loadImage() {
+            // see if we have a local version
+            for (int i = 0; i < AttractionTabsActivity.galleryItems.size(); i++) {
+                int key = AttractionTabsActivity.galleryItems.keyAt(i);
+                // get the object by the key.
+                GalleryItem item = AttractionTabsActivity.galleryItems.get(key);
+                if (item.getFilename().equals(attractionData.getImage())) {
+                    Glide.with(PlaceholderFragment.this)
+                            .load(item.getCachedFile())
+                            .into(new SimpleTarget<GlideDrawable>() {
+                                @Override
+                                public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                                    super.onLoadFailed(e, errorDrawable);
 
+                                    // NO LOCAL VERSION FOUND - Load the image from Firebase
+                                    StorageReference mCoverImageStorageRef = FirebaseStorage.getInstance().getReference().child("coverImages/");
+                                    Glide.with(getActivity())
+                                            .using(new FirebaseImageLoader())
+                                            .load(mCoverImageStorageRef.child(attractionData.getImage()))
+                                            .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                                            .into(imageBackDrop);
+                                }
+
+                                @Override
+                                public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
+                                    imageBackDrop.setImageDrawable(resource);
+                                }
+                            });
+                    return;
+                }
+            }
+            cbTourListener.firebaseUpdateRequired();
+        }
+    }
 
     private void buildViews(View rootView, boolean germanLanguage) {
         int text = ContextCompat.getColor(getActivity(), R.color.almostBlack);
         ViewUtils.changeFabColour(getActivity(), backFab, R.color.toursBackButtonBackgroundColor);
 
         ((TextView) rootView.findViewById(R.id.infoTitle)).setTextColor(text);
-
 
         Typeface fontTitle = Typeface.create("serif", Typeface.NORMAL);/*BaseActivity.getDefaultFont(getActivity());*/
         Typeface fontText = fontTitle; //Typeface.createFromAsset(getAssets(), "fonts/Roboto-Thin.ttf");
@@ -665,7 +668,8 @@ public class PlaceholderFragment extends Fragment {
 
     /**
      * Show the credits card
-     * @param title the title of the card
+     *
+     * @param title     the title of the card
      * @param textColor color of text
      * @return the card to be inserted to layout
      */
@@ -752,9 +756,9 @@ public class PlaceholderFragment extends Fragment {
     private View.OnClickListener onBackFabClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-        ViewUtils.createAlphaAnimator(backFab, false, getResources()
-                .getInteger(R.integer.gallery_alpha_duration) * 2).start();
-        getActivity().onBackPressed();
+            ViewUtils.createAlphaAnimator(backFab, false, getResources()
+                    .getInteger(R.integer.gallery_alpha_duration) * 2).start();
+            getActivity().onBackPressed();
         }
     };
 

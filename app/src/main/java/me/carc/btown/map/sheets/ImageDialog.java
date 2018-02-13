@@ -1,15 +1,16 @@
 package me.carc.btown.map.sheets;
 
 import android.app.WallpaperManager;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
@@ -26,8 +27,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.BitmapImageViewTarget;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 
 import java.io.File;
 import java.io.IOException;
@@ -55,7 +57,7 @@ import okhttp3.Response;
 public class ImageDialog extends DialogFragment {
 
     public static final String ID_TAG = "ImageDialog";
-    public static final int ACTIVITY_CROP  = 101;
+    public static final int ACTIVITY_CROP = 101;
     public static final int ACTIVITY_SHARE = 102;
 
     private static final String IMAGE_URL = "IMAGE_URL";
@@ -93,15 +95,14 @@ public class ImageDialog extends DialogFragment {
         try {
             Bundle bundle = new Bundle();
 
-            if(Commons.isNotNull(imageUrl)) bundle.putString(IMAGE_URL, imageUrl);
-            if(Commons.isNotNull(pageUrl))  bundle.putString(PAGE_URL, pageUrl);
-            if(Commons.isNotNull(title))    bundle.putString(TITLE, title);
-            if(Commons.isNotNull(subTitle)) bundle.putString(SUBTITLE, subTitle);
+            if (Commons.isNotNull(imageUrl)) bundle.putString(IMAGE_URL, imageUrl);
+            if (Commons.isNotNull(pageUrl))  bundle.putString(PAGE_URL, pageUrl);
+            if (Commons.isNotNull(title))    bundle.putString(TITLE, title);
+            if (Commons.isNotNull(subTitle)) bundle.putString(SUBTITLE, subTitle);
 
             ImageDialog fragment = new ImageDialog();
             fragment.setArguments(bundle);
             fragment.show(activity.getSupportFragmentManager(), ID_TAG);
-
             return true;
 
         } catch (RuntimeException e) {
@@ -115,46 +116,36 @@ public class ImageDialog extends DialogFragment {
         unbinder = ButterKnife.bind(this, view);
 
         Bundle args = getArguments();
-        if(args != null) {
-
+        if (args != null) {
             String imageUrl = args.getString(IMAGE_URL);
             imageTitle.setText(args.getString(TITLE));
             imageSubTitle.setText(args.getString(SUBTITLE));
-            if(Commons.isEmpty(args.getString(SUBTITLE)))
+            if (Commons.isEmpty(args.getString(SUBTITLE)))
                 imageSubTitle.setVisibility(View.GONE);
 
             Glide.with(getActivity())
                     .load(imageUrl)
-                    .asBitmap()
+                    .listener(new RequestListener<String, GlideDrawable>() {
+                        @Override
+                        public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                            retryNetworkImage();
+                            return true;
+                        }
+
+                        @Override
+                        public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                            if (Commons.isNotNull(imageLoadProgress))
+                                imageLoadProgress.setVisibility(View.GONE);
+                            return false;
+                        }
+                    })
+                    .crossFade(500)
                     .placeholder(R.drawable.checkered_background)  // required otherwise load doesn't happen!!
                     .error(R.drawable.no_image)
-                    .into(new BitmapImageViewTarget(image) {
-                        @Override
-                        public void onResourceReady(final Bitmap bitmap, @Nullable GlideAnimation anim) {
-                            super.onResourceReady(bitmap, anim);
-
-                            // make sure user hasn't exited while waiting for the image to load!!
-                            if(Commons.isNotNull(imageLoadProgress))
-                                imageLoadProgress.setVisibility(View.GONE);
-                        }
-
-                        @Override
-                        public void onLoadFailed(Exception e, Drawable errorDrawable) {
-                            super.onLoadFailed(e, errorDrawable);
-
-                            // make sure user hasn't exited while waiting for the image to load!!
-                            if(Commons.isNotNull(image)) {
-//                                image.setImageResource(R.drawable.no_image);
-                                image.setScaleType(ImageView.ScaleType.CENTER);
-                            }
-                            if(Commons.isNotNull(imageLoadProgress))
-                                imageLoadProgress.setVisibility(View.GONE);
-                        }
-                    });
-
+                    .into(image);
 
             int scale = TinyDB.getTinyDB().getInt(SAVED_SCALE_TYPE, ImageView.ScaleType.CENTER_CROP.ordinal());
-            switch (scale){
+            switch (scale) {
                 case 3:
                     image.setScaleType(ImageView.ScaleType.FIT_CENTER);
                     break;
@@ -163,12 +154,56 @@ public class ImageDialog extends DialogFragment {
                     image.setScaleType(ImageView.ScaleType.CENTER_CROP);
                     break;
             }
-
         } else
             dismiss();
 
         return view;
     }
+
+    private void retryNetworkImage() {
+        String loadString = getArguments().getString(IMAGE_URL);
+        Glide.with(getActivity())
+                .load(loadString)
+                .listener(glideListener)
+                .crossFade(500)
+                .into(image);
+    }
+
+    private RequestListener<String, GlideDrawable> glideListener = new RequestListener<String, GlideDrawable>() {
+        int retryCount = 2;
+
+        @Override
+        public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+            // Attempt a retry
+            if (retryCount != 0) {
+                retryNetworkImage();
+                retryCount--;
+                return true;
+            }
+
+            // make sure user hasn't exited while waiting for the image to load!!
+            if (Commons.isNotNull(image)) {
+                image.setImageResource(R.drawable.no_image);
+                image.setScaleType(ImageView.ScaleType.FIT_CENTER);
+            }
+            if (Commons.isNotNull(imageLoadProgress))
+                imageLoadProgress.setVisibility(View.GONE);
+
+            // show load error notification
+            if (getActivity() != null) {
+                Commons.Toast(getActivity(), R.string.operation_error, Color.RED, Toast.LENGTH_SHORT);
+            }
+            return false;
+        }
+
+        @Override
+        public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+            image.setImageDrawable(resource);
+            if (Commons.isNotNull(imageLoadProgress))
+                imageLoadProgress.setVisibility(View.GONE);
+            return false;
+        }
+    };
 
     @OnClick(R.id.textContainer)
     void onTextContainerClick() {
@@ -177,7 +212,7 @@ public class ImageDialog extends DialogFragment {
 
     @OnClick(R.id.imageDialogImage)
     void singleImageTouch() {
-        if(image.getScaleType() == ImageView.ScaleType.CENTER_CROP) {
+        if (image.getScaleType() == ImageView.ScaleType.CENTER_CROP) {
             image.setScaleType(ImageView.ScaleType.FIT_CENTER);
         } else
             image.setScaleType(ImageView.ScaleType.CENTER_CROP);
@@ -185,8 +220,6 @@ public class ImageDialog extends DialogFragment {
         TinyDB.getTinyDB().putInt(SAVED_SCALE_TYPE, image.getScaleType().ordinal());
     }
 
-
-    // TODO: 09/10/2017 - this is copied from SearchDialogFragment, needs updating for ImageDialog
     @OnClick(R.id.imageMoreBtn)
     void onSettingOverflow() {
         PopupMenu popupMenu = new PopupMenu(getActivity(), imageMoreBtn);
@@ -219,17 +252,16 @@ public class ImageDialog extends DialogFragment {
 
     @OnClick(R.id.helpContainer)
     void showHideHelp() {
-        if(helpContainer.getVisibility() == View.GONE)
+        if (helpContainer.getVisibility() == View.GONE)
             helpContainer.setVisibility(View.VISIBLE);
         else
             helpContainer.setVisibility(View.GONE);
     }
 
     private void downloadAndSetOrShareImage(final boolean set) {
-        final String imageUrl = getArguments().getString(IMAGE_URL);
+        String imageUrl = getArguments().getString(IMAGE_URL);
 
         if (Commons.isNotNull(imageUrl)) {
-
             imageLoadProgress.setVisibility(View.VISIBLE);
 
             OkHttpClient client = new OkHttpClient();
@@ -241,15 +273,14 @@ public class ImageDialog extends DialogFragment {
             client.newCall(request).enqueue(new okhttp3.Callback() {
                 @Override
                 public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                    imageLoadProgress.setVisibility(View.GONE);
-                    Toast.makeText(getActivity(), "Could not download the image", Toast.LENGTH_SHORT).show();
+                    showDownloadError();
                 }
 
                 @SuppressWarnings({"ConstantConditions", "ResultOfMethodCallIgnored"})
                 @Override
                 public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
 
-                    if(response.body().byteStream() != null) {
+                    if (response.body().byteStream() != null) {
 
                         try {
                             //create a temporary directory within the cache folder
@@ -257,7 +288,8 @@ public class ImageDialog extends DialogFragment {
                             if (!dir.exists()) dir.mkdirs();
 
                             //create the file
-                            File file = new File(dir, "btownTemp.jpg");
+                            String filename = "btownTemp.jpg";
+                            File file = new File(dir, filename);
                             if (!file.exists()) file.createNewFile();
 
                             FileUtils.copyInputStreamToFile(response.body().byteStream(), file);
@@ -266,10 +298,23 @@ public class ImageDialog extends DialogFragment {
                             Uri contentUri = FileProvider.getUriForFile(getActivity(), getString(R.string.file_provider), file);
 
                             if (set) {
-                                //Home screen it
-                                Intent intent = WallpaperManager.getInstance(getActivity()).getCropAndSetWallpaperIntent(contentUri);
-                                //startActivityForResult to stop the progress bar
-                                startActivityForResult(intent, ACTIVITY_CROP);
+                                try {
+                                    Intent intent = WallpaperManager.getInstance(getActivity()).getCropAndSetWallpaperIntent(contentUri);
+                                    //startActivityForResult to stop the progress bar
+                                    startActivityForResult(intent, ACTIVITY_CROP);
+                                } catch (IllegalArgumentException e) {
+                                    // Seems to be an Oreo bug - fall back to using the bitmap instead
+                                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), contentUri);
+                                    WallpaperManager.getInstance(getActivity()).setBitmap(bitmap);
+                                    getActivity().runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            imageLoadProgress.setVisibility(View.GONE);
+                                            Commons.Toast(getActivity(), R.string.shared_string_success, Color.GREEN, Toast.LENGTH_SHORT);
+                                        }
+                                    });
+                                }
+
                             } else {
                                 //Share it
                                 final String pageUrl = imageTitle.getText().toString() + "\n\n" + getArguments().getString(PAGE_URL);
@@ -284,8 +329,7 @@ public class ImageDialog extends DialogFragment {
                             }
 
                         } catch (Exception ex) {
-                            Commons.Toast(getActivity(), R.string.operation_error, Color.RED, Toast.LENGTH_SHORT);
-                            imageLoadProgress.setVisibility(View.GONE);
+                            showDownloadError();
                         }
                     }
                 }
@@ -293,9 +337,49 @@ public class ImageDialog extends DialogFragment {
         }
     }
 
+    private void showDownloadError() {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (Commons.isNotNull(imageLoadProgress))
+                    imageLoadProgress.setVisibility(View.GONE);
+                Commons.Toast(getActivity(), R.string.operation_error, Color.RED, Toast.LENGTH_SHORT);
+            }
+        });
+    }
+
+
+    public static Uri getImageContentUri(Context context, File imageFile) {
+        String filePath = imageFile.getAbsolutePath();
+        Cursor cursor = context.getContentResolver().query(
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                new String[]{MediaStore.Images.Media._ID},
+                MediaStore.Images.Media.DATA + "=? ",
+                new String[]{filePath}, null);
+
+        if (cursor != null && cursor.moveToFirst()) {
+            int id = cursor.getInt(cursor
+                    .getColumnIndex(MediaStore.MediaColumns._ID));
+            Uri baseUri = Uri.parse("content://media/external/images/media");
+            return Uri.withAppendedPath(baseUri, "" + id);
+        } else {
+            if (imageFile.exists()) {
+                ContentValues values = new ContentValues();
+                values.put(MediaStore.Images.Media.DATA, filePath);
+                return context.getContentResolver().insert(
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+            } else {
+                return null;
+            }
+        }
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        imageLoadProgress.setVisibility(View.GONE);
+        if (requestCode == ACTIVITY_CROP || requestCode == ACTIVITY_SHARE) {
+            imageLoadProgress.setVisibility(View.GONE);
+            Commons.Toast(getActivity(), R.string.shared_string_success, Color.GREEN, Toast.LENGTH_SHORT);
+        }
     }
 
 

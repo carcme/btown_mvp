@@ -18,13 +18,16 @@
         android:background="@drawable/rating_background"
         android:backgroundTint="@color/tintStandard"
         android:contentDescription="@null"
-        android:scaleType="centerCrop"/>
+        android:layout_gravity="center_vertical"
+        android:scaleType="centerCrop"
+        tools:src="@drawable/ic_clock"/>
 
     <RelativeLayout
         android:id="@+id/textHolder"
         android:layout_width="0dp"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:gravity="center_vertical"
+        android:layout_gravity="center_vertical"
         android:layout_weight="1">
 
         <me.carc.btown.ui.custom.CapitalisedTextView
@@ -49,13 +52,13 @@
             android:maxLines="1"
             android:textSize="@dimen/tiny_list_text_size"
             tools:text="@string/lorum_ipsum"
-            android:layout_alignParentBottom="true"/>
+            />
 
     </RelativeLayout>
 
     <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <TextView
@@ -67,7 +70,6 @@
             android:gravity="center|top"
             android:minWidth="22dp"
             android:padding="@dimen/margin_tiny"
-            android:text="---"
             android:textColor="@color/colorPrimary"
             android:textSize="@dimen/tiny_list_text_size"
             tools:backgroundTint="@color/tintLight"
@@ -91,11 +93,12 @@
     <ImageView
         android:id="@+id/searchMore"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:background="@drawable/backgroud_round_image_button"
         android:contentDescription="@null"
         android:padding="@dimen/margin_tiny"
         android:src="@drawable/ic_more"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        tools:visibility="visible"/>
 
 </LinearLayout>

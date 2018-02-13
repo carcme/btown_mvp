@@ -2,8 +2,12 @@ package me.carc.btown;
 
 import android.app.Application;
 import android.arch.persistence.room.Room;
+import android.content.Context;
+import android.content.Intent;
 import android.content.IntentFilter;
+import android.location.Location;
 import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
 
 import com.crashlytics.android.Crashlytics;
@@ -12,10 +16,14 @@ import com.squareup.leakcanary.LeakCanary;
 import io.fabric.sdk.android.Fabric;
 import me.carc.btown.common.Commons;
 import me.carc.btown.common.NetworkChangeReceiver;
-import me.carc.btown.common.location.BTownLocation;
+import me.carc.btown.common.injection.component.ApplicationComponent;
+import me.carc.btown.common.injection.component.DaggerApplicationComponent;
+import me.carc.btown.common.injection.module.ApplicationModule;
 import me.carc.btown.db.AppDatabase;
+import me.carc.btown.tours.data.services.FirebaseImageDownloader;
 
-/** Application class for BTown
+/**
+ * Application class for BTown
  * Created by bamptonm on 19/09/2017.
  */
 
@@ -23,19 +31,30 @@ public class App extends Application {
 
     private static final String BTOWN_DATABASE_NAME = "btown.db";
 
-    private BTownLocation mBTownLocation;
     private AppDatabase database;
     private NetworkChangeReceiver networkChangeReceiver;
-        private AppCompatActivity mCurrentActivity = null;
+    private AppCompatActivity mCurrentActivity = null;
+    private Location mLatestLocation;
 
+
+    public Location getLatestLocation() {
+        return mLatestLocation;
+    }
+    public void setLatestLocation(Location location) {
+        mLatestLocation = location;
+    }
+
+    ApplicationComponent mApplicationComponent;
+
+    private Intent imagesServiceIntent;
+
+    public static App get(Context context) {
+        return (App) context.getApplicationContext();
+    }
 
     public AppCompatActivity getCurrentActivity() {
         return mCurrentActivity;
     }
-
-
-    public BTownLocation getBTownLocation() {return mBTownLocation;}
-
     public void setCurrentActivity(AppCompatActivity mCurrentActivity) {
         this.mCurrentActivity = mCurrentActivity;
     }
@@ -45,6 +64,22 @@ public class App extends Application {
             database = initDB();
         return database;
     }
+
+    public ApplicationComponent getComponent() {
+        if (mApplicationComponent == null) {
+            mApplicationComponent = DaggerApplicationComponent.builder()
+                    .applicationModule(new ApplicationModule(this))
+                    .build();
+        }
+        return mApplicationComponent;
+    }
+
+    // Needed to replace the component with a test specific one
+    public void setComponent(ApplicationComponent applicationComponent) {
+        mApplicationComponent = applicationComponent;
+    }
+
+
 
     /**
      * Init global values
@@ -56,15 +91,22 @@ public class App extends Application {
 
         try {
             LeakCanary.install(this);
-        }catch (Throwable ex){ // catch on androidx86 getExternalStorageDir is not writable
+        } catch (Throwable ex) { // catch on androidx86 getExternalStorageDir is not writable
             ex.printStackTrace();
         }
 
         database = initDB();
 
-        mBTownLocation = new BTownLocation(this);
-
         registerConnectivityRecver();
+
+        getFirebaseTours();
+    }
+
+    public void getFirebaseTours() {
+        if(isNetworkAvailable()) {
+            imagesServiceIntent = new Intent(getApplicationContext(), FirebaseImageDownloader.class);
+            startService(imagesServiceIntent);
+        }
     }
 
     /**
@@ -84,15 +126,20 @@ public class App extends Application {
         registerReceiver(new NetworkChangeReceiver(), intentFilter);
     }
 
+    public boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        return networkInfo != null && (networkInfo.isConnected());
+    }
+
 
     @Override
     public void onTerminate() {
-        mBTownLocation.closeLocationProvider();
+        stopService(imagesServiceIntent);
         super.onTerminate();
-        try { unregisterReceiver(networkChangeReceiver);
-        }catch (IllegalArgumentException e) { /*EMPTY*/ }
+        try {
+            unregisterReceiver(networkChangeReceiver);
+        } catch (IllegalArgumentException e) { /*EMPTY*/ }
 
     }
 }
-
-

@@ -6,6 +6,7 @@ import org.osmdroid.util.GeoPoint;
 
 import java.text.MessageFormat;
 import java.util.Comparator;
+import java.util.List;
 
 import me.carc.btown.map.search.model.Place;
 
@@ -172,6 +173,44 @@ public class MapUtils {
                 p.getLongitude() - BOUNDS_FROM_POINT_LIMIT);
     }
 
+
+    public static BoundingBox findBoundingBoxFromPointsList(List<GeoPoint> points, boolean addPadding) {
+        double west = 0.0;
+        double east = 0.0;
+        double north = 0.0;
+        double south = 0.0;
+
+        for (int lc = 0; lc < points.size(); lc++) {
+            GeoPoint point = points.get(lc);
+            if (lc == 0) {
+                north = point.getLatitude();
+                south = point.getLatitude();
+                west = point.getLongitude();
+                east = point.getLongitude();
+            } else {
+                if (point.getLatitude() > north) {
+                    north = point.getLatitude();
+                } else if (point.getLatitude() < south) {
+                    south = point.getLatitude();
+                }
+                if (point.getLongitude() < west) {
+                    west = point.getLongitude();
+                } else if (point.getLongitude() > east) {
+                    east = point.getLongitude();
+                }
+            }
+        }
+
+        // OPTIONAL - Add some extra "padding" for better map display
+        if(addPadding) {
+            double padding = 0.01;
+            north = north + padding;
+            south = south - padding;
+            west = west - padding;
+            east = east + padding;
+        }
+        return new BoundingBox(north, east, south, west);
+    }
 
     public static class DistanceComparator implements Comparator<Place> {
         boolean closestFirst;

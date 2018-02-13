@@ -30,7 +30,7 @@
                 android:layout_height="match_parent"
                 android:contentDescription="Get directions to here"
                 android:scaleType="centerCrop"
-                android:src="@drawable/gradient_transparent"/>
+                android:src="@drawable/gradient_fsq_map"/>
 
         </FrameLayout>
 

@@ -1,20 +1,24 @@
 package me.carc.btown.tours.attractionPager;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
+import org.osmdroid.views.overlay.simplefastpoint.LabelledGeoPoint;
+import org.osmdroid.views.overlay.simplefastpoint.SimpleFastPointOverlay;
+import org.osmdroid.views.overlay.simplefastpoint.SimplePointTheme;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -24,6 +28,7 @@ import me.carc.btown.common.Commons;
 import me.carc.btown.map.markers.MarkersOverlay;
 import me.carc.btown.tours.model.Attraction;
 import me.carc.btown.tours.model.POIs;
+import me.carc.btown.ui.custom.MySimplePointOverlayOptions;
 
 /**
  * Show map and POIs of tour location
@@ -38,6 +43,7 @@ public class AttractionMapActivity extends BaseActivity {
     public static final String GEOPOINT = "GEOPOINT";
 
     public MarkersOverlay mPoiMarkers;
+    private SimpleFastPointOverlay mTourOverlay;
 
     @BindView(R.id.attractionsMmap)
     MapView mapView;
@@ -55,6 +61,12 @@ public class AttractionMapActivity extends BaseActivity {
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onBackPressed();
+                }
+            });
         }
 
         Intent intent = getIntent();
@@ -77,10 +89,6 @@ public class AttractionMapActivity extends BaseActivity {
     private void initMarkers() {
         //POI markers:
         mPoiMarkers = new MarkersOverlay(this, mapView, "POIs");
-
-        Drawable clusterIconD = ResourcesCompat.getDrawable(getResources(), R.drawable.marker_cluster, null);
-        Bitmap clusterIcon = ((BitmapDrawable) clusterIconD).getBitmap();
-        mPoiMarkers.setIcon(clusterIcon);
         mPoiMarkers.mAnchorV = Marker.ANCHOR_BOTTOM;
         mPoiMarkers.mTextAnchorU = 0.70f;
         mPoiMarkers.mTextAnchorV = 0.27f;
@@ -95,7 +103,7 @@ public class AttractionMapActivity extends BaseActivity {
         else
             geoAttractionPoint = getIntent().getParcelableExtra(GEOPOINT);
 
-        mapView.getController().setZoom(16);
+        mapView.getController().setZoom(17);
         mapView.getController().setCenter(geoAttractionPoint);
         mapView.setBuiltInZoomControls(false);
         mapView.setMultiTouchControls(enableControls);
@@ -109,12 +117,6 @@ public class AttractionMapActivity extends BaseActivity {
 
                 initMarkers();
 
-                // add pois to map
-                if(Commons.isNotNull(data)) {
-                    ArrayList<POIs> pois = data.getPOIs();
-                    if (Commons.isNotNull(pois))
-                        mPoiMarkers.addTourPOIs(pois, getResources(), getPackageName());
-                }
                 //tour map point of interest
                 Marker poi = new Marker(mapView);
                 poi.setPosition(geoAttractionPoint);
@@ -122,6 +124,33 @@ public class AttractionMapActivity extends BaseActivity {
                 poi.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.btown_marker_icon, null));
                 mPoiMarkers.add(poi);
 
+                // add pois to map
+                if(Commons.isNotNull(data)) {
+                    List<POIs> pois = data.getPOIs();
+                    if (Commons.isNotNull(pois)) {
+
+                        List<IGeoPoint> points = new ArrayList<>();     // tour points
+                        for (POIs item : pois) {
+                            points.add(new LabelledGeoPoint(item.lat, item.lng, item.title));
+                        }
+
+                        SimplePointTheme theme = new SimplePointTheme(points, true);
+                        MySimplePointOverlayOptions opt = new MySimplePointOverlayOptions()
+                                .setRadius(24)
+                                .setSelectedRadius(24)
+                                .setIsClickable(true)
+                                .setCellSize(20);
+
+                        mTourOverlay = new SimpleFastPointOverlay(theme, opt);
+                        mTourOverlay.setOnClickListener(new SimpleFastPointOverlay.OnClickListener() {
+                            @Override
+                            public void onClick(SimpleFastPointOverlay.PointAdapter points, Integer point) {
+                                Toast.makeText(mapView.getContext(), ((LabelledGeoPoint) points.get(point)).getLabel(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                        mapView.getOverlays().add(mTourOverlay);
+                    }
+                }
                 mapView.getController().animateTo(geoAttractionPoint);
 
                 return true;
@@ -130,14 +159,24 @@ public class AttractionMapActivity extends BaseActivity {
     }
 
     @Override
-    protected void onDestroy() {
+    public void onBackPressed() {
+        finish();
+    }
+
+    @Override
+    protected void onPause() {
         if(Commons.isNotNull(mPoiMarkers)) {
             mPoiMarkers.closeInfoWidows();
             mPoiMarkers.getItems().clear();
             mPoiMarkers.clear();
             mPoiMarkers = null;
-
+            mapView.getOverlays().remove(mTourOverlay);
         }
+        super.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
         mapView = null;
         super.onDestroy();
     }

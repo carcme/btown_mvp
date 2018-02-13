@@ -23,6 +23,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.GraphRequest;
@@ -65,7 +66,7 @@ public class AttractionPagerActivity extends BaseActivity implements Placeholder
     private String mOnCameraLocation;
     private TourPagerAdapter tourAdapter;
     private ArrayList<Attraction> attractions;
-
+    private CallbackManager callbackManager;
 
     @BindView(R.id.fabMap)
     FloatingActionButton fabShowMap;
@@ -115,17 +116,15 @@ public class AttractionPagerActivity extends BaseActivity implements Placeholder
             mViewPager.setAdapter(tourAdapter);
             mViewPager.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
             mViewPager.addOnPageChangeListener(onPagerChangedListener);
-
-
             mViewPager.setCurrentItem(index, true);
         }
 
-//        fabShowMap = (FloatingActionButton) findViewById(R.id.fabMap);
         fabShowMap.getDrawable().setColorFilter(ContextCompat.getColor(this, R.color.white), PorterDuff.Mode.MULTIPLY);
         ViewUtils.changeFabColour(this, fabShowMap, R.color.colorPrimary);
         fabShowMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                mViewPager.getCurrentItem();
                 onShowMap(attractions.get(mViewPager.getCurrentItem()));
             }
         });
@@ -219,7 +218,6 @@ public class AttractionPagerActivity extends BaseActivity implements Placeholder
         Intent share = new Intent(Intent.ACTION_SEND);
         share.setType("image/*");
 
-
         // Add the descriptions
         share.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.strShareBody));
         share.putExtra(Intent.EXTRA_TEXT, IntentUtils.getUrlWithRef(getPackageName())/*getString(R.string.strShareStore*/);
@@ -241,6 +239,7 @@ public class AttractionPagerActivity extends BaseActivity implements Placeholder
 
             if (AccessToken.getCurrentAccessToken() == null) {
                 // Need to log in to facebook first
+                callbackManager = CallbackManager.Factory.create();
                 LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
                     @Override
                     public void onSuccess(LoginResult loginResult) {
@@ -272,7 +271,6 @@ public class AttractionPagerActivity extends BaseActivity implements Placeholder
 
         Intent iComment = new Intent(AttractionPagerActivity.this, CommentsActivity.class);
         iComment.putExtra(CommentsActivity.EXTRA_MESSAGE_BOARD_CAT, CommentsActivity.MSG_BOARD_CAT_COMMENTS);
-//            iComment.putExtra(C.EXTRA_MESSAGE_BOARD_ITEM, tourData.getTourName());
         iComment.putExtra(CommentsActivity.EXTRA_MESSAGE_BOARD_ID, stopName);
         startActivity(iComment);
     }
@@ -349,6 +347,8 @@ public class AttractionPagerActivity extends BaseActivity implements Placeholder
 
     @Override
     public void onScrollView(boolean hide) {
+        // TODO: 11/01/2018 if you keep these, move to collapsing toolbar
+/*
         if (hide) {
             fabShowMap.hide();
             fabCamera.hide();
@@ -356,6 +356,7 @@ public class AttractionPagerActivity extends BaseActivity implements Placeholder
             fabShowMap.show();
             fabCamera.show();
         }
+*/
     }
 
     @Override
@@ -392,9 +393,7 @@ public class AttractionPagerActivity extends BaseActivity implements Placeholder
                 HttpMethod.POST,
                 new GraphRequest.Callback() {
                     public void onCompleted(GraphResponse response) {
-
                         // TODO: if successful, add check in visited marker to main map?
-
                         hideProgressDialog();
                     }
                 }

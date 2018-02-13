@@ -10,6 +10,10 @@
     <string name="desc_background_jewish">Mahnmal für die ermordeten Juden in Europa</string>
     <string name="desc_background_transportr">Satelliten-App für die Öffentlichen Verkehrsmittel</string>
     <string name="desc_background_brandenburg_tor">Das Brandenburger Tor bei Nacht</string>
+    <string name="desc_background_brandenburg_tor2">Das Brandenburger Tor</string>
+    <string name="desc_background_ubahn">U-Bahn abfliegen</string>
+    <string name="desc_background_sanssouci">Schloss Sanssouci in Potsdam</string>
+    <string name="desc_background_insel">Eines von vielen Museen auf der Museumsinsel</string>
 
 
     <!-- Navigation drawer -->
@@ -65,6 +69,7 @@
     <string name="shared_string_internet">Link teilen</string>
     <string name="shared_string_browser">Im Browser öffnen</string>
     <string name="shared_string_help_toggle">Umschalten Hilfe</string>
+    <string name="shared_string_user_guide">Benutzerhandbuch</string>
     <string name="shared_string_info">Info</string>
     <string name="shared_string_rate">Bewerte</string>
     <string name="shared_string_language">Sprache</string>
@@ -86,6 +91,9 @@
     <string name="shared_string_copied_to_clipboard">In die Zwischenablage kopiert</string>
     <string name="shared_string_loading">Lade</string>
     <string name="shared_string_none">Keine</string>
+    <string name="shared_string_success">Erfolg</string>
+    <string name="shared_string_search">Suche</string>
+
 
     <!--TODO-->
     <string name="shared_string_phone">Phone</string>
@@ -142,7 +150,8 @@
 
 
     <!--PERMISSIONS-->
-    <string name="rationale_storage">B-Town wird beendet</string>
+    <string name="rationale_locaiton">B-Town funktioniert am besten, wenn es weiß, wo Sie sind.</string>
+    <string name="rationale_storage">B-Town muss Kartenkacheln speichern.</string>
     <string name="permission_rejected_msg">B-Town braucht deine Zustimmung unbedingt, um zu funktionieren. Wir hoffen, du lässt dich überzeugen und stimmst beim nächsten Mal zu.</string>
     <string name="enable_gps_request">Bitte aktiviere GPS</string>
     <string name="no_gps">Kein GPS</string>
@@ -151,6 +160,10 @@
 
     <!--SETTINGS-->
     <string name="pref_display">Anzeige</string>
+
+    <string name="pref_location_use_gps_title">Stromverbrauch</string>
+    <string name="pref_location_use_gps_best_accuracy">Höchste Genauigkeit</string>
+    <string name="pref_location_use_gps_best_battery">Batterie sparen</string>
 
     <string name="pref_theme_title">Thema</string>
     <string name="pref_theme_light">Hell</string>
@@ -200,8 +213,19 @@
     <string name="alert_title_pt_route_map">Karte herunterladen</string>
     <string name="alert_msg_pt_route_map">%s wird heruntergeladen. Bitte haben Sie Geduld. Wenn Sie eine neue Karte wünschen, lassen Sie es mich wissen, indem Sie das obige Feedback verwenden.</string>
 
-    <string name="lib_thanks">TODO - remove this and have a proper tab screen with libs used</string>
 
+
+
+
+    <string name="lib_thanks">TODO - remove this and have a proper tab screen with libs used</string>
+    <string name="foursquare_search">FourSquare Search</string>
+    <string name="nearby_wikipedia">Nearby Wikipedia</string>
+    <string name="explore_trending">Explore Trending</string>
+    <string name="nearby_food_and_drink">Nearby Food and Drink</string>
+    <string name="nearby_tourism">Nearby Tourism</string>
+    <string name="drop_a_pin">Drop a Pin</string>
+    <string name="clear_all_pins">Clear all Pins</string>
+    <string name="front_page_header_desc">Kopfbild. Berühren Sie, um zu ändern</string>
 
 
 </resources>

@@ -45,34 +45,6 @@
 
 
     <LinearLayout
-        android:id="@+id/itemWiki"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?attr/selectableItemBackground">
-
-        <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="@dimen/margin_standard"
-            android:layout_marginRight="@dimen/margin_standard"
-            android:contentDescription="@null"
-            app:srcCompat="@drawable/ic_wiki"/>
-
-        <TextView
-            style="@style/RtlAwareTextView"
-            android:layout_width="0dp"
-            android:layout_height="54dp"
-            android:layout_weight="1"
-            android:gravity="center_vertical"
-            android:paddingLeft="@dimen/margin_standard"
-            android:paddingRight="@dimen/margin_standard"
-            android:text="Nearby Wikipedia"
-            android:textColor="@color/primary_text_color"
-            android:textSize="16sp" />
-    </LinearLayout>
-
-    <LinearLayout
         android:id="@+id/itemFsqSearch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -97,9 +69,37 @@
             android:gravity="center_vertical"
             android:paddingLeft="@dimen/margin_standard"
             android:paddingRight="@dimen/margin_standard"
-            android:text="FourSquare Search"
+            android:text="@string/foursquare_search"
             android:textColor="@color/primary_text_color"
             android:textSize="16sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/itemWiki"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground">
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/margin_standard"
+            android:layout_marginRight="@dimen/margin_standard"
+            android:contentDescription="@null"
+            app:srcCompat="@drawable/ic_wiki"/>
+
+        <TextView
+            style="@style/RtlAwareTextView"
+            android:layout_width="0dp"
+            android:layout_height="54dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/margin_standard"
+            android:paddingRight="@dimen/margin_standard"
+            android:text="@string/nearby_wikipedia"
+            android:textColor="@color/primary_text_color"
+            android:textSize="16sp"/>
     </LinearLayout>
 
     <LinearLayout
@@ -126,7 +126,7 @@
             android:gravity="center_vertical"
             android:paddingLeft="@dimen/margin_standard"
             android:paddingRight="@dimen/margin_standard"
-            android:text="FourSquare Explore"
+            android:text="@string/explore_trending"
             android:textColor="@color/primary_text_color"
             android:textSize="16sp" />
 
@@ -167,7 +167,7 @@
             android:gravity="center_vertical"
             android:paddingLeft="@dimen/margin_standard"
             android:paddingRight="@dimen/margin_standard"
-            android:text="Nearby Food and Drink"
+            android:text="@string/nearby_food_and_drink"
             android:textColor="@color/primary_text_color"
             android:textSize="16sp" />
     </LinearLayout>
@@ -196,7 +196,7 @@
             android:gravity="center_vertical"
             android:paddingLeft="@dimen/margin_standard"
             android:paddingRight="@dimen/margin_standard"
-            android:text="Nearby Tourism"
+            android:text="@string/nearby_tourism"
             android:textColor="@color/primary_text_color"
             android:textSize="16sp" />
     </LinearLayout>
@@ -234,7 +234,39 @@
             android:gravity="center_vertical"
             android:paddingLeft="@dimen/margin_standard"
             android:paddingRight="@dimen/margin_standard"
-            android:text="@string/share_point"
+            android:text="@string/drop_a_pin"
+            android:textColor="@color/primary_text_color"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/clearDropPins"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/margin_standard"
+            android:layout_marginRight="@dimen/margin_standard"
+            android:contentDescription="@null"
+            app:srcCompat="@drawable/ic_times"
+            android:tint="@color/sheet_icon_color"/>
+
+        <TextView
+            style="@style/RtlAwareTextView"
+            android:layout_width="0dp"
+            android:layout_height="54dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/margin_standard"
+            android:paddingRight="@dimen/margin_standard"
+            android:text="@string/clear_all_pins"
             android:textColor="@color/primary_text_color"
             android:textSize="16sp" />
     </LinearLayout>
@@ -269,7 +301,7 @@
             android:gravity="center_vertical"
             android:paddingLeft="@dimen/margin_standard"
             android:paddingRight="@dimen/margin_standard"
-            android:text="@string/shared_string_help_toggle"
+            android:text="@string/shared_string_user_guide"
             android:textColor="@color/primary_text_color"
             android:textSize="16sp" />
     </LinearLayout>

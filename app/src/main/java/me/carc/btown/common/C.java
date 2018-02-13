@@ -12,8 +12,6 @@ import me.carc.btown.BuildConfig;
 public class C {
     public static final boolean DEBUG_ENABLED = BuildConfig.DEBUG;
 
-    public static final boolean INC_TOP_LISTS = BuildConfig.DEBUG;
-
     public static final String DEBUG = "DEAD:";
 
     public static final boolean HAS_K = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;

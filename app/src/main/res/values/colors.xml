@@ -55,17 +55,6 @@
     <color name="toastErrorColor">#FFCC0000</color>
 
 
-    <color name="md_blue_grey_50">#ffeceff1</color>
-    <color name="md_blue_grey_100">#ffcfd8dc</color>
-    <color name="md_blue_grey_200">#ffb0bec5</color>
-    <color name="md_blue_grey_300">#ff90a4ae</color>
-    <color name="md_blue_grey_400">#ff78909c</color>
-    <color name="md_blue_grey_500">#607D8B</color>
-    <color name="md_blue_grey_600">#ff546e7a</color>
-    <color name="md_blue_grey_700">#ff455a64</color>
-    <color name="md_blue_grey_800">#ff37474f</color>
-    <color name="md_blue_grey_900">#263238</color>
-
 
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
@@ -79,11 +68,60 @@
 
     <color name="accentColorRed">#ec2045</color>
 
+    <color name="transparent">#00000000</color>
     <color name="tintLight">#22000000</color>
     <color name="tintStandard">#80000000</color>
     <color name="tintDark">#A0000000</color>
 
+
+
+
     <color name="grey_ripple">#8ddd</color>
+
+
+
+<!--  COLOR BACKGROUNDS
+    <color name="color_map">#faaf00</color> &lt;!&ndash;056B78&ndash;&gt;
+    <color name="color_map_dark">#bb8300</color> &lt;!&ndash;03505a&ndash;&gt;
+
+    <color name="color_tours">#faaf00</color>  &lt;!&ndash;FF6954&ndash;&gt;
+    <color name="color_tours_dark">#03505a</color>  &lt;!&ndash;fe1f00&ndash;&gt;
+
+    <color name="color_lists">@color/md_green_600</color>&lt;!&ndash;faaf00    #FF6954&ndash;&gt;
+    <color name="color_lists_dark">@color/md_green_700</color>&lt;!&ndash;bb8300 #fe1f00 &ndash;&gt;
+    <color name="color_list_tint_start">#00000000</color> &lt;!&ndash;#fe1f00&ndash;&gt;
+    <color name="color_list_tint_end">#FF000000</color> &lt;!&ndash;#fe1f00&ndash;&gt;
+
+    <color name="color_getting_around">#19a0d6</color>
+    <color name="color_getting_around_dark">#1278a0</color>
+
+    <color name="color_good_to_know">#0E7886</color>
+    <color name="color_good_to_know_dark">#0a5964</color>
+
+    <color name="color_settings">#d50000</color>
+    <color name="color_settings_dark">#9f0000</color>
+-->
+    <!--USING PRIMARY-->
+    <color name="color_map">@color/colorPrimary</color> <!--056B78-->
+    <color name="color_map_dark">@color/colorPrimary</color> <!--03505a-->
+
+    <color name="color_tours">@color/colorPrimary</color>  <!--FF6954-->
+    <color name="color_tours_dark">@color/colorPrimary</color>  <!--fe1f00-->
+
+    <color name="color_lists">@color/colorPrimary</color><!--faaf00    #FF6954-->
+    <color name="color_lists_dark">@color/colorPrimaryDark</color><!--bb8300 #fe1f00 -->
+    <color name="color_list_tint_start">#00263238</color> <!--#fe1f00-->
+    <color name="color_list_tint_center">#88263238</color> <!--#fe1f00-->
+    <color name="color_list_tint_end">#FF263238</color> <!--#fe1f00-->
+
+    <color name="color_getting_around">@color/colorPrimary</color>
+    <color name="color_getting_around_dark">@color/colorPrimary</color>
+
+    <color name="color_good_to_know">@color/colorPrimary</color>
+    <color name="color_good_to_know_dark">@color/colorPrimary</color>
+
+    <color name="color_settings">@color/colorPrimary</color>
+    <color name="color_settings_dark">@color/colorPrimary</color>
 
 
 
@@ -96,7 +134,7 @@
 
     <color name="map_widget_blue">#536dfe</color>
 
-    <color name="roadOverlayBlue">#0000FF</color>
+    <color name="roadOverlayBlue">#4488FF</color>
     <color name="roadOverlayGray">#90666666</color>
 
 
@@ -106,9 +144,14 @@
     <color name="rippleRoundColor">#8BC34A</color>
 
 
+    <color name="colorTourMapPoint">@color/md_amber_50</color>
+
+
+<!--
     <color name="md_yellow_500">#FFEB3B</color>
     <color name="md_yellow_600">#FDD835</color>
     <color name="md_yellow_700">#FBC02D</color>
+-->
 
 
     <color name="paper_color">#FFF</color>
@@ -153,5 +196,9 @@
     <color name="FSQKale">#00B551</color>
 
     <color name="FSQColor">#f94877</color>
+
+
+
+    <color name="primary_light">#B2DFDB</color>
 
 </resources>

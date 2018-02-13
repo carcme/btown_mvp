@@ -2,6 +2,7 @@ package me.carc.btown.map;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.hardware.Sensor;
@@ -11,20 +12,31 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.android.gms.location.LocationAvailability;
+import com.google.android.gms.location.LocationResult;
+
+import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.events.MapEventsReceiver;
 import org.osmdroid.util.BoundingBox;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
+import org.osmdroid.views.Projection;
 import org.osmdroid.views.overlay.MapEventsOverlay;
 import org.osmdroid.views.overlay.Marker;
+import org.osmdroid.views.overlay.Overlay;
+import org.osmdroid.views.overlay.Polyline;
 import org.osmdroid.views.overlay.ScaleBarOverlay;
+import org.osmdroid.views.overlay.simplefastpoint.SimpleFastPointOverlay;
+import org.osmdroid.views.overlay.simplefastpoint.SimplePointTheme;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -33,7 +45,6 @@ import java.util.Locale;
 import java.util.concurrent.Executors;
 
 import me.carc.btown.App;
-import me.carc.btown.MapActivity;
 import me.carc.btown.R;
 import me.carc.btown.Utils.AndroidUtils;
 import me.carc.btown.Utils.ImageUtils;
@@ -44,8 +55,8 @@ import me.carc.btown.common.C;
 import me.carc.btown.common.Commons;
 import me.carc.btown.common.CompassSensor;
 import me.carc.btown.common.TinyDB;
-import me.carc.btown.common.interfaces.LocationCallback;
-import me.carc.btown.common.location.BTownLocation;
+import me.carc.btown.common.location.BTownFusedLocation;
+import me.carc.btown.common.location.BTownLocationCallback;
 import me.carc.btown.data.all4squ.FourSquResult;
 import me.carc.btown.data.all4squ.FourSquareApi;
 import me.carc.btown.data.all4squ.FourSquareServiceProvider;
@@ -59,7 +70,10 @@ import me.carc.btown.data.overpass.query.QueryGenerator;
 import me.carc.btown.data.results.OverpassDataTags;
 import me.carc.btown.data.results.OverpassQueryResult;
 import me.carc.btown.data.results.PlaceToOverpass;
+import me.carc.btown.data.results.ReverseResult;
 import me.carc.btown.data.results.VenueToOverpass;
+import me.carc.btown.data.reverse.ReverseApi;
+import me.carc.btown.data.reverse.ReverseServiceProvider;
 import me.carc.btown.data.wiki.WikiApi;
 import me.carc.btown.data.wiki.WikiQueryPage;
 import me.carc.btown.data.wiki.WikiQueryResponse;
@@ -69,12 +83,17 @@ import me.carc.btown.db.bookmark.BookmarkEntry;
 import me.carc.btown.db.favorite.FavoriteEntry;
 import me.carc.btown.db.history.HistoryEntry;
 import me.carc.btown.map.markers.MarkersOverlay;
+import me.carc.btown.map.markers.RadiusMarkerClusterer;
 import me.carc.btown.map.overlays.MyDirectedLocationOverlay;
 import me.carc.btown.map.search.SearchDialogFragment;
 import me.carc.btown.map.search.model.Place;
 import me.carc.btown.map.sheets.SinglePoiOptionsDialog;
+import me.carc.btown.map.sheets.TourSheetDialog;
 import me.carc.btown.map.sheets.WikiPoiSheetDialog;
 import me.carc.btown.map.sheets.marker_list.MarkerListDialogFragment;
+import me.carc.btown.tours.model.Attraction;
+import me.carc.btown.tours.model.TourCatalogue;
+import me.carc.btown.ui.custom.MySimplePointOverlayOptions;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -99,11 +118,16 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
     private static final String LOCATION = "LOCATION";
 
     private static final String OVERLAY_SINGLE_TAP = "OVERLAY_SINGLE_TAP";
-    private static final String OVERLAY_SEARCH = "OVERLAY_SEARCH";
-    private static final String OVERLAY_FSQ = "OVERLAY_FSQ";
+    private static final String OVERLAY_SEARCH  = "OVERLAY_SEARCH";
+    private static final String OVERLAY_FSQ     = "OVERLAY_FSQ";
+    private static final String OVERLAY_PIN     = "OVERLAY_PIN";
+    private static final String OVERLAY_TOUR    = "OVERLAY_TOUR";
+
 
     private static final int DEFAULT_WIKI_SEARCH_RADIUS = 10000;
     private static final int DEFAULT_WIKI_THUMBNAIL_SIZE = C.SCREEN_WIDTH;
+
+    private static final int MAX_VALID_ACCRACY = 100;
 
     private final static float BERLIN_LAT = 52.517f;
     private final static float BERLIN_LNG = 13.350f;
@@ -112,11 +136,16 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
     private MarkersOverlay mMarkersOverlay;
     private MarkersOverlay mSearchOverlay;
     private MarkersOverlay mFsqOverlay;
+    private MarkersOverlay mPinOverlay;
+    private SimpleFastPointOverlay mTourOverlay;
+    private Polyline tourLine;
+
+    private TourCatalogue mCatalogue;
 
     private Context mContext;
     private MapView mMap;
     private final IMap.View view;
-    private BTownLocation btLocation;
+    private BTownFusedLocation btLocation;
     private CompassSensor compassSensor;
 
     private GeoPoint mLocation;
@@ -124,6 +153,7 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
 
     private Call<OverpassQueryResult> overpassCall;
     private Call<WikiQueryResponse> wikiCall;
+    private Call<FourSquResult> listsCall;
 
     private BrowsingLocation browsingLocation;
     private boolean mTrackingMode;
@@ -137,21 +167,20 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
         view.setPresenter(this);
     }
 
-/*
-    @Override
-    public void debugBtn() {
-    }
-*/
-
     @Override
     public void onUpdateLocation() {
-        btLocation.setCallback(onLocationChanged);
+        if(Commons.isNull(btLocation)) {
+            btLocation = new BTownFusedLocation(mContext);
+            btLocation.setCallback(locationCallbackListener);
+        } else btLocation.setCallback(locationCallbackListener);
 
+        if(Commons.isNotNull(compassSensor))
+            compassSensor = new CompassSensor(mContext, onCompassCallback);
         compassSensor.enableSensors();
     }
 
-    private LocationCallback onLocationChanged = new LocationCallback() {
-
+    private BTownLocationCallback locationCallbackListener = new BTownLocationCallback() {
+/*
         @Override
         public void onLocationChanged(Location location) {
             updateLocationOverlay(location);            // update the location overlay
@@ -162,31 +191,47 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
             else
                 mMap.invalidate(); // re-draw
         }
+*/
+
+        @Override
+        public void onLocationResult(LocationResult result) {
+            updateLocationOverlay(result.getLocations().get(0));    // update the location overlay
+            view.enableLocationDependantFab(true);                  // hide UI dependant controls
+            ((App)mContext.getApplicationContext()).setLatestLocation(result.getLocations().get(0));
+
+            if (mTrackingMode)
+                mMap.getController().animateTo(mLocation); //keep the map view centered on current location:
+            else
+                mMap.invalidate(); // re-draw
+        }
+
+        @Override
+        public void onLocationAvailability(LocationAvailability availability) {
+            if (!availability.isLocationAvailable()) {
+                view.enableLocationDependantFab(false);
+            }
+        }
 
         @Override
         public void onLastKnownLocation(Location location) {
             updateLocationOverlay(location);    // update the location overlay
         }
 
+/*
         public void onConnected(boolean connected) {
             if (connected) {
                 btLocation.startLocationUpdates();
+                btLocation.redownloadAGPS();
             } else {
                 compassSensor.disableSensors();
                 view.enableLocationDependantFab(false);
             }
         }
+*/
     };
-
-//    boolean SHOW_DEBUG = false;  // change this to show location info on map screen
 
     private void updateLocationOverlay(Location location) {
         mLocation = new GeoPoint(location.getLatitude(), location.getLongitude());
-/*        if(BuildConfig.DEBUG && SHOW_DEBUG) {
-            btLocation.setCallback(onLocationChanged);
-            view.showLocationSettings(mLocation, btLocation.getLocationRequest(), location);
-        }
-*/
 
         if (!compassSensor.isEnabled())
             compassSensor.enableSensors();
@@ -196,7 +241,7 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
 
         myLocationOverlay.setLocation(mLocation);
 
-        if (location.hasAccuracy()) {
+        if (location.hasAccuracy() && location.getAccuracy() < MAX_VALID_ACCRACY) {
             myLocationOverlay.setShowAccuracy(true);
             myLocationOverlay.setAccuracy((int) location.getAccuracy());
         }
@@ -246,26 +291,18 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
         mMap.setTilesScaledToDpi(true);
 
         TinyDB db = TinyDB.getTinyDB();
-        mMap.setMinZoomLevel(2);
+        mMap.setMinZoomLevel(2.0);
         mMap.getController().setZoom(db.getInt(LAST_ZOOM_LEVEL, 9));
         GeoPoint savedCenter = new GeoPoint(db.getDouble(LAST_CENTER_LAT, BERLIN_LAT), db.getDouble(LAST_CENTER_LNG, BERLIN_LNG));
         mMap.getController().animateTo(savedCenter);
-
         compassSensor = new CompassSensor(mContext, onCompassCallback);
 
-        btLocation = ((App)mContext.getApplicationContext()).getBTownLocation();
-        btLocation.setCallback(onLocationChanged);
-        if (!btLocation.canGetLocation()) {
-            view.enableLocationDependantFab(false);
-            view.requestGpsEnable();
-        } else {
-            btLocation.getCurrentLocation();
-        }
+        initLocationProvider();
     }
 
     @Override
     public void stop() {
-        btLocation.pauseLocationUpdates();
+        stopLocationProvider();
         compassSensor.disableSensors();
 
         if (Commons.isNotNull(overpassCall)) overpassCall.cancel();
@@ -281,7 +318,27 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
         }
 
         closePoiDialog();
+        closeTourDialog();
         clearBackStack();
+    }
+
+
+    private void initLocationProvider() {
+        if(Commons.isNull(btLocation)) {
+            btLocation = new BTownFusedLocation(mContext);
+            btLocation.setCallback(locationCallbackListener);
+        }
+
+        if (!btLocation.canGetLocation()) {
+            view.enableLocationDependantFab(false);
+            view.requestGpsEnable();
+        } else {
+            btLocation.getLastLocation();
+        }
+    }
+
+    private void stopLocationProvider() {
+        btLocation.stopLocationUpdates();
     }
 
     private void clearBackStack() {
@@ -298,7 +355,7 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
         bundle.putParcelableArrayList(OVERLAY_SINGLE_TAP, mMarkersOverlay.getElemets());
         bundle.putParcelableArrayList(OVERLAY_SEARCH, mSearchOverlay.getElemets());
         bundle.putParcelableArrayList(OVERLAY_SEARCH, mFsqOverlay.getElemets());
-
+        bundle.putParcelableArrayList(OVERLAY_PIN, mPinOverlay.getElemets());
         return bundle;
     }
 
@@ -365,15 +422,27 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
         mFsqOverlay.getTextPaint().setTextSize(12 * mContext.getResources().getDisplayMetrics().density);
 
 
+        mPinOverlay = new MarkersOverlay(mContext, mMap, OVERLAY_PIN);
+        mPinOverlay.setIcon(clusterIcon);
+        mPinOverlay.mAnchorV = Marker.ANCHOR_BOTTOM;
+        mPinOverlay.mTextAnchorU = 0.70f;
+        mPinOverlay.mTextAnchorV = 0.27f;
+        mPinOverlay.getTextPaint().setTextSize(12 * mContext.getResources().getDisplayMetrics().density);
+
+
         // Add the overlays to the map
         mMap.getOverlays().add(myLocationOverlay);
         mMap.getOverlays().add(mMarkersOverlay);
         mMap.getOverlays().add(mSearchOverlay);
         mMap.getOverlays().add(mFsqOverlay);
+        mMap.getOverlays().add(mPinOverlay);
+
 
         mMarkersOverlay.setOnMarkerClickListener(MapPresenter.this);
         mSearchOverlay.setOnMarkerClickListener(MapPresenter.this);
         mFsqOverlay.setOnMarkerClickListener(MapPresenter.this);
+        mPinOverlay.setOnMarkerClickListener(MapPresenter.this);
+
 
         if (Commons.isNotNull(inState)) {
             // single tap POI
@@ -390,6 +459,12 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
             elements = inState.getParcelableArrayList(OVERLAY_FSQ);
             if (Commons.isNotNull(elements) && elements.size() > 0) {
                 mFsqOverlay.updateWithResults(elements, OVERLAY_FSQ);
+            }
+
+            // pins
+            elements = inState.getParcelableArrayList(OVERLAY_PIN);
+            if (Commons.isNotNull(elements) && elements.size() > 0) {
+                mPinOverlay.updateWithResults(elements, OVERLAY_PIN);
             }
         }
     }
@@ -580,9 +655,10 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
 
             @Override
             public void onFailure(@NonNull Call call, @NonNull Throwable t) {
+                view.showSearching(false);
                 if (!call.isCanceled()) {
                     showQuickSearch();
-                    view.showSearching(false);
+                    view.onLoadFailed();
 //                } else {
 //                    view.onLoadFinish();
 
@@ -763,13 +839,151 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
 
             @Override
             public void onFailure(@NonNull Call call, @NonNull Throwable t) {
+                view.showSearching(false);
                 if (!call.isCanceled()) {
                     view.onLoadFailed();
-                    view.showSearching(false);
                     view.setListMode(false);
                 }
             }
         });
+    }
+
+
+    @Override
+    public void onDropPin(GeoPoint p) {
+        view.showSearching(true);
+        ReverseApi service = ReverseServiceProvider.get();
+        Call<ReverseResult> reverseCall = service.reverseDetails(p.getLatitude(), p.getLongitude());
+        reverseCall.enqueue(new Callback<ReverseResult>() {
+            @SuppressWarnings({"ConstantConditions"})
+            @Override
+            public void onResponse(@NonNull Call<ReverseResult> call, @NonNull Response<ReverseResult> response) {
+                try {
+                    if (Commons.isNotNull(response.body())) {
+                        ReverseResult result = response.body();
+                        if(Commons.isNotNull(result.osm_id)) {
+                            OverpassQueryResult.Element element = new OverpassQueryResult.Element();
+
+                            element.id = Long.valueOf(result.osm_id);
+                            element.lat = result.lat;
+                            element.lon = result.lon;
+                            element.iconId = R.drawable.ic_pin;
+                            element.tags.name = result.namedetails.name != null ? result.namedetails.name : result.name;
+
+                            element.tags.addressHouseNumber = result.address.house_number;
+                            element.tags.addressStreet = result.address.road;
+                            element.tags.addressSuburb = result.address.city_district;
+                            element.tags.addressCity = result.address.city;
+                            element.tags.addressPostCode = result.address.postcode;
+
+                            // use reflection to populate the class members
+                            Field[] resFields = ReverseResult.ExtraTags.class.getDeclaredFields();
+                            Field[] tagFields = OverpassQueryResult.Element.Tags.class.getDeclaredFields();
+                            for (Field field : resFields) {
+                                for (Field tag : tagFields) {
+                                    if (tag.getName().equals(result.tagCategory)) {
+                                        try {
+                                            tag.set(element.tags, result.tagType);
+                                        } catch (IllegalAccessException e) {
+                                            e.printStackTrace();
+                                            Log.d(TAG, "onResponse: WRONG TYPE:: " + field.getName());
+                                        }
+                                    } else if (field.getName().equals(tag.getName())) {
+                                        try {
+                                            tag.set(element.tags, field.get(result.extratags));
+                                        } catch (IllegalAccessException e) {
+                                            e.printStackTrace();
+                                            Log.d(TAG, "onResponse: WRONG TYPE:: " + field.getName());
+                                        }
+                                    }
+                                }
+                            }
+
+                            element.distance = MapUtils.getDistance(whereAmI(), element.lat, element.lon);
+
+                            // put this here to overwrite the reflection assignments and format the image strings
+                            if (Commons.isNotNull(result.extratags.image)) {
+                                element.tags.thumbnail = WikiUtils.buildWikiCommonsLink(result.extratags.image, C.THUMBNAIL_SIZE);
+                                element.tags.image = WikiUtils.buildWikiCommonsLink(result.extratags.image, C.SCREEN_WIDTH);
+                            } else {
+                                element.tags.thumbnail = WikiUtils.buildWikiCommonsLink(result.extratags.image, C.THUMBNAIL_SIZE);
+                            }
+
+                            Marker poiMarker = new Marker(mMap);
+                            poiMarker.setTitle("DROP_PIN");
+                            poiMarker.setPosition(new GeoPoint(element.lat, element.lon));
+                            poiMarker.setIcon(ImageUtils.drawableFromVectorDrawable(mContext, R.drawable.ic_pin));
+                            poiMarker.setAnchor(0.5f, 0.7f);
+                            poiMarker.setRelatedObject(element);
+                            poiMarker.setDraggable(true);
+                            poiMarker.setOnMarkerDragListener(mPinDragListener);
+                            poiMarker.setOnMarkerClickListener(MapPresenter.this);
+
+                            mPinOverlay.add(poiMarker);
+                            mPinOverlay.invalidate();
+
+                            onMarkerClick(poiMarker, mMap);
+
+                            view.addClearDropMenuItem(true);
+                        } else
+                            view.onLoadFailed();
+                    } else {
+                        view.showSearching(false);
+                        view.onLoadFailed();
+                        view.setListMode(false);
+                    }
+
+                } catch (NullPointerException e) {
+                    Log.d(TAG, "onResponse: " + e.getLocalizedMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull Throwable t) {
+                view.showSearching(false);
+                if (!call.isCanceled()) {
+                    view.onLoadFailed();
+                    view.setListMode(false);
+                }
+            }
+        });
+    }
+
+
+    @Override
+    public void onClearPins() {
+        mPinOverlay.clear();
+        view.addClearDropMenuItem(false);
+    }
+
+    final OnPinMarkerDragListener mPinDragListener = new OnPinMarkerDragListener();
+
+    class OnPinMarkerDragListener implements Marker.OnMarkerDragListener {
+
+        @Override
+        public void onMarkerDrag(Marker marker) {
+        }
+
+        @Override
+        public void onMarkerDragEnd(Marker marker) {
+        }
+
+        @Override
+        public void onMarkerDragStart(Marker marker) {
+            List<Overlay> overlays = mMap.getOverlayManager().overlays();
+
+            for(Overlay overlay : overlays) {
+                if(overlay instanceof RadiusMarkerClusterer) {
+                    RadiusMarkerClusterer obj = (RadiusMarkerClusterer)overlay;
+                    if(obj.getName().equals(OVERLAY_PIN)){
+                        view.addClearDropMenuItem(obj.getItems().size() > 1);
+                        obj.getItems().remove(marker);
+                        break;
+                    }
+                }
+            }
+            mPinOverlay.invalidate();
+        }
     }
 
     @Override
@@ -778,7 +992,7 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
         String latLon = mMap.getMapCenter().getLatitude() + "," + mMap.getMapCenter().getLongitude();
 
         FourSquareApi service = FourSquareServiceProvider.get();
-        Call<FourSquResult> listsCall = service.searchArea(latLon, "checkin", 50, 500);
+        listsCall = service.searchArea(latLon, "checkin", 50, 500);
 
         listsCall.enqueue(new Callback<FourSquResult>() {
             @SuppressWarnings({"ConstantConditions"})
@@ -795,7 +1009,7 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
 
             @Override
             public void onFailure(@NonNull Call call, @NonNull Throwable t) {
-                Log.d(TAG, "onFailure: ");
+                view.onLoadFailed();
             }
         });
 
@@ -807,7 +1021,13 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
         String latLon = mMap.getMapCenter().getLatitude() + "," + mMap.getMapCenter().getLongitude();
 
         FourSquareApi service = FourSquareServiceProvider.get();
-        Call<FourSquResult> listsCall = service.explore(latLon, 50, 500);
+        listsCall = service.explore(latLon, 50, 500);
+
+        if(listsCall.isExecuted()) {
+            listsCall.cancel();
+            view.showSearching(false);
+            return;
+        }
 
         listsCall.enqueue(new Callback<FourSquResult>() {
             @SuppressWarnings({"ConstantConditions"})
@@ -815,25 +1035,25 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
             public void onResponse(@NonNull Call<FourSquResult> call, @NonNull Response<FourSquResult> response) {
 
                 FourSquResult body = response.body();
-                ArrayList<GroupExplore> resp = body.getResponse().getExplore();
+                if(body != null && body.getResponse() != null) {
+                    ArrayList<GroupExplore> resp = body.getResponse().getExplore();
 
-                if (Commons.isNotNull(resp) && resp.size() > 0) {
-                    ArrayList<ExploreItem> items = resp.get(0).getItems();
-                    view.showFsqSExploreResults(body.getResponse().headerFullLocation, items);
+                    if (Commons.isNotNull(resp) && resp.size() > 0) {
+                        ArrayList<ExploreItem> items = resp.get(0).getItems();
+                        view.showFsqSExploreResults(body.getResponse().headerFullLocation, items);
+                    }
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call call, @NonNull Throwable t) {
-                Log.d(TAG, "onFailure: ");
+                view.onLoadFailed();
             }
         });
-
     }
 
     @Override
     public void showFsqVenue(VenueResult venue) {
-
         VenueToOverpass converter = new VenueToOverpass();
         mFsqOverlay.updateWithResults(converter.convertFsqToElement(venue, venue.getBestPhoto()), "");
         mMap.getController().animateTo(new GeoPoint(venue.getLocation().getLat(), venue.getLocation().getLng()));
@@ -879,10 +1099,15 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
                     view.setListMode(true);
                 }
             });
+
+        } else if (marker.getTitle().equals("DROP_PIN")) {
+            showPoiDialog(marker.getRelatedObject());
+            return true;
+
         } else if (marker.getRelatedObject() instanceof OverpassQueryResult.Element) {
             showPoiDialog(marker.getRelatedObject());
-
             return true;
+
         } else if (marker.getRelatedObject() instanceof WikiQueryPage) {
             showPoiDialog(marker.getRelatedObject());
             return true;
@@ -931,8 +1156,8 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
                 case MotionEvent.ACTION_MOVE:
                     if (mTrackingMode) {
                         mTrackingMode = false;
-                        BTownLocation loc = ((App)mContext.getApplicationContext()).getBTownLocation();
-                        loc.updateLocationRequest(false);
+//                        BTownFusedLocation loc = ((App) mContext.getApplicationContext()).getBTownLocation();
+//                        loc.updateLocationRequest(false);
                         btLocation.updateLocationRequest(false);
                         view.setTrackingMode(false);
                         bAllowReturnLocation = false;
@@ -996,13 +1221,26 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
 
         if (mSearchOverlay.getSize() > 0) {
             mSearchOverlay.clear();
-            view.setListMode(false);
+            if(mFsqOverlay.getSize() == 0)
+                view.setListMode(false);
+
         } else if (mFsqOverlay.getSize() > 0) {
             mFsqOverlay.clear();
             view.setListMode(false);
+
         } else {
             showQuickSearch(true);
         }
+    }
+
+    @Override
+    public void clearPoiMarkers() {
+        mMarkersOverlay.clear();
+        mSearchOverlay.clear();
+        mFsqOverlay.clear();
+        mPinOverlay.clear();
+        mMap.getOverlays().remove(mTourOverlay);
+        mMap.getOverlayManager().remove(tourLine);
     }
 
     private void showQuickSearch(boolean show) {
@@ -1039,7 +1277,8 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
         return fragment != null && !fragment.isDetached() && !fragment.isRemoving() ? (SinglePoiOptionsDialog) fragment : null;
     }
 
-    private void hidePoiDialog() {
+    @Override
+    public void hidePoiDialog() {
         SinglePoiOptionsDialog fragment = getPoiDialog();
         if (fragment != null) {
             fragment.hide();
@@ -1105,7 +1344,7 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
                 }
             }
         } else {
-            if (bAllowReturnLocation) {
+            if (bAllowReturnLocation && Commons.isNotNull(browsingLocation)) {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -1141,4 +1380,84 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
                 animateToHandler.postDelayed(this, 200);
         }
     };
+
+    @Override
+    public void clearTourIcons() {
+        mMap.getOverlays().remove(mTourOverlay);
+        mMap.getOverlayManager().remove(tourLine);
+        mMap.invalidate();
+        view.resetToursBtn();
+    }
+
+
+    @Override
+    public void showTour(TourCatalogue catalogue) {
+
+        mCatalogue = catalogue;
+        List<GeoPoint> geoPoints = new ArrayList<>();   // tour lines
+        List<IGeoPoint> points = new ArrayList<>();     // tour points
+        for (Attraction attraction: mCatalogue.getAttractions()) {
+            points.add(new GeoPoint(attraction.getLocation().lat, attraction.getLocation().lon));
+            geoPoints.add(new GeoPoint(attraction.getLocation().lat, attraction.getLocation().lon));
+        }
+
+        // wrap them in a theme
+        SimplePointTheme theme = new SimplePointTheme(points, false);
+
+        // Draw the lines between tour stops
+        tourLine = new Polyline();
+        tourLine.setColor(ContextCompat.getColor(mContext, R.color.roadOverlayBlue));
+        tourLine.setPoints(geoPoints);
+
+        // Add the tour stops (should be below the lines)
+        MySimplePointOverlayOptions opt = new MySimplePointOverlayOptions()
+                .setRadius(24)
+                .setSelectedRadius(24)
+                .setIsClickable(true)
+                .setCellSize(20);
+
+        mTourOverlay = new SimpleFastPointOverlay(theme, opt);
+        mTourOverlay.setOnClickListener(new SimpleFastPointOverlay.OnClickListener() {
+            @Override
+            public void onClick(SimpleFastPointOverlay.PointAdapter points, final Integer point) {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        TourSheetDialog.showInstance(mContext.getApplicationContext(), mCatalogue.getAttractions().get(point));
+
+                   }
+                }, 200);
+
+                // Show the selected point in top quarter of screen
+                Projection projection = mMap.getProjection();
+                Point p = new Point();
+                projection.toPixels(points.get(point), p);
+                int y = projection.getScreenRect().height() / 4;
+
+                IGeoPoint geoPoint = projection.fromPixels(p.x, p.y + y) ;
+                mMap.getController().animateTo(geoPoint);
+
+            }
+        });
+
+        mTourOverlay.setSelectedPoint(0);
+        mMap.getOverlayManager().add(tourLine);
+        mMap.getOverlays().add(mTourOverlay);
+
+        mMap.zoomToBoundingBox(mTourOverlay.getBoundingBox(), true);
+    }
+
+
+    private TourSheetDialog getTourDialog() {
+        Fragment fragment = ((MapActivity) mContext).getSupportFragmentManager().findFragmentByTag(TourSheetDialog.ID_TAG);
+        return fragment != null && !fragment.isDetached() && !fragment.isRemoving() ? (TourSheetDialog) fragment : null;
+    }
+
+    private void closeTourDialog() {
+        TourSheetDialog fragment = getTourDialog();
+        if (fragment != null) {
+            fragment.close();
+            mMap.refreshDrawableState();
+        }
+    }
 }

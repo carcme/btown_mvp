@@ -24,8 +24,8 @@ android {
         applicationId 'me.carc.btown'
         minSdkVersion 21
         targetSdkVersion 26
-        versionCode 42
-        versionName "2.1.2"
+        versionCode 52
+        versionName "2.1.12"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         android.defaultConfig.vectorDrawables.useSupportLibrary = true
         javaCompileOptions {
@@ -38,10 +38,10 @@ android {
     }
     buildTypes {
         debug {
-            minifyEnabled true
+            minifyEnabled false
             shrinkResources false
             zipAlignEnabled false
-            useProguard true
+            useProguard false
             buildConfigField "boolean", "USE_CRASHLYTICS", "false"
             buildConfigField "String", "FABRIC_apiSecret", getPrivateKey("FABRIC_apiSecret")
 
@@ -135,6 +135,12 @@ ext {
     roomVersion = '1.0.0-alpha7'
     gsonVersion = '2.8.2'
 //    evernotejob = '1.2.0'
+    DAGGER_VERSION = '2.5'
+
+    RXJAVA = '2.1.8'
+    RXANDROID = '2.0.1'
+    RXLIFECYCLE = '2.2.1'
+    RXPERMISSIONS = '0.9.5@aar'
 
     leakcanary = '1.5.4'
     robolectric = '3.5.1'
@@ -142,8 +148,12 @@ ext {
 }
 
 dependencies {
+    def daggerCompiler = "com.google.dagger:dagger-compiler:$DAGGER_VERSION"
+
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+
+
+     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     compile 'com.android.support:multidex:1.0.1'
@@ -160,6 +170,7 @@ dependencies {
     compile "com.android.support.constraint:constraint-layout:${constraintLayoutVersion}"
     compile "com.google.android.gms:play-services-auth:${googlePlayServices}"
     compile "com.google.android.gms:play-services-location:${googlePlayServices}"
+
     compile "com.jakewharton:butterknife:$butterknife"
     annotationProcessor "com.jakewharton:butterknife-compiler:$butterknife"
     compile "com.google.firebase:firebase-core:$firebase"
@@ -170,7 +181,9 @@ dependencies {
     compile "com.firebaseui:firebase-ui-storage:$firebaseUI"
     compile "com.facebook.android:facebook-android-sdk:$facebook"
 
-    compile "org.osmdroid:osmdroid-android:$osmdroid"
+    compile(name: 'osmdroid-android-6.0.0-SNAPSHOT', ext: 'aar')
+//    compile 'org.osmdroid:osmdroid-android-6.0.0-SNAPSHOT.aar'
+//    compile "org.osmdroid:osmdroid-android:$osmdroid"
 
     compile "com.github.bumptech.glide:glide:$glide"
     compile "com.squareup.retrofit2:retrofit:$retrofit"
@@ -184,6 +197,15 @@ dependencies {
     //    compile "com.evernote:android-job:$evernotejob"
 
     //    compile 'com.mikepenz:fontawesome-typeface:4.7.0.1@aar'
+
+    compile 'com.github.faruktoptas:FancyShowCaseView:1.0.0'
+
+    compile  "com.google.dagger:dagger:$DAGGER_VERSION"
+    provided 'org.glassfish:javax.annotation:10.0-b28' //Required by Dagger2
+    annotationProcessor daggerCompiler
+    testAnnotationProcessor daggerCompiler
+    androidTestAnnotationProcessor daggerCompiler
+
 
     //    compile 'com.mikepenz:materialdrawer:5.8.1'
     compile 'com.mikepenz:iconics-core:2.9.3@aar'
@@ -208,5 +230,12 @@ dependencies {
     compile('com.crashlytics.sdk.android:crashlytics:2.7.0@aar') {
         transitive = true;
     }
+/*
+    compile 'pl.charmas.android:android-reactive-location2:2.1@aar'
+    compile "io.reactivex.rxjava2:rxjava:$RXJAVA"
+    compile "io.reactivex.rxjava2:rxandroid:$RXANDROID"
+    compile "com.tbruyelle.rxpermissions2:rxpermissions:$RXPERMISSIONS"
+*/
+
 }
 apply plugin: 'com.google.gms.google-services'

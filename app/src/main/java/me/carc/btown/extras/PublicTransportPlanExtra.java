@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.widget.GridLayoutManager;
@@ -19,8 +21,10 @@ import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import me.carc.btown.BaseActivity;
 import me.carc.btown.R;
+import me.carc.btown.Utils.ViewUtils;
 import me.carc.btown.common.C;
 import me.carc.btown.common.Commons;
 import me.carc.btown.common.interfaces.DrawableClickListener;
@@ -56,6 +60,9 @@ public class PublicTransportPlanExtra extends BaseActivity {
     @BindView(R.id.appBarProgressBar)
     ProgressBar appBarProgressBar;
 
+    @BindView(R.id.fabExit)
+    FloatingActionButton fabExit;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,6 +87,8 @@ public class PublicTransportPlanExtra extends BaseActivity {
                 onBackPressed();
             }
         });
+
+        fabExit.setVisibility(View.VISIBLE);
 
         setupRecycler();
     }
@@ -118,10 +127,26 @@ public class PublicTransportPlanExtra extends BaseActivity {
                 recyclerView.addItemDecoration(itemDecoration);
             }
             recyclerView.setAdapter(mAdapter);
+            recyclerView.addOnScrollListener(onScrollListener);
         }
 
         progressCenter.setVisibility(View.GONE);
         appBarProgressBar.setVisibility(View.GONE);
+    }
+
+    private RecyclerView.OnScrollListener onScrollListener = new RecyclerView.OnScrollListener() {
+        @Override
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            if(dy > 0)
+                fabExit.hide();
+            else
+                fabExit.show();;
+        }
+    };
+
+    @OnClick(R.id.fabExit)
+    void fabBack() {
+        onBackPressed();
     }
 
     @Override
@@ -135,7 +160,7 @@ public class PublicTransportPlanExtra extends BaseActivity {
         switch (item.getItemId()) {
 
             case android.R.id.home:
-                finish();
+                onBackPressed();
                 break;
 
             case R.id.menu_feedback:
@@ -148,6 +173,20 @@ public class PublicTransportPlanExtra extends BaseActivity {
         return true;
     }
 
+
+    @Override
+    public void onBackPressed() {
+        float temp = getResources().getDimension(R.dimen.fab_margin);
+        int duration = getResources().getInteger(R.integer.gallery_alpha_duration);
+
+        ViewUtils.hideView(fabExit, duration, (int) temp);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                finish();
+            }
+        }, duration * 2);
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

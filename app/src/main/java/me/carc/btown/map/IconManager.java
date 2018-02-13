@@ -30,7 +30,6 @@ public class IconManager {
         this.packageName = context.getPackageName();
     }
 
-
     public Drawable getRoundedIcon(String identifier) {
         try {
             Drawable icon;

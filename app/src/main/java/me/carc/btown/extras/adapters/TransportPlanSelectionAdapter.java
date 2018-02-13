@@ -50,6 +50,8 @@ public class TransportPlanSelectionAdapter extends RecyclerView.Adapter<Catalogu
         Context ctx = holder.mView.getContext();
 
         holder.supportingText.setText(plan.getDescriptionResourceId());
+        holder.supportingText.setTextColor(ContextCompat.getColor(ctx, R.color.white));
+        holder.supportingText.setBackgroundColor(ContextCompat.getColor(ctx, R.color.color_getting_around));
         holder.iconsHolder.setVisibility(View.GONE);
 
         if(plan.hasLocalFile(plan.getFileName())) {

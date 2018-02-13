@@ -11,6 +11,7 @@ import android.os.Handler;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -62,11 +63,9 @@ public class FourSquareListsActivity extends BaseActivity {
     @BindView(R.id.inventoryProgressBar)
     ProgressBar progressLayout;
 
-    @BindView(R.id.appBarProgressBar)
-    ProgressBar appBarProgressBar;
-
     @BindView(R.id.fab)
     FloatingActionButton fab;
+
 
     @OnClick(R.id.fab)
     void done() {
@@ -93,6 +92,11 @@ public class FourSquareListsActivity extends BaseActivity {
     private void setupUI(Bundle savedInstanceState) {
 
         toolbar.setTitle("Top Picks");
+//        getActionBar().setBackgroundDrawable(new ColorDrawable(ContextCompat.getColor(this, R.color.color_getting_around)));
+
+        toolbar.setBackgroundColor(ContextCompat.getColor(this, R.color.color_lists));
+        getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.color_lists_dark));
+
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setSupportActionBar(toolbar);
@@ -194,6 +198,8 @@ public class FourSquareListsActivity extends BaseActivity {
                     @Override
                     public void onFailure(@NonNull Call call, @NonNull Throwable t) {
                         Log.d(TAG, "onFailure: ");
+
+                        // TODO: 20/12/2017 close progress bars
                     }
                 });
             }
@@ -222,7 +228,6 @@ public class FourSquareListsActivity extends BaseActivity {
     }
 
     private void setProgressItems(int vis) {
-        appBarProgressBar.setVisibility(vis);
         progressLayout.setVisibility(vis);
     }
 

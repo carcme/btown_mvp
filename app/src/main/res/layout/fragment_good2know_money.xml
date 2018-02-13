@@ -11,15 +11,79 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="7dp">
+        android:layout_margin="@dimen/margin_small"
+        android:orientation="vertical">
 
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:foreground="?android:attr/selectableItemBackground"
             card_view:cardBackgroundColor="@color/almostWhite"
-            card_view:cardCornerRadius="2dp"
+            card_view:cardCornerRadius="@dimen/card_corner_radius"
+            card_view:cardUseCompatPadding="true"
+            >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="6dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="3dp"
+                    android:text="@string/goodtoknow_currency"
+                    android:textColor="?android:attr/textColorPrimary"
+                    android:textSize="@dimen/textSizeLarge_openSource"
+                    android:textStyle="normal"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginStart="3dp"
+                    android:background="@color/colorPrimary"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="7dp"
+                    android:text="@string/goodtoknow_currency_text1"
+                    />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="7dp"
+                    android:paddingEnd="0dp"
+                    android:paddingStart="0dp"
+                    android:paddingTop="3dp"
+                    android:text="@string/goodtoknow_credit_cards"
+                    android:textColor="?android:attr/textColorPrimary"
+                    android:textSize="16sp"
+                    android:textStyle="normal"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="7dp"
+                    android:text="@string/goodtoknow_credit_cards_text1"
+                    />
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:foreground="?android:attr/selectableItemBackground"
+            card_view:cardBackgroundColor="@color/almostWhite"
+            card_view:cardCornerRadius="@dimen/card_corner_radius"
             card_view:cardUseCompatPadding="true">
 
             <LinearLayout
@@ -32,19 +96,26 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="3dp"
-                    android:text="@string/maintainer"
+                    android:text="@string/goodtoknow_tipping"
                     android:textColor="?android:attr/textColorPrimary"
                     android:textSize="@dimen/textSizeLarge_openSource"
                     android:textStyle="normal"/>
 
-                <include layout="@layout/divider"/>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginStart="3dp"
+                    android:background="@color/colorPrimary"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="7dp"
+                    android:autoLink="phone|web"
                     android:padding="7dp"
-                    android:text="Carc"
+                    android:text="@string/goodtoknow_tipping_text1"
+                    android:textColorLink="@color/colorAccent"
                     tools:ignore="HardcodedText"/>
 
             </LinearLayout>
@@ -54,9 +125,10 @@
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/margin_standard"
             android:foreground="?android:attr/selectableItemBackground"
             card_view:cardBackgroundColor="@color/almostWhite"
-            card_view:cardCornerRadius="2dp"
+            card_view:cardCornerRadius="@dimen/card_corner_radius"
             card_view:cardUseCompatPadding="true">
 
             <LinearLayout
@@ -69,83 +141,32 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="3dp"
-                    android:text="@string/contributors"
+                    android:text="@string/goodtoknow_tax"
                     android:textColor="?android:attr/textColorPrimary"
                     android:textSize="@dimen/textSizeLarge_openSource"
                     android:textStyle="normal"/>
 
-                <include layout="@layout/divider"/>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginEnd="@dimen/margin_standard"
+                    android:layout_marginStart="3dp"
+                    android:background="@color/colorPrimary"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="7dp"
+                    android:autoLink="web"
                     android:padding="7dp"
-                    android:text="---"
+                    android:text="@string/goodtoknow_tax_text1"
+                    android:textColorLink="@color/colorAccent"
                     tools:ignore="HardcodedText"/>
 
-
             </LinearLayout>
 
         </android.support.v7.widget.CardView>
 
-        <android.support.v7.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:foreground="?android:attr/selectableItemBackground"
-            card_view:cardBackgroundColor="@color/almostWhite"
-            card_view:cardCornerRadius="2dp"
-            card_view:cardUseCompatPadding="true">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="6dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="3dp"
-                    android:text="@string/translators"
-                    android:textColor="?android:attr/textColorPrimary"
-                    android:textSize="@dimen/textSizeLarge_openSource"
-                    android:textStyle="normal"/>
-
-                <include layout="@layout/divider"/>
-
-                <TableLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="7dp">
-
-                    <TableRow
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:padding="7dp"
-                            android:text="@string/german"
-                            android:textColor="?android:attr/textColorPrimary"
-                            />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:padding="7dp"
-                            android:text="Susanne Abendroth"
-                            tools:ignore="HardcodedText"/>
-
-                    </TableRow>
-
-                </TableLayout>
-
-            </LinearLayout>
-
-        </android.support.v7.widget.CardView>
 
     </LinearLayout>
 

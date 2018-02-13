@@ -5,15 +5,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="me.carc.btown.MapActivity">
+    tools:context="me.carc.btown.map.MapActivity">
 
     <org.osmdroid.views.MapView
         android:id="@+id/mapView"
         android:name="org.osmdroid.views.MapView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:layout="@layout/activity_map" />
+        tools:layout="@layout/activity_map"/>
 
-    <include layout="@layout/map_fab_overlay" />
+    <include layout="@layout/map_fab_overlay"/>
+
+    <include layout="@layout/map_crosshair_overlay"/>
 
 </android.support.design.widget.CoordinatorLayout>

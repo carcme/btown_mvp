@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <string name="front_menu_map">Map</string>
+    <string name="front_menu_map_desc">Find your place in Berlin. Get Wikipedia entries, local restaurants and bars or a specific road</string>
+
+    <string name="front_menu_tours">Tours</string>
+    <string name="front_menu_tours_desc">Get out and see the city</string>
+
+    <string name="front_menu_lists">What and Where</string>
+    <string name="front_menu_lists_desc">Berlin\'s popular attractions, favorite places and upcoming events</string>
+
+    <string name="front_menu_getting_around">Getting Around</string>
+    <string name="front_menu_getting_around_desc">Local transport when you arrive and while you\'re here</string>
+
+    <string name="front_menu_good_to_know">Good to Know</string>
+    <string name="front_menu_good_to_know_desc">A little local knowledge goes a long way</string>
+
+    <string name="front_menu_settings">Settings</string>
+    <string name="front_menu_settings_desc">Adjust settings, share, rate and send feedback</string>
+
+    <string name="front_menu_subtitle">Todo</string>
+
+    <!--TRANSPORT -->
+
+    <string name="transport_tab_overview">Trains</string>
+    <string name="transport_tab_plans">Plans</string>
+    <string name="transport_tab_taxi">Taxis</string>
+    <string name="transport_tab_airport">Airport</string>
+
+
+    <string name="transport_walking">Walking</string>
+    <string name="transport_bikes">Bikes</string>
+
+    <string name="transport_public_transport">Public transport in Berlin</string>
+    <string name="transport_public_transport_text1">Comfortable, safe and affordable way to see Berlin’s sights. Berlin\'s has an extensive network of city and metro trains, buses and trams.</string>
+
+    <string name="transport_tickets">Tickets</string>
+    <string name="transport_tickets_text1">Berlin transport runs on the honor system and there are no ticket barriers to use the U-Bahn, S-Bahn, trams or regional trains. On buses, you need to show your ticket to the driver and enter through the front door.\n\nPlain clothes controllers patrol all public transportation, so make sure to validate tickets before boarding.</string>
+
+    <string name="transport_welcome_card">Welcome Card</string>
+    <string name="transport_welcome_card_text1">You may want to buy a WelcomeCard which gives you significant discounts at museums, theaters and other attractions. A card is valid for 1 adult and up to 3 children (age 6 to 14, under 6 years ride for free).\n\nThere are 2 versions of the cards available: cards for zones AB and for zones ABC. If you arrive or depart from Schoenefeld airport and/or want to travel to Potsdam, zone ABC is ideal to see Prussian Palaces and Gardens and Sansoucci Palace.\n\nThere is also the Museum Island WelcomeCard which allows access to all museums of Museums Island and is valid for 72 hours.\n\n www.berlin-welcomecard.de</string>
+
+    <string name="transport_fares">Fare Zones</string>
+    <string name="transport_fares_text1">In Berlin there are three fare zones:\n - Zone A is limited to within the S-Bahn ring and includes the city centre.\n - Zone B ends at Berlin’s city limits.\n - Zone C includes the surrounding area (e.g. Berlin-Schönefeld Airport, Potsdam, Oranienburg).\n\nThe regular fare applies to adults and the concession fare is for children from 6 up to and including 14 years of age. Children under 6 years of age don’t require a ticket.\n\nVarious maps showing the different zones are available in the \'Plans\' tab.</string>
+
+    <string name="transport_contact">Contact</string>
+    <string name="transport_BVG_text1">The BVG operates the following means of transport in Berlin: U-Bahn (metro), bus, tram and ferry.\nPhone: +49 30 19 44 9\nWebsite: www.bvg.de</string>
+    <string name="transport_SBAHN_text1">City Train\nPhone: +49 30 29 74 33 33\nWebsite: www.s-bahn-berlin.de</string>
+
+    <string name="transport_walking_desc">Berlin is a very walkable city athough you may want to include some public transport to see as many attractions as possible.\nAreas ideal for exploring are Charlottenburg in west Berlin, Prenzlauer Berg in the north and Mitte in the center. We have a number of tours available for free and more tours are planned.</string>
+    <string name="transport_bikes_desc">Berlin has an extensive network of dedicated bicycle lanes which makes for a great way to explore the sights. You can even take the bikes on public transport although an extra fee is required. Avoid taking bikes on the train during morning and afternoon rush hours, you may have trouble making space for the bike.</string>
+
+    <string name="transport_taxi">Taxis in Berlin</string>
+    <string name="transport_taxi_text1">More than 7,000 taxis offer a quick and comfy ride to your destination. Get safely and comfortably to where you want to go in Berlin whenever you want – airport or railway station, a business meeting or anywhere else you may have in mind.</string>
+
+    <string name="transport_getting_ride">Getting a Ride</string>
+    <string name="transport_getting_ride_text1">You can simply flag down a free cab when its roof sign is lit up. There are also taxi ranks all over the city with taxis waiting for you or with taxi-call points for requesting pick-up.</string>
+
+    <string name="transport_taxi_fares">Fares</string>
+    <string name="transport_taxi_fares_text1">Base fare is €3.90 + €2 for each of the first 7km. Each subsequent km is €1.50. This should help you estimate the cost pretty accurately before you even get into the taxi.\nMini-van taxis and bulky luggage incur an extra charge.\nWaiting in traffic shouldn\'t affect the fare, the meter only accounts for time after a two-minute delay.</string>
+
+    <string name="transport_taxi_short">Short Trips</string>
+    <string name="transport_taxi_short_text1">You can only get the short-trip fare for flagged taxis, the trip distance is 2km or less and if you do not interrupt your journey. It will cost you €5 and you must tell the driver straight away that you want a short trip (Kurzstrecke in German).</string>
+
+
+    <string name="transport_airport_desc_title">Berlin\'s Airports</string>
+    <string name="transport_airport_desc_text1">Berlin has 2 international airports, Schönefeld in the south-west and Tegel in the north-east.</string>
+    <string name="transport_airport_desc_text2">Travel options for each airport are given below.</string>
+
+    <string name="transport_airport_schon">Schönefeld Airport (SXF)</string>
+    <string name="transport_airport_tegel">Tegel Airport (TXL)</string>
+    <string name="transport_airport_schon_text1">The train is a quick and easy option to get to the city or you can get the bus right outside the terminal which will take you to the subway/underground. Alternatively, there are always plenty of taxi\'s ready to take you where you want to go.</string>
+    <string name="transport_airport_tegel_text1">There is no direct train to the city center but the buses will take you via any number of U-Bahn and S-Bahn stations where you can continue to your desination.</string>
+
+
+    <string name="transport_train">Train</string>
+    <string name="transport_train_schon">Berlin Schönefeld Flughafen station is a 10 minute, under cover walk from the terminal. The specially marked RE7 or RB14 will take you to the center of Berlin in about 30 minutes with stops at Karlshort, Ostbahnhof, Alexanderplatz, Friedrichstrasse, Hauptbahnhof (Berlin Central station), Zoologischer Garten and finally Charlottenburg\n\nA ticket from one of the machines at the station will cost about €3.30.\n\nMake sure you validate the ticket in one of the red boxes.</string>
+
+
+
+    <string name="transport_bus">Bus</string>
+    <string name="transport_bus_schon">There are no direct buses to the city but getting the bus to a local underground/subway (U-Bahn) is a good option, depending on where you want to end up.\n\nPlease use the maps in the \'Plans\' tab to see available connections.</string>
+    <string name="transport_bus_tegel">Buses run every 10 minutes and are found outside the airports main terminal.\n • Use 109 &amp; X9 for the Ring Bahn, Charlottenburg and Zoologischer Garten.\n • Use TXL for Alexanderplatz, stoppiing at Unter den Linden and Hauphtbahnhof among others.\n\nA ticket from one of the machines will cost about €2.80.\n\nMake sure you validate the ticket when you enter the bus.</string>
+
+    <string name="transport_airport_taxi">Taxi</string>
+    <string name="transport_taxi_schon">It takes about 30–45 minutes to get to the center and will cost around €50. The taxi ranks are right outside the terminals.</string>
+    <string name="transport_taxi_tegel">A taxi to the center is roughly €30 and should be less than 30 minutes (depending on traffic). Taxi ranks are outside Gates 6&#8211;9 of Terminal A and outside Terminals C &amp; E</string>
+
+
+
+
+    <!--GOOD TO KNOW-->
+
+    <string name="goodtoknow_tab_health">Health</string>
+    <string name="goodtoknow_tab_money">Money</string>
+    <string name="goodtoknow_tab_internet">Internet</string>
+
+    <string name="goodtoknow_police">Police</string>
+    <string name="goodtoknow_fire">Fire/Ambulance</string>
+    <string name="goodtoknow_dental">Dental</string>
+    <string name="goodtoknow_emergencies">Emergency Numbers</string>
+
+    <string name="goodtoknow_hospitals">Hospitals</string>
+    <string name="goodtoknow_hospitals_text1">Private insurance is probably a good idea for all nationalities although EU citizens can use the European Health Insurance Card (EHIC). Should you fall ill, take your EHIC to any doctor or hospital emergency department to get treatment.</string>
+    <string name="goodtoknow_hospitals_text2">All hospitals have a 24-hour emergency ward. More hospitals are listed in the Gelbe Seiten (Yellow Pages) under Krankenhäuser/Kliniken.</string>
+
+
+    <string name="goodtoknow_doctors">Doctors</string>
+    <string name="goodtoknow_doctors_text1">Use http://doctorberlin.de to find English speaking doctors local to where you\'re staying.\n\nIf you are too ill to leave your bed, call the Emergency Doctor\'s Service (Ärztlicher Bereitschaftdienst) +49 30 310 031\nThey will send a doctors to you. The charges vary according to the treatment required and can be expensive. Have your EHIC or insurance documents ready.</string>
+
+
+    <string name="goodtoknow_pharmacy">Pharmacies</string>
+    <string name="goodtoknow_pharmacy_text1">Prescription and non-prescription drugs are sold only at pharmacies (Apotheke). They are recognised by a red \'A\' outside the store and a list of the nearest pharmacies open evening and on Sundays should be displayed in the window.\nA list of emergency pharmacies (Notdienst-Apotheken ) is available at www.akberlin.de/notdienst</string>
+
+
+    <string name="goodtoknow_currency">Currency</string>
+    <string name="goodtoknow_currency_text1">Germany is part of the EU and uses the euro (€) as its currency. Notes are issued in €500, €200, €100, €50, €20, €10, €5 and each has a different colour and size. Coins are issued in €2, €1, 50c, 20c, 10c, 5c, 2c, and 1c denominations</string>
+
+    <string name="goodtoknow_credit_cards">Credit Cards</string>
+    <string name="goodtoknow_credit_cards_text1">In general, Germany is less enthusiastic about credit than their UK or US equivalents and cash is preferred for most transactions.\n\nMany establishments do not accept credit or debit cards so be sure to check when you arrive</string>
+
+    <string name="goodtoknow_tipping">Tipping</string>
+    <string name="goodtoknow_tipping_text1">A 10 per cent service charge will already be part of your restaurant bill, but it\'s common to leave a small tip too. In a taxi round up the bill to the nearest euro.</string>
+
+
+    <string name="goodtoknow_tax">Tax Reimbursement</string>
+    <string name="goodtoknow_tax_text1">Non-EU citizens can claim back German value-added tax (Mehrwertsteuer or MwSt) on goods purchased in the country (it\'s only worth the hassle on sizeable purchases). Ask the shop to provide a Tax-Free Shopping Cheque for the amount of the refund and present this, with the receipt, at the airport\'s refund office before checking in bags.</string>
+
+    <string name="goodtoknow_wifi">Wifi</string>
+    <string name="goodtoknow_wifi_text1">Public WiFi is available throughout Berlin and you should be able to get at least 30 minutes free without registration.\n\nUse the link below to find over 3,300 public Wi-Fi hotspots around Berlin and Potsdam.\nwww.publicwifi.de</string>
+
+
+
+</resources>

@@ -4,15 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_glide_placeholder">
+    android:background="@drawable/background_glide_placeholder"
+    android:animateLayoutChanges="true">
 
     <me.carc.btown.ui.TouchImageView
         android:id="@+id/imageDialogImage"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-        tools:src="@drawable/no_image"
-        tools:scaleType="center"/>
+        android:scaleType="center"
+        android:src="@drawable/checkered_background"
+        android:tileMode="repeat"/>
 
     <ProgressBar
         android:id="@+id/imageLoadProgress"
@@ -29,8 +30,7 @@
         android:background="@color/tintDark"
         android:orientation="vertical"
         android:visibility="gone"
-        tools:visibility="visible"
-        >
+        tools:visibility="gone" >
 
         <TextView
             android:layout_width="match_parent"
@@ -56,8 +56,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="@color/tintStandard"
-        android:orientation="horizontal"
-        >
+        android:orientation="horizontal" >
 
         <LinearLayout
             android:id="@+id/textContainer"
@@ -98,9 +97,7 @@
             android:layout_height="48dp"
             android:layout_gravity="bottom"
             android:contentDescription="@null"
-            app:srcCompat="@drawable/ic_more"
-            />
-
+            app:srcCompat="@drawable/ic_more" />
 
     </LinearLayout>
 

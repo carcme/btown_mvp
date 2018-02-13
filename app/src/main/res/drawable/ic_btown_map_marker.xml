@@ -13,7 +13,7 @@
     <!--BACKGROUND-->
     <path
         android:fillAlpha="1"
-        android:fillColor="@color/md_yellow_500"
+        android:fillColor="@color/md_yellow_800"
         android:pathData="M12.06,0.094C7.811,0.094 4.375,3.135 4.375,7.779c0,5.764 7.685,14.272 7.685,14.272 0,0 7.685,-8.508 7.685,-14.272 0,-4.733 -3.436,-7.685 -7.685,-7.685z"
         android:strokeColor="#000"
         android:strokeLineCap="butt"

@@ -70,8 +70,8 @@ public class ListsAdapter extends RecyclerView.Adapter<ListsAdapter.CatalogueVie
                             @Override
                             public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
                                 holder.itemImage.setImageDrawable(resource);
-                                holder.mainFrame.animate().setDuration(800);
-                                holder.mainFrame.setVisibility(View.VISIBLE);
+                                holder.mainFrame.animate().setDuration(1800);
+                    //            holder.mainFrame.setVisibility(View.VISIBLE);
                             }
                         });
             } catch (Exception e) {

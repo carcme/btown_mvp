@@ -22,6 +22,8 @@ public class WikiUtils {
      */
     public static String buildWikiCommonsLink(String wikiLink, int thumbSize) {
 
+        if(wikiLink == null)
+            return null;
         try {
             int fileIndex = wikiLink.indexOf("File:");
             int imageTagLen = "File:".length();

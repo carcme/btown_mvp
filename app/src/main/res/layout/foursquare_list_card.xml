@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:animateLayoutChanges="true"
-        android:visibility="gone"
+        android:visibility="visible"
         tools:visibility="visible">
 
         <ImageView
@@ -32,9 +32,12 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/margin_standard"
+            android:paddingStart="@dimen/margin_standard"
+            android:paddingEnd="@dimen/margin_standard"
+            android:paddingTop="@dimen/margin_huge"
+            android:paddingBottom="@dimen/margin_big"
             android:layout_gravity="bottom"
-            android:background="@color/tintDark"
+            android:background="@drawable/gradient_description_bar"
             android:orientation="vertical">
 
             <LinearLayout

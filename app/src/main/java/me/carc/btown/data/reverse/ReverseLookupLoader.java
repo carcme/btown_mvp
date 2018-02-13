@@ -15,6 +15,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
+ * Reverse address lookup - extend to get all parameters
  * Created by bamptonm on 09/10/2017.
  */
 
@@ -26,7 +27,7 @@ public class ReverseLookupLoader {
 
     public ReverseLookupLoader(TextView textView, double lat, double lon) {
         // Use a WeakReference to ensure the ImageView can be garbage collected
-        imageViewRef = new WeakReference<TextView>(textView);
+        imageViewRef = new WeakReference<>(textView);
 
         reverseAddressLookup(lat, lon);
     }
@@ -52,7 +53,7 @@ public class ReverseLookupLoader {
             }
 
             @Override
-            public void onFailure(Call call, Throwable t) {
+            public void onFailure(@NonNull Call call, @NonNull Throwable t) {
                 setImageView(false);
             }
         });

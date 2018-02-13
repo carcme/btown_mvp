@@ -54,6 +54,7 @@ public class MarkersOverlay extends RadiusMarkerClusterer {
 
         mMarkers = new RadiusMarkerClusterer(ctx);
         mMarkers.setName(name);
+        mMarkers.setMaxClusteringZoomLevel(15);
         map = mapView;
         map.getOverlays().add(mMarkers);
 
@@ -211,7 +212,7 @@ public class MarkersOverlay extends RadiusMarkerClusterer {
             for(POIs item : tourPOIs) {
                 String title = item.title;
                 double lat = item.lat;
-                double lng = item.lon;
+                double lng = item.lng;
 
                 // Add destination location marker
                 Marker poi = new Marker(view);

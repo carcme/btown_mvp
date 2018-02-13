@@ -30,7 +30,7 @@ import me.carc.btown.R;
 
 /**
  * com.codemybrainsout.rating:ratingdialog
- *
+ * <p>
  * Created by ahulr on 24-10-2016.
  */
 
@@ -72,17 +72,17 @@ public class RatingDialog extends AppCompatDialog implements RatingBar.OnRatingB
         getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         setContentView(R.layout.rating_dialog);
 
-        tvTitle = (TextView) findViewById(R.id.dialog_rating_title);
-        tvNegative = (TextView) findViewById(R.id.dialog_rating_button_negative);
-        tvPositive = (TextView) findViewById(R.id.dialog_rating_button_positive);
-        tvFeedback = (TextView) findViewById(R.id.dialog_rating_feedback_title);
-        tvSubmit = (TextView) findViewById(R.id.dialog_rating_button_feedback_submit);
-        tvCancel = (TextView) findViewById(R.id.dialog_rating_button_feedback_cancel);
-        ratingBar = (RatingBar) findViewById(R.id.dialog_rating_rating_bar);
-        ivIcon = (ImageView) findViewById(R.id.dialog_rating_icon);
-        etFeedback = (EditText) findViewById(R.id.dialog_rating_feedback);
-        ratingButtons = (LinearLayout) findViewById(R.id.dialog_rating_buttons);
-        feedbackButtons = (LinearLayout) findViewById(R.id.dialog_rating_feedback_buttons);
+        tvTitle = findViewById(R.id.dialog_rating_title);
+        tvNegative = findViewById(R.id.dialog_rating_button_negative);
+        tvPositive = findViewById(R.id.dialog_rating_button_positive);
+        tvFeedback = findViewById(R.id.dialog_rating_feedback_title);
+        tvSubmit = findViewById(R.id.dialog_rating_button_feedback_submit);
+        tvCancel = findViewById(R.id.dialog_rating_button_feedback_cancel);
+        ratingBar = findViewById(R.id.dialog_rating_rating_bar);
+        ivIcon = findViewById(R.id.dialog_rating_icon);
+        etFeedback = findViewById(R.id.dialog_rating_feedback);
+        ratingButtons = findViewById(R.id.dialog_rating_buttons);
+        feedbackButtons = findViewById(R.id.dialog_rating_feedback_buttons);
 
         init();
     }
@@ -234,13 +234,13 @@ public class RatingDialog extends AppCompatDialog implements RatingBar.OnRatingB
     }
 
     private void openForm() {
-        tvFeedback.setVisibility(View.VISIBLE);
-        etFeedback.setVisibility(View.VISIBLE);
-        feedbackButtons.setVisibility(View.VISIBLE);
+        ratingBar.setVisibility(View.GONE);
         ratingButtons.setVisibility(View.GONE);
         ivIcon.setVisibility(View.GONE);
         tvTitle.setVisibility(View.GONE);
-        ratingBar.setVisibility(View.GONE);
+        tvFeedback.setVisibility(View.VISIBLE);
+        etFeedback.setVisibility(View.VISIBLE);
+        feedbackButtons.setVisibility(View.VISIBLE);
     }
 
     private void openPlaystore(Context context) {

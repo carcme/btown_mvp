@@ -9,6 +9,7 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 
 /**
+ * Tour stop extras to look out for
  * Created by bamptonm on 16/10/2017.
  */
 @Keep
@@ -17,8 +18,10 @@ public class POIs implements Serializable, Parcelable {
     public String title;
     @SerializedName("lat")
     public double lat;
-    @SerializedName("long")
-    public double lon;
+    @SerializedName("lng")
+    public double lng;
+    @SerializedName("tag")
+    public String tag;
 
     @Override
     public int describeContents() {
@@ -29,23 +32,21 @@ public class POIs implements Serializable, Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.title);
         dest.writeDouble(this.lat);
-        dest.writeDouble(this.lon);
-    }
-
-    public POIs() {
+        dest.writeDouble(this.lng);
+        dest.writeString(this.tag);
     }
 
     protected POIs(Parcel in) {
         this.title = in.readString();
         this.lat = in.readDouble();
-        this.lon = in.readDouble();
+        this.lng = in.readDouble();
+        this.tag = in.readString();
     }
 
     public static final Creator<POIs> CREATOR = new Creator<POIs>() {
         public POIs createFromParcel(Parcel source) {
             return new POIs(source);
         }
-
         public POIs[] newArray(int size) {
             return new POIs[size];
         }

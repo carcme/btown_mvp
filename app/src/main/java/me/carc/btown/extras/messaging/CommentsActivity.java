@@ -221,6 +221,25 @@ public class CommentsActivity extends BaseActivity {
         });
     }
 
+
+    private ValueEventListener valueEventListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(DataSnapshot dataSnapshot) {
+            long count = dataSnapshot.getChildrenCount();
+            if (count > 0) {
+                firstCommentTV.setVisibility(View.GONE);
+                firstCommentImage.setVisibility(View.GONE);
+            } else {
+                firstCommentTV.setVisibility(View.VISIBLE);
+                firstCommentTV.setText(R.string.first_comment_notification);
+                progressBar.setVisibility(ProgressBar.INVISIBLE);
+            }
+        }
+
+        @Override
+        public void onCancelled(DatabaseError databaseError) { /*EMPTY*/ }
+    };
+
     /**
      * Setup the recyclerview to display the comments
      */
@@ -236,23 +255,7 @@ public class CommentsActivity extends BaseActivity {
 
         if (Commons.isNetworkAvailable(this)) {
             // check the number of items in the msg board
-            database.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot snapshot) {
-                    long count = snapshot.getChildrenCount();
-                    if (count > 0) {
-                        firstCommentTV.setVisibility(View.GONE);
-                        firstCommentImage.setVisibility(View.GONE);
-                    } else {
-                        firstCommentTV.setVisibility(View.VISIBLE);
-                        firstCommentTV.setText(R.string.first_comment_notification);
-                        progressBar.setVisibility(ProgressBar.INVISIBLE);
-                    }
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) { /*EMPTY*/ }
-            });
+            database.addValueEventListener(valueEventListener);
         } else {
             firstCommentTV.setText(R.string.sync_comment_later);
             firstCommentTV.setVisibility(View.VISIBLE);
@@ -339,6 +342,9 @@ public class CommentsActivity extends BaseActivity {
 
     @Override
     public void onDestroy() {
+        try {
+            database.removeEventListener(valueEventListener);
+        }catch (Exception e) { /* EMPTY */ }
         super.onDestroy();
     }
 

@@ -55,7 +55,6 @@ public class FirebaseImageDownloader extends IntentService {
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
-
         if(!updateInProgress) {
             updateInProgress = true;
             Boolean forceUpdate = intent.getBooleanExtra("FORCE_UPDATE", false);
@@ -67,16 +66,13 @@ public class FirebaseImageDownloader extends IntentService {
 
     private void initValues() {
         mStorageRef = FirebaseStorage.getInstance().getReference();
+
+        if(CacheDir.getCacheDir() == null)    // Crashlytics #131 - Make sure Cache is init'd
+            new CacheDir(getApplicationContext());
         dir = CacheDir.getCacheDir().cacheDirAsStr();
     }
 
     private void getLatestJsonTours(final boolean force) {
-
-/*
-        if(C.DEBUG_ENABLED)
-            return;
-*/
-
         FirebaseService service = new Retrofit.Builder()
                 .baseUrl(BuildConfig.FIREBASE_ENDPOINT)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -112,11 +108,8 @@ public class FirebaseImageDownloader extends IntentService {
 
 
     private void getImages(TourHolderResult holder) {
-
         ArrayList<TourCatalogue> catalogues = holder.tours;
-
         initValues();
-
         for (TourCatalogue catalogue : catalogues) {
             getImage("coverImages", catalogue.getCatalogueImage());
             for (Attraction attraction : catalogue.getAttractions()) {
@@ -146,11 +139,8 @@ public class FirebaseImageDownloader extends IntentService {
      * Moved storage to Firebase - get the images from there
      */
     private void getFirebaseImage(final String fromWhere, final String image) {
-
         StorageReference imageRef = mStorageRef.child(fromWhere + "/" + image);
-
         File localFile = new File(CacheDir.getCacheDirAsFile(), image);
-
         imageRef.getFile(localFile)
                 .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
                     @Override

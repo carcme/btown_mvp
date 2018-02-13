@@ -39,6 +39,7 @@
             android:layout_gravity="bottom"
             android:padding="@dimen/margin_small"
             android:textColor="#EEEEEE"
+            android:background="@color/tintStandard"
             android:maxLines="1"
             android:textSize="14sp"
             tools:text="Desc" />

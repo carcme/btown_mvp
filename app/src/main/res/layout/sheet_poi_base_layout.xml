@@ -15,7 +15,6 @@
 
     <include layout="@layout/divider"/>
 
-
     <include layout="@layout/sheet_poi_buttons" />
 
     <android.support.v4.widget.NestedScrollView

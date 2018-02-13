@@ -1,4 +1,5 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,14 +9,28 @@
     android:weightSum="5"
     tools:context="me.carc.btown.login.LoginActivity">
 
-    <ImageView
-        android:id="@+id/exitLogin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:layout_marginEnd="@dimen/margin_standard"
-        android:layout_marginTop="@dimen/margin_standard"
-        android:src="@android:drawable/ic_menu_close_clear_cancel" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/privacyPolicy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_standard"
+            android:layout_marginTop="@dimen/margin_standard"
+            android:src="@drawable/ic_lock"/>
+
+        <ImageView
+            android:id="@+id/exitLogin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_gravity="end"
+            android:layout_marginEnd="@dimen/margin_standard"
+            android:layout_marginTop="@dimen/margin_standard"
+            android:src="@drawable/ic_times"/>
+    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -29,7 +44,7 @@
             android:layout_width="280dp"
             android:layout_height="280dp"
             android:contentDescription="@null"
-            android:src="@drawable/btown_skyline" />
+            android:src="@drawable/btown_skyline"/>
 
         <TextView
             android:id="@+id/status"
@@ -41,7 +56,7 @@
             android:textColor="@color/almostBlack"
             android:textSize="18sp"
             android:visibility="gone"
-            tools:visibility="visible" />
+            tools:visibility="visible"/>
 
     </LinearLayout>
 
@@ -57,33 +72,33 @@
             android:id="@+id/googleBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:contentDescription="Sign in with Google"
-            android:layout_marginStart="@dimen/margin_standard"
-            android:layout_marginEnd="@dimen/margin_standard"
-            android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"
-            app:transparentBackground="true"
+            android:layout_marginEnd="@dimen/margin_standard"
+            android:layout_marginStart="@dimen/margin_standard"
+            android:layout_marginTop="5dp"
+            android:contentDescription="Sign in with Google"
             android:elevation="@dimen/button_press_elevation"
             android:textAlignment="center"
             app:iconCenterAligned="false"
             app:iconSize="30dp"
             app:roundedCorner="true"
+            app:transparentBackground="true"
             tools:text="Google Sign in"/>
 
         <com.shaishavgandhi.loginbuttons.FacebookButton
             android:id="@+id/facebookBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:contentDescription="Sign in with Facebook"
-            android:layout_marginStart="@dimen/margin_standard"
-            android:layout_marginEnd="@dimen/margin_standard"
-            android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"
-            app:transparentBackground="true"
+            android:layout_marginEnd="@dimen/margin_standard"
+            android:layout_marginStart="@dimen/margin_standard"
+            android:layout_marginTop="5dp"
+            android:contentDescription="Sign in with Facebook"
             android:elevation="@dimen/button_press_elevation"
             app:iconCenterAligned="false"
             app:iconSize="30dp"
             app:roundedCorner="true"
+            app:transparentBackground="true"
             tools:text="Facebook Sign in"/>
 
     </LinearLayout>

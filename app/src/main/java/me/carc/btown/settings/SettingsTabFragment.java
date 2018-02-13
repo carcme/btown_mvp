@@ -41,6 +41,12 @@ public class SettingsTabFragment extends PreferenceFragment implements SharedPre
                 toursPref.setSummary(R.string.pref_tours_summary_show);
             else
                 toursPref.setSummary(R.string.pref_tours_summary_hide);
+        } else if (key.equals(Preferences.GPS)) {
+            CheckBoxPreference gpsPref = (CheckBoxPreference)findPreference(key);
+            if(gpsPref.isChecked())
+                gpsPref.setSummary(R.string.pref_location_use_gps_best_accuracy);
+            else
+                gpsPref.setSummary(R.string.pref_location_use_gps_best_battery);
         }
     }
 

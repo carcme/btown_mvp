@@ -24,6 +24,12 @@ public interface ReverseApi {
     //  EG: http://nominatim.openstreetmap.org/reverse?format=json&&lat=52.5206056&lon=13.2985634
     @GET("/reverse?format=json")
     @Headers("User-Agent: B-Town")
-    Call<ReverseResult> reverse(@Query("lat") double lat, @Query("lon") double lon);
+    Call<ReverseResult> reverse(@Query("lat") double lat,
+                                @Query("lon") double lon);
+
+    @GET("/reverse?format=jsonv2&osm_type=N&extratags=1&namedetails=1")
+    @Headers("User-Agent: B-Town")
+    Call<ReverseResult> reverseDetails(@Query("lat") double lat,
+                                      @Query("lon") double lon);
 }
 

@@ -47,13 +47,10 @@
                 app:layout_scrollFlags="scroll|enterAlwaysCollapsed|snap"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
-<!--
-            app:popupTheme="@style/AppTheme.PopupOverlay"/>
--->
-
         </android.support.design.widget.CollapsingToolbarLayout>
 
     </android.support.design.widget.AppBarLayout>
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -87,5 +84,17 @@
             tools:visibility="visible" />
 
     </LinearLayout>
+
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fabClose"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="@dimen/fab_margin"
+        app:fabSize="normal"
+        app:srcCompat="@drawable/ic_times_white"/>
 
 </android.support.design.widget.CoordinatorLayout>

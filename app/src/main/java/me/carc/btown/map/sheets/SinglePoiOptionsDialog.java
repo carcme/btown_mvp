@@ -22,7 +22,6 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,6 +40,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import de.hdodenhof.circleimageview.CircleImageView;
 import me.carc.btown.App;
 import me.carc.btown.R;
 import me.carc.btown.Utils.AndroidUtils;
@@ -89,7 +89,7 @@ public class SinglePoiOptionsDialog extends BottomSheetDialogFragment {
     TextView featureTitle;
 
     @BindView(R.id.featureIcon)
-    ImageView featureIcon;
+    CircleImageView featureIcon;
 
     @BindView(R.id.featureType)
     CapitalisedTextView featureType;
@@ -194,12 +194,16 @@ public class SinglePoiOptionsDialog extends BottomSheetDialogFragment {
 //            if (!Commons.isEmpty(node.userDescription))
 //                userDesc.setText(Commons.capitalizeFirstLetter(node.userDescription));
 
+            String type = node.tags.getPrimaryType();
             if (!Commons.isEmpty(node.tags.cuisine)) {
-                String type = node.tags.getPrimaryType();
-                type += " • " + Commons.capitalizeFirstLetter(node.tags.cuisine);
-                featureType.setText(type.replace(";", ", "));
+                if(!Commons.isEmpty(type)) {
+                    type += " • " + Commons.capitalizeFirstLetter(node.tags.cuisine);
+                    featureType.setText(type.replace(";", ", "));
+                } else {
+                    featureType.setText(Commons.capitalizeFirstLetter(node.tags.cuisine));
+                }
             } else
-                featureType.setText(node.tags.getPrimaryType());
+                featureType.setText(Commons.isEmpty(type) ? getString(R.string.shared_string_unknown) : node.tags.getPrimaryType());
 
             String address = node.tags.getAddress();
 
@@ -228,13 +232,16 @@ public class SinglePoiOptionsDialog extends BottomSheetDialogFragment {
                 }
             }
 
-            Glide.with(getActivity())
-                    .load(node.tags.thumbnail)
-                    .asBitmap()
-                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                    .placeholder(R.drawable.checkered_background)
-                    .error(node.iconId)
-                    .into(featureIcon);
+            if(Commons.isNotNull(node.tags.thumbnail)) {
+                Glide.with(getActivity())
+                        .load(node.tags.thumbnail)
+                        .asBitmap()
+                        .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                        .placeholder(R.drawable.checkered_background)
+                        .error(node.iconId)
+                        .into(featureIcon);
+            } else if(node.iconId == 0)
+                featureIcon.setImageResource(R.drawable.no_image);
 
             if(node.tags.isIcon) {
                 featureIcon.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.rating_background));
@@ -325,7 +332,7 @@ public class SinglePoiOptionsDialog extends BottomSheetDialogFragment {
             // Is the place open at right now
             OpeningHoursParser.OpeningHours hours = OpeningHoursParser.parseOpenedHours(node.tags.openingHours);
             if (Commons.isEmpty(node.tags.openingHours)) {
-                featureOpeningHours.setText(R.string.unknown);
+                featureOpeningHours.setText(R.string.shared_string_missing_data);
                 featureOpeningHours.setTextColor(ContextCompat.getColor(getActivity(), R.color.primary_text_color));
             } else {
                 if (hours.isOpenedForTime(Calendar.getInstance())) {
@@ -629,7 +636,8 @@ public class SinglePoiOptionsDialog extends BottomSheetDialogFragment {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        featureSave.setCompoundDrawablesRelativeWithIntrinsicBounds(null, icon, null, null);
+                        if(Commons.isNotNull(featureSave))
+                            featureSave.setCompoundDrawablesRelativeWithIntrinsicBounds(null, icon, null, null);
                     }
                 });
             }

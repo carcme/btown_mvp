@@ -25,7 +25,7 @@ public class MapZoom {
         int mapHeight = mapView.getHeight() - padding;
 
         double pixels = Math.sqrt((mapWidth * mapWidth) + (mapHeight * mapHeight));
-        final double requiredMinimalGroundResolutionInMetersPerPixel = ((double) new GeoPoint(min.getLatitude(), min.getLongitude()).distanceTo(max)) / pixels;
+        final double requiredMinimalGroundResolutionInMetersPerPixel = ((double) new GeoPoint(min.getLatitude(), min.getLongitude()).distanceToAsDouble(max)) / pixels;
         int zoom = calculateZoom(center.getLatitude(), requiredMinimalGroundResolutionInMetersPerPixel, tileProvider.getMaximumZoomLevel(), tileProvider.getMinimumZoomLevel());
         controller.setZoom(zoom > 17 ? 17 : zoom-1);
         controller.animateTo(center);

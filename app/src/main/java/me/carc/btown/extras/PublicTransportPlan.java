@@ -3,12 +3,16 @@ package me.carc.btown.extras;
 import android.content.DialogInterface;
 import android.graphics.PointF;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
 import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.RatingEvent;
@@ -24,9 +28,11 @@ import java.io.File;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import me.carc.btown.BaseActivity;
 import me.carc.btown.R;
 import me.carc.btown.Utils.FileUtils;
+import me.carc.btown.Utils.ViewUtils;
 import me.carc.btown.common.C;
 import me.carc.btown.common.CacheDir;
 import me.carc.btown.common.Commons;
@@ -45,6 +51,9 @@ public class PublicTransportPlan extends BaseActivity implements SubsamplingScal
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+
+    @BindView(R.id.fabPlansExit)
+    FloatingActionButton fabPlansExit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +100,11 @@ public class PublicTransportPlan extends BaseActivity implements SubsamplingScal
             // get the tranport plan
             downloadFirebaseImage(FIREBASE_DIR, firebaseFile);
         }
+
+        final Animation a = AnimationUtils.loadAnimation(this, R.anim.fade_in);
+        a.setDuration(getResources().getInteger(R.integer.gallery_alpha_duration) * 2);
+        fabPlansExit.setAnimation(a);
+
     }
 
     /**
@@ -165,6 +179,11 @@ public class PublicTransportPlan extends BaseActivity implements SubsamplingScal
     }
 
 
+    @OnClick(R.id.fabPlansExit)
+    void fabBack() {
+        onBackPressed();
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_plans, menu);
@@ -184,5 +203,19 @@ public class PublicTransportPlan extends BaseActivity implements SubsamplingScal
 
         }
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        float temp = getResources().getDimension(R.dimen.fab_margin);
+        int duration = getResources().getInteger(R.integer.gallery_alpha_duration);
+
+        ViewUtils.hideView(fabPlansExit, duration, (int) temp);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                finish();
+            }
+        }, duration * 2);
     }
 }

@@ -26,7 +26,14 @@
     <string name="name_background_transportr" translatable="false">Transportr</string>
     <string name="desc_background_transportr">Public Transport companion app</string>
     <string name="name_background_brandenburg_tor" translatable="false">Brandenburg Tor</string>
-    <string name="desc_background_brandenburg_tor">The Brandenburg Tor by night</string>
+    <string name="desc_background_brandenburg_tor">The Brandenburg Gate by night</string>
+    <string name="desc_background_brandenburg_tor2">The Brandenburg Gate</string>
+    <string name="name_background_ubahn" translatable="false">U-Bahn</string>
+    <string name="desc_background_ubahn">U-Bahn departing</string>
+    <string name="name_background_sanssouci" translatable="false">Sanssouci</string>
+    <string name="desc_background_sanssouci">Sanssouci palace in Potsdam</string>
+    <string name="name_background_insel" translatable="false">Bode Museum</string>
+    <string name="desc_background_insel">One of many museums on Museum Island</string>
 
 
     <!--FAVORITES VIEW-->
@@ -78,6 +85,7 @@
     <string name="shared_string_use_on_home_screen">Use on Home Screen</string>
     <string name="shared_string_bookmark">Bookmarks</string>
     <string name="shared_string_options">Options</string>
+    <string name="shared_string_user_guide">User Guide</string>
     <string name="shared_string_help_toggle">Toggle Help</string>
     <string name="shared_string_info">Info</string>
     <string name="shared_string_rate">Rate</string>
@@ -95,10 +103,14 @@
     <string name="shared_string_copied_to_clipboard">Copied to clipboard</string>
     <string name="shared_string_loading">Loading</string>
     <string name="shared_string_none">None</string>
+    <string name="shared_string_success">Success</string>
+    <string name="shared_string_search">Search</string>
+
 
     <string name="shared_string_phone">Phone</string>
     <string name="shared_string_web">Web</string>
     <string name="shared_string_unknown">Unknown</string>
+    <string name="shared_string_missing_data" translatable="false">---</string>
 
 
 
@@ -153,11 +165,12 @@
 
 
     <!--PERMISSIONS-->
+    <string name="rationale_locaiton">B-Town works best if it knows where you are.</string>
     <string name="rationale_storage">B-Town needs to store map tiles.</string>
     <string name="permission_rejected_msg">B-Town really needs those permissions for the map functions. Hope you change your mind and grant the permissions another time.</string>
     <string name="enable_gps_request">Please enable the device GPS</string>
     <string name="no_gps">No GPS</string>
-    <string name="rationale_camera">I needs access to your camera so you can take pictures.</string>
+    <string name="rationale_camera">I need access to your camera so you can take pictures.</string>
 
 
 
@@ -167,6 +180,11 @@
     <string name="pref_theme_title">Theme</string>
     <string name="pref_theme_light">Light</string>
     <string name="pref_theme_dark">Dark</string>
+
+    <string name="pref_location_use_gps_title">Power Usage</string>
+    <string name="pref_location_use_gps_best_accuracy">Always use GPS for best accuracy</string>
+    <string name="pref_location_use_gps_best_battery">Conserve battery but less accurate</string>
+
 
     <string name="pref_show_tours_title">Show Tours</string>
     <string name="pref_tours_summary_show">Show tours button on map</string>
@@ -228,6 +246,14 @@
 
     <string name="lorum_ipsum_short" translatable="false">Lorem ipsum dolor.sit amet, faucibus morbi tortor lacus cursus, non libero lacus sapien aenean, justo non congue, id aliquam odio scelerisque augue suspendisse faucibus, vel dolor erat ac. </string>
     <string name="lorum_ipsum" translatable="false">Lorem ipsum dolor sit amet, faucibus morbi tortor lacus cursus, non libero lacus sapien aenean, justo non congue, id aliquam odio scelerisque augue suspendisse faucibus, vel dolor erat ac. Etiam sapien, odio porttitor dictum lectus consectetuer accumsan eros, iaculis nulla ad nunc, tempor wisi leo ut ut sodales, interdum sed nunc adipiscing molestie dolor mauris. Et nec quis at et, eleifend consectetuer nibh est, est sed. Ac dictumst in neque tempus, nam nonummy dignissim phasellus leo, sollicitudin aspernatur pharetra sed vehicula sed turpis, praesent turpis aenean. Sagittis odio. Mi habitant commodo, curae eleifend velit feugiat et laoreet, suscipit etiam mauris ipsum rutrum nisl et, erat magna. Condimentum eget cupiditate luctus enim, aliquam penatibus augue justo rutrum. In interdum luctus nulla nunc. Rhoncus suspendisse vehicula lacinia, proin quaerat vestibulum magna felis venenatis, voluptatem nobis, urna cras porttitor justo id nec. Suscipit sit, quisque pharetra cras ullamcorper. Nec wisi non tempor posuere in etiam, nunc wisi sit at, vel velit urna diamlorem mauris cum ac. Consectetuer magna suspendisse odio non. Aliquet ipsum, risus semper cubilia odio et nulla, quis semper varius vel. Suspendisse tortor volutpat nunc dapibus. Lacus hac euismod aliquam. Lectus et duis, vitae nibh nascetur tortor magna vitae, quam odio ornare. Imperdiet at rhoncus, turpis vehicula mi. Est magna in amet amet, laoreet condimentum posuere nulla auctor. Suspendisse vitae lectus ipsum consequat, venenatis mauris et hac vestibulum sit etiam, arcu leo augue, augue lectus, in elit justo. Mattis nunc nunc vitae tempus eu, mauris scelerisque nisl varius, enim eu id arcu suspendisse mi quidem, eros lacinia nulla sagittis pulvinar. Eget dapibus curabitur, sed vitae et, etiam arcu. Id lectus vehicula nulla nunc, porttitor ut viverra sapien interdum sagittis consectetuer. Et nulla ornare eleifend vitae, consequat lacus non, ante nisl. Tellus magnis velit pulvinar non luctus, sed fusce sodales magnis massa sed, suscipit amet quis ultricies mauris velit arcu, eget turpis ullamcorper cras suspendisse, ac cras massa et nonummy tincidunt rhoncus. Sed quis lectus, turpis mauris. Vel eu vivamus tincidunt. Nec quam est adipiscing, amet velit, bibendum mauris praesent amet mauris habitasse. Vehicula placerat imperdiet ut consequat. Suspendisse in venenatis nullam, donec perferendis ac, id justo ante mi mi. Habitasse porta risus massa lobortis felis, ligula vulputate, nec luctus massa, pellentesque in pulvinar vestibulum, nulla ipsam. Pretium feugiat, neque arcu quis sed, ut molestie tempus. Nec amet ut platea, dui tellus purus, in vel massa lobortis velit sed tellus, aenean ultricies amet. Lacus felis ornare et porta, id id. Habitant wisi ac mi et, in eu lectus tortor tellus, dis molestie leo rutrum, ut lectus massa per sem nascetur a. Vulputate neque dolor dapibus pharetra mauris sit, quisque tempus pretium amet, adipiscing vel tempus, etiam ac aliquam sed ut quos interdum, ligula neque ante mi fringilla sit. Mus tempor tempor id, at ut eros suspendisse at in, nullam pellentesque, donec vitae integer vitae lorem orci rhoncus, tristique pede. Aliquam aliquip donec alias. Massa aliquet massa est, donec eu nec purus dignissim ultrices. Rutrum volutpat cras nunc amet tellus, maecenas quam pede, vitae bibendum at dolor nibh. Diam tellus adipiscing magnis diam ullamcorper, ut dolor dolor sagittis mi. Aliquam erat, pellentesque vestibulum, at vel faucibus pretium lectus.</string>
+    <string name="foursquare_search">FourSquare Search</string>
+    <string name="nearby_wikipedia">Nearby Wikipedia</string>
+    <string name="explore_trending">Explore Trending</string>
+    <string name="nearby_food_and_drink">Nearby Food and Drink</string>
+    <string name="nearby_tourism">Nearby Tourism</string>
+    <string name="drop_a_pin">Drop a Pin</string>
+    <string name="clear_all_pins">Clear all Pins</string>
+    <string name="front_page_header_desc">Header Image. Touch to change</string>
 
 
 </resources>

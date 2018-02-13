@@ -378,6 +378,7 @@ public class OverpassQueryResult {
                 list.add(tourism);
                 list.add(waterway);
                 list.add(healthcare);
+                list.add(memorial);
 
                 list.removeAll(Collections.singleton(null));
 

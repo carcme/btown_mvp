@@ -21,7 +21,7 @@ import me.carc.btown.data.all4squ.entities.VenueResult;
 /**
  * Display the different stops of the tour
  */
-public class FsqSearchResultAdapter extends RecyclerView.Adapter<FsqSearchResultAdapter.MyViewHolder> {
+public class FsqSearchResultAdapter extends RecyclerView.Adapter<FsqSearchResultAdapter.FsqExploreViewHolder> {
 
     private final ArrayList<VenueResult> mList;
 
@@ -30,13 +30,13 @@ public class FsqSearchResultAdapter extends RecyclerView.Adapter<FsqSearchResult
     }
 
     @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public FsqExploreViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.venue_search_item_layout, parent, false);
-        return new MyViewHolder(view);
+        return new FsqExploreViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(final MyViewHolder holder, final int position) {
+    public void onBindViewHolder(final FsqExploreViewHolder holder, final int position) {
         VenueResult item = mList.get(position);
 
         try {
@@ -81,8 +81,7 @@ public class FsqSearchResultAdapter extends RecyclerView.Adapter<FsqSearchResult
             holder.ratingText.setText(String.valueOf(ratingRaw));
             holder.ratingText.getBackground().setTint(ContextCompat.getColor(holder.mView.getContext(), color));
         } else {
-            holder.ratingText.setText("---");
-            holder.ratingText.getBackground().setTint(ContextCompat.getColor(holder.mView.getContext(), R.color.tintStandard));
+            holder.ratingText.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -95,7 +94,7 @@ public class FsqSearchResultAdapter extends RecyclerView.Adapter<FsqSearchResult
         return mList.size();
     }
 
-    public static class MyViewHolder extends RecyclerView.ViewHolder {
+    public static class FsqExploreViewHolder extends RecyclerView.ViewHolder {
         final View mView;
 
         final TextView searchTitle;
@@ -106,7 +105,7 @@ public class FsqSearchResultAdapter extends RecyclerView.Adapter<FsqSearchResult
         final ImageView searchMore;
 
 
-        public MyViewHolder(View itemView) {
+        public FsqExploreViewHolder(View itemView) {
             super(itemView);
 
             mView = itemView;
@@ -118,6 +117,10 @@ public class FsqSearchResultAdapter extends RecyclerView.Adapter<FsqSearchResult
             searchDistance = itemView.findViewById(R.id.searchDistance);
             this.searchMore = itemView.findViewById(R.id.searchMore);
             this.searchMore.setVisibility(View.GONE);
+        }
+
+        public View getView() {
+            return mView;
         }
     }
 }

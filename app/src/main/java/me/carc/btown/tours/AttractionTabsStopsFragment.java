@@ -1,6 +1,7 @@
 package me.carc.btown.tours;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -24,8 +25,6 @@ import me.carc.btown.tours.model.Attraction;
 import me.carc.btown.ui.custom.MyCustomLayoutManager;
 import me.carc.btown.ui.custom.MyRecyclerItemClickListener;
 
-import static me.carc.btown.BaseActivity.hideProgressDialog;
-
 public class AttractionTabsStopsFragment extends Fragment {
 
     private static final String TAG = C.DEBUG + Commons.getTag();
@@ -40,6 +39,7 @@ public class AttractionTabsStopsFragment extends Fragment {
 
     RecyclerView rv;
 
+    ProgressDialog mProgressBar;
 
     public AttractionTabsStopsFragment() {
     }
@@ -119,6 +119,10 @@ public class AttractionTabsStopsFragment extends Fragment {
                     recyclerView, new MyRecyclerItemClickListener.OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, int position) {
+
+                    // lots of info to process - show a modal dialog so user doesn't press stuff while loading
+                    showLoadingDialog();
+
                     ArrayList<Attraction> attractions = getArguments().getParcelableArrayList(CataloguePreviewActivity.ATTRACTIONS_LIST);
 
                     Intent intent = new Intent(getActivity(), AttractionPagerActivity.class);
@@ -132,9 +136,35 @@ public class AttractionTabsStopsFragment extends Fragment {
                 public void onItemLongClick(View view, int position) {
                 }
             }));
+
+            createProgressBar();
         }
     }
 
+    @Override
+    public void onResume() {
+        hideLoadingDialog();
+        super.onResume();
+    }
+
+    private void createProgressBar() {
+        mProgressBar = new ProgressDialog(getActivity(), R.style.LoadingDialog);
+        mProgressBar.setProgressStyle(android.R.style.Widget_ProgressBar_Small);
+        mProgressBar.setIndeterminate(true);
+        mProgressBar.setCancelable(false);
+        mProgressBar.setTitle(R.string.com_facebook_loading);
+    }
+
+    private void showLoadingDialog() {
+        if (mProgressBar == null) {
+            createProgressBar();
+        }
+        mProgressBar.show();
+    }
+
+    private void hideLoadingDialog() {
+        if(Commons.isNotNull(mProgressBar)) mProgressBar.dismiss();
+    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -142,7 +172,6 @@ public class AttractionTabsStopsFragment extends Fragment {
 
         switch (requestCode) {
             case RESULT_ATTRACTION:
-                hideProgressDialog();
                 if (resultCode == Activity.RESULT_OK) {
                     int storyIndex = data.getIntExtra(AttractionPagerActivity.SCROLL_TO_NEW_INDEX, -1);
                     if (-1 != storyIndex)

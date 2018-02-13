@@ -1,10 +1,12 @@
-package me.carc.btown;
+package me.carc.btown.map;
 
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -14,8 +16,11 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -31,7 +36,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
-import me.carc.btown.Utils.MapUtils;
+import me.carc.btown.BaseActivity;
+import me.carc.btown.R;
 import me.carc.btown.Utils.ViewUtils;
 import me.carc.btown.camera.CameraActivity;
 import me.carc.btown.common.C;
@@ -40,18 +46,18 @@ import me.carc.btown.data.all4squ.entities.ExploreItem;
 import me.carc.btown.data.all4squ.entities.ListItems;
 import me.carc.btown.data.all4squ.entities.VenueResult;
 import me.carc.btown.db.bookmark.BookmarkEntry;
-import me.carc.btown.map.IMap;
-import me.carc.btown.map.MapPresenter;
 import me.carc.btown.map.search.SearchDialogFragment;
 import me.carc.btown.map.search.model.Place;
 import me.carc.btown.map.sheets.WikiPoiSheetDialog;
-import me.carc.btown.map.sheets.share.ShareDialog;
 import me.carc.btown.map.sheets.wiki.WikiReadingListDialogFragment;
-import me.carc.btown.settings.Preferences;
-import me.carc.btown.tours.ToursLaunchActivity;
+import me.carc.btown.tours.CatalogueActivity;
+import me.carc.btown.tours.model.TourCatalogue;
 import me.carc.btown.tours.top_pick_lists.FourSquareListsActivity;
 import me.carc.btown.tours.top_pick_lists.FourSquareSearchResultActivity;
 import me.carc.btown.tours.top_pick_lists.VenueTabsActivity;
+import me.toptas.fancyshowcase.DismissListener;
+import me.toptas.fancyshowcase.FancyShowCaseQueue;
+import me.toptas.fancyshowcase.FancyShowCaseView;
 
 public class MapActivity extends BaseActivity implements
         IMap.View,
@@ -64,105 +70,36 @@ public class MapActivity extends BaseActivity implements
     public static final int PERMISSION_FINE_LOCATION = 100;
 
     public static final String PREFKEY_NEVER_ASK_GPS = "PREFKEY_NEVER_ASK_GPS";
+    private static final String SHOWN_FIRST_LAUNCH = "SHOWN_FIRST_LAUNCH";  // show reason for sign in
+    private static final String SHOWN_FIRST_PIN_DROP = "SHOWN_FIRST_PIN_DROP";  // show reason for sign in
 
+    public final static int REQUEST_CHECK_SETTINGS = 4008;
     public static final int RESULT_GPS_REQ = 4009;
     public static final int RESULT_CAMERA = 4010;
     public static final int RESULT_TOURS = 4011;
     public static final int RESULT_EXPLORE = 4012;
+    public static final int RESULT_SHOW_TOURS_MAP = 4013;
 
 
     private IMap.Presenter presenter;
 
     private boolean isActive;  // remove this and replace with instanceof 'this'
     private Unbinder unbinder;
+    private boolean hasDropPinsVisible;
 
-
-    @BindView(R.id.mapView)
-    MapView mMap;
-
-    @BindView(R.id.featureProgressDialog)
-    ProgressBar featureProgressDialog;
-
-    @BindView(R.id.routeInfoText)
-    TextView routeInfoText;
-
-    @BindView(R.id.fab_map_friend)
-    FloatingActionButton fab_map_friend;
-
-    @BindView(R.id.fab_search)
-    FloatingActionButton fabSearch;
-
-    @BindView(R.id.fab_CameraAndPoiList)
-    FloatingActionButton fabCameraAndPoiList;
-
-    @BindView(R.id.fab_menu)
-    FloatingActionButton fabMenu;
-
-    @BindView(R.id.fabTours)
-    ImageView fabTours;
-
-    @BindView(R.id.fab_ZoomIn)
-    FloatingActionButton fabZoomIn;
-
-    @BindView(R.id.fab_ZoomOut)
-    FloatingActionButton fabZoomOut;
-
-    @BindView(R.id.fab_location)
-    FloatingActionButton trackingModeFab;
-
-/*
-
-
-    // DEBUG STUFF
-    @BindView(R.id.debugText)
-    TextView debugText;
-    @BindView(R.id.proximityBtn)
-    Button proximityBtn;
-
-    private long dbgLocationUpdateCounter;
-    private long dbgLocationUpdateTime  = 0;
-    private GeoPoint dbgPoint;
-
-    @OnClick(R.id.proximityBtn)
-    void debugBtn() {
-        presenter.debugBtn();
-    }
-
-    @Override
-    public void showLocationSettings(GeoPoint point, LocationRequest locationRequest, Location location) {
-
-        if(BuildConfig.DEBUG) {
-           proximityBtn.setVisibility(View.VISIBLE);
-
-            StringBuilder builder = new StringBuilder();
-
-            builder.append("Accuracy: ").append(location.getAccuracy()).append("\n");
-            builder.append("Bearing: ").append(location.getBearing()).append("\n");
-            if (C.HAS_O)
-                builder.append("AccuracyDegrees: ").append(String.valueOf(location.getBearingAccuracyDegrees())).append("\n");
-            builder.append("Speed: ").append(String.valueOf(location.getSpeed())).append("\n");
-            builder.append("Displacement: ").append(locationRequest.getSmallestDisplacement()).append("\n");
-            builder.append("Interval: ").append(locationRequest.getInterval()).append("\n");
-            builder.append("MaxWaitTime: ").append(locationRequest.getMaxWaitTime()).append("\n");
-            builder.append("Counter: ").append(String.valueOf(dbgLocationUpdateCounter++)).append("\n");
-
-            if (dbgPoint != null) {
-                builder.append("OPoint: ").append(dbgPoint.getLatitude() + " " + dbgPoint.getLongitude()).append("\n");
-                builder.append("NPoint: ").append(point.getLatitude() + " " + point.getLongitude()).append("\n");
-            }
-
-            builder.append("TimeDiff: ").append((double) (System.currentTimeMillis() - dbgLocationUpdateTime) / 1000);
-
-            dbgLocationUpdateTime = System.currentTimeMillis();
-            dbgPoint = point;
-            debugText.setVisibility(View.VISIBLE);
-            debugText.setText(builder.toString());
-        } else {
-            proximityBtn.setVisibility(View.GONE);
-            debugText.setVisibility(View.GONE);
-        }
-    }
-*/
+    @BindView(R.id.mapView)                 MapView mMap;
+    @BindView(R.id.featureProgressDialog)   ProgressBar featureProgressDialog;
+    @BindView(R.id.routeInfoText)           TextView routeInfoText;
+    @BindView(R.id.fab_map_friend)          FloatingActionButton fab_map_friend;
+    @BindView(R.id.fab_search)              FloatingActionButton fabSearch;
+    @BindView(R.id.fab_CameraAndPoiList)    FloatingActionButton fabCameraAndPoiList;
+    @BindView(R.id.fab_menu)                FloatingActionButton fabMenu;
+    @BindView(R.id.fab_ZoomIn)              FloatingActionButton fabZoomIn;
+    @BindView(R.id.fab_ZoomOut)             FloatingActionButton fabZoomOut;
+    @BindView(R.id.fab_location)            FloatingActionButton trackingModeFab;
+    @BindView(R.id.crosshairIcon)           ImageView crosshairIcon;
+    @BindView(R.id.fabBack)                 FloatingActionButton fabBack;
+    @BindView(R.id.fabTours)                FloatingActionButton fabTours;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -172,8 +109,18 @@ public class MapActivity extends BaseActivity implements
 
         presenter = new MapPresenter(this, this, mMap);
         presenter.initMap(savedInstanceState);
-    }
 
+        if (getIntent().hasExtra(VenueTabsActivity.EXTRA_VENUE)) {
+            // show single item from FSQ
+            VenueResult mVenueResult = getIntent().getParcelableExtra(VenueTabsActivity.EXTRA_VENUE);
+            presenter.showFsqVenue(mVenueResult);
+
+        } else if (getIntent().hasExtra(FourSquareListsActivity.EXTRA_LISTS)) {
+            // show list items from FSQ
+            ListItems items = getIntent().getParcelableExtra(FourSquareListsActivity.EXTRA_LISTS);
+            presenter.showFsqList(items);
+        }
+    }
 
     @Override
     public void showNavigationPopup(final GeoPoint point) {
@@ -189,6 +136,7 @@ public class MapActivity extends BaseActivity implements
             @Override
             public void onClick(View v) {
                 presenter.onWikiLookup();
+                showSearching(true);
                 dlg.dismiss();
             }
         });
@@ -201,11 +149,11 @@ public class MapActivity extends BaseActivity implements
             }
         });
 
-
         view.findViewById(R.id.itemFsqExplore).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 presenter.onFsqExplore();
+                showSearching(true);
                 dlg.dismiss();
             }
         });
@@ -221,6 +169,7 @@ public class MapActivity extends BaseActivity implements
             @Override
             public void onClick(View v) {
                 presenter.onFoodLookupFromLongPress(point);
+                showSearching(true);
                 dlg.dismiss();
             }
         });
@@ -229,6 +178,7 @@ public class MapActivity extends BaseActivity implements
             @Override
             public void onClick(View v) {
                 presenter.onTouristLookupFromLongPress(point);
+                showSearching(true);
                 dlg.dismiss();
             }
         });
@@ -236,43 +186,122 @@ public class MapActivity extends BaseActivity implements
         view.findViewById(R.id.itemPoint).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ShareDialog.sendMessage(MapActivity.this, MapUtils.buildOsmMapLink(point, mMap.getMaxZoomLevel()));
+                presenter.onDropPin(point);
                 dlg.dismiss();
             }
         });
+
+        if (hasDropPinsVisible) {
+            view.findViewById(R.id.clearDropPins).setVisibility(View.VISIBLE);
+            view.findViewById(R.id.clearDropPins).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    presenter.onClearPins();
+                    dlg.dismiss();
+                }
+            });
+        } else
+            view.findViewById(R.id.clearDropPins).setVisibility(View.GONE);
 
         view.findViewById(R.id.itemHelp).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(MapActivity.this, "Todo - Add help screen ", Toast.LENGTH_SHORT).show();
                 dlg.dismiss();
+                helpShowcase();
             }
         });
 
         dlg.show();
+    }
 
+    @Override
+    public void addClearDropMenuItem(boolean hasDropPins) {
+        hasDropPinsVisible = hasDropPins;
 
-/*
-        final Dialog dlg = new Dialog(this);
+        showSearching(false);
+        if (!db.getBoolean(SHOWN_FIRST_PIN_DROP)) {
+            Animation enterAnimation = AnimationUtils.loadAnimation(this, R.anim.fade_in);
+            new FancyShowCaseView.Builder(this)
+                    .title(getString(R.string.help_pin_drop))
+                    .titleStyle(0, Gravity.TOP | Gravity.CENTER)
+                    .fitSystemWindows(true)
+                    .focusOn(crosshairIcon)
+                    .focusCircleRadiusFactor(2)
+                    .dismissListener(new DismissListener() {
+                        @Override
+                        public void onDismiss(String id) {
+                            db.putBoolean(SHOWN_FIRST_PIN_DROP, true);
+                        }
 
-        LayoutInflater inflater = this.getLayoutInflater();
-        View view = inflater.inflate(R.layout.long_press_context_menu_layout, null);
-        dlg.setTitle("Options");
+                        @Override
+                        public void onSkipped(String id) { /*EMPTY*/ }
+                    })
+                    .enterAnimation(enterAnimation)
+                    .build()
+                    .show();
+        }
+    }
 
-        dlg.setContentView(view);
+    /**
+     * Show the help and what each fab/button does
+     */
+    private void helpShowcase() {
 
-        view.findViewById(R.id.longPressWiki).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                doWikiLookup();
-                dlg.dismiss();
+        int borderColor = ContextCompat.getColor(this, R.color.colorAccent);
+        Animation enterAnimation = AnimationUtils.loadAnimation(this, R.anim.fade_in);
 
-            }
-        });
+        final FancyShowCaseView tours = new FancyShowCaseView.Builder(this)
+                .title(getString(R.string.help_tours))
+                .fitSystemWindows(true)
+                .focusBorderColor(borderColor)
+                .focusBorderSize(5)
+                .enterAnimation(enterAnimation)
+                .focusOn(fabTours)
+                .build();
 
-        dlg.show();
-*/
+        final FancyShowCaseView search = new FancyShowCaseView.Builder(this)
+                .title(getString(R.string.help_search))
+                .fitSystemWindows(true)
+                .focusBorderColor(borderColor)
+                .focusBorderSize(5)
+                .enterAnimation(enterAnimation)
+                .focusOn(fabSearch)
+                .build();
 
+        final FancyShowCaseView tracking = new FancyShowCaseView.Builder(this)
+                .title(getString(R.string.help_tracking))
+                .fitSystemWindows(true)
+                .focusBorderColor(borderColor)
+                .focusBorderSize(5)
+                .enterAnimation(enterAnimation)
+                .focusOn(trackingModeFab)
+                .build();
+
+        final FancyShowCaseView camera = new FancyShowCaseView.Builder(this)
+                .title(getString(R.string.help_camera))
+                .fitSystemWindows(true)
+                .focusBorderColor(borderColor)
+                .focusBorderSize(5)
+                .enterAnimation(enterAnimation)
+                .focusOn(fabCameraAndPoiList)
+                .build();
+
+        final FancyShowCaseView menu = new FancyShowCaseView.Builder(this)
+                .title(getString(R.string.help_menu))
+                .fitSystemWindows(true)
+                .focusBorderColor(borderColor)
+                .focusBorderSize(5)
+                .enterAnimation(enterAnimation)
+                .focusOn(fabMenu)
+                .build();
+
+        new FancyShowCaseQueue()
+                .add(tours)
+                .add(search)
+                .add(tracking)
+                .add(camera)
+                .add(menu)
+                .show();
     }
 
 
@@ -282,10 +311,24 @@ public class MapActivity extends BaseActivity implements
         isActive = true;
         presenter.start();
 
-        if (Preferences.showTours(this))
-            fabTours.setVisibility(View.VISIBLE);
-        else
-            fabTours.setVisibility(View.GONE);
+        if (!db.getBoolean(SHOWN_FIRST_LAUNCH)) {
+            Animation enterAnimation = AnimationUtils.loadAnimation(this, R.anim.fade_in);
+            new FancyShowCaseView.Builder(this)
+                    .title(getString(R.string.help_intro))
+                    .fitSystemWindows(true)
+                    .dismissListener(new DismissListener() {
+                        @Override
+                        public void onDismiss(String id) {
+                            db.putBoolean(SHOWN_FIRST_LAUNCH, true);
+                        }
+
+                        @Override
+                        public void onSkipped(String id) { /*EMPTY*/ }
+                    })
+                    .enterAnimation(enterAnimation)
+                    .build()
+                    .show();
+        }
     }
 
     @Override
@@ -307,6 +350,22 @@ public class MapActivity extends BaseActivity implements
         super.onActivityResult(requestCode, resultCode, data);
 
         switch (requestCode) {
+            case REQUEST_CHECK_SETTINGS:
+                //Reference: https://developers.google.com/android/reference/com/google/android/gms/location/SettingsApi
+                switch (resultCode) {
+                    case RESULT_OK:
+                        // All required changes were successfully made
+                        Log.d(TAG, "User enabled location");
+                        break;
+                    case RESULT_CANCELED:
+                        // The user was asked to change settings, but chose not to
+                        Log.d(TAG, "User Cancelled enabling location");
+                        break;
+                    default:
+                        break;
+                }
+                break;
+
             case RESULT_GPS_REQ:
                 if (((LocationManager) getSystemService(Context.LOCATION_SERVICE)).isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                     presenter.onUpdateLocation();
@@ -318,6 +377,7 @@ public class MapActivity extends BaseActivity implements
 
             case RESULT_TOURS:
                 if (resultCode == RESULT_OK) {
+                    showSearching(false);
                     if (data.hasExtra(VenueTabsActivity.EXTRA_VENUE)) {
                         // show single item from FSQ
                         VenueResult mVenueResult = data.getParcelableExtra(VenueTabsActivity.EXTRA_VENUE);
@@ -345,6 +405,18 @@ public class MapActivity extends BaseActivity implements
                         Log.d(TAG, "onActivityResult: ");
                 }
                 break;
+
+            case RESULT_SHOW_TOURS_MAP:
+                if (resultCode == RESULT_OK) {
+                    if(data.hasExtra(CatalogueActivity.CATALOGUE)) {
+                        TourCatalogue catalogue = data.getParcelableExtra(CatalogueActivity.CATALOGUE);
+                        presenter.showTour(catalogue);
+
+                        ViewUtils.changeFabColour(this, fabTours, R.color.fabSearchCancelColor);
+                        ViewUtils.changeFabIcon(this, fabTours, R.drawable.ic_times_white);
+                    }
+                }
+                break;
         }
     }
 
@@ -358,8 +430,10 @@ public class MapActivity extends BaseActivity implements
     public void onBackPressed() {
         if (fabSearch.getTag().equals(true))
             presenter.showOrClearSearchDialog();
-        else
-            super.onBackPressed();
+        else {
+            presenter.clearPoiMarkers();
+            super.onBackPressed();  // clear all markers to avoid mem leaks - maybe save them to put them back on restart
+        }
     }
 
     @Override
@@ -423,6 +497,7 @@ public class MapActivity extends BaseActivity implements
     @Override
     public void onLoadFailed() {
         showSearching(false);
+        Commons.Toast(this, R.string.operation_error, Color.RED, Toast.LENGTH_SHORT);
     }
 
 
@@ -500,6 +575,9 @@ public class MapActivity extends BaseActivity implements
     }
 
 
+    @OnClick(R.id.fabBack)
+    void back() { super.onBackPressed(); }
+
     @OnClick(R.id.fab_menu)
     void onMenuFab() {
         mDrawerLayout.openDrawer(GravityCompat.START);
@@ -531,12 +609,28 @@ public class MapActivity extends BaseActivity implements
     }
 
     @OnClick(R.id.fabTours)
-    void launchTours() {
-        startActivityForResult(new Intent(MapActivity.this, ToursLaunchActivity.class), RESULT_TOURS);
+    void pickTour() {
+        ColorStateList color = fabTours.getBackgroundTintList();
+        if(color.getDefaultColor() == ContextCompat.getColor(this, R.color.fabSearchCancelColor)) {
+            presenter.clearTourIcons();
+        } else {
+            Intent intent = new Intent(MapActivity.this, CatalogueActivity.class);
+            intent.putExtra(CatalogueActivity.EXTRA_SHOW_ON_MAP, true);
+            startActivityForResult(intent, RESULT_SHOW_TOURS_MAP);
+        }
     }
 
     @Override
+    public void resetToursBtn() {
+        ViewUtils.changeFabColour(this, fabTours, R.color.fabColorAlmostClear);
+        ViewUtils.changeFabIcon(this, fabTours, R.drawable.ic_tours);
+    }
+
+
+
+    @Override
     public void showFsqSearchResults(ArrayList<VenueResult> results) {
+        showSearching(false);
         Intent intent = new Intent(MapActivity.this, FourSquareSearchResultActivity.class);
         intent.putParcelableArrayListExtra("SEARCH_RESULTS", results);
         startActivityForResult(intent, RESULT_TOURS);
@@ -544,6 +638,7 @@ public class MapActivity extends BaseActivity implements
 
     @Override
     public void showFsqSExploreResults(String header, ArrayList<ExploreItem> results) {
+        showSearching(false);
         Intent intent = new Intent(MapActivity.this, FourSquareSearchResultActivity.class);
         intent.putExtra("HEADER", header);
         intent.putParcelableArrayListExtra(FourSquareSearchResultActivity.EXTRA_EXPLORE, results);
@@ -580,7 +675,7 @@ public class MapActivity extends BaseActivity implements
 
     @Override
     public void requestGpsEnable() {
-        if(!db.getBoolean(PREFKEY_NEVER_ASK_GPS)) {
+        if (!db.getBoolean(PREFKEY_NEVER_ASK_GPS)) {
             new AlertDialog.Builder(MapActivity.this, AlertDialog.THEME_HOLO_LIGHT)
                     .setTitle(R.string.shared_string_location)
                     .setMessage(R.string.enable_gps_request)

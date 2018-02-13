@@ -39,7 +39,7 @@ import me.carc.btown.tours.top_pick_lists.FourSquareListsActivity;
 public class ToursLaunchActivity extends BaseActivity {
 
     public static final int RESULT_LOGIN = 156;
-    public static final int RESULT_FSQ   = 157;
+    public static final int RESULT_FSQ = 157;
 
     public static final int TOURS = 0;
     public static final int TOP10 = 1;
@@ -120,7 +120,7 @@ public class ToursLaunchActivity extends BaseActivity {
                 break;
 
             case RESULT_FSQ:
-                if(resultCode == RESULT_OK) {
+                if (resultCode == RESULT_OK) {
                     setResult(RESULT_OK, data);
                     finish();
                 }
@@ -141,14 +141,14 @@ public class ToursLaunchActivity extends BaseActivity {
 
     Handler handler = new Handler();
 
-    private final Runnable preLoadRunner = new Runnable(){
+    private final Runnable preLoadRunner = new Runnable() {
         int progrss = 1;
-        public void run(){
+
+        public void run() {
             try {
                 preLoadProgress.setProgress(progrss++);
                 handler.postDelayed(this, 10);
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -157,19 +157,17 @@ public class ToursLaunchActivity extends BaseActivity {
     private void preloadTourCatalogues() {
         handler.postDelayed(preLoadRunner, 10);
 
-
         Executors.newSingleThreadExecutor().execute(new Runnable() {
             @Override
             public void run() {
                 final Gson gson = new Gson();
                 String json = TinyDB.getTinyDB().getString(CatalogueActivity.SERVER_FILE, null);
-                if(Commons.isNotNull(json))
+                if (Commons.isNotNull(json))
                     jsonPreLoad = gson.fromJson(json, TourHolderResult.class);
 
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-//                        Commons.Toast(ToursLaunchActivity.this, R.string.pre_load_data_done, 0xFF669900, Toast.LENGTH_SHORT);
                         preLoadProgress.setProgress(100);
                         handler.removeCallbacks(preLoadRunner);
                     }
@@ -191,10 +189,7 @@ public class ToursLaunchActivity extends BaseActivity {
 
     @OnClick(R.id.top10_holder)
     void startTop10() {
-//        if(BuildConfig.DEBUG)
-            flyOut(TOP10);
-//        else
-//            showAlertDialog(R.string.top10_coming_soon_title, R.string.top10_coming_soon_msg, -1, R.drawable.ic_timelapse);
+        flyOut(TOP10);
     }
 
     @OnClick(R.id.login_holder)
@@ -222,12 +217,16 @@ public class ToursLaunchActivity extends BaseActivity {
 
         animation.setAnimationListener(new Animation.AnimationListener() {
             @Override
-            public void onAnimationStart(Animation animation) { }
+            public void onAnimationStart(Animation animation) {
+            }
+
             @Override
-            public void onAnimationRepeat(Animation animation) { }
+            public void onAnimationRepeat(Animation animation) {
+            }
+
             @Override
             public void onAnimationEnd(Animation animation) {
-                preLoadProgress.setVisibility(View.VISIBLE);  //  hide in case user doesn't wait for the preload
+                preLoadProgress.setVisibility(View.VISIBLE);
             }
         });
     }
@@ -261,12 +260,11 @@ public class ToursLaunchActivity extends BaseActivity {
                         break;
                 }
 
-                preLoadProgress.setVisibility(View.GONE);  //  hide in case user doesn't wait for the preload
+                preLoadProgress.setVisibility(View.GONE);  // hide in case user doesn't wait for the preload
             }
 
             @Override
-            public void onAnimationRepeat(Animation a) {
-            }
+            public void onAnimationRepeat(Animation a) { /* EMPTY*/ }
 
             @Override
             public void onAnimationEnd(Animation a) {

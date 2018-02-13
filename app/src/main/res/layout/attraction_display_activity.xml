@@ -94,8 +94,6 @@
 
             </android.support.v7.widget.CardView>
 
-            <!--<include layout="@layout/layout_card" />-->
-
         </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>
@@ -110,19 +108,5 @@
         app:layout_anchorGravity="bottom|right|end"
         app:srcCompat="@drawable/ic_back_white"
         tools:ignore="UnusedAttribute" />
-
-    <!--    <me.carc.btown.ui.controls.FloatingActionButton
-            android:id="@+id/backFab"
-            android:layout_width="@dimen/fab_size"
-            android:layout_height="@dimen/fab_size"
-            android:layout_margin="@dimen/fab_margin"
-            android:clickable="true"
-            android:background="@drawable/fab_info_background"
-            android:stateListAnimator="@drawable/button_raise"
-            android:elevation="@dimen/button_elevation"
-            app:srcCompat="@drawable/ic_back_white"
-            app:layout_anchor="@id/appbar"
-            app:layout_anchorGravity="bottom|right|end"
-            tools:ignore="UnusedAttribute"/>-->
 
 </android.support.design.widget.CoordinatorLayout>

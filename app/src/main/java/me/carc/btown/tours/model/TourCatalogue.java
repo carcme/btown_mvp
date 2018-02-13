@@ -49,7 +49,6 @@ public class TourCatalogue implements Parcelable {
     @SerializedName("attractions")
     private ArrayList<Attraction> attractions = new ArrayList<>();
 
-
     public int getCatalogueNumberOfStops() {
         return attractions.size();
     }

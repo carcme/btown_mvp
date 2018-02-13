@@ -22,4 +22,7 @@
     <string name="error_playstore_not_found">Der Playstore ist auf deinem Handy nicht installiert.</string>
 
 
+    <string name="error_image_load_failed">Das Bild konnte nicht geladen werden.</string>
+
+
 </resources>

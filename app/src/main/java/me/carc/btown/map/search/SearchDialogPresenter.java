@@ -21,7 +21,7 @@ import java.util.concurrent.Executors;
 
 import me.carc.btown.App;
 import me.carc.btown.BuildConfig;
-import me.carc.btown.MapActivity;
+import me.carc.btown.map.MapActivity;
 import me.carc.btown.R;
 import me.carc.btown.Utils.MapUtils;
 import me.carc.btown.common.C;
@@ -158,7 +158,7 @@ public class SearchDialogPresenter implements ISearch.Presenter {
 
         HashMap<String, String> map = new HashMap<>();
         map.put("q", text);
-        map.put("lon", String.valueOf(mapCenter.getLongitude()));
+        map.put("lng", String.valueOf(mapCenter.getLongitude()));
         map.put("lat", String.valueOf(mapCenter.getLatitude()));
         map.put("lang", Locale.getDefault().getLanguage());
 

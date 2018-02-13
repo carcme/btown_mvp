@@ -3,6 +3,7 @@ package me.carc.btown.data.all4squ;
 import android.support.annotation.NonNull;
 
 import java.io.IOException;
+import java.util.Locale;
 
 import me.carc.btown.BuildConfig;
 import okhttp3.HttpUrl;
@@ -41,6 +42,7 @@ public class FourSquareServiceProvider {
 
                 // Request customization: add request headers
                 Request.Builder requestBuilder = original.newBuilder()
+                        .header("Accept-Language", Locale.getDefault().getLanguage())
                         .url(url);
 
                 Request request = requestBuilder.build();

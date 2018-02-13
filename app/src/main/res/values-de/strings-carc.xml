@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="carc_app_base_url" formatted="false">https://play.google.com/store/apps/details?id=me.carc.%s</string>
+
+    <string name="appTitleITimer">Interval Timer | Einfach, Einfach, intuitiv</string>
+    <string name="appDescITimer">Intervall-Timer geeignet für: Laufen, Boxen, Calisthenics, Zirkeltraining, HIIT, Tabata und mehr!</string>
+
+    <string name="appTitleBtown">B-Town | Berlin Touren und Karten | Berlin Führer</string>
+    <string name="appDescBtown">Der ultimative Berlin Führer. Entdecke alle Sehenswürdigkeiten mit B-Town!</string>
+
+    <string name="appTitleAGD">Any Given Date | Event Counter</string>
+    <string name="appDescAGB">Any Given Date bietet dir einen Countdown mit einem super geilen Bild deiner Wahl zu jedem Termin.</string>
+
+    <string name="appTitleBlackBooks">BlackBooks Rätsel</string>
+    <string name="appDescBlackBooks">Gehirnrätsel, um mit Freunden zu spielen. Finde die Situation hinter der Kurzgeschichte mit nur Ja und Nein Antworten</string>
+
+    <string name="appTitleFakeCall">Scherzanruf and SMS</string>
+    <string name="appDescFakeCall">Eine Ausrede an deinen Fingerspitzen. Keine Werbung und völlig kostenlos</string>
+
+    <string name="shared_string_extra">Extra</string>
+
+</resources>

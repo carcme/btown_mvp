@@ -13,17 +13,20 @@
         android:layout_gravity="top|start"
         android:layout_margin="@dimen/margin_standard"
         android:textSize="20sp"
-        tools:text="30 km/h"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        tools:text="30 km/h"/>
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/fabTours"
-        android:layout_width="@dimen/fab_size"
-        android:layout_height="@dimen/fab_size"
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fabBack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_small"
         android:layout_marginTop="@dimen/margin_standard"
-        android:layout_marginStart="@dimen/margin_standard"
-        android:src="@mipmap/ic_launcher_skyline_rnd_blue"
-        app:civ_circle_background_color="@color/sheet_icon_color" />
+        android:tint="@color/black"
+        app:backgroundTint="@android:color/transparent"
+        app:fabSize="mini"
+        app:srcCompat="@drawable/ic_arrow_back"/>
 
 
     <android.support.design.widget.FloatingActionButton
@@ -31,39 +34,39 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="start|top"
-        android:layout_marginTop="150dp"
         android:layout_marginStart="@dimen/margin_standard"
-        app:srcCompat="@drawable/ic_directions_walk"
+        android:layout_marginTop="150dp"
+        android:visibility="gone"
         app:backgroundTint="#66000000"
         app:borderWidth="0dp"
         app:elevation="0dp"
         app:fabSize="mini"
         app:pressedTranslationZ="0dp"
-        android:visibility="gone"/>
+        app:srcCompat="@drawable/ic_directions_walk"/>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_search"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end|top"
-        android:layout_marginTop="@dimen/margin_standard"
         android:layout_marginEnd="@dimen/margin_standard"
+        android:layout_marginTop="@dimen/margin_standard"
         android:tag="false"
-        app:srcCompat="@drawable/ic_search"
         app:backgroundTint="@color/fabColorAlmostClear"
         app:borderWidth="0dp"
         app:elevation="0dp"
         app:fabSize="normal"
-        app:pressedTranslationZ="0dp"/>
+        app:pressedTranslationZ="0dp"
+        app:srcCompat="@drawable/ic_search"/>
 
 
     <ProgressBar
         android:id="@+id/featureProgressDialog"
         android:layout_width="64dp"
         android:layout_height="64dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="12dp"
         android:layout_gravity="end|top"
+        android:layout_marginEnd="12dp"
+        android:layout_marginTop="12dp"
         android:indeterminate="true"
         android:visibility="gone"
         />
@@ -73,14 +76,28 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end|top"
-        android:layout_marginTop="78dp"
         android:layout_marginEnd="@dimen/margin_standard"
-        app:srcCompat="@drawable/ic_camera_white"
+        android:layout_marginTop="78dp"
         app:backgroundTint="@color/fabColorAlmostClear"
         app:borderWidth="0dp"
         app:elevation="0dp"
         app:fabSize="mini"
-        app:pressedTranslationZ="0dp"/>
+        app:pressedTranslationZ="0dp"
+        app:srcCompat="@drawable/ic_camera_white"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fabTours"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|top"
+        android:layout_marginEnd="@dimen/margin_standard"
+        android:layout_marginTop="124dp"
+        app:backgroundTint="@color/fabColorAlmostClear"
+        app:borderWidth="0dp"
+        app:elevation="0dp"
+        app:fabSize="mini"
+        app:pressedTranslationZ="0dp"
+        app:srcCompat="@drawable/ic_tours"/>
 
 
     <android.support.design.widget.FloatingActionButton
@@ -89,22 +106,22 @@
         android:layout_height="wrap_content"
         android:layout_gravity="start|bottom"
         android:layout_margin="@dimen/margin_standard"
-        app:srcCompat="@drawable/ic_burger_menu"
         app:backgroundTint="@color/fabColorAlmostClear"
         app:borderWidth="0dp"
         app:elevation="0dp"
         app:fabSize="normal"
-        app:pressedTranslationZ="0dp"/>
+        app:pressedTranslationZ="0dp"
+        app:srcCompat="@drawable/ic_burger_menu"/>
 
     <TextView
         android:id="@+id/routeInfoText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:gravity="center"
-        android:layout_marginStart="@dimen/fab_space"
-        android:layout_marginEnd="@dimen/fab_space"
         android:layout_marginBottom="@dimen/margin_standard"
+        android:layout_marginEnd="@dimen/fab_space"
+        android:layout_marginStart="@dimen/fab_space"
+        android:gravity="center"
         android:textSize="18sp"
         android:textStyle="bold"
         android:visibility="gone"
@@ -121,16 +138,16 @@
             android:id="@+id/fab_ZoomIn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/margin_standard"
-            android:layout_marginBottom="@dimen/margin_standard"
             android:layout_gravity="end"
-            app:srcCompat="@drawable/ic_plus"
-            app:layout_anchorGravity="right|end"
+            android:layout_marginBottom="@dimen/margin_standard"
+            android:layout_marginEnd="@dimen/margin_standard"
             app:backgroundTint="@color/fabColorAlmostClear"
             app:borderWidth="0dp"
             app:elevation="0dp"
             app:fabSize="mini"
-            app:pressedTranslationZ="0dp"/>
+            app:layout_anchorGravity="right|end"
+            app:pressedTranslationZ="0dp"
+            app:srcCompat="@drawable/ic_plus"/>
 
 
         <android.support.design.widget.FloatingActionButton
@@ -138,15 +155,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
-            android:layout_marginEnd="@dimen/margin_standard"
             android:layout_marginBottom="@dimen/margin_standard"
-            app:srcCompat="@drawable/ic_minus"
-            app:layout_anchorGravity="right|end"
+            android:layout_marginEnd="@dimen/margin_standard"
             app:backgroundTint="@color/fabColorAlmostClear"
             app:borderWidth="0dp"
             app:elevation="0dp"
             app:fabSize="mini"
-            app:pressedTranslationZ="0dp"/>
+            app:layout_anchorGravity="right|end"
+            app:pressedTranslationZ="0dp"
+            app:srcCompat="@drawable/ic_minus"/>
 
 
         <android.support.design.widget.FloatingActionButton
@@ -154,14 +171,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
-            android:layout_marginEnd="@dimen/margin_standard"
             android:layout_marginBottom="@dimen/margin_standard"
-            app:srcCompat="@drawable/ic_my_location"
+            android:layout_marginEnd="@dimen/margin_standard"
             app:backgroundTint="@color/fabColorAlmostClear"
             app:borderWidth="0dp"
             app:elevation="0dp"
             app:fabSize="normal"
-            app:pressedTranslationZ="0dp" />
+            app:pressedTranslationZ="0dp"
+            app:srcCompat="@drawable/ic_my_location"/>
 
     </LinearLayout>
 

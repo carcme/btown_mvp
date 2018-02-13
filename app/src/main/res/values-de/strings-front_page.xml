@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="front_menu_map">Karte</string>
+    <string name="front_menu_map_desc">Finde jeden Ort in Berlin</string>
+
+    <string name="front_menu_tours">Touren</string>
+    <string name="front_menu_tours_desc">Entdecke die Stadt</string>
+
+    <string name="front_menu_lists">Unternehmungen</string>
+    <string name="front_menu_lists_desc">Beliebte Berliner Attraktionen</string>
+
+    <string name="front_menu_getting_around">Finde dich zurecht</string>
+
+    <string name="front_menu_getting_around_desc">Öffentliche Verkehrsmittel in Berlin</string>
+
+    <string name="front_menu_good_to_know">Gut zu wissen</string>
+    <string name="front_menu_good_to_know_desc">Insider-Wissen macht einen großen Unterschied</string>
+
+
+    <string name="front_menu_settings">Einstellungen</string>
+    <string name="front_menu_settings_desc">Einstellungen anpassen, teilen, bewerten und Feedback senden</string>
+
+    <string name="front_menu_subtitle">Todo</string>
+
+
+    <!--TRANSPORT -->
+    <string name="transport_tab_overview">Züge</string>
+    <string name="transport_tab_plans">Streckennetz</string>
+    <string name="transport_tab_taxi">Taxis</string>
+    <string name="transport_tab_airport">Flughafen</string>
+
+
+    <string name="transport_walking">Zu Fuß</string>
+    <string name="transport_bikes">Mit dem Bike</string>
+
+    <string name="transport_public_transport">Öffentliche Verkehrsmittel in Berlin</string>
+    <string name="transport_public_transport_text1">Ein bequemer, sicherer und billiger Weg, Berlins Sehenswürdigkeiten zu erkunden. Berlin\'s hat ein tolles Netz aus Zügen, Regionalbahnen, Bussen, U-, S- und Straßenbahnen.</string>
+
+    <string name="transport_tickets">Fahrscheine</string>
+    <string name="transport_tickets_text1">In Berlin kann man die Bahnhöfe ohne einen gültigen Fahrschein betreten. Im Bus muss man sein Ticket dem Fahrer beim Einsteigen zeigen. n\nKontrolleure tragen Alltagskleidung und patrouillieren Busse und Bahnen in regelmäßigen Abständen. Geh’ also lieber sicher, dass du einen gültigen Fahrschein hast.</string>
+
+    <string name="transport_welcome_card">Welcome Card</string>
+    <string name="transport_welcome_card_text1">Die Aktion rechnet sich durchaus, weil sie dir auch satte Rabatte auf Eintritte in bestimmten Museen, im Theater oder beim Eintritt in zahlreiche andere Attraktionen bietet. Die Karte gilt für einen Erwachsenen und bis zu drei Kinder im Alter bis 14 Jahren. Kinder unter sechs Jahren fahren Bus und Bahn kostenlos. n\nEs gibt zwei Versionen der Welcome Card: Eine gilt lediglich für die Tarifzone AB, die andere ist auch in den Zonen ABC gültig. Die C Zone ist wichtig, wenn Ihr vom Flughafen Schönefeld fliegt, oder gerne auch Potsdam und seine wunderschönen Preußischen Baudenkmäler besuchen wollt. n\nEs gibt zudem eine Museumsinsel Welcome Card. Sie bietet Dir 72 Stunden freien Eintritt in alle Museen auf der Insel.\n\n www.berlin-welcomecard.de</string>
+
+    <string name="transport_fares">Tarif Zonen</string>
+    <string name="transport_fares_text1">In Berlin gibt es drei verschiedene Tarif Zonen:\n - Zone A beinhaltet lediglich das Zentrum.\n - Zone B endet an der Berliner Stadtgrenze.\n - Zone C beinhaltet Randgebiete wie beispielsweise den Flughafen Schönefeld, Potsdam und Oranienburg. \n\nDer Tarif schließt Kinder unter sechs Jahren aus. Sie fahren in Berlin umsonst. \n\nUnter der Rubrik \' Streckennetz \' findet ihr einen genauen Plan, welche Adresse, welcher Zone zuzuordnen ist.</string>
+
+    <string name="transport_contact">Kontakt</string>
+    <string name="transport_BVG_text1">Die BVG betreibt in Berlin U-, S- und Straßenbahnen, Busse und sogar Fähren.\nTelefon: 030-19 44 9\nWebseite: www.bvg.de</string>
+    <string name="transport_SBAHN_text1">S-Bahn\nTelefon: 030-29 74 33 33\nWebseite: www.s-bahn-berlin.de</string>
+
+    <string name="transport_walking_desc">In Berlin kommt man gut zu Fuß voran. \nBeliebte Stadtbezirke dafür sind vor allem Charlottenburg, Prenzlauer Berg und Mitte. Hierfür haben wir euch einige super interessante Touren vorbereitet.</string>
+
+    <string name="transport_bikes_desc">In Berlin gibt es auch ein gut ausgebautes Netz an Radwegen. Auch auf dem Bike kann man die Stadt prima erkunden. Die Fahrräder können (soweit nicht ohnehin schon völlig überfüllt) auch in Bus und Bahnen mitgenommen werden. Dafür fällt jedoch ein extra Ticket an.</string>
+
+    <string name="transport_taxi">Taxis in Berlin</string>
+    <string name="transport_taxi_text1">Mehr als 7.000 Taxis stehen in Berlin für dich bereit. Sie bringen dich sicher und schnell zum Flughafen, dem Hauptbahnhof oder einem geschäftlichen Meeting.</string>
+
+    <string name="transport_getting_ride">So rufe ich ein Taxi</string>
+    <string name="transport_getting_ride_text1">Einfach nach einem Wagen, dessen Dachlampe gelb leuchtet, winken. Zudem gibt es überall in der Stadt zahlreiche Taxi-Stände. Hier findet sich eigentlich immer eine Möglichkeit. Sollte doch einmal kein Wagen bereitstehen, so gibt es an den Taxi-Ständen auch eine Ruffunktion.</string>
+
+    <string name="transport_taxi_fares">Preise</string>
+    <string name="transport_taxi_fares_text1">Der Grundpreis beträgt €3.90 + €2 für die ersten sieben Kilometer. Jeder darauffolgende Kilometer kostet €1.50. \nGroßraum-Taxis kosten natürlich ein wenig mehr. \nEin Verkehrsstau darf sich nicht übermäßig auf den Preis der Taxifahrt auswirken.</string>
+
+    <string name="transport_taxi_short">Kurzstrecke</string>
+    <string name="transport_taxi_short_text1">Der Preis für eine Kurzstrecke kann nicht an Taxi-Ständen angeboten werden, sondern gilt nur für herangewunkene Fahrzeuge. Die Distanz darf nicht mehr als zwei Kilometer betragen und die Reise darf zu keinem Zweitpunkt unterbrochen werden. Man sollte dem Fahrer noch vor Antritt der Fahrt sagen, dass man eine Kurzstrecke wünscht. Dann kostet die Reise lediglich fünf Euro.</string>
+
+
+    <string name="transport_airport_desc_title">Berlins Flughäfen</string>
+    <string name="transport_airport_desc_text1">Berlin hat zwei internationale Flughäfen, Schönefeld im Südwesten und Tegel im Nordosten der Stadt.</string>
+    <string name="transport_airport_desc_text2">Die Anreise-Tipps für beide Flughäfen findet Ihr weiter unten.</string>
+
+    <string name="transport_airport_schon">Flughafen Schönefeld (SXF)</string>
+    <string name="transport_airport_tegel">Flughafen Tegel (TXL)</string>
+    <string name="transport_airport_schon_text1">Mit dem Zug und der S-Bahn gelangt man schnell in die City. Vor dem Flughafengebäude fährt zudem ein Bus, der dich zur U-Bahn befördert. Alternativ warten jede Menge Taxis auf dich.</string>
+    <string name="transport_airport_tegel_text1">Zum Flughafen Tegel gibt es keine direkte S-Bahn oder Zugverbindung. Dafür haben zahlreiche Busse den Flughafen als Endhaltestelle. Sie sind fast überall in Berlin unterwegs.</string>
+
+
+    <string name="transport_train">Zug</string>
+    <string name="transport_train_schon">Der Bahnhof Berlin Schönefeld befindet sich fußläufig in 10 Minuten Entfernung vom Flughafengebäude. Der Weg ist komplett überdacht. Die Regionalbahnen RE7 und RB14 bringen dich via Karlshorst, Ostbahnhof, Alexanderplatz, Friedrichstrasse, Hauptbahnhof, Zoologischer Garten und Charlottenburg nach Berlin.\n\nEin Fahrschein am Automaten kostet 3,30 Euro. \n\nBitte unbedingt das Ticket vor Antritt deiner Reise entwerten.</string>
+
+
+
+    <string name="transport_bus">Bus</string>
+    <string name="transport_bus_schon">Einen direkten Bus ins Zentrum von Berlin gibt es nicht. Jedoch kommt man mit der U-Bahn schnell in die City. \n\nNutze dafür bitte unseren B-Town \'Fahrplan\', um deine Route im Detail zu planen.</string>
+
+    <string name="transport_bus_tegel">Die Busse fahren direkt vor dem Flughafengebäude alle zehn Minuten ab.\n • Nutze 109 &amp; X9, um zur Ringbahn, dem Zoologischen Garten und Charlottenburg zu gelangen.\n • Nutze TXL, um zum Alexanderplatz, dem Hauptbahnhof und Unter den Linden zu gelangen.\n\nA Ein Fahrschein am Automaten kostet 2,80 Euro.\n\nBitte unbedingt das Ticket vor Antritt deiner Reise entwerten.</string>
+
+    <string name="transport_airport_taxi">Taxi</string>
+    <string name="transport_taxi_schon">Mit dem Taxi braucht man ungefähr 30–45 Minuten in die City. Die Fahrt sollte nicht mehr als 50 Euro kosten. Taxi-Stände findet Ihr direkt vor dem Gebäude des Flughafens.</string>
+    <string name="transport_taxi_tegel">Eine Fahrt in die City kostet ungefähr 30 Euro und sollte nicht länger als eine halbe Stunde dauern. Taxi-Stände befinden sich vor den Gates 6&#8211;9 im Terminal A und auch in den Terminals C &amp; E</string>
+
+
+    <!--GOOD TO KNOW-->
+    <string name="goodtoknow_tab_health">Gesundheit</string>
+    <string name="goodtoknow_tab_money">Geld</string>
+    <string name="goodtoknow_tab_internet">Internet</string>
+
+    <string name="goodtoknow_police">Polizei</string>
+    <string name="goodtoknow_fire">Feuerwehr/Krankenwagen</string>
+    <string name="goodtoknow_dental">Zahnarzt</string>
+    <string name="goodtoknow_emergencies">Notfall Nummern</string>
+
+    <string name="goodtoknow_hospitals">Krankenhäuser</string>
+    <string name="goodtoknow_hospitals_text1">Eine private Auslandskrankenversicherung ist sicherlich immer eine gute Idee. EU Bürger können jedoch auch ohne Probleme ihre European Health Insurance Card (EHIC) nutzen. Diese kann im Krankheitsfall einfach bei Ärzten und Krankenhäusern vorgezeigt werden.</string>
+
+    <string name="goodtoknow_hospitals_text2">Alle Krankenhäuser haben eine 24-Stunden-Notaufnahme. Weitere Krankenhäuser findet Ihr in den Gelben Seiten.</string>
+
+
+    <string name="goodtoknow_doctors">Ärzte</string>
+    <string name="goodtoknow_doctors_text1">Nutze http://doctorberlin.de, um einen englischsprachigen Arzt zu finden.\n\nSolltest du zu krank sein, um das Bett verlassen zu können, rufe den Ärztlichen Bereitschaftsdienst unter der 030/ 310 031\nHier wird dir dann ein Arzt zugeschickt. Die Kosten variieren natürlich und sind ganz von der ärztlichen Behandlung abhängig. Zeige aus diesem Grund am besten sofort deine Versicherungskarte vor.</string>
+
+
+    <string name="goodtoknow_pharmacy">Apotheken</string>
+    <string name="goodtoknow_pharmacy_text1">Verschreibungspflichtige und freie Medikamente werden in jeder Apotheke verkauft. Man erkennt sie an dem großen, roten Buchstaben \'A\'. Hier findet ihr direkt neben dem Eingang auch eine Liste, die Apotheken in der Nähe anzeigt, die einen 24-Stunden-Bereitschaftsdienst haben. \nA Notdienst-Apotheken: www.akberlin.de/notdienst</string>
+
+
+    <string name="goodtoknow_currency">Währung</string>
+    <string name="goodtoknow_currency_text1">Deutschland ist Teil der EU und nutzt dem entsprechend den Euro. Geldscheine gib es als €500, €200, €100, €50, €20, €10 und €5 Noten. Kleingeld gibt es in €2, €1, 50 Cent, 20 Cent, 10 Cent, 5 Cent, 2 Cent und 1Cent Münzen.</string>
+
+    <string name="goodtoknow_credit_cards">Kreditkarten</string>
+    <string name="goodtoknow_credit_cards_text1">In Deutschland zahlt man im Vergleich zu England und den USA deutlich weniger mit Kreditkarte. \n\nViele Geschäfte, Bars und Restaurants bestehen sogar auf Barzahlung, also bitte vorher nachfragen.</string>
+
+    <string name="goodtoknow_tipping">Trinkgeld</string>
+    <string name="goodtoknow_tipping_text1">Ein Trinkgeld ist nicht vorgeschrieben, wird jedoch gerne angenommen. Zehn Prozent sind hier der Standard. Auch im Taxi kann man gerne aufrunden und dem Fahrer den Tag versüßen.</string>
+
+
+    <string name="goodtoknow_tax">Steuer-Rückerstattung</string>
+    <string name="goodtoknow_tax_text1">Nicht-EU-Bürger können sich die Mehrwertsteuer (MwSt) zurückerstatten lassen. Dieser Aufwand ergibt jedoch nur wirklich Sinn, wenn der Einkaufspreis dem entsprechend hoch ist. Nachdem ihr im Geschäft nach der Steuerquittung gefragt habt, könnt Ihr diese bei der Ausreise am Flughafen geltend machen.</string>
+
+    <string name="goodtoknow_wifi">Wi-Fi</string>
+    <string name="goodtoknow_wifi_text1">Öffentliches Wi-Fi gibt es mittlerweile fast überall in Berlin.\n\nNutze den nachfolgenden Link, um kostenfreie Hotspots in deiner Nähe ausfindig zu machen.\nwww.publicwifi.de</string>
+
+
+
+
+</resources>

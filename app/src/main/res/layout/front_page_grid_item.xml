@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/color_lists"
+    android:padding="@dimen/margin_standard"
+    android:orientation="vertical"
+    android:id="@+id/elementHolder"
+    tools:layout_width="200dp">
+
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/margin_standard"
+        android:contentDescription="@string/front_menu_map"
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
+        tools:src="@drawable/ic_notepad"/>
+
+    <me.carc.btown.ui.AutoResizeTextView
+        android:id="@+id/detailsTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:text="@string/front_menu_lists"
+        android:fontFamily="serif"
+        android:textColor="@color/white"
+        android:textSize="30sp"
+        />
+
+    <me.carc.btown.ui.AutoResizeTextView
+        android:id="@+id/detailsDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="serif"
+        android:gravity="center_horizontal"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        tools:text="@string/front_menu_lists_desc"
+        />
+
+</LinearLayout>

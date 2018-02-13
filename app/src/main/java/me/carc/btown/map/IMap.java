@@ -13,6 +13,7 @@ import me.carc.btown.data.all4squ.entities.ListItems;
 import me.carc.btown.data.all4squ.entities.VenueResult;
 import me.carc.btown.db.bookmark.BookmarkEntry;
 import me.carc.btown.map.search.model.Place;
+import me.carc.btown.tours.model.TourCatalogue;
 
 /** Interface between the mapActivity adn the mapPresenter
  * Created by nawin on 6/14/17.
@@ -39,6 +40,9 @@ public interface IMap {
         void showFsqSearchResults(ArrayList<VenueResult> results);
         void showFsqSExploreResults(String header, ArrayList<ExploreItem> results);
 
+        void addClearDropMenuItem(boolean hasDropPins);
+
+        void resetToursBtn();
 
 //        void showLocationSettings(GeoPoint point, LocationRequest locationRequest, Location location);
     }
@@ -50,6 +54,7 @@ public interface IMap {
         void zoomOut();
         void zoomToMyLocation();
         void showOrClearSearchDialog();
+        void clearPoiMarkers();
 
         void onSearchItemSelected(Place poi);
         void onShowPlaceItem(Place poi);
@@ -64,12 +69,19 @@ public interface IMap {
         void showPoiDialog(Object obj);
         void onShowCameraOrPoiMarkerListDialog();
 
+        void onDropPin(GeoPoint p);
+        void onClearPins();
+
         void showFsqVenue(VenueResult venueResult);
         void showFsqVenues(ArrayList<VenueResult> venues);
         void showFsqList(ListItems items);
 
+        void hidePoiDialog();
 //        void debugBtn();
 
         Bundle getBundle(Bundle outstate);
+
+        void showTour(TourCatalogue catalogue);
+        void clearTourIcons();
     }
 }

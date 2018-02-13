@@ -7,7 +7,9 @@ import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -19,10 +21,12 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import me.carc.btown.BaseActivity;
 import me.carc.btown.BuildConfig;
 import me.carc.btown.R;
 import me.carc.btown.Utils.Holder;
+import me.carc.btown.Utils.ViewUtils;
 import me.carc.btown.common.C;
 import me.carc.btown.common.Commons;
 import me.carc.btown.common.interfaces.DrawableClickListener;
@@ -31,6 +35,7 @@ import me.carc.btown.tours.data.FirebaseService;
 import me.carc.btown.tours.model.TourCatalogue;
 import me.carc.btown.tours.model.TourHolderResult;
 import me.carc.btown.ui.custom.MyCustomLayoutManager;
+import me.carc.btown.ui.front_page.FrontPagePresenter;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -45,11 +50,13 @@ public class CatalogueActivity extends BaseActivity {
     public static final String SERVER_FILE = "SERVER_FILE";
     public static final String JSON_VERSION= "JSON_VERSION";
 
+    public static final String EXTRA_SHOW_ON_MAP = "EXTRA_SHOW_ON_MAP";
+
+
     private ToursAdapter mAdapter;
 
     @BindView(R.id.catalogue_recycler)
     RecyclerView recyclerView;
-
 
     @BindView(R.id.toursToolbar)
     Toolbar toolbar;
@@ -60,7 +67,13 @@ public class CatalogueActivity extends BaseActivity {
     @BindView(R.id.appBarProgressBar)
     ProgressBar appBarProgressBar;
 
+    @BindView(R.id.fabExit)
+    FloatingActionButton fabExit;
 
+    @OnClick(R.id.fabExit)
+    void done() {
+        onBackPressed();
+    }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -84,7 +97,6 @@ public class CatalogueActivity extends BaseActivity {
         toolbar.setTitle(R.string.tours_tour_catalogue);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        setSupportActionBar(toolbar);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -103,7 +115,7 @@ public class CatalogueActivity extends BaseActivity {
 
 //        String json = TinyDB.getTinyDB().getString(SERVER_FILE);
 
-        TourHolderResult serverFile = ToursLaunchActivity.jsonPreLoad;
+        TourHolderResult serverFile = FrontPagePresenter.toursPreLoad;
 
         if(Commons.isNotNull(serverFile)){
             ArrayList<TourCatalogue> tours = serverFile.tours;
@@ -123,14 +135,7 @@ public class CatalogueActivity extends BaseActivity {
                 @Override
                 @SuppressWarnings({"ConstantConditions"})
                 public void onResponse(@NonNull Call<TourHolderResult> call, @NonNull Response<TourHolderResult> response) {
-
-
                     ArrayList<TourCatalogue> tours = response.body().tours;
-//                    TinyDB.getTinyDB().putInt(JSON_VERSION, response.body().version);
-//
-//                    String json = gson.toJson(response.body());
-//                    TinyDB.getTinyDB().putString(SERVER_FILE, json);
-
                     setupRecycler(tours);
                 }
 
@@ -152,18 +157,26 @@ public class CatalogueActivity extends BaseActivity {
             @Override
             public void OnClick(View v, Drawable drawable, int pos) {
                 TourCatalogue catalogue = mAdapter.getItem(pos);
-                Holder.set(drawable);
-                Intent intent = new Intent(CatalogueActivity.this, CataloguePreviewActivity.class);
-                intent.putExtra(CATALOGUE, catalogue);
 
-                Bundle options = null;
-                if (C.HAS_L)
-                    options = ActivityOptions.makeSceneTransitionAnimation(
-                            CatalogueActivity.this,
-                            v,
-                            getString(R.string.image_pop_transition)
-                    ).toBundle();
-                startActivity(intent, options);
+                // show tour on map?
+                if(getIntent().hasExtra(EXTRA_SHOW_ON_MAP)) {
+                    getIntent().putExtra(CATALOGUE, catalogue);
+                    setResult(RESULT_OK, getIntent());
+                    onBackPressed();
+                } else {  // show tour in tabs and pager
+                    Holder.set(drawable);
+                    Intent intent = new Intent(CatalogueActivity.this, CataloguePreviewActivity.class);
+                    intent.putExtra(CATALOGUE, catalogue);
+
+                    Bundle options = null;
+                    if (C.HAS_L)
+                        options = ActivityOptions.makeSceneTransitionAnimation(
+                                CatalogueActivity.this,
+                                v,
+                                getString(R.string.image_pop_transition)
+                        ).toBundle();
+                    startActivity(intent, options);
+                }
             }
 
             @Override
@@ -182,8 +195,11 @@ public class CatalogueActivity extends BaseActivity {
                 recyclerView.setLayoutManager(layoutManager);
             }
             recyclerView.setAdapter(mAdapter);
+
+            scrollHider(recyclerView, fabExit);
         }
 
+        fabExit.setVisibility(View.VISIBLE);
         setProgressItems(View.GONE);
     }
 
@@ -218,8 +234,17 @@ public class CatalogueActivity extends BaseActivity {
         super.onRestoreInstanceState(savedInstanceState);
     }
 
+
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        float temp = getResources().getDimension(R.dimen.fab_margin);
+        int duration = getResources().getInteger(R.integer.gallery_alpha_duration);
+        ViewUtils.hideView(fabExit, duration, (int) temp);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                finish();
+            }
+        }, duration * 2);
     }
 }

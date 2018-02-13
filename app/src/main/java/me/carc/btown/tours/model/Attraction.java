@@ -8,6 +8,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Tour attractions holder
@@ -90,8 +91,8 @@ public class Attraction implements Serializable, Parcelable {
     public LatLon getLocation() { return location; }
 
     @SerializedName("pois")
-    private ArrayList<POIs> pois = new ArrayList<>();
-    public ArrayList<POIs> getPOIs() { return pois; }
+    private List<POIs> pois = new ArrayList<>();
+    public List<POIs> getPOIs() { return pois; }
 
     @SerializedName("stopInfo")
     private StopInfo stopInfo = new StopInfo();

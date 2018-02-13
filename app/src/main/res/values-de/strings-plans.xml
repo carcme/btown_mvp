@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="usbahn_title" templateMergeStrategy="preserve">Download U and S Bahn Routes</string>
+    <string name="usbahn_desc" templateMergeStrategy="preserve">U and S Bahn, Zones A, B and C</string>
+
+    <string name="tram_title" templateMergeStrategy="preserve">Download Trams Routes</string>
+    <string name="tram_desc" templateMergeStrategy="preserve">Trams Routes</string>
+
+    <string name="regional_title" templateMergeStrategy="preserve">Download Regional Trains Routes</string>
+    <string name="regional_desc" templateMergeStrategy="preserve">Regional Trains Routes</string>
+
+    <string name="zoo_title" templateMergeStrategy="preserve">Download Zoo Map</string>
+    <string name="zoo_desc" templateMergeStrategy="preserve">Berlin Zoo Map</string>
+
+
+</resources>

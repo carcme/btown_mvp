@@ -117,7 +117,6 @@ class LoginPresenter implements IfLogin.Presenter, GoogleApiClient.OnConnectionF
         return mGoogleApiClient;
     }
 
-
     private void updateUI(FirebaseUser user) {
         if (user != null) {
             if (user.getProviders() != null && user.getProviders().size() > 0) {

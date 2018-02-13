@@ -28,7 +28,7 @@ import me.carc.btown.tours.model.Attraction;
 public class TourDataAdapter extends RecyclerView.Adapter<TourDataAdapter.MyViewHolder> {
 
     private static final String TAG = C.DEBUG + Commons.getTag();
-    boolean userDE;
+    private boolean userDE;
     private final ArrayList<Attraction> mAttractions;
     private StorageReference mCoverImageStorageRef;
 

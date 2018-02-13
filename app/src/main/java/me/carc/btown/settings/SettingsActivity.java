@@ -1,7 +1,13 @@
 package me.carc.btown.settings;
 
 import android.app.Activity;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
+import android.text.Html;
 import android.view.MenuItem;
 
 import me.carc.btown.R;
@@ -20,7 +26,14 @@ public class SettingsActivity extends Activity {
 
         if(getActionBar() != null) {
             getActionBar().setDisplayHomeAsUpEnabled(true);
-            getActionBar().setTitle(getString(R.string.shared_string_settings));
+            final Drawable upArrow = ContextCompat.getDrawable(this, R.drawable.ic_arrow_back);
+            upArrow.setColorFilter(Color.parseColor("#FFFFFF"), PorterDuff.Mode.SRC_ATOP);
+            getActionBar().setHomeAsUpIndicator(upArrow);
+
+            // TODO: 22/12/2017 dont like this - find way to change actionbar text color that is correct/nice
+            getActionBar().setTitle(Html.fromHtml("<font color=\"#FFFFFF\">" + getString(R.string.shared_string_settings) + "</font>"));
+            getActionBar().setBackgroundDrawable(new ColorDrawable(ContextCompat.getColor(this, R.color.color_settings)));
+            getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.color_settings_dark));
         }
 
         getFragmentManager().beginTransaction().replace(android.R.id.content, new SettingsPagerFragment()).commit();

@@ -58,7 +58,8 @@ public class WikiWebViewActivity extends BaseActivity {
     private static final String JPG    = ".JPG";
     private static final String JPEG   = ".JPEG";
     private static final String PNG    = ".PNG";
-    private static final String FILE   = "File:";
+    private static final String enFILE = "File:";
+    private static final String deFILE = "Datei:";
     private static final String TEL    = "TEL://";
     private static final String MAILTO = "mailto:";  // NOTE: This is lower case
 
@@ -122,108 +123,14 @@ public class WikiWebViewActivity extends BaseActivity {
                 disableJS = intent.getBooleanExtra(DISABLE_JS, false);
             }
         }
-
-        webView.setListener(new NonLeakingWebView.WebViewCallback() {
-
-            @Override
-            public void onReceivedSslError(WebView view, final SslErrorHandler handler, SslError error) {
-
-                int msgRes;
-                switch(error.getPrimaryError()) {
-                    case SslError.SSL_DATE_INVALID:
-                        msgRes = R.string.ssl_date_invalid;
-                        break;
-                    case SslError.SSL_EXPIRED:
-                        msgRes = R.string.ssl_cert_expired;
-                        break;
-                    case SslError.SSL_IDMISMATCH:
-                        msgRes = R.string.ssl_hostname_mismatch;
-                        break;
-                    case SslError.SSL_INVALID:
-                        msgRes = R.string.ssl_generic_error;
-                        break;
-                    case SslError.SSL_NOTYETVALID:
-                        msgRes = R.string.ssl_not_yet_valid;
-                        break;
-                    case SslError.SSL_UNTRUSTED:
-                        msgRes = R.string.ssl_untrusted;
-                        break;
-                    default:
-                        msgRes = R.string.unknown;
-                }
-
-                final AlertDialog.Builder builder = new AlertDialog.Builder(WikiWebViewActivity.this);
-                builder.setMessage(msgRes);
-                builder.setPositiveButton("continue", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        handler.proceed();
-                    }
-                });
-                builder.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        handler.cancel();
-                    }
-                });
-                final AlertDialog dialog = builder.create();
-                dialog.show();
-            }
-
-            @Override
-            public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                progressBar.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                return overrideImageUrls(view, url);
-            }
-
-            @Override
-            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-                return overrideImageUrls(view, request.getUrl().toString());
-            }
-
-            @Override
-            public boolean loadPdfUrl(final String url) {
-                if (!Commons.isEmpty(url)) {
-                    Intent intent = new Intent(Intent.ACTION_VIEW);
-                    intent.setDataAndType(Uri.parse(url), MIME_TYPE_PDF);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                    startActivity(intent);
-                    return true;
-                }
-                return false;
-            }
-
-            @Override
-            public void onPageFinished(WebView view, String url) {
-                progressBar.setVisibility(View.GONE);
-            }
-        });
-
-        webView.setWebChromeClient(new WebChromeClient() {
-
-            @Override
-            public void onReceivedTitle(WebView view, String title) {
-                super.onReceivedTitle(view, title);
-                if(titleRequired) {
-                    getSupportActionBar().setTitle(title);
-                    titleRequired = false;
-                } else
-                    getSupportActionBar().setSubtitle(title);
-            }
-        });
+        webView.setListener(mWebViewCallback);
+        webView.setWebChromeClient(mChromeClient);
 
         if(!Commons.contains(postUrl, WIKIPEDIA)) {
             allowJavaScript(true);
             if(BuildConfig.DEBUG)
                 Toast.makeText(this, "JAVA SCRIPT ENABLED", Toast.LENGTH_SHORT).show();
         }
-
-//        if(disableJS)
-//            allowJavaScript(false);
 
         // Load the URL
         if (Commons.isNotNull(savedInstanceState)) {
@@ -239,6 +146,97 @@ public class WikiWebViewActivity extends BaseActivity {
             webView.loadUrl(postUrl);
         }
     }
+
+    private final WebChromeClient mChromeClient = new WebChromeClient() {
+        @Override
+        public void onReceivedTitle(WebView view, String title) {
+            super.onReceivedTitle(view, title);
+            if(titleRequired) {
+                getSupportActionBar().setTitle(title);
+                titleRequired = false;
+            } else
+                getSupportActionBar().setSubtitle(title);
+        }
+    };
+
+    private final NonLeakingWebView.WebViewCallback mWebViewCallback = new NonLeakingWebView.WebViewCallback() {
+
+        @Override
+        public void onReceivedSslError(WebView view, final SslErrorHandler handler, SslError error) {
+            int msgRes;
+            switch(error.getPrimaryError()) {
+                case SslError.SSL_DATE_INVALID:
+                    msgRes = R.string.ssl_date_invalid;
+                    break;
+                case SslError.SSL_EXPIRED:
+                    msgRes = R.string.ssl_cert_expired;
+                    break;
+                case SslError.SSL_IDMISMATCH:
+                    msgRes = R.string.ssl_hostname_mismatch;
+                    break;
+                case SslError.SSL_INVALID:
+                    msgRes = R.string.ssl_generic_error;
+                    break;
+                case SslError.SSL_NOTYETVALID:
+                    msgRes = R.string.ssl_not_yet_valid;
+                    break;
+                case SslError.SSL_UNTRUSTED:
+                    msgRes = R.string.ssl_untrusted;
+                    break;
+                default:
+                    msgRes = R.string.unknown;
+            }
+
+            final AlertDialog.Builder builder = new AlertDialog.Builder(WikiWebViewActivity.this);
+            builder.setMessage(msgRes);
+            builder.setPositiveButton("continue", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    handler.proceed();
+                }
+            });
+            builder.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    handler.cancel();
+                }
+            });
+            final AlertDialog dialog = builder.create();
+            dialog.show();
+        }
+
+        @Override
+        public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                progressBar.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            return overrideImageUrls(view, url);
+        }
+
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+            return overrideImageUrls(view, request.getUrl().toString());
+        }
+
+        @Override
+        public boolean loadPdfUrl(String url) {
+            if (!Commons.isEmpty(url)) {
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setDataAndType(Uri.parse(url), MIME_TYPE_PDF);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                startActivity(intent);
+                return true;
+            }
+            return false;
+        }
+
+        @Override
+        public void onPageFinished(WebView view, String url) {
+            progressBar.setVisibility(View.GONE);
+        }
+    };
 
     private void allowJavaScript(boolean allow) {
         webView.getSettings().setSupportZoom(allow);
@@ -265,7 +263,7 @@ public class WikiWebViewActivity extends BaseActivity {
                     ImageDialog.showInstance(getApplication(), url, history.getOriginalUrl(), title, getString(R.string.wikipedia));
                     return true;
                 }
-            } else if (url.contains(FILE)) {
+            } else if (url.contains(enFILE) || url.contains(deFILE)) {
                 String decodedString = Uri.decode(url);
                 String deviceThumbnail = WikiUtils.buildWikiCommonsLink(decodedString, C.SCREEN_WIDTH);
 

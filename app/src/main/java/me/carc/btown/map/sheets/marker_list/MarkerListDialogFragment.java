@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -27,9 +28,9 @@ import java.util.concurrent.Executors;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 import me.carc.btown.App;
-import me.carc.btown.MapActivity;
 import me.carc.btown.R;
 import me.carc.btown.Utils.MapUtils;
 import me.carc.btown.Utils.ViewUtils;
@@ -42,6 +43,7 @@ import me.carc.btown.db.AppDatabase;
 import me.carc.btown.db.bookmark.BookmarkEntry;
 import me.carc.btown.db.favorite.FavoriteEntry;
 import me.carc.btown.map.IconManager;
+import me.carc.btown.map.MapActivity;
 import me.carc.btown.map.sheets.ImageDialog;
 import me.carc.btown.map.sheets.search_context.SearchContextMenu;
 import me.carc.btown.ui.CompassDialog;
@@ -75,6 +77,9 @@ public class MarkerListDialogFragment extends DialogFragment {
 
     @BindView(R.id.recyclerview)
     RecyclerView recyclerView;
+
+    @BindView(R.id.fabClose)
+    FloatingActionButton fabClose;
 
 /*
     @BindView(R.id.readingListHeaderImageContainer)
@@ -158,7 +163,7 @@ public class MarkerListDialogFragment extends DialogFragment {
             adapter = new MarkerListAdapter(myLocation, buildAdapterList(myLocation), new MarkerListListener() {
                 @Override
                 public void onClick(View v, int position) {
-                    hide();
+                    dismiss();
                     ((MapActivity) getActivity()).showPoiDlg(relatedObjects.get(position));
                 }
 
@@ -185,6 +190,8 @@ public class MarkerListDialogFragment extends DialogFragment {
                 layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
                 recyclerView.setLayoutManager(layoutManager);
                 recyclerView.setAdapter(adapter);
+
+                recyclerView.addOnScrollListener(scrollListener);
             }
 
             assert collapsingToolbar != null;
@@ -202,6 +209,30 @@ public class MarkerListDialogFragment extends DialogFragment {
             collapsingToolbar.setExpandedTitleColor(ContextCompat.getColor(getActivity(), R.color.white));
         }
         return view;
+    }
+
+    private final RecyclerView.OnScrollListener scrollListener = new RecyclerView.OnScrollListener() {
+        @Override
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            super.onScrolled(recyclerView, dx, dy);
+            if (dy > 0)
+                fabClose.hide();
+            else
+                fabClose.show();
+        }
+    };
+
+
+    @OnClick(R.id.fabClose)
+    void exit() {
+        ViewUtils.createAlphaAnimator(fabClose, false, getResources()
+                .getInteger(R.integer.gallery_alpha_duration) * 2)
+                .withEndAction(new Runnable() {
+                    @Override
+                    public void run() {
+                        dismiss();
+                    }
+                }).start();
     }
 
     public void hide() {

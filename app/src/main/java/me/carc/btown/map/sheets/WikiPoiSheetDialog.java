@@ -93,7 +93,6 @@ public class WikiPoiSheetDialog extends BottomSheetDialogFragment {
     @BindView(R.id.featureRead)
     Button featureRead;
 
-
     @BindView(R.id.wikiDialogContentContainer)
     LinearLayout wikiDialogContentContainer;
 

@@ -12,7 +12,6 @@ import java.util.List;
 
 import me.carc.btown.common.C;
 import me.carc.btown.common.Commons;
-import me.carc.btown.tours.data.services.FirebaseImageDownloader;
 import me.carc.btown.ui.front_page.FrontPageActivity;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
@@ -21,7 +20,7 @@ import pub.devrel.easypermissions.EasyPermissions;
 /**
  * Created by Carc.me on 03.08.16.
  * <p/>
- * Display a splash screen at start upTODO: Add a class header comment!
+ * Display a splash screen at start up
  */
 public class SplashActivity extends BaseActivity implements EasyPermissions.PermissionCallbacks {
 
@@ -37,31 +36,8 @@ public class SplashActivity extends BaseActivity implements EasyPermissions.Perm
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-/*
-        auth = FirebaseAuth.getInstance();
-        authListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
-                Profile facebookUser = Profile.getCurrentProfile();
-
-                if(Commons.isNotNull(facebookUser) || Commons.isNotNull(firebaseUser)) {
-                    if (Commons.isNetworkAvailable(SplashActivity.this)) {
-                        Intent getImagesIntent = new Intent(SplashActivity.this, FirebaseImageDownloader.class);
-                        startService(getImagesIntent);
-                    }
-                }
-            }
-        };
-*/
-
-        if (Commons.isNetworkAvailable(SplashActivity.this)) {
-            Intent getImagesIntent = new Intent(SplashActivity.this, FirebaseImageDownloader.class);
-            startService(getImagesIntent);
-        }
-
         if(C.HAS_L) {
-            storage();
+            checkStoragePermission();
         } else {
             hasStorage = true;
             hasLocation = true;
@@ -70,7 +46,6 @@ public class SplashActivity extends BaseActivity implements EasyPermissions.Perm
 
     private void launchNextActivity() {
         if(hasStorage && hasLocation /*&& hasUser && attemptedLogin*/) {
-
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -89,20 +64,20 @@ public class SplashActivity extends BaseActivity implements EasyPermissions.Perm
                 }
             }, 100);
         } else if(!hasStorage){
-            storage();
+            checkStoragePermission();
         } else {
-            location();
+            checkLocationPermssion();
         }
     }
 
     @AfterPermissionGranted(C.PERMISSION_STORAGE)
-    public void storage() {
+    public void checkStoragePermission() {
         if(!hasStorage) {
             if (EasyPermissions.hasPermissions(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                 hasStorage = true;
                 launchNextActivity();
             } else {
-                // Ask for one permission
+                // Ask for permission
                 EasyPermissions.requestPermissions(SplashActivity.this, getString(R.string.rationale_storage),
                         C.PERMISSION_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE);
             }
@@ -110,13 +85,13 @@ public class SplashActivity extends BaseActivity implements EasyPermissions.Perm
     }
 
     @AfterPermissionGranted(C.PERMISSION_LOCATION)
-    public void location() {
+    public void checkLocationPermssion() {
         if(!hasLocation) {
             if (EasyPermissions.hasPermissions(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
                 hasLocation = true;
                 launchNextActivity();
             } else {
-                // Ask for one permission
+                // Ask for permission
                 EasyPermissions.requestPermissions(SplashActivity.this, getString(R.string.rationale_storage),
                         C.PERMISSION_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION);
             }
@@ -125,7 +100,6 @@ public class SplashActivity extends BaseActivity implements EasyPermissions.Perm
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
-//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
     }
 
@@ -135,7 +109,6 @@ public class SplashActivity extends BaseActivity implements EasyPermissions.Perm
             hasStorage = true;
         else if(requestCode == C.PERMISSION_LOCATION)
             hasLocation = true;
-
 
         launchNextActivity();
     }
@@ -156,15 +129,10 @@ public class SplashActivity extends BaseActivity implements EasyPermissions.Perm
     @Override
     public void onStart() {
         super.onStart();
-//        auth.addAuthStateListener(authListener);
     }
 
     @Override
     public void onStop() {
         super.onStop();
-
-//        if (authListener != null) {
-//            auth.removeAuthStateListener(authListener);
-//        }
     }
 }

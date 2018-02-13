@@ -211,7 +211,7 @@ public class FourSquareListDetailsActivity extends BaseActivity {
     @AfterPermissionGranted(C.PERMISSION_LOCATION)
     @SuppressWarnings({"MissingPermission"})
     private GeoPoint getLastLocation() {
-        Location location = ((App) getApplication()).getBTownLocation().getLatestLocation();
+        Location location = ((App) getApplication()).getLatestLocation();
         return location != null ? new GeoPoint(location.getLatitude(), location.getLongitude()) : null;
     }
 

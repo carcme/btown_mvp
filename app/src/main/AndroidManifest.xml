@@ -1,27 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="me.carc.btown">
+          xmlns:tools="http://schemas.android.com/tools"
+          package="me.carc.btown">
 
     <!-- BILLING - Donations -->
     <uses-permission android:name="com.android.vending.BILLING"/>
 
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS"/>
 
 
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
+
+    <!-- WALLPAPER PERM FOR ANDROID 6 -->
+    <uses-permission android:name="android.permission.SET_WALLPAPER"></uses-permission>
+    <uses-permission android:name="android.permission.SET_WALLPAPER_HINTS"></uses-permission>
 
     <!-- ENABLE CAMERA FROM B-TOWN -->
-    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.CAMERA"/>
     <!-- ENABLE CALL ATTRACTION -->
-    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.CALL_PHONE"/>
     <!-- SOME FEATURES REQUIRED FOR WIKI BROWSER -->
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
 
 
     <application
@@ -32,58 +36,61 @@
         android:roundIcon="@mipmap/ic_launcher_skyline_rnd_blue"
         android:supportsRtl="true"
         android:theme="@style/SplashTheme">
-        <!--android:theme="@style/AppTheme.FullScrnActivity">-->
-        <!--<activity android:name="me.carc.btown.tours.top_pick_lists.FourSquareListsActivity">-->
         <activity android:name="me.carc.btown.SplashActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
 
 
         <activity
-            android:name="me.carc.btown.MapActivity"
+            android:name="me.carc.btown.map.MapActivity"
             android:hardwareAccelerated="false"
-            android:label="@string/app_name"
             android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.front_page.FrontPageActivity">
+            </meta-data>
+
             <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.VIEW"/>
 
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
 
                 <data
                     android:host="*"
                     android:pathPattern="/*.kml"
-                    android:scheme="http" />
+                    android:scheme="http"/>
                 <data
                     android:host="*"
                     android:pathPattern="/*.kml"
-                    android:scheme="https" />
+                    android:scheme="https"/>
             </intent-filter>
             <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.VIEW"/>
 
-                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.DEFAULT"/>
 
                 <data
                     android:host="*"
                     android:mimeType="*/*"
                     android:pathPattern=".*\\.kml"
-                    android:scheme="file" />
+                    android:scheme="file"/>
                 <data
                     android:host="*"
                     android:mimeType="*/*"
                     android:pathPattern=".*\\.kmz"
-                    android:scheme="file" />
+                    android:scheme="file"/>
                 <data
                     android:host="*"
                     android:mimeType="*/*"
                     android:pathPattern=".*\\.json"
-                    android:scheme="file" />
+                    android:scheme="file"/>
             </intent-filter>
+
         </activity>
 
         <activity
@@ -91,6 +98,18 @@
             android:screenOrientation="portrait"
             android:theme="@style/SettingsTheme"/>
 
+        <activity
+            android:name=".ui.front_page.FrontPageActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme"/>
+
+        <activity
+            android:name=".ui.front_page.getting_about.TransportActivity"
+            android:theme="@style/SettingsTheme"/>
+
+        <activity
+            android:name=".ui.front_page.good_to_know.GoodToKnowActivity"
+            android:theme="@style/SettingsTheme"/>
 
 
         <activity
@@ -105,27 +124,28 @@
 
         <activity
             android:name="me.carc.btown.camera.CameraActivity"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"/>
 
 
-        <activity android:name=".extras.PublicTransportPlanExtra"
-                  android:theme="@style/AppTheme" />
+        <activity
+            android:name=".extras.PublicTransportPlanExtra"
+            android:theme="@style/AppTheme"/>
 
-        <activity android:name=".extras.PublicTransportPlan"
-            android:theme="@style/AppTheme" />
-
+        <activity
+            android:name=".extras.PublicTransportPlan"
+            android:theme="@style/AppTheme"/>
 
 
         <activity
             android:name="me.carc.btown.map.sheets.wiki.WikiWebViewActivity"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"/>
 
 
         <!-- TOURS -->
         <activity
             android:name="me.carc.btown.tours.ToursLaunchActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.FullScrnActivity" />
+            android:theme="@style/AppTheme.FullScrnActivity"/>
 
         <activity
             android:name="me.carc.btown.login.LoginActivity"
@@ -133,10 +153,8 @@
             android:theme="@style/SplashTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MapActivity" />
+                android:value=".map.MapActivity"/>
         </activity>
-
-
 
 
         <activity
@@ -146,7 +164,7 @@
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MapActivity" />
+                android:value=".map.MapActivity"/>
         </activity>
 
         <activity
@@ -156,7 +174,7 @@
             android:theme="@style/AppTheme.FullScrnActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".tours.ToursLaunchActivity" />
+                android:value=".tours.ToursLaunchActivity"/>
         </activity>
 
         <activity
@@ -166,7 +184,7 @@
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".tours.top_pick_lists.FourSquareListsActivity" />
+                android:value=".tours.top_pick_lists.FourSquareListsActivity"/>
         </activity>
 
         <activity
@@ -175,9 +193,8 @@
             android:theme="@style/AppTheme.FullScrnActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".tours.top_pick_lists.FourSquareListDetailsActivity" />
+                android:value=".tours.top_pick_lists.FourSquareListDetailsActivity"/>
         </activity>
-
 
 
         <activity
@@ -187,7 +204,7 @@
             android:theme="@style/AppTheme.FullScrnActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MapActivity" />
+                android:value=".map.MapActivity"/>
         </activity>
 
         <activity
@@ -197,7 +214,7 @@
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MapActivity" />
+                android:value=".map.MapActivity"/>
         </activity>
 
         <activity
@@ -206,7 +223,7 @@
             android:theme="@style/AppTheme.FullScrnActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MapActivity" />
+                android:value=".map.MapActivity"/>
         </activity>
         <activity
             android:name="me.carc.btown.tours.attractionPager.AttractionPagerActivity"
@@ -214,14 +231,14 @@
             android:theme="@style/AppTheme.FullScrnActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MapActivity" />
+                android:value=".map.MapActivity"/>
         </activity>
         <activity
             android:name="me.carc.btown.tours.AttractionShowcaseImageActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.ShowCaseGallery">
         </activity>
-            <!--android:screenOrientation="portrait"-->
+        <!--android:screenOrientation="portrait"-->
 
         <activity
             android:name="me.carc.btown.tours.attractionPager.AttractionMapActivity"
@@ -229,7 +246,7 @@
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".tours.attractionPager.AttractionPagerActivity" />
+                android:value=".tours.attractionPager.AttractionPagerActivity"/>
         </activity>
 
 
@@ -245,12 +262,12 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/paths" />
+                android:resource="@xml/paths"/>
         </provider>
 
         <meta-data
             android:name="io.fabric.ApiKey"
-            android:value="fbef5068aff924f588f1045c445fae0a1e2eaa4a" />
+            android:value="fbef5068aff924f588f1045c445fae0a1e2eaa4a"/>
 
 
         <provider
@@ -259,16 +276,27 @@
             android:exported="false">
         </provider>
 
+
         <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
-            android:label="@string/app_name"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
-            tools:replace="android:theme" />
+            android:label="@string/app_name"/>
+        <activity
+            android:name="com.facebook.CustomTabActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+
+                <data android:scheme="@string/fb_login_protocol_scheme"/>
+            </intent-filter>
+        </activity>
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
-            android:value="@string/facebook_app_id" />
+            android:value="@string/facebook_app_id"/>
 
     </application>
 

@@ -50,10 +50,9 @@ import android.widget.TextView;
 
 import com.android.vending.billing.IInAppBillingService;
 import com.bumptech.glide.Glide;
-import com.facebook.CallbackManager;
-import com.facebook.FacebookSdk;
 import com.facebook.Profile;
-import com.facebook.appevents.AppEventsLogger;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -76,26 +75,24 @@ import me.carc.btown.common.C;
 import me.carc.btown.common.CacheDir;
 import me.carc.btown.common.Commons;
 import me.carc.btown.common.TinyDB;
-import me.carc.btown.extras.BackgroundImageDialog;
-import me.carc.btown.extras.PublicTransportPlan;
 import me.carc.btown.extras.PublicTransportPlanExtra;
-import me.carc.btown.login.LoginActivity;
 import me.carc.btown.settings.Preferences;
 import me.carc.btown.settings.SendFeedback;
 import me.carc.btown.settings.SettingsActivity;
 
-public class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity extends AppCompatActivity {
 
-    private static final String TAG = C.DEBUG + Commons.getTag();
+    private static final String TAG = BaseActivity.class.getName();
+
     private static final String SAVED_HEADER_BACKGROUND = "SAVED_HEADER_BACKGROUND";
-    public static final String FIREBASE_MSG_BOARD_FEEDBACK = "FEEDBACK";
 
     private static final int RESULT_SETTINGS = 71;
     private static final int RESULT_LOGIN = 72;
     private static final int RESULT_DONATE = 73;
+    private static final int RESULT_PLAY_SERVICES_RESOLUTION = 74;
 
     public static final String TRANSPORTR_INTENT = "de.grobox.liberario";
-    public static final String TRANSLATE_INTENT  = "com.google.android.apps.translate";
+    public static final String TRANSLATE_INTENT = "com.google.android.apps.translate";
 
 
     private static IInAppBillingService mBillingService;
@@ -113,21 +110,8 @@ public class BaseActivity extends AppCompatActivity {
     private static ProgressDialog mProgressDialog;
 
     protected TinyDB db;
-    private CacheDir cacheDir;
-
-    protected CallbackManager callbackManager;
 
 
-    /**
-     * Initialize the facebook sdk.
-     * And then callback manager will handle the login responses.
-     */
-    protected CallbackManager facebookSDKInitialize() {
-        FacebookSdk.sdkInitialize(getApplicationContext());
-        callbackManager = CallbackManager.Factory.create();
-        AppEventsLogger.activateApp(getApplication());
-        return callbackManager;
-    }
 
     public App getApp() {
         return (App) getApplication();
@@ -146,7 +130,6 @@ public class BaseActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         getApp().setCurrentActivity(this);
-        facebookSDKInitialize();
 
         Intent serviceIntent = new Intent("com.android.vending.billing.InAppBillingService.BIND");
         serviceIntent.setPackage("com.android.vending");
@@ -159,9 +142,11 @@ public class BaseActivity extends AppCompatActivity {
         hideProgressDialog();
         clearReferences();
 
-        if (mBillingService != null) {
-            unbindService(mServiceConnection);
-        }
+        try {
+            if (mBillingService != null) {
+                unbindService(mServiceConnection);
+            }
+        } catch (Exception e) {/* EMPTY CATCH */ }
     }
 
     @Override
@@ -224,6 +209,9 @@ public class BaseActivity extends AppCompatActivity {
                     showDonateDialogErrorCallback(null);
                 }
                 break;
+
+            case RESULT_PLAY_SERVICES_RESOLUTION:
+                break;
         }
     }
 
@@ -243,11 +231,9 @@ public class BaseActivity extends AppCompatActivity {
     public void getBaseFunctions() {
         db = TinyDB.getTinyDB();
         if (db == null)
-            db = new TinyDB(this);
+            db = new TinyDB(getApplicationContext());
 
-        cacheDir = CacheDir.getCacheDir();
-        if (cacheDir == null)
-            cacheDir = new CacheDir(this);
+        new CacheDir(getApplicationContext());
 
         calculateImageHeight();
     }
@@ -357,18 +343,18 @@ public class BaseActivity extends AppCompatActivity {
     }
 
 
-    protected void removeToolBarFlags(Toolbar toolbar){
+    protected void removeToolBarFlags(Toolbar toolbar) {
         AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams) toolbar.getLayoutParams();
         params.setScrollFlags(0);
     }
 
 
-    protected void scrollHider(RecyclerView rv, final FloatingActionButton fab){
+    protected void scrollHider(RecyclerView rv, final FloatingActionButton fab) {
         rv.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                if(dy>0)
+                if (dy > 0)
                     fab.hide();
                 else
                     fab.show();
@@ -385,7 +371,7 @@ public class BaseActivity extends AppCompatActivity {
      * @param resId            The dialog icon
      * @param packageToInstall The id of app on Playstore
      */
-    public void installExtApp(final String title, final String content, int resId,  final String packageToInstall) {
+    public void installExtApp(final String title, final String content, int resId, final String packageToInstall) {
         new AlertDialog.Builder(BaseActivity.this)
                 .setTitle(title)
                 .setIcon(resId)
@@ -394,11 +380,21 @@ public class BaseActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
-                        // download from android market
-                        Intent intent = new Intent(Intent.ACTION_VIEW);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        intent.setData(Uri.parse(IntentUtils.getUrlWithRef(packageToInstall)));
-                        startActivity(intent);
+
+                        GoogleApiAvailability googleAPI = GoogleApiAvailability.getInstance();
+                        int result = googleAPI.isGooglePlayServicesAvailable(BaseActivity.this);
+                        if (result == ConnectionResult.SUCCESS) {
+                            // download from android market
+                            Intent intent = new Intent(Intent.ACTION_VIEW);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            intent.setData(Uri.parse(IntentUtils.getUrlWithRef(packageToInstall)));
+                            startActivity(intent);
+
+                        } else {
+                            if (googleAPI.isUserResolvableError(result)) {
+                                googleAPI.getErrorDialog(BaseActivity.this, result, RESULT_PLAY_SERVICES_RESOLUTION).show();
+                            }
+                        }
                     }
                 })
                 .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
@@ -481,6 +477,16 @@ public class BaseActivity extends AppCompatActivity {
         mProgressDialog.show();
     }
 
+    public void showModalProgressDialog(@Nullable String msg) {
+        if (mProgressDialog == null) {
+            mProgressDialog = new ProgressDialog(this);
+            mProgressDialog.setIndeterminate(true);
+            mProgressDialog.setCancelable(false);
+        }
+        mProgressDialog.setMessage(msg);
+        mProgressDialog.show();
+    }
+
     public void showProgressDialog() {
         showProgressDialog(getString(R.string.shared_string_loading));
     }
@@ -531,44 +537,40 @@ public class BaseActivity extends AppCompatActivity {
 
     private void configureNavView() {
         NavigationView navigationView = findViewById(R.id.navigation_view);
-        navigationView.setNavigationItemSelectedListener(navigationViewListener);
+        if(Commons.isNotNull(navigationView)) {
+            navigationView.setNavigationItemSelectedListener(navigationViewListener);
 
-        if (!Preferences.showTours(this)) {
-            navigationView.getMenu().clear();
-            navigationView.inflateMenu(R.menu.menu_drawer_no_tours);
-        }
-
-        View headerLayout = navigationView.getHeaderView(0);
-
-        ImageView header = headerLayout.findViewById(R.id.nav_header_background_image);
-        header.setImageResource(getBackground());
-        header.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                BackgroundImageDialog.showInstance(getApplicationContext());
+            if (!Preferences.showTours(this)) {
+                navigationView.getMenu().clear();
+                navigationView.inflateMenu(R.menu.menu_drawer_no_tours);
             }
-        });
 
-        TextView headeUser = headerLayout.findViewById(R.id.nav_header_email);
+            View headerLayout = navigationView.getHeaderView(0);
 
-        ImageView userImage = headerLayout.findViewById(R.id.nav_header_user_image);
-        userImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivityForResult(new Intent(BaseActivity.this, LoginActivity.class), RESULT_LOGIN);
+            ImageView header = headerLayout.findViewById(R.id.nav_header_background_image);
+            header.setImageResource(getBackground());
+
+            TextView headeUser = headerLayout.findViewById(R.id.nav_header_email);
+
+            ImageView userImage = headerLayout.findViewById(R.id.nav_header_user_image);
+            userImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+//                startActivityForResult(new Intent(BaseActivity.this, LoginActivity.class), RESULT_LOGIN);
+                }
+            });
+
+            FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+            Profile facebookUser = Profile.getCurrentProfile();
+            if (Commons.isNotNull(firebaseUser) || Commons.isNotNull(facebookUser)) {
+                headeUser.setText(facebookUser != null ? facebookUser.getName() : firebaseUser.getDisplayName());
+                Glide.with(this)
+                        .load(facebookUser != null ? facebookUser.getProfilePictureUri(50, 50) : firebaseUser.getPhotoUrl())
+                        .into(userImage);
+            } else {
+                userImage.setImageResource(R.mipmap.ic_launcher_skyline_rnd_blue);
+                headeUser.setText(R.string.app_name);
             }
-        });
-
-        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        Profile facebookUser = Profile.getCurrentProfile();
-        if (Commons.isNotNull(firebaseUser) || Commons.isNotNull(facebookUser)) {
-            headeUser.setText(facebookUser != null ? facebookUser.getName() : firebaseUser.getDisplayName());
-            Glide.with(this)
-                    .load(facebookUser != null ? facebookUser.getProfilePictureUri(50, 50) : firebaseUser.getPhotoUrl())
-                    .into(userImage);
-        } else {
-            userImage.setImageResource(R.mipmap.ic_launcher_skyline_rnd_blue);
-            headeUser.setText(R.string.app_name);
         }
     }
 
@@ -582,10 +584,7 @@ public class BaseActivity extends AppCompatActivity {
                     break;
 
                 case R.id.nav_transport_maps:
-                    if(BuildConfig.DEBUG)
-                        transportPlansExtra();
-                    else
-                        transportPlans();
+                    transportPlansExtra();
                     break;
 
                 case R.id.nav_translate:
@@ -598,6 +597,23 @@ public class BaseActivity extends AppCompatActivity {
 
                 case R.id.nav_donate:
                     showDonateDialog();
+                    break;
+
+                case R.id.nav_rate:
+                    new SendFeedback(BaseActivity.this, SendFeedback.TYPE_RATE);
+                    break;
+
+                case R.id.nav_share:
+                    Intent intent = new Intent(Intent.ACTION_SEND);
+                    intent.setAction(Intent.ACTION_SEND);
+                    intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name));
+                    intent.putExtra(Intent.EXTRA_TEXT, "https://play.google.com/store/apps/details?id=" + getPackageName());
+                    intent.setType("text/plain");
+                    startActivity(Intent.createChooser(intent, getString(R.string.shared_string_share)));
+                    break;
+
+                case R.id.nav_feedback:
+                    new SendFeedback(BaseActivity.this, SendFeedback.TYPE_FEEDBACK);
                     break;
 
             }
@@ -634,10 +650,6 @@ public class BaseActivity extends AppCompatActivity {
 
     public void transportPlansExtra() {
         startActivity(new Intent(BaseActivity.this, PublicTransportPlanExtra.class));
-    }
-
-    public void transportPlans() {
-        startActivity(new Intent(BaseActivity.this, PublicTransportPlan.class));
     }
 
     public void settings() {

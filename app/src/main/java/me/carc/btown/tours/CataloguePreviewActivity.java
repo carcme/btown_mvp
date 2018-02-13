@@ -81,6 +81,8 @@ public class CataloguePreviewActivity extends BaseActivity implements View.OnCli
     ScrollView launchSrollview;
     @BindView(R.id.launchBtn)
     ExploreButton launchBtn;
+    @BindView(R.id.launchEndBtn)
+    ExploreButton launchEndBtn;
 
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -104,6 +106,7 @@ public class CataloguePreviewActivity extends BaseActivity implements View.OnCli
             summary.setText(card.getCatalogueDesc(isGermanLanguage));
 
             launchBtn.setOnClickListener(this);
+            launchEndBtn.setOnClickListener(this);  // add second button to end of description (does same thing)
 
             catalogueImage.setImageDrawable(Holder.get());
 
@@ -169,6 +172,7 @@ public class CataloguePreviewActivity extends BaseActivity implements View.OnCli
 
         switch (v.getId()) {
             case R.id.launchBtn:
+            case R.id.launchEndBtn:
                     launchCollection();
                 break;
 
