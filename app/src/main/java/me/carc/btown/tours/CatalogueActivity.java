@@ -2,6 +2,7 @@ package me.carc.btown.tours;
 
 import android.annotation.TargetApi;
 import android.app.ActivityOptions;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
@@ -10,6 +11,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -22,20 +24,20 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import me.carc.btown.App;
 import me.carc.btown.BaseActivity;
 import me.carc.btown.BuildConfig;
 import me.carc.btown.R;
 import me.carc.btown.Utils.Holder;
 import me.carc.btown.Utils.ViewUtils;
 import me.carc.btown.common.C;
-import me.carc.btown.common.Commons;
 import me.carc.btown.common.interfaces.DrawableClickListener;
+import me.carc.btown.data.ToursDataClass;
 import me.carc.btown.tours.adapters.ToursAdapter;
 import me.carc.btown.tours.data.FirebaseService;
 import me.carc.btown.tours.model.TourCatalogue;
 import me.carc.btown.tours.model.TourHolderResult;
 import me.carc.btown.ui.custom.MyCustomLayoutManager;
-import me.carc.btown.ui.front_page.FrontPagePresenter;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -43,32 +45,23 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class CatalogueActivity extends BaseActivity {
+    private static final String TAG = CatalogueActivity.class.getName();
 
-    private static final String TAG = C.DEBUG + Commons.getTag();
     public static final String CATALOGUE = "SELECTED_CATALOGUE";
+    public static final String CATALOGUE_INDEX = "SELECTED_CATALOGUE_INDEX";
 
     public static final String SERVER_FILE = "SERVER_FILE";
     public static final String JSON_VERSION= "JSON_VERSION";
 
     public static final String EXTRA_SHOW_ON_MAP = "EXTRA_SHOW_ON_MAP";
 
-
     private ToursAdapter mAdapter;
 
-    @BindView(R.id.catalogue_recycler)
-    RecyclerView recyclerView;
-
-    @BindView(R.id.toursToolbar)
-    Toolbar toolbar;
-
-    @BindView(R.id.inventoryProgressBar)
-    ProgressBar progressLayout;
-
-    @BindView(R.id.appBarProgressBar)
-    ProgressBar appBarProgressBar;
-
-    @BindView(R.id.fabExit)
-    FloatingActionButton fabExit;
+    @BindView(R.id.catalogue_recycler)      RecyclerView recyclerView;
+    @BindView(R.id.toursToolbar)            Toolbar toolbar;
+    @BindView(R.id.inventoryProgressBar)    ProgressBar progressLayout;
+    @BindView(R.id.appBarProgressBar)       ProgressBar appBarProgressBar;
+    @BindView(R.id.fabExit)                 FloatingActionButton fabExit;
 
     @OnClick(R.id.fabExit)
     void done() {
@@ -110,15 +103,10 @@ public class CatalogueActivity extends BaseActivity {
     }
 
     private void getJsonCollections() {
-
         setProgressItems(View.VISIBLE);
 
-//        String json = TinyDB.getTinyDB().getString(SERVER_FILE);
-
-        TourHolderResult serverFile = FrontPagePresenter.toursPreLoad;
-
-        if(Commons.isNotNull(serverFile)){
-            ArrayList<TourCatalogue> tours = serverFile.tours;
+        if(ToursDataClass.getInstance().hasTours()/*serverFile*/){
+            ArrayList<TourCatalogue> tours = ToursDataClass.getInstance().getAllTours()/*serverFile.tours*/;
             setupRecycler(tours);
         } else {
 
@@ -156,6 +144,20 @@ public class CatalogueActivity extends BaseActivity {
 
             @Override
             public void OnClick(View v, Drawable drawable, int pos) {
+                // Check if the tours are being updated. Try again later if they are
+                if(((App)getApplication()).isUpdatingFirebase()) {
+                    AlertDialog.Builder dlg = new AlertDialog.Builder(CatalogueActivity.this)
+                            .setTitle(R.string.getting_tours)
+                            .setMessage(R.string.getting_tours_desc)
+                            .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    finish();
+                                }
+                            });
+                    return;
+                }
+
                 TourCatalogue catalogue = mAdapter.getItem(pos);
 
                 // show tour on map?
@@ -166,7 +168,7 @@ public class CatalogueActivity extends BaseActivity {
                 } else {  // show tour in tabs and pager
                     Holder.set(drawable);
                     Intent intent = new Intent(CatalogueActivity.this, CataloguePreviewActivity.class);
-                    intent.putExtra(CATALOGUE, catalogue);
+                    intent.putExtra(CATALOGUE_INDEX, pos);
 
                     Bundle options = null;
                     if (C.HAS_L)

@@ -94,8 +94,6 @@ public class MapActivity extends BaseActivity implements
     @BindView(R.id.fab_search)              FloatingActionButton fabSearch;
     @BindView(R.id.fab_CameraAndPoiList)    FloatingActionButton fabCameraAndPoiList;
     @BindView(R.id.fab_menu)                FloatingActionButton fabMenu;
-    @BindView(R.id.fab_ZoomIn)              FloatingActionButton fabZoomIn;
-    @BindView(R.id.fab_ZoomOut)             FloatingActionButton fabZoomOut;
     @BindView(R.id.fab_location)            FloatingActionButton trackingModeFab;
     @BindView(R.id.crosshairIcon)           ImageView crosshairIcon;
     @BindView(R.id.fabBack)                 FloatingActionButton fabBack;

@@ -2,12 +2,21 @@
 <layer-list
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-
     <item>
         <shape
-            android:shape="oval"
-            android:tint="#80AAAAAA"
-            android:gravity="center"/>
+            android:gravity="center"
+            android:shape="oval">
+
+            <solid
+                android:color="#80AAAAAA"/>
+
+<!--
+            <size
+                android:width="@dimen/margin_standard"
+                android:height="@dimen/margin_standard"/>
+-->
+
+        </shape>
     </item>
 
     <item

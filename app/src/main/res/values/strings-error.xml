@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <string name="ssl_date_invalid" translatable="false">The date of the certificate is invalid</string>
+    <string name="ssl_cert_expired" translatable="false">The certificate has expired</string>
+    <string name="ssl_hostname_mismatch" translatable="false">Hostname mismatch</string>
+    <string name="ssl_generic_error" translatable="false">A generic error occurred</string>
+    <string name="ssl_not_yet_valid" translatable="false">The certificate is not yet valid</string>
+    <string name="ssl_untrusted" translatable="false">The certificate authority is not trusted</string>
+
+
 
     <string name="shared_string_error">"Error!"</string>
     <string name="login_required">You must login to proceed or press the \'X\' above to close %s</string>
@@ -26,13 +34,10 @@
 
     <string name="error_image_load_failed">The image failed to load.</string>
 
+    <string name="no_image_no_connection_desc">The image was not found on the device. Check your connection and try again</string>
+    <string name="no_image_no_connection_title">Image Load Error</string>
 
-    <string name="ssl_date_invalid" translatable="false">The date of the certificate is invalid</string>
-    <string name="ssl_cert_expired" translatable="false">The certificate has expired</string>
-    <string name="ssl_hostname_mismatch" translatable="false">Hostname mismatch</string>
-    <string name="ssl_generic_error" translatable="false">A generic error occurred</string>
-    <string name="ssl_not_yet_valid" translatable="false">The certificate is not yet valid</string>
-    <string name="ssl_untrusted" translatable="false">The certificate authority is not trusted</string>
+
 
 
 </resources>

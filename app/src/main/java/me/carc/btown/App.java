@@ -16,6 +16,7 @@ import com.squareup.leakcanary.LeakCanary;
 import io.fabric.sdk.android.Fabric;
 import me.carc.btown.common.Commons;
 import me.carc.btown.common.NetworkChangeReceiver;
+import me.carc.btown.common.TinyDB;
 import me.carc.btown.common.injection.component.ApplicationComponent;
 import me.carc.btown.common.injection.component.DaggerApplicationComponent;
 import me.carc.btown.common.injection.module.ApplicationModule;
@@ -35,6 +36,7 @@ public class App extends Application {
     private NetworkChangeReceiver networkChangeReceiver;
     private AppCompatActivity mCurrentActivity = null;
     private Location mLatestLocation;
+    private boolean isUpdatingFirebase;
 
 
     public Location getLatestLocation() {
@@ -63,6 +65,10 @@ public class App extends Application {
         if (Commons.isNull(database))
             database = initDB();
         return database;
+    }
+
+    public TinyDB getTinyDB() {
+        return new TinyDB(App.this);
     }
 
     public ApplicationComponent getComponent() {
@@ -102,8 +108,16 @@ public class App extends Application {
         getFirebaseTours();
     }
 
+
+    public void setUpdatingFirebase(boolean updating){
+        isUpdatingFirebase = updating;
+    }
+    public boolean isUpdatingFirebase(){
+        return isUpdatingFirebase;
+    }
+
     public void getFirebaseTours() {
-        if(isNetworkAvailable()) {
+        if(isNetworkAvailable() && !isUpdatingFirebase()) {
             imagesServiceIntent = new Intent(getApplicationContext(), FirebaseImageDownloader.class);
             startService(imagesServiceIntent);
         }

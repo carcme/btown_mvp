@@ -162,11 +162,13 @@ public class ImageDialog extends DialogFragment {
 
     private void retryNetworkImage() {
         String loadString = getArguments().getString(IMAGE_URL);
-        Glide.with(getActivity())
-                .load(loadString)
-                .listener(glideListener)
-                .crossFade(500)
-                .into(image);
+        // Crashlytics  #138 - check user hasn't got bored and left
+        if(getActivity() != null)
+            Glide.with(getActivity())
+                    .load(loadString)
+                    .listener(glideListener)
+                    .crossFade(500)
+                    .into(image);
     }
 
     private RequestListener<String, GlideDrawable> glideListener = new RequestListener<String, GlideDrawable>() {

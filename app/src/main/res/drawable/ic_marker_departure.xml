@@ -4,8 +4,18 @@
     <item>
         <shape
             android:gravity="center"
-            android:shape="oval"
-            android:tint="#80AAAAAA" />
+            android:shape="oval">
+
+            <solid
+                android:color="#80AAAAAA"/>
+
+            <!--
+                        <size
+                            android:width="@dimen/margin_standard"
+                            android:height="@dimen/margin_standard"/>
+            -->
+
+        </shape>
     </item>
 
     <item

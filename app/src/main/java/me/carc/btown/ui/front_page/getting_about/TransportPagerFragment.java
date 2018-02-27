@@ -33,6 +33,7 @@ import android.widget.ImageView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import me.carc.btown.R;
 
 public class TransportPagerFragment extends Fragment {
@@ -46,29 +47,26 @@ public class TransportPagerFragment extends Fragment {
 
     private static final int TAB_COUNT = AIRPORT_TAB + 1;
 
-    PagerAdapter mPagerAdapter;
+    private Unbinder unbinder;
 
     @BindView(R.id.pager) ViewPager viewPager;
     @BindView(R.id.tab_layout) TabLayout tabLayout;
     @BindView(R.id.collapsing_toolbar) CollapsingToolbarLayout collapsing_toolbar;
     @BindView(R.id.headerImage) ImageView headerImage;
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_front_page_main, container, false);
-        ButterKnife.bind(this, view);
+        unbinder = ButterKnife.bind(this, view);
 
         // don't recreate the fragments when changing tabs
         viewPager.setOffscreenPageLimit(TAB_COUNT);
 
-        mPagerAdapter = new PagerAdapter(getFragmentManager());
-        viewPager.setAdapter(mPagerAdapter);
+        PagerAdapter pagerAdapter = new PagerAdapter(getFragmentManager());
+        viewPager.setAdapter(pagerAdapter);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) { /* EMPTY*/ }
 
             @Override
             public void onPageSelected(int i) {
@@ -83,9 +81,7 @@ public class TransportPagerFragment extends Fragment {
             }
 
             @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
+            public void onPageScrollStateChanged(int state) { /* EMPTY*/ }
         });
 
         tabLayout.setupWithViewPager(viewPager);
@@ -129,5 +125,11 @@ public class TransportPagerFragment extends Fragment {
 
             return getString(R.string.transport_tab_overview);
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        unbinder.unbind();
+        super.onDestroy();
     }
 }

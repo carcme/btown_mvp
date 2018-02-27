@@ -24,5 +24,8 @@
 
     <string name="error_image_load_failed">Das Bild konnte nicht geladen werden.</string>
 
+    <string name="no_image_no_connection_desc">Das Bild wurde nicht auf dem Gerät gefunden. Überprüfen Sie Ihre Verbindung und versuchen Sie es erneut</string>
+    <string name="no_image_no_connection_title">Bildladefehler</string>
+
 
 </resources>

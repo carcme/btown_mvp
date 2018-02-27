@@ -253,7 +253,9 @@
     <string name="nearby_tourism">Nearby Tourism</string>
     <string name="drop_a_pin">Drop a Pin</string>
     <string name="clear_all_pins">Clear all Pins</string>
-    <string name="front_page_header_desc">Header Image. Touch to change</string>
+
+
+    <string name="building">Building</string>
 
 
 </resources>

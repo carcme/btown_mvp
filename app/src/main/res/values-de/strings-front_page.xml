@@ -133,6 +133,7 @@
     <string name="goodtoknow_wifi_text1">Öffentliches Wi-Fi gibt es mittlerweile fast überall in Berlin.\n\nNutze den nachfolgenden Link, um kostenfreie Hotspots in deiner Nähe ausfindig zu machen.\nwww.publicwifi.de</string>
 
 
+    <string name="front_page_header_desc">Kopfbild. Berühren Sie, um zu ändern</string>
 
 
 </resources>

@@ -202,9 +202,17 @@ public class SinglePoiOptionsDialog extends BottomSheetDialogFragment {
                 } else {
                     featureType.setText(Commons.capitalizeFirstLetter(node.tags.cuisine));
                 }
-            } else
-                featureType.setText(Commons.isEmpty(type) ? getString(R.string.shared_string_unknown) : node.tags.getPrimaryType());
-
+            } else {
+                if(Commons.isEmpty(type)) {
+                    featureType.setText(getString(R.string.shared_string_unknown));
+                } else {
+                    if(type.equals(node.tags.building) && node.tags.building.equalsIgnoreCase("yes")) {
+                        node.tags.building = String.format("%s: %s", getString(R.string.building), getString(R.string.shared_string_unknown));
+                        featureType.setText(node.tags.building);
+                    } else
+                        featureType.setText(node.tags.getPrimaryType());
+                }
+            }
             String address = node.tags.getAddress();
 
             checkFavorite(node.id);
@@ -224,10 +232,10 @@ public class SinglePoiOptionsDialog extends BottomSheetDialogFragment {
             node.iconId = 0;
             if (iconStr != null) {
                 node.iconId = getResources().getIdentifier(iconStr, "raw", getActivity().getPackageName());
-                if (node.iconId == 0) {
-                    featureIcon.setImageResource(R.drawable.ic_plus_red);
-                    featureType.setText(iconStr.isEmpty() ? "Unknown" : iconStr);
-                } else {
+                if (node.iconId != 0) {
+//                    featureIcon.setImageResource(R.drawable.ic_plus_red);
+//                    featureType.setText(iconStr.isEmpty() ? getString(R.string.shared_string_unknown) : iconStr);
+//                } else {
                     featureIcon.setImageResource(node.iconId);
                 }
             }

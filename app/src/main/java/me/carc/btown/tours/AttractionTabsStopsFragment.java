@@ -101,7 +101,7 @@ public class AttractionTabsStopsFragment extends Fragment {
     }
 
     private void setupRecyclerView(final RecyclerView recyclerView) {
-        Bundle args = getArguments();
+        final Bundle args = getArguments();
         if(Commons.isNotNull(args)) {
 
             ArrayList<Attraction> list = args.getParcelableArrayList(CataloguePreviewActivity.ATTRACTIONS_LIST);
@@ -119,16 +119,12 @@ public class AttractionTabsStopsFragment extends Fragment {
                     recyclerView, new MyRecyclerItemClickListener.OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, int position) {
-
-                    // lots of info to process - show a modal dialog so user doesn't press stuff while loading
+                    // lots of info to process and views to build - show a modal dialog so user doesn't press stuff while loading
                     showLoadingDialog();
 
-                    ArrayList<Attraction> attractions = getArguments().getParcelableArrayList(CataloguePreviewActivity.ATTRACTIONS_LIST);
-
                     Intent intent = new Intent(getActivity(), AttractionPagerActivity.class);
-                    intent.putParcelableArrayListExtra(CataloguePreviewActivity.ATTRACTIONS_LIST, attractions);
-                    intent.putExtra("INDEX", position);
-
+                    intent.putExtra(CatalogueActivity.CATALOGUE_INDEX, args.getInt(CatalogueActivity.CATALOGUE_INDEX));
+                    intent.putExtra(AttractionPagerActivity.ATTRACTION_INDEX, position);
                     startActivityForResult(intent, RESULT_ATTRACTION);
                 }
 

@@ -53,5 +53,7 @@
     <!-- FOUR SQUARE-->
     <string name="load_more_photos" formatted="false">Mehr laden ( %d )</string>
 
+    <string name="getting_tours">Herunterladen von Touren</string>
+    <string name="getting_tours_desc">Die Toureninformationen werden heruntergeladen. Das dauert nicht lange. Bitte versuche es gleich noch einmal</string>
 
 </resources>

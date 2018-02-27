@@ -63,6 +63,7 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import me.carc.btown.R;
 import me.carc.btown.Utils.AndroidUtils;
 import me.carc.btown.Utils.ImageUtils;
@@ -94,6 +95,8 @@ public class PlaceholderFragment extends Fragment {
     private Attraction attractionData;
     private ArrayList<CardView> cards;
     private ArrayList<InfoCard> items;
+
+    private Unbinder unbinder;
 
     @BindView(R.id.main_content)
     CoordinatorLayout root;
@@ -184,11 +187,10 @@ public class PlaceholderFragment extends Fragment {
         super.onDetach();
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.attraction_display_activity, container, false);
-        ButterKnife.bind(this, rootView);
+        unbinder = ButterKnife.bind(this, rootView);
 
         attractionData = getArguments().getParcelable("data");
 
@@ -237,6 +239,12 @@ public class PlaceholderFragment extends Fragment {
         }
 
         return rootView;
+    }
+
+    @Override
+    public void onDestroy() {
+        unbinder.unbind();
+        super.onDestroy();
     }
 
     private class LoadHeaderImage implements Runnable {

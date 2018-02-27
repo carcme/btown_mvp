@@ -25,7 +25,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        android:text="@string/front_menu_lists"
+        tools:text="@string/front_menu_lists"
         android:fontFamily="serif"
         android:textColor="@color/white"
         android:textSize="30sp"

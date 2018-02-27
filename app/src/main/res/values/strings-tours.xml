@@ -57,4 +57,7 @@
     <!-- FOUR SQUARE-->
     <string name="load_more_photos" formatted="false">Load More ( %d )</string>
 
+    <string name="getting_tours">Downloading Tours</string>
+    <string name="getting_tours_desc">The tours information is being downloaded. This doesn\'t take long. Please try again in a moment</string>
+
 </resources>

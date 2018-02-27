@@ -132,5 +132,7 @@
     <string name="goodtoknow_wifi_text1">Public WiFi is available throughout Berlin and you should be able to get at least 30 minutes free without registration.\n\nUse the link below to find over 3,300 public Wi-Fi hotspots around Berlin and Potsdam.\nwww.publicwifi.de</string>
 
 
+    <string name="front_page_header_desc">Header Image. Touch to change</string>
+
 
 </resources>

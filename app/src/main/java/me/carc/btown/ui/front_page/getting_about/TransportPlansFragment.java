@@ -1,20 +1,3 @@
-/*    Transportr
- *    Copyright (C) 2013 - 2016 Torsten Grote
- *
- *    This program is Free Software: you can redistribute it and/or modify
- *    it under the terms of the GNU General Public License as
- *    published by the Free Software Foundation, either version 3 of the
- *    License, or (at your option) any later version.
- *
- *    This program is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *    GNU General Public License for more details.
- *
- *    You should have received a copy of the GNU General Public License
- *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 package me.carc.btown.ui.front_page.getting_about;
 
 import android.app.Fragment;
@@ -39,6 +22,7 @@ import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import me.carc.btown.R;
 import me.carc.btown.common.interfaces.DrawableClickListener;
 import me.carc.btown.extras.PublicTransportPlan;
@@ -53,6 +37,7 @@ public class TransportPlansFragment extends Fragment {
     private static final int RESULT_OPENED = 789;
 
     private TransportPlanSelectionAdapter mAdapter;
+    private Unbinder unbinder;
 
     @BindView(R.id.catalogue_recycler)
     RecyclerView recyclerView;
@@ -80,11 +65,17 @@ public class TransportPlansFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.tours_catalogue_activity, container, false);
-        ButterKnife.bind(this, view);
+        unbinder = ButterKnife.bind(this, view);
 
         setupUI();
 
         return view;
+    }
+
+    @Override
+    public void onDestroy() {
+        unbinder.unbind();
+        super.onDestroy();
     }
 
     private void setupUI() {
@@ -134,7 +125,7 @@ public class TransportPlansFragment extends Fragment {
         appBarProgressBar.setVisibility(View.GONE);
     }
 
-    private RecyclerView.OnScrollListener onScrollListener = new RecyclerView.OnScrollListener() {
+/*    private RecyclerView.OnScrollListener onScrollListener = new RecyclerView.OnScrollListener() {
         @Override
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
             if(dy > 0)
@@ -143,6 +134,7 @@ public class TransportPlansFragment extends Fragment {
                 fabExit.show();
         }
     };
+*/
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

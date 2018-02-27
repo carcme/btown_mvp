@@ -48,6 +48,8 @@
   public *** get*();
 }
 
+-dontwarn me.carc.btown.tours.attractionPager.AttractionPagerActivity
+
 # Crashlytics
 -keepattributes *Annotation*
 -keepattributes SourceFile,LineNumberTable

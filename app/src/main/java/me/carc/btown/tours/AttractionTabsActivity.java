@@ -28,6 +28,7 @@ import me.carc.btown.common.C;
 import me.carc.btown.common.CacheDir;
 import me.carc.btown.common.Commons;
 import me.carc.btown.common.interfaces.ToursScrollListener;
+import me.carc.btown.data.ToursDataClass;
 import me.carc.btown.tours.model.Attraction;
 import me.carc.btown.ui.custom.MyFragmentPagerAdapter;
 
@@ -65,9 +66,13 @@ public class AttractionTabsActivity extends BaseActivity implements
         ButterKnife.bind(this);
 
         Intent intent = getIntent();
-        if (intent.hasExtra(CataloguePreviewActivity.ATTRACTIONS_LIST)) {
+        if (intent.hasExtra(CatalogueActivity.CATALOGUE_INDEX)) {
             tourTitle = intent.getStringExtra(CataloguePreviewActivity.CATALOGUE_TITLE);
-            attractions = intent.getParcelableArrayListExtra(CataloguePreviewActivity.ATTRACTIONS_LIST);
+//            attractions = intent.getParcelableArrayListExtra(CataloguePreviewActivity.ATTRACTIONS_LIST);
+
+            int catalogueIndex = intent.getIntExtra(CatalogueActivity.CATALOGUE_INDEX, -1);
+
+            attractions = ToursDataClass.getInstance().getTourAttractions(catalogueIndex);
 
             // populate the various lists
             if(Commons.isNotNull(attractions)) {
@@ -77,7 +82,7 @@ public class AttractionTabsActivity extends BaseActivity implements
                 ViewUtils.changeFabColour(this, fab, R.color.toursBackButtonBackgroundColor);
 
                 setupUI();
-                setupViewPager(attractions);
+                setupViewPager(attractions, catalogueIndex);
 
             } else {
                 new AlertDialog.Builder(this)
@@ -132,13 +137,14 @@ public class AttractionTabsActivity extends BaseActivity implements
         fab.setAnimation(a);
     }
 
-    private void setupViewPager(ArrayList<Attraction> attractions) {
+    private void setupViewPager(ArrayList<Attraction> attractions, int catalogueIndex) {
         adapter = new MyFragmentPagerAdapter(getSupportFragmentManager());
 
         Bundle bundle = null;
         if (Commons.isNotNull(attractions)) {
             bundle = new Bundle();
             bundle.putParcelableArrayList(CataloguePreviewActivity.ATTRACTIONS_LIST, attractions);
+            bundle.putInt(CatalogueActivity.CATALOGUE_INDEX, catalogueIndex);
         }
 
         adapter.addFragment(new AttractionTabsStopsFragment(), getString(R.string.attractions), bundle);

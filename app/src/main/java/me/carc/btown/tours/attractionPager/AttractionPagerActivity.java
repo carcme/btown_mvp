@@ -7,14 +7,12 @@ import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.ColorFilter;
-import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Parcelable;
 import android.provider.MediaStore;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.OnApplyWindowInsetsListener;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
@@ -44,13 +42,13 @@ import butterknife.ButterKnife;
 import me.carc.btown.BaseActivity;
 import me.carc.btown.R;
 import me.carc.btown.Utils.IntentUtils;
-import me.carc.btown.Utils.ViewUtils;
 import me.carc.btown.camera.CameraActivity;
 import me.carc.btown.common.C;
 import me.carc.btown.common.Commons;
+import me.carc.btown.data.ToursDataClass;
 import me.carc.btown.extras.messaging.CommentsActivity;
 import me.carc.btown.map.sheets.ImageDialog;
-import me.carc.btown.tours.CataloguePreviewActivity;
+import me.carc.btown.tours.CatalogueActivity;
 import me.carc.btown.tours.data.services.FirebaseImageDownloader;
 import me.carc.btown.tours.model.Attraction;
 import me.carc.btown.ui.custom.LockableViewPager;
@@ -60,18 +58,21 @@ public class AttractionPagerActivity extends BaseActivity implements Placeholder
     private static final String TAG = C.DEBUG + Commons.getTag();
     public static final String SCROLL_TO_NEW_INDEX = "SCROLL_TO_NEW_INDEX";
     public static final String ATTRACTION = "ATTRACTION";
+    public static final String ATTRACTION_INDEX = "ATTRACTION_INDEX";
+
+
     private static final int RESULT_DETAIL = 10;
     private static final int RESULT_CAMERA_PREVIEW = 101;
 
     private String mOnCameraLocation;
     private TourPagerAdapter tourAdapter;
-    private ArrayList<Attraction> attractions;
+//    private ArrayList<Attraction> attractions;
     private CallbackManager callbackManager;
 
-    @BindView(R.id.fabMap)
-    FloatingActionButton fabShowMap;
-    @BindView(R.id.fabCamera)
-    FloatingActionButton fabCamera;
+//    @BindView(R.id.fabMap)
+//    FloatingActionButton fabShowMap;
+//    @BindView(R.id.fabCamera)
+//    FloatingActionButton fabCamera;
     @BindView(R.id.attractionViewPager)
     LockableViewPager mViewPager;
 
@@ -105,9 +106,13 @@ public class AttractionPagerActivity extends BaseActivity implements Placeholder
         ButterKnife.bind(this);
 
         Intent intent = getIntent();
-        if (intent.hasExtra(CataloguePreviewActivity.ATTRACTIONS_LIST)) {
-            attractions = intent.getParcelableArrayListExtra(CataloguePreviewActivity.ATTRACTIONS_LIST);
-            int index = intent.getIntExtra("INDEX", 0);
+        if (intent.hasExtra(CatalogueActivity.CATALOGUE_INDEX)) {
+
+            int CATALOGUE_INDEX = intent.getIntExtra(CatalogueActivity.CATALOGUE_INDEX, -1);
+            ArrayList<Attraction> attractions = ToursDataClass.getInstance().getTourAttractions(CATALOGUE_INDEX);
+//            attractions = intent.getParcelableArrayListExtra(CataloguePreviewActivity.ATTRACTIONS_LIST);
+
+            int index = intent.getIntExtra(ATTRACTION_INDEX, 0);
 
             tourAdapter = new TourPagerAdapter(getSupportFragmentManager(), attractions, isGermanLanguage());
 
@@ -119,13 +124,16 @@ public class AttractionPagerActivity extends BaseActivity implements Placeholder
             mViewPager.setCurrentItem(index, true);
         }
 
+/*
         fabShowMap.getDrawable().setColorFilter(ContextCompat.getColor(this, R.color.white), PorterDuff.Mode.MULTIPLY);
         ViewUtils.changeFabColour(this, fabShowMap, R.color.colorPrimary);
         fabShowMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 mViewPager.getCurrentItem();
-                onShowMap(attractions.get(mViewPager.getCurrentItem()));
+                onShowMap(ToursDataClass.getInstance()
+                        .getTourAttraction(getIntent().getIntExtra(CatalogueActivity.CATALOGUE_INDEX, -1), mViewPager.getCurrentItem()));
+//                        attractions.get(mViewPager.getCurrentItem()));
             }
         });
 
@@ -137,6 +145,7 @@ public class AttractionPagerActivity extends BaseActivity implements Placeholder
                 onCamera(tourAdapter.getPageTitle(mViewPager.getCurrentItem()).toString());
             }
         });
+*/
 
 
         // Android Team solution to status bar overlay problem
@@ -165,19 +174,29 @@ public class AttractionPagerActivity extends BaseActivity implements Placeholder
     @Override
     public void onBackPressed() {
 
-        ViewUtils.createAlphaAnimator(fabShowMap, false, getResources()
-                .getInteger(R.integer.gallery_alpha_duration) * 2).start();
-        ViewUtils.createAlphaAnimator(fabCamera, false, getResources()
-                .getInteger(R.integer.gallery_alpha_duration) * 2)
-                .withEndAction(new Runnable() {
-                    @Override
-                    public void run() {
-                        Intent returnIntent = getIntent();
-                        returnIntent.putExtra(SCROLL_TO_NEW_INDEX, mViewPager.getCurrentItem());
-                        setResult(RESULT_OK, returnIntent);
-                        finish();
-                    }
-                }).start();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Intent returnIntent = getIntent();
+                returnIntent.putExtra(SCROLL_TO_NEW_INDEX, mViewPager.getCurrentItem());
+                setResult(RESULT_OK, returnIntent);
+                finish();
+            }
+        }, getResources().getInteger(R.integer.gallery_alpha_duration) * 2);
+
+//        ViewUtils.createAlphaAnimator(fabShowMap, false, getResources()
+//                .getInteger(R.integer.gallery_alpha_duration) * 2).start();
+//        ViewUtils.createAlphaAnimator(fabCamera, false, getResources()
+//                .getInteger(R.integer.gallery_alpha_duration) * 2)
+//                .withEndAction(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        Intent returnIntent = getIntent();
+//                        returnIntent.putExtra(SCROLL_TO_NEW_INDEX, mViewPager.getCurrentItem());
+//                        setResult(RESULT_OK, returnIntent);
+//                        finish();
+//                    }
+//                }).start();
     }
 
 
@@ -243,7 +262,7 @@ public class AttractionPagerActivity extends BaseActivity implements Placeholder
                 LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
                     @Override
                     public void onSuccess(LoginResult loginResult) {
-                        checkinFacebook(id, lat, lng, title, null);
+                        checkinFacebook(id, lat, lng, title);
                     }
 
                     @Override
@@ -259,7 +278,7 @@ public class AttractionPagerActivity extends BaseActivity implements Placeholder
                 LoginManager.getInstance().logInWithReadPermissions(AttractionPagerActivity.this,
                         Collections.singletonList(C.FACEBOOK_PERMISSIONS) /*Arrays.asList(C.FACEBOOK_PERMISSIONS)*/);
             } else {
-                checkinFacebook(id, lat, lng, title, null);
+                checkinFacebook(id, lat, lng, title);
             }
         }
     }
@@ -295,6 +314,7 @@ public class AttractionPagerActivity extends BaseActivity implements Placeholder
 
     @Override
     public void onColorFab(ColorStateList stateList, ColorFilter filter) {
+/*
         if (C.HAS_L) {
             fabShowMap.setBackgroundTintList(stateList);
             fabCamera.setBackgroundTintList(stateList);
@@ -302,6 +322,7 @@ public class AttractionPagerActivity extends BaseActivity implements Placeholder
             fabShowMap.getBackground().setColorFilter(filter);
             fabCamera.getBackground().setColorFilter(filter);
         }
+*/
     }
 
 
@@ -365,24 +386,17 @@ public class AttractionPagerActivity extends BaseActivity implements Placeholder
             Intent getImagesIntent = new Intent(this, FirebaseImageDownloader.class);
             getImagesIntent.putExtra("FORCE_UPDATE", true);
             startService(getImagesIntent);
-        }
+        } else
+            showAlertDialog(R.string.no_image_no_connection_title, R.string.no_image_no_connection_desc, -1, R.drawable.ic_menu_share);
+
     }
 
     /**
      * @param pageId facebook id if provided
-     * @param bytes  byte array of image - actually forgot, been so long. Should check at some
-     *               point!!
      */
-    private void checkinFacebookWithID(String pageId, final byte[] bytes) {
+    private void checkinFacebookWithID(String pageId) {
         Bundle params = new Bundle();
         String postLocation = "me/feed";
-        if (bytes != null) {
-            postLocation = "me/photos";
-//            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-//            bm.compress(Bitmap.CompressFormat.PNG, 80, stream);
-//            byte[] byteArray = stream.toByteArray();
-            params.putByteArray("photo", bytes);
-        }
         params.putString("caption", "Post just using lat and lng coords then get first from the list of nearby attractions");
         params.putString("place", pageId);
 
@@ -401,10 +415,10 @@ public class AttractionPagerActivity extends BaseActivity implements Placeholder
     }
 
 
-    private void checkinFacebook(final String id, final double lat, final double lng, final String title, final byte[] bytes) {
+    private void checkinFacebook(final String id, final double lat, final double lng, final String title) {
 
         if (!id.isEmpty()) {
-            checkinFacebookWithID(id, null);
+            checkinFacebookWithID(id);
         } else {
 
             new GraphRequest(
@@ -430,7 +444,7 @@ public class AttractionPagerActivity extends BaseActivity implements Placeholder
                                             break;
                                         }
                                     }
-                                    checkinFacebookWithID(pageId, bytes);
+                                    checkinFacebookWithID(pageId);
 
                                 } catch (JSONException e) {
                                     e.printStackTrace();

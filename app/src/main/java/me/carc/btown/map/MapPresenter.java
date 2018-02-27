@@ -1,5 +1,6 @@
 package me.carc.btown.map;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Point;
@@ -956,7 +957,7 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
         view.addClearDropMenuItem(false);
     }
 
-    final OnPinMarkerDragListener mPinDragListener = new OnPinMarkerDragListener();
+    private final OnPinMarkerDragListener mPinDragListener = new OnPinMarkerDragListener();
 
     class OnPinMarkerDragListener implements Marker.OnMarkerDragListener {
 
@@ -1146,6 +1147,7 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
      * Override the map touch listener
      */
     private MapView.OnTouchListener onMapTouchListener = new View.OnTouchListener() {
+        @SuppressLint("ClickableViewAccessibility")
         @Override
         public boolean onTouch(View v, MotionEvent event) {
             switch (event.getAction()) {
@@ -1197,7 +1199,6 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
             if (Commons.isNotNull(markerList)) {
                 markerList.show();
             } else {
-
                 ArrayList<Object> objects = new ArrayList<>();
 
                 for (Marker marker : mSearchOverlay.getItems()) {
@@ -1207,7 +1208,6 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
                     objects.add(marker.getRelatedObject());
                 }
                 MarkerListDialogFragment.showInstance(mContext.getApplicationContext(), whereAmI(), objects);
-//                MarkerListDialogFragment.showInstance(mContext.getApplicationContext(), whereAmI(), mSearchOverlay.getItems());
             }
         } else {
             view.onCameraLaunch();
@@ -1313,11 +1313,8 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
         updateUIWithTrackingMode();
     }
 
-
     private void updateUIWithTrackingMode() {
-
         btLocation.updateLocationRequest(mTrackingMode);
-
         view.setTrackingMode(mTrackingMode);
 
         if (mTrackingMode) {
@@ -1326,7 +1323,7 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
             GeoPoint myLocation = myLocationOverlay.getLocation();
 
             if (myLocationOverlay.isEnabled() && Commons.isNotNull(myLocation)) {
-                int currentZoomLvl = mMap.getZoomLevel();
+                double currentZoomLvl = mMap.getZoomLevelDouble();
 
                 if (currentZoomLvl < MIN_POI_LOOKUP_ZOOM_LVL) {
 

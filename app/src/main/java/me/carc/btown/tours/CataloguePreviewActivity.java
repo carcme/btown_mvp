@@ -1,6 +1,7 @@
 package me.carc.btown.tours;
 
 import android.animation.Animator;
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -26,6 +27,7 @@ import me.carc.btown.Utils.Holder;
 import me.carc.btown.Utils.ViewUtils;
 import me.carc.btown.common.C;
 import me.carc.btown.common.Commons;
+import me.carc.btown.data.ToursDataClass;
 import me.carc.btown.tours.model.TourCatalogue;
 import me.carc.btown.ui.custom.ExploreButton;
 import me.carc.btown.ui.custom.GalleryBottomView;
@@ -85,6 +87,7 @@ public class CataloguePreviewActivity extends BaseActivity implements View.OnCli
     ExploreButton launchEndBtn;
 
 
+    @SuppressLint("ClickableViewAccessibility")
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,8 +100,9 @@ public class CataloguePreviewActivity extends BaseActivity implements View.OnCli
         calculateImageHeight();
         initializeViews();
 
-        if (getIntent().hasExtra(CatalogueActivity.CATALOGUE)) {
-            card = getIntent().getParcelableExtra(CatalogueActivity.CATALOGUE);
+        if (getIntent().hasExtra(CatalogueActivity.CATALOGUE_INDEX)) {
+//            card = getIntent().getParcelableExtra(CatalogueActivity.CATALOGUE);
+            card = ToursDataClass.getInstance().getTourCatalogue(getIntent().getIntExtra(CatalogueActivity.CATALOGUE_INDEX, -1));
 
             title.setText(card.getCatalogueName(isGermanLanguage));
             collection_Title.setText(title.getText());
@@ -118,7 +122,10 @@ public class CataloguePreviewActivity extends BaseActivity implements View.OnCli
             catalogueImage.setOnTouchListener(this);
 
             ViewUtils.changeFabColour(this, backFab, R.color.toursBackButtonBackgroundColor);
+        } else {
+            finish();
         }
+
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -185,7 +192,8 @@ public class CataloguePreviewActivity extends BaseActivity implements View.OnCli
     private void launchCollection() {
         Intent intent = new Intent(CataloguePreviewActivity.this, AttractionTabsActivity.class);
         intent.putExtra(CATALOGUE_TITLE, card.getCatalogueName(isGermanLanguage));
-        intent.putExtra(ATTRACTIONS_LIST, card.getAttractions());
+        intent.putExtra(CatalogueActivity.CATALOGUE_INDEX, getIntent().getIntExtra(CatalogueActivity.CATALOGUE_INDEX, -1));
+//        intent.putExtra(ATTRACTIONS_LIST, card.getAttractions());
         startActivity(intent);
     }
 

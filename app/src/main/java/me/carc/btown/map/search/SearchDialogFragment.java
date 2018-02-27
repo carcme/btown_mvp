@@ -575,9 +575,7 @@ public class SearchDialogFragment extends DialogFragment implements ISearch.View
     }
 
     public void completeQueryWithObject(Place place) {
-
         AndroidUtils.hideSoftKeyboard(getActivity(), searchEditText);
-
         onShowProgressBar(true);
 
         if (place.getPlaceId() == SEARCH_ITEM_POI_CATEGORIES) {
@@ -587,7 +585,6 @@ public class SearchDialogFragment extends DialogFragment implements ISearch.View
                 cbSearchListener.searchItemSelected(place);
 
         } else if (place.getPlaceId() == SEARCH_ITEM_HISTORY) {
-//            cbSearchListener.showPlaceItem(place);
             cbSearchListener.showFromDatabase(place.getPlaceId(), place);
 
         } else if (place.getPlaceId() == SEARCH_ITEM_MAIN) {
@@ -595,7 +592,6 @@ public class SearchDialogFragment extends DialogFragment implements ISearch.View
             cbSearchListener.showPlaceItem(place);
 
         } else if (place.getPlaceId() == SEARCH_ITEM_FAVORITE) {
-//            cbSearchListener.showFavoriteItem(place);
             cbSearchListener.showFromDatabase(place.getPlaceId(), place);
         }
     }

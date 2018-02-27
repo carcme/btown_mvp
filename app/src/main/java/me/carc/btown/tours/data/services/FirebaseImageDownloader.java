@@ -16,6 +16,7 @@ import com.google.gson.Gson;
 import java.io.File;
 import java.util.ArrayList;
 
+import me.carc.btown.App;
 import me.carc.btown.BuildConfig;
 import me.carc.btown.Utils.FileUtils;
 import me.carc.btown.common.C;
@@ -42,9 +43,18 @@ public class FirebaseImageDownloader extends IntentService {
 
     private static final String TAG = C.DEBUG + Commons.getTag();
 
-    private static boolean updateInProgress;
     private String dir;
     private StorageReference mStorageRef;
+    private TinyDB db;
+
+
+    private boolean updateInProgress() {
+        return ((App)getApplicationContext()).isUpdatingFirebase();
+    }
+
+    private void  setUpdateInProgress(boolean update) {
+        ((App)getApplicationContext()).setUpdatingFirebase(update);
+    }
 
     /**
      * Creates an IntentService.  Invoked by your subclass's constructor.
@@ -55,12 +65,12 @@ public class FirebaseImageDownloader extends IntentService {
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
-        if(!updateInProgress) {
-            updateInProgress = true;
+
+        if(!updateInProgress()) {
+            setUpdateInProgress(true);
             Boolean forceUpdate = intent.getBooleanExtra("FORCE_UPDATE", false);
             initValues();
             getLatestJsonTours(forceUpdate);
-            updateInProgress = false;
         }
     }
 
@@ -70,6 +80,7 @@ public class FirebaseImageDownloader extends IntentService {
         if(CacheDir.getCacheDir() == null)    // Crashlytics #131 - Make sure Cache is init'd
             new CacheDir(getApplicationContext());
         dir = CacheDir.getCacheDir().cacheDirAsStr();
+        db = new TinyDB(getApplicationContext());    // ensure TinyDB is init'd
     }
 
     private void getLatestJsonTours(final boolean force) {
@@ -85,23 +96,26 @@ public class FirebaseImageDownloader extends IntentService {
             @Override
             public void onResponse(@NonNull Call<TourHolderResult> call, @NonNull final Response<TourHolderResult> response) {
 
-                int version = TinyDB.getTinyDB().getInt(CatalogueActivity.JSON_VERSION, 0);
+                int version = db.getInt(CatalogueActivity.JSON_VERSION, 0);
 
                 if (version < response.body().version || force) {
 
                     final Gson gson = new Gson();
-                    TinyDB.getTinyDB().putInt(CatalogueActivity.JSON_VERSION, response.body().version);
+                    db.putInt(CatalogueActivity.JSON_VERSION, response.body().version);
 
                     String json = gson.toJson(response.body());
-                    TinyDB.getTinyDB().putString(CatalogueActivity.SERVER_FILE, json);
+                    db.putString(CatalogueActivity.SERVER_FILE, json);
                 }
                 // check we have the images - download any that are missing
                 getImages(response.body());
+
+                setUpdateInProgress(false);
             }
 
             @Override
             public void onFailure(Call<TourHolderResult> call, Throwable t) {
                 Log.d(TAG, "onResponse: ");
+                setUpdateInProgress(false);
             }
         });
     }
@@ -145,6 +159,7 @@ public class FirebaseImageDownloader extends IntentService {
                 .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                        Log.d(TAG, "onSuccess: "  +taskSnapshot.toString());
 
                     }
                 }).addOnFailureListener(new OnFailureListener() {
