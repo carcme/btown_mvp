@@ -63,6 +63,7 @@ public class PoiMoreRecyclerAdapter extends RecyclerView.Adapter<PoiMoreRecycler
             case PHONE:
                 holder.infoText.setAutoLinkMask(Linkify.PHONE_NUMBERS);
                 break;
+            default:
         }
 
         // set the text

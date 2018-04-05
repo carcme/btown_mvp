@@ -66,6 +66,10 @@ public class BackgroundImageDialog extends DialogFragment {
             R.drawable.background_museum_insel
     };
 
+    public int getBACKGROUNG(int index) {
+        return BACKGROUNGS[index];
+    }
+
 
     protected void scrollHider(RecyclerView rv, final FloatingActionButton fab) {
         rv.addOnScrollListener(new RecyclerView.OnScrollListener() {

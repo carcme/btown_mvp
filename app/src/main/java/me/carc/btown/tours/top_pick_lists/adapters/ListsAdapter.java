@@ -32,7 +32,6 @@ public class ListsAdapter extends RecyclerView.Adapter<ListsAdapter.CatalogueVie
 
     private ArrayList<ItemsUserList> lists;
     private StorageReference mCoverImageStorageRef;
-    private boolean isGermanLanguage;
 
     public DrawableClickListener onClickListener;
 

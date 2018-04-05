@@ -26,6 +26,7 @@ import android.widget.Toast;
 
 import org.osmdroid.util.GeoPoint;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -167,7 +168,7 @@ public class FourSquareSearchResultActivity extends BaseActivity {
     }
 
 
-    public class DistanceComparator implements Comparator<VenueResult> {
+    public static class DistanceComparator implements Comparator<VenueResult>, Serializable {
 
         @Override
         public int compare(VenueResult lhs, VenueResult rhs) {
@@ -269,6 +270,7 @@ public class FourSquareSearchResultActivity extends BaseActivity {
                     }
                 }
                 break;
+            default:
         }
     }
 

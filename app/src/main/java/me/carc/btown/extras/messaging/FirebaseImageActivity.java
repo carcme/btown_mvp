@@ -61,7 +61,7 @@ public class FirebaseImageActivity extends BaseActivity {
     public static final String MSG_BOARD_CAT_PHOTO     = "PHOTO_BOARD";
 
 
-    private final int RESULT_CAMERA_PREVIEW = 102;
+    private static final int RESULT_CAMERA_PREVIEW = 102;
     private static final String COLUMN_COUNT = "COLUMN_COUNT"; // use sp to save user preferences
     private static final int COL_SINGLE = 1;
     private static final int COL_GRID = 3;
@@ -77,6 +77,10 @@ public class FirebaseImageActivity extends BaseActivity {
 
     @BindView(R.id.toggleFab)
     FloatingActionButton toggleFab;
+
+    @BindView(R.id.photo)
+    ImageView image;
+
 
     /*
         private DrawerLayout mDrawerLayout;
@@ -234,7 +238,6 @@ public class FirebaseImageActivity extends BaseActivity {
             public void onItemClick(View view, int pos) {
 
                 try {
-                    ImageView image = (ImageView) view.findViewById(R.id.photo);
 
                     // TODO: 25/10/2017 launch the image viewer
 
@@ -375,6 +378,7 @@ public class FirebaseImageActivity extends BaseActivity {
                     TinyDB.getTinyDB().putInt(COLUMN_COUNT, 3);
                     layoutManager = new GridLayoutManager(this, 3);
                     break;
+                default:
             }
 
             if (layoutManager != null) {
@@ -395,6 +399,7 @@ public class FirebaseImageActivity extends BaseActivity {
             case RESULT_CAMERA_PREVIEW:
                 loadingBar.setVisibility(View.GONE);
                 break;
+            default:
         }
     }
 }

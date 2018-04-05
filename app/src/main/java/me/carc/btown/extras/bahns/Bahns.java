@@ -62,7 +62,7 @@ public class Bahns {
 
 
         public boolean hasLocalFile(String filename) {
-            String planPath = CacheDir.getCacheDir().cacheDirAsStr() + "/" + filename;
+            String planPath = CacheDir.getInstance().cacheDirAsStr() + "/" + filename;
 
             boolean haveFile = FileUtils.checkValidFilePath(planPath);
             imageUrl = haveFile ? planPath :  filename;

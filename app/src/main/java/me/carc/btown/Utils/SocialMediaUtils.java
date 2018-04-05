@@ -19,7 +19,7 @@ public class SocialMediaUtils {
 
         try {
             int versionCode = packageManager.getPackageInfo("com.facebook.katana", 0).versionCode;
-            boolean activated =  packageManager.getApplicationInfo("com.facebook.katana", 0).enabled;
+//            boolean activated =  packageManager.getApplicationInfo("com.facebook.katana", 0).enabled;
             if (versionCode >= 3002850) //newer versions of fb app
                 facebookIntent.setData(Uri.parse("fb://facewebmodal/f?href=" + "https://www.facebook.com/" + pageId));
             else  //older versions of fb app

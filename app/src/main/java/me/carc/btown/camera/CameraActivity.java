@@ -57,19 +57,16 @@ public class CameraActivity extends BaseActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
         switch (requestCode) {
-            case C.PERMISSION_CAMERA: {
+            case C.PERMISSION_CAMERA:
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
                     launchCamera();
-
-                } else {
-
-                    if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA)) {
+                } else if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA)) {
                         showAlert();
-                    }
                 }
-            }
+                break;
+
+            default:
         }
     }
 
@@ -163,6 +160,8 @@ public class CameraActivity extends BaseActivity {
             case RESULT_CAMERA_PREVIEW:
                 finish();
                 break;
+
+            default:
         }
     }
 }

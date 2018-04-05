@@ -33,7 +33,6 @@ public class MyDirectedLocationOverlay extends DirectedLocationOverlay {
     private long time1, time2;                // timestamps of previous iterations--used in numerical integration
     private float angle1, angle2, angle0;    // angles of previous iterations
     private float angleLastDrawn;            // last drawn anglular position
-    float bearTo;            // last drawn anglular position
     private boolean animationOn = false;    // if animation should be performed
     private boolean usingDirection;
     private Bitmap arrow;

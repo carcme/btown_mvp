@@ -16,7 +16,7 @@ import java.util.List;
  * Created by bamptonm on 30/09/2017.
  */
 
-public class RouteResult implements Parcelable, Serializable {
+public class RouteResult implements Serializable, Parcelable {
     @SerializedName("paths")
     public List<Paths> paths = new ArrayList<>();
 
@@ -49,7 +49,7 @@ public class RouteResult implements Parcelable, Serializable {
         @SerializedName("instructions")
         public ArrayList<Instructions> instructions = new ArrayList<>();
 
-        public static class Instructions {
+        public static class Instructions implements Serializable {
 
             @SerializedName("text")
             public String text;
@@ -83,8 +83,6 @@ public class RouteResult implements Parcelable, Serializable {
 
         public void setRoutePoints(ArrayList<GeoPoint> points) { routePoints = points; }
         public ArrayList<GeoPoint> getRoutePoints() { return routePoints; }
-
-
     }
 
     public Paths getPath() {

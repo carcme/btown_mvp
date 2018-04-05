@@ -547,6 +547,7 @@ public class PlaceholderFragment extends Fragment {
                         intent.putExtra(WikiWebViewActivity.WIKI_EXTRA_PAGE_URL, "https://www.facebook.com/".concat(item.getData()));
                         startActivity(intent);
                         break;
+                    default:
                 }
             }
         });

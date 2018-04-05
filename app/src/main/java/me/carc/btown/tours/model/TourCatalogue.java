@@ -66,7 +66,7 @@ public class TourCatalogue implements Parcelable {
     }
 
     public String getCatalogueTourTime() {
-        double duration = tourTime / 60;
+        double duration = tourTime / 60.0;
         return Double.toString(duration).concat("h");
     }
 

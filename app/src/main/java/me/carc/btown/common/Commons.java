@@ -22,6 +22,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import me.carc.btown.R;
 
 /**
@@ -44,6 +45,7 @@ public class Commons {
         return tag;
     }
 
+    @SuppressFBWarnings("NM_METHOD_NAMING_CONVENTION")
     public static void Toast(Context context, @StringRes int resId, @ColorInt int bgColor, int duration) {
 
         final View v = ((LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE))

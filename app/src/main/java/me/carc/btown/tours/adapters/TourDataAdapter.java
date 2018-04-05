@@ -50,7 +50,7 @@ public class TourDataAdapter extends RecyclerView.Adapter<TourDataAdapter.MyView
 
         final int pos = holder.getAdapterPosition();
 
-        String cachedImage = CacheDir.getCachePath() + mAttractions.get(pos).getImage();
+        String cachedImage = CacheDir.getInstance().getCachePath() + mAttractions.get(pos).getImage();
         // Use the saved image
         if (FileUtils.checkValidFilePath(cachedImage)) {
             Glide.with(holder.mView.getContext())

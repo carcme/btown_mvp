@@ -108,7 +108,7 @@ public class AttractionTabsActivity extends BaseActivity implements
             GalleryItem gallery = new GalleryItem();
 
             gallery.setFilename(attraction.getImage());
-            gallery.setCachedFilePath(CacheDir.getCachePath() + attraction.getImage());
+            gallery.setCachedFilePath(CacheDir.getInstance().getCachePath() + attraction.getImage());
             gallery.setTitle(attraction.getStopName());
             gallery.setDesc(attraction.getAttractionStopInfo(isGermanLanguage()).getTeaser()[0]);
 

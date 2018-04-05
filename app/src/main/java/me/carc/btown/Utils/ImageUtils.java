@@ -30,6 +30,7 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import me.carc.btown.common.C;
 import me.carc.btown.common.Commons;
 
@@ -38,6 +39,7 @@ import me.carc.btown.common.Commons;
  * Date: 08/09/2015
  * Email: m3ario@gmail.com
  */
+@SuppressFBWarnings("RV_RETURN_VALUE_IGNORED_BAD_PRACTICE")
 public class ImageUtils {
 
     private static final String TAG = C.DEBUG + Commons.getTag();
@@ -277,6 +279,7 @@ public class ImageUtils {
     }
 
 
+    @SuppressFBWarnings("NM_METHOD_NAMING_CONVENTION")
     public static Bitmap RotateBitmap(Bitmap source, float angle) {
         Matrix matrix = new Matrix();
         matrix.postRotate(angle);
@@ -327,6 +330,7 @@ public class ImageUtils {
                 case ExifInterface.ORIENTATION_ROTATE_90:
                     rotate = 90;
                     break;
+                default:
             }
         } catch (Exception e) {
             e.printStackTrace();

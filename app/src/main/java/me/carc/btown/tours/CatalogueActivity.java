@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import me.carc.btown.App;
 import me.carc.btown.BaseActivity;
 import me.carc.btown.BuildConfig;
@@ -142,10 +143,11 @@ public class CatalogueActivity extends BaseActivity {
 
         mAdapter = new ToursAdapter(tours, isGermanLanguage(),  new DrawableClickListener() {
 
+            @SuppressFBWarnings("DLS_DEAD_LOCAL_STORE")
             @Override
             public void OnClick(View v, Drawable drawable, int pos) {
                 // Check if the tours are being updated. Try again later if they are
-                if(((App)getApplication()).isUpdatingFirebase()) {
+                if(((App)getApplication()).isUpdatingFirebase() || !ToursDataClass.getInstance().hasTours()) {
                     AlertDialog.Builder dlg = new AlertDialog.Builder(CatalogueActivity.this)
                             .setTitle(R.string.getting_tours)
                             .setMessage(R.string.getting_tours_desc)

@@ -214,6 +214,7 @@ public class AttractionPagerActivity extends BaseActivity implements Placeholder
             case RESULT_DETAIL:
                 Log.d(TAG, "onActivityResult: RESULT_DETAIL");
                 break;
+            default:
         }
 
         super.onActivityResult(requestCode, resultCode, data);

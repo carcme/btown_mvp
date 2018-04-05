@@ -31,14 +31,8 @@ public class WikiQueryResponse {
         return query;
     }
 
-    public boolean success() {
-        return success() && query != null;
-    }
-
     @VisibleForTesting
     protected void setQuery(@Nullable WikiQueryResult query) {
         this.query = query;
     }
-
-
 }

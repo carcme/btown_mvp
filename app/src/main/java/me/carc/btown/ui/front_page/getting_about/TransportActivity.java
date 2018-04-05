@@ -45,6 +45,7 @@ public class TransportActivity extends Activity {
             case android.R.id.home:
                 onBackPressed();
                 break;
+            default:
         }
         return true;
     }

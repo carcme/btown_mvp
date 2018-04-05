@@ -174,6 +174,7 @@ public class AttractionTabsStopsFragment extends Fragment {
                         rv.smoothScrollToPosition(storyIndex);
                 }
                 break;
+            default:
         }
     }
 }

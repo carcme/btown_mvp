@@ -3,7 +3,9 @@ package me.carc.btown.Utils;
 
 import org.osmdroid.util.BoundingBox;
 import org.osmdroid.util.GeoPoint;
+import org.osmdroid.views.util.constants.MathConstants;
 
+import java.io.Serializable;
 import java.text.MessageFormat;
 import java.util.Comparator;
 import java.util.List;
@@ -110,7 +112,7 @@ public class MapUtils {
     public static double bearingBetweenLocations(GeoPoint a, GeoPoint b) {
         if(a == null || b == null) return 0;
 
-        double PI = 3.14159;
+        double PI = MathConstants.PI;
         double lat1 = a.getLatitude() * PI / 180;
         double long1 = a.getLongitude() * PI / 180;
         double lat2 = b.getLatitude() * PI / 180;
@@ -212,7 +214,7 @@ public class MapUtils {
         return new BoundingBox(north, east, south, west);
     }
 
-    public static class DistanceComparator implements Comparator<Place> {
+    public static class DistanceComparator implements Comparator<Place>, Serializable {
         boolean closestFirst;
         public DistanceComparator(boolean closestFirst) {
             this.closestFirst = closestFirst;
@@ -241,7 +243,7 @@ public class MapUtils {
         }
     }
 
-    public static class TimeStampComparator implements Comparator<Place> {
+    public static class TimeStampComparator implements Comparator<Place>, Serializable {
         boolean newstFirst;
         public TimeStampComparator(boolean newstFirst) {
             this.newstFirst = newstFirst;

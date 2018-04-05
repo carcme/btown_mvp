@@ -1,7 +1,6 @@
 package me.carc.btown.map.sheets.wiki;
 
 import android.support.v7.widget.RecyclerView;
-import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,21 +15,18 @@ import java.util.ArrayList;
 
 import me.carc.btown.R;
 import me.carc.btown.Utils.MapUtils;
+import me.carc.btown.common.interfaces.WikiBookmarkClickListener;
 import me.carc.btown.data.results.OverpassQueryResult;
 import me.carc.btown.data.wiki.WikiQueryPage;
-import me.carc.btown.common.interfaces.WikiBookmarkClickListener;
 
 /**
  * A custom adapter to use with the RecyclerView widget.
  */
 public class WikiBookmarksListAdapter extends RecyclerView.Adapter<WikiBookmarksListAdapter.BookmarkItemHolder> {
 
-    private boolean allowUpdates = false;
     private GeoPoint currentLocation;
     private ArrayList<WikiItemAdpater> listItems;
-    public WikiBookmarkClickListener onClickListener;
-
-    private SparseArray<TextView> distanceArray = new SparseArray<>();
+    private WikiBookmarkClickListener onClickListener;
 
 
     public static class WikiItemAdpater {

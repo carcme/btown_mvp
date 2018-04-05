@@ -264,7 +264,7 @@ public class TourSheetDialog extends BottomSheetDialogFragment {
     private void loadImage() {
         if(Commons.isNotNull(attractionData.getImage())) {
             Glide.with(this)
-                    .load(CacheDir.getCachePath() + attractionData.getImage())
+                    .load(CacheDir.getInstance().getCachePath() + attractionData.getImage())
                     .into(new SimpleTarget<GlideDrawable>() {
                         @Override
                         public void onLoadFailed(Exception e, Drawable errorDrawable) {
@@ -544,6 +544,7 @@ public class TourSheetDialog extends BottomSheetDialogFragment {
                         intent.putExtra(WikiWebViewActivity.WIKI_EXTRA_PAGE_URL, "https://www.facebook.com/".concat(item.getData()));
                         startActivity(intent);
                         break;
+                    default:
                 }
             }
         });

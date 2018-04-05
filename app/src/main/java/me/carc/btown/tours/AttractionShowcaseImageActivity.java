@@ -45,6 +45,7 @@ import java.io.IOException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import me.carc.btown.BaseActivity;
 import me.carc.btown.R;
 import me.carc.btown.Utils.AndroidUtils;
@@ -297,7 +298,7 @@ public class AttractionShowcaseImageActivity extends BaseActivity {
         }
     };
 
-    private void setError(@Nullable Exception e) {
+    private void setError(@Nullable Exception exeption) {
         // something went wrong, show the error icon
         mProgressFabAnimation.cancel();
         fabBackButton.setImageDrawable(mDrawableError);
@@ -311,12 +312,12 @@ public class AttractionShowcaseImageActivity extends BaseActivity {
                 });
         fabBackButton.setBackgroundTintList(stateList);
         mFabProgress.setFinishedStrokeColor(Color.RED);
-        if (Commons.isNotNull(e))
-            Log.d(TAG, "downloadAndSetOrShareImage ERROR: " + e.getMessage());
+        if (exeption != null)
+            Log.d(TAG, "downloadAndSetOrShareImage ERROR: " + exeption.getMessage());
 
         new AlertDialog.Builder(this)
                 .setTitle("Error - Opps")
-                .setMessage(e != null ? e.getLocalizedMessage() : "Check your network connection")
+                .setMessage(exeption != null ? exeption.getLocalizedMessage() : "Check your network connection")
                 .show();
 
         if (Commons.isNetworkAvailable(AttractionShowcaseImageActivity.this)) {
@@ -518,6 +519,7 @@ public class AttractionShowcaseImageActivity extends BaseActivity {
     /**
      * animate the start of the download
      */
+    @SuppressFBWarnings("ICAST_IDIV_CAST_TO_DOUBLE")
     private void animateStart() {
         //reset progress to prevent jumping
         mFabProgress.setProgress(0);
@@ -784,6 +786,7 @@ public class AttractionShowcaseImageActivity extends BaseActivity {
     /**
      *
      */
+    @edu.umd.cs.findbugs.annotations.SuppressFBWarnings("DE_MIGHT_IGNORE")
     private void back() {
         try {
             super.onBackPressed();

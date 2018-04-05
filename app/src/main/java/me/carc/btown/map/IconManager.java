@@ -21,7 +21,7 @@ import me.carc.btown.common.Commons;
 
 public class IconManager {
 
-    private final int DEFAULT_ICON = R.drawable.ic_place;
+    private static final int DEFAULT_ICON = R.drawable.ic_place;
     private Resources res;
     private String packageName;
 

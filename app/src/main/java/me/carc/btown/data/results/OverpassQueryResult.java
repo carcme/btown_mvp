@@ -560,7 +560,7 @@ public class OverpassQueryResult {
             return new GeoPoint(lat, lon);
         }
 
-        public static class DistanceComparator implements Comparator<OverpassQueryResult.Element> {
+        public static class DistanceComparator implements Comparator<OverpassQueryResult.Element>, Serializable {
             @Override
             public int compare(Element lhs, Element rhs) {
                 Double d1 = lhs.distance;

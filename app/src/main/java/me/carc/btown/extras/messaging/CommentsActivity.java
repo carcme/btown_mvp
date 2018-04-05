@@ -146,6 +146,7 @@ public class CommentsActivity extends BaseActivity {
             case android.R.id.home:
                 onBackPressed();
                 break;
+            default:
         }
         return true;
     }
@@ -340,6 +341,7 @@ public class CommentsActivity extends BaseActivity {
         super.onResume();
     }
 
+    @edu.umd.cs.findbugs.annotations.SuppressFBWarnings("DE_MIGHT_IGNORE")
     @Override
     public void onDestroy() {
         try {

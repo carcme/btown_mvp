@@ -58,7 +58,7 @@ public class ToursAdapter extends RecyclerView.Adapter<CatalogueViewHolder> {
 
         // Load image from Local storeage using Glide
         Glide.with(holder.mView.getContext())
-                .load(CacheDir.getCachePath() + card.getCatalogueImage())
+                .load(CacheDir.getInstance().getCachePath() + card.getCatalogueImage())
                 .into(holder.catalogueImage);
 /*
         // Load image from Firebase using Glide

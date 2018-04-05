@@ -21,6 +21,9 @@ import android.view.inputmethod.InputMethodManager;
 
 import java.util.Date;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
+@SuppressFBWarnings("NM_METHOD_NAMING_CONVENTION")
 public class AndroidUtils {
 
 	/**
@@ -159,6 +162,7 @@ public class AndroidUtils {
 	 * @param dp A value in dp (density independent pixels) unit. Which we need to convert into pixels
 	 * @return A float value to represent px equivalent to dp depending on device density
 	 */
+	@SuppressFBWarnings("ICAST_IDIV_CAST_TO_DOUBLE")
 	public static int DpToDx(Resources r, float dp){
 		float px = dp * (r.getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT);
 		return (int)px;

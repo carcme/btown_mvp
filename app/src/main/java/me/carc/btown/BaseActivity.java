@@ -1,6 +1,7 @@
 package me.carc.btown;
 
 import android.annotation.TargetApi;
+import android.app.ActivityManager;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.ComponentName;
@@ -107,16 +108,14 @@ public abstract class BaseActivity extends AppCompatActivity {
     private ActionBarDrawerToggle mDrawerToggle;
 
     @VisibleForTesting
-    private static ProgressDialog mProgressDialog;
+    private static volatile ProgressDialog mProgressDialog;
+    private static final Object lock = new Object();
 
     protected TinyDB db;
-
-
 
     public App getApp() {
         return (App) getApplication();
     }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,11 +130,29 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onResume();
         getApp().setCurrentActivity(this);
 
-        Intent serviceIntent = new Intent("com.android.vending.billing.InAppBillingService.BIND");
-        serviceIntent.setPackage("com.android.vending");
-        bindService(serviceIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
+        if(isServiceRunning(IInAppBillingService.Stub.class)) {
+            Intent serviceIntent = new Intent("com.android.vending.billing.InAppBillingService.BIND");
+            serviceIntent.setPackage("com.android.vending");
+            bindService(serviceIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
+        }
     }
 
+    private boolean isServiceRunning(Class<?> serviceClass) {
+        try {
+            ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+            for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+                if (serviceClass.getName().equals(service.service.getClassName())) {
+                    return true;
+                }
+            }
+        }catch (NullPointerException e) {
+            Log.d(TAG, "isServiceRunning: " + e.getMessage());
+        }
+        return false;
+    }
+
+
+    @edu.umd.cs.findbugs.annotations.SuppressFBWarnings("DE_MIGHT_IGNORE")
     @Override
     protected void onPause() {
         super.onPause();
@@ -279,22 +296,24 @@ public abstract class BaseActivity extends AppCompatActivity {
      * Display image on 2/3 of screen
      */
     protected void calculateImageHeight() {
-        if (C.IMAGE_WIDTH == null || C.IMAGE_HEIGHT == null) {
-            final DisplayMetrics metrics = new DisplayMetrics();
-            Display display = getWindowManager().getDefaultDisplay();
+        synchronized (lock) {
+            if (C.IMAGE_WIDTH == null || C.IMAGE_HEIGHT == null) {
+                final DisplayMetrics metrics = new DisplayMetrics();
+                Display display = getWindowManager().getDefaultDisplay();
 
-            display.getRealMetrics(metrics);
+                display.getRealMetrics(metrics);
 
-            // SCREEN DIMENSIONS
-            C.SCREEN_WIDTH = metrics.widthPixels;
-            C.SCREEN_HEIGHT = metrics.heightPixels;
+                // SCREEN DIMENSIONS
+                C.SCREEN_WIDTH = metrics.widthPixels;
+                C.SCREEN_HEIGHT = metrics.heightPixels;
 
-            // IMAGE DIMENSIONS
-            C.IMAGE_WIDTH = C.SCREEN_WIDTH;
-            if (C.SCREEN_HEIGHT > 1200)
-                C.IMAGE_HEIGHT = (int) (C.SCREEN_HEIGHT * 3 / 4.0f);
-            else
-                C.IMAGE_HEIGHT = (int) (C.SCREEN_HEIGHT * 2 / 3.0f);
+                // IMAGE DIMENSIONS
+                C.IMAGE_WIDTH = C.SCREEN_WIDTH;
+                if (C.SCREEN_HEIGHT > 1200)
+                    C.IMAGE_HEIGHT = (int) (C.SCREEN_HEIGHT * 3 / 4.0f);
+                else
+                    C.IMAGE_HEIGHT = (int) (C.SCREEN_HEIGHT * 2 / 3.0f);
+            }
         }
     }
 
@@ -462,26 +481,20 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     public static void hideProgressDialog() {
-        if (mProgressDialog != null) {
-            mProgressDialog.dismiss();
-            mProgressDialog = null;
+        synchronized (lock) {
+            if (mProgressDialog != null) {
+                mProgressDialog.dismiss();
+                mProgressDialog = null;
+            }
         }
     }
 
     public void showProgressDialog(@Nullable String msg) {
-        if (mProgressDialog == null) {
-            mProgressDialog = new ProgressDialog(this);
-            mProgressDialog.setIndeterminate(true);
-        }
-        mProgressDialog.setMessage(msg);
-        mProgressDialog.show();
-    }
-
-    public void showModalProgressDialog(@Nullable String msg) {
-        if (mProgressDialog == null) {
-            mProgressDialog = new ProgressDialog(this);
-            mProgressDialog.setIndeterminate(true);
-            mProgressDialog.setCancelable(false);
+        synchronized (lock) {
+            if (mProgressDialog == null) {
+                mProgressDialog = new ProgressDialog(this);
+                mProgressDialog.setIndeterminate(true);
+            }
         }
         mProgressDialog.setMessage(msg);
         mProgressDialog.show();
@@ -496,7 +509,11 @@ public abstract class BaseActivity extends AppCompatActivity {
             return;
         hideProgressDialog();
 
-        mProgressDialog = new ProgressDialog(this);
+        synchronized (lock) {
+            if (mProgressDialog == null) {
+                mProgressDialog = new ProgressDialog(this);
+            }
+        }
         mProgressDialog.setTitle(title);
         mProgressDialog.setMessage(message);
         mProgressDialog.show();
@@ -616,6 +633,7 @@ public abstract class BaseActivity extends AppCompatActivity {
                     new SendFeedback(BaseActivity.this, SendFeedback.TYPE_FEEDBACK);
                     break;
 
+                default:
             }
 
             mDrawerLayout.closeDrawer(GravityCompat.START);

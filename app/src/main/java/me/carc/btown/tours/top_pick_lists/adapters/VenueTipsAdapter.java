@@ -81,7 +81,7 @@ public class VenueTipsAdapter extends RecyclerView.Adapter<VenueTipsAdapter.TipH
 
     @Override
     public long getItemId(int position) {
-        return Integer.valueOf(tips.get(position).getId());
+        return Integer.parseInt(tips.get(position).getId());
     }
 
     public ItemsGroupsTip getTip(int pos) {

@@ -23,6 +23,7 @@ import me.carc.btown.common.C;
 import me.carc.btown.common.CacheDir;
 import me.carc.btown.common.Commons;
 import me.carc.btown.common.TinyDB;
+import me.carc.btown.data.ToursDataClass;
 import me.carc.btown.tours.CatalogueActivity;
 import me.carc.btown.tours.data.FirebaseService;
 import me.carc.btown.tours.model.Attraction;
@@ -77,9 +78,9 @@ public class FirebaseImageDownloader extends IntentService {
     private void initValues() {
         mStorageRef = FirebaseStorage.getInstance().getReference();
 
-        if(CacheDir.getCacheDir() == null)    // Crashlytics #131 - Make sure Cache is init'd
+        if(CacheDir.getInstance() == null)    // Crashlytics #131 - Make sure Cache is init'd
             new CacheDir(getApplicationContext());
-        dir = CacheDir.getCacheDir().cacheDirAsStr();
+        dir = CacheDir.getInstance().cacheDirAsStr();
         db = new TinyDB(getApplicationContext());    // ensure TinyDB is init'd
     }
 
@@ -105,6 +106,7 @@ public class FirebaseImageDownloader extends IntentService {
 
                     String json = gson.toJson(response.body());
                     db.putString(CatalogueActivity.SERVER_FILE, json);
+                    ToursDataClass.getInstance().setTourResult(gson.fromJson(json, TourHolderResult.class));
                 }
                 // check we have the images - download any that are missing
                 getImages(response.body());
@@ -154,7 +156,7 @@ public class FirebaseImageDownloader extends IntentService {
      */
     private void getFirebaseImage(final String fromWhere, final String image) {
         StorageReference imageRef = mStorageRef.child(fromWhere + "/" + image);
-        File localFile = new File(CacheDir.getCacheDirAsFile(), image);
+        File localFile = new File(CacheDir.getInstance().getCacheDirAsFile(), image);
         imageRef.getFile(localFile)
                 .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
                     @Override

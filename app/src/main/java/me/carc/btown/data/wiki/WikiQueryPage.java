@@ -199,7 +199,7 @@ public class WikiQueryPage implements Serializable {
         }
     }
 
-    public static class DistanceComparator implements Comparator<WikiQueryPage> {
+    public static class DistanceComparator implements Comparator<WikiQueryPage>, Serializable {
         @Override
         public int compare(WikiQueryPage lhs, WikiQueryPage rhs) {
 

@@ -129,6 +129,7 @@ public class FrontPageActivity extends MvpBaseActivity implements FrontPageMvpVi
                     startActivity(data);
                 }
                 break;
+            default:
         }
     }
 

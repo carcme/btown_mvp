@@ -71,7 +71,7 @@ public class SearchDialogFragment extends DialogFragment implements ISearch.View
         void doWikiLookup();
     }
 
-    SearchListener cbSearchListener;
+    private SearchListener cbSearchListener;
 
     @SuppressWarnings("unused")
     private static final String TAG = C.DEBUG + Commons.getTag();
@@ -506,6 +506,7 @@ public class SearchDialogFragment extends DialogFragment implements ISearch.View
                     favoriteSearchFragment.updateListAdapter(places);
                 }
                 break;
+            default:
         }
     }
 

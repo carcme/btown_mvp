@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 
 import java.util.List;
 
@@ -22,7 +23,7 @@ import pub.devrel.easypermissions.EasyPermissions;
  * <p/>
  * Display a splash screen at start up
  */
-public class SplashActivity extends BaseActivity implements EasyPermissions.PermissionCallbacks {
+public class SplashActivity extends AppCompatActivity implements EasyPermissions.PermissionCallbacks {
 
     private static final String TAG = C.DEBUG + Commons.getTag();
 

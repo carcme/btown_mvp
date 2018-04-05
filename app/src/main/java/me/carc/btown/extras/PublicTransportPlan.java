@@ -29,6 +29,7 @@ import java.io.File;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import me.carc.btown.BaseActivity;
 import me.carc.btown.R;
 import me.carc.btown.Utils.FileUtils;
@@ -79,7 +80,7 @@ public class PublicTransportPlan extends BaseActivity implements SubsamplingScal
         }
 
         // is file already downloaded and saved?
-        String planPath = CacheDir.getCacheDir().cacheDirAsStr() + "/" + firebaseFile;
+        String planPath = CacheDir.getInstance().cacheDirAsStr() + "/" + firebaseFile;
         if (FileUtils.checkValidFilePath(planPath)) {
             imageView.setImage(ImageSource.uri(planPath));
             imageView.setOnImageEventListener(this);
@@ -115,7 +116,7 @@ public class PublicTransportPlan extends BaseActivity implements SubsamplingScal
         StorageReference mStorageRef = FirebaseStorage.getInstance().getReference();
         StorageReference imageRef = mStorageRef.child(fromWhere + "/" + image);
 
-        final File localFile = new File(CacheDir.getCacheDirAsFile(), image);
+        final File localFile = new File(CacheDir.getInstance().getCacheDirAsFile(), image);
         imageRef.getFile(localFile)
                 .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
                     @Override
@@ -137,6 +138,7 @@ public class PublicTransportPlan extends BaseActivity implements SubsamplingScal
     public void onReady() {
     }
 
+    @SuppressFBWarnings("ICAST_IDIV_CAST_TO_DOUBLE")
     @Override
     public void onImageLoaded() {
 
@@ -201,6 +203,7 @@ public class PublicTransportPlan extends BaseActivity implements SubsamplingScal
                 new SendFeedback(this, SendFeedback.TYPE_FEEDBACK);
                 break;
 
+            default:
         }
         return true;
     }

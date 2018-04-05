@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.util.AttributeSet;
 
 import org.osmdroid.util.GeoPoint;
+import org.osmdroid.views.util.constants.MathConstants;
 
 import java.util.Date;
 
@@ -106,7 +107,7 @@ public class CompassView extends android.support.v7.widget.AppCompatImageView {
      */
     public void rotationFromLocations(final GeoPoint a, final GeoPoint b, final boolean animate) {
 
-        double PI = 3.14159;
+        double PI = MathConstants.PI;
         double lat1 = a.getLatitude() * PI / 180;
         double long1 = a.getLongitude() * PI / 180;
         double lat2 = b.getLatitude() * PI / 180;

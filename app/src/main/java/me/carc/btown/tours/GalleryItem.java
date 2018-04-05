@@ -18,6 +18,8 @@ import me.carc.btown.common.Commons;
  */
 public class GalleryItem implements Serializable {
 
+    private static final long serialVersionUID = 505776582548764253L;
+
     private String filename;
     private String url;
     private String cacheFile;
@@ -137,4 +139,11 @@ public class GalleryItem implements Serializable {
     public void setFilename(String filename) { this.filename = filename; }
     public String getFilename() { return filename; }
 
+    private void writeObject(java.io.ObjectOutputStream stream) throws java.io.IOException {
+        throw new java.io.NotSerializableException( getClass().getName() );
+    }
+
+    private void readObject(java.io.ObjectInputStream stream) throws java.io.IOException, ClassNotFoundException {
+        throw new java.io.NotSerializableException( getClass().getName() );
+    }
 }

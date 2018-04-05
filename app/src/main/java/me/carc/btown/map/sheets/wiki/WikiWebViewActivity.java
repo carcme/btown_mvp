@@ -103,7 +103,7 @@ public class WikiWebViewActivity extends BaseActivity {
         assert getSupportActionBar() != null;
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        boolean disableJS = false;
+//        boolean disableJS = false;
         Intent intent = getIntent();
         if (Commons.isNotNull(intent) && Commons.isNull(savedInstanceState)) {
             if (intent.hasExtra(WIKI_EXTRA_PAGE_URL)) {
@@ -119,9 +119,9 @@ public class WikiWebViewActivity extends BaseActivity {
                 getSupportActionBar().setSubtitle(intent.getStringExtra(WIKI_EXTRA_PAGE_SUBHEADING));
             }
 
-            if (intent.hasExtra(DISABLE_JS)) {
-                disableJS = intent.getBooleanExtra(DISABLE_JS, false);
-            }
+//            if (intent.hasExtra(DISABLE_JS)) {
+//                disableJS = intent.getBooleanExtra(DISABLE_JS, false);
+//            }
         }
         webView.setListener(mWebViewCallback);
         webView.setWebChromeClient(mChromeClient);

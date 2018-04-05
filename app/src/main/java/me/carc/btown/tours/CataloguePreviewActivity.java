@@ -186,6 +186,7 @@ public class CataloguePreviewActivity extends BaseActivity implements View.OnCli
             case R.id.galleryFab:
                 onBackPressed();
                 break;
+            default:
         }
     }
 
@@ -238,10 +239,10 @@ public class CataloguePreviewActivity extends BaseActivity implements View.OnCli
                         return false;
 
                     case MotionEvent.ACTION_UP:
-                        float upX = event.getX();
+//                        float upX = event.getX();
                         float upY = event.getY();
 
-                        float deltaX = downX - upX;
+//                        float deltaX = downX - upX;
                         float deltaY = downY - upY;
 
                         // swipe vertical?

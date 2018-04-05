@@ -92,7 +92,7 @@ public class ShareMenu {
 
         final String geoUrl = MapUtils.buildGeoUrl(latLon.getLatitude(), latLon.getLongitude(), zoom);
 
-        final String httpUrlGoogle = MapUtils.buildGoogleMapLink(latLon);
+//        final String httpUrlGoogle = MapUtils.buildGoogleMapLink(latLon);
 
         final String httpUrl = MapUtils.buildOsmMapLink(latLon, zoom);
 

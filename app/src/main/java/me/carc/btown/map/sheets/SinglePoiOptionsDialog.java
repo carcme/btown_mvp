@@ -470,6 +470,7 @@ public class SinglePoiOptionsDialog extends BottomSheetDialogFragment {
                                 AndroidUtils.copyToClipboard(getActivity(), item.getData());
                                 Toast.makeText(getActivity(), "Copied to clipboard:\n" + item.getData(), Toast.LENGTH_SHORT).show();
                                 break;
+                            default:
                         }
                     }
 

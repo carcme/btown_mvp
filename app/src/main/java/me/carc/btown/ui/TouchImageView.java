@@ -23,6 +23,7 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.OverScroller;
 import android.widget.Scroller;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import me.carc.btown.common.C;
 import me.carc.btown.common.Commons;
 
@@ -369,6 +370,7 @@ public class TouchImageView extends android.support.v7.widget.AppCompatImageView
      * @param focusY
      * @param scaleType
      */
+    @SuppressFBWarnings("ICAST_IDIV_CAST_TO_DOUBLE")
     public void setZoom(float scale, float focusX, float focusY, ScaleType scaleType) {
         //
         // setZoom can be called before the image is on the screen, but at this point,
@@ -411,6 +413,7 @@ public class TouchImageView extends android.support.v7.widget.AppCompatImageView
      * And the bottom right corner would be (1, 1).
      * @return PointF representing the scroll position of the zoomed image.
      */
+    @SuppressFBWarnings("ICAST_IDIV_CAST_TO_DOUBLE")
     public PointF getScrollPosition() {
         Drawable drawable = getDrawable();
         if (drawable == null) {
@@ -849,6 +852,7 @@ public class TouchImageView extends android.support.v7.widget.AppCompatImageView
                     case MotionEvent.ACTION_POINTER_UP:
                         setState(State.NONE);
                         break;
+                    default:
                 }
             }
 
@@ -900,6 +904,7 @@ public class TouchImageView extends android.support.v7.widget.AppCompatImageView
             return true;
         }
 
+        @SuppressFBWarnings("ICAST_IDIV_CAST_TO_DOUBLE")
         @Override
         public void onScaleEnd(ScaleGestureDetector detector) {
             super.onScaleEnd(detector);
@@ -954,6 +959,7 @@ public class TouchImageView extends android.support.v7.widget.AppCompatImageView
      * @author Ortiz
      *
      */
+    @SuppressFBWarnings("ICAST_IDIV_CAST_TO_DOUBLE")
     private class DoubleTapZoom implements Runnable {
 
         private long startTime;
@@ -1175,7 +1181,7 @@ public class TouchImageView extends android.support.v7.widget.AppCompatImageView
     }
 
     @TargetApi(Build.VERSION_CODES.GINGERBREAD)
-    private class CompatScroller {
+    private static class CompatScroller {
         Scroller scroller;
         OverScroller overScroller;
         boolean isPreGingerbread;
@@ -1251,7 +1257,7 @@ public class TouchImageView extends android.support.v7.widget.AppCompatImageView
         }
     }
 
-    private class ZoomVariables {
+    private static class ZoomVariables {
         public float scale;
         public float focusX;
         public float focusY;

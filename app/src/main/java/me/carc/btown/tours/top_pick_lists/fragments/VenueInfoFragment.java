@@ -1,6 +1,7 @@
 package me.carc.btown.tours.top_pick_lists.fragments;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -210,9 +211,7 @@ public class VenueInfoFragment extends Fragment {
                         if (!Commons.isEmpty(venue.getPage().getPageInfo().getDescription())) {
                             Log.d(TAG, "setup: ");
                         }
-                    } catch (Exception e) {}
-
-
+                    } catch (Exception e) { /* EMPTY */}
                 new SetupMore(venue).run();
             }
         }
@@ -249,12 +248,18 @@ public class VenueInfoFragment extends Fragment {
                 }
             } catch (Exception e) { /*IGNORE*/  }
 
-            if(Commons.isEmpty(btownComment))
-                venueDescription.setText(venue.getDescription());
-            else if(!Commons.isEmpty(venue.getDescription()))
+            if(!Commons.isEmpty(btownComment))
                 venueDescription.setText(btownComment);
-            else
-                descLayout.setVisibility(View.GONE);
+            else if(!Commons.isEmpty(venue.getDescription()))
+                venueDescription.setText(venue.getDescription());
+            else {
+                try {
+                    if (!Commons.isEmpty(venue.getPage().getPageInfo().getDescription()))
+                        venueDescription.setText(venue.getPage().getPageInfo().getDescription());
+                } catch (Exception e) {
+                    descLayout.setVisibility(View.GONE);
+                }
+            }
 
             populateContact(venue);
             populateFeatures(venue.getAttributes());
@@ -352,7 +357,7 @@ public class VenueInfoFragment extends Fragment {
     }
 
 
-
+    @SuppressLint("ResourceAsColor")
     private void populatePopular(VenueResult venue) {
 
         try {
@@ -373,8 +378,9 @@ public class VenueInfoFragment extends Fragment {
 
             venuePopularPeopleHere.setText(venue.getHereNow().getSummary()); //One other person is here
             venuePopularLikes.setText(venue.getLikes().getSummary());   //"144 Likes"
-            venue.getStats().getCheckinsCount();
-            venue.getStats().getVisitsCount();
+
+//            venue.getStats().getCheckinsCount();    // TODO: 20/03/2018
+//            venue.getStats().getVisitsCount();      // TODO: 20/03/2018
 
             for (Reason reason : venue.getReasons().getItemsReasons()) {
                 if (reason.getType().equals("general"))
@@ -392,7 +398,7 @@ public class VenueInfoFragment extends Fragment {
     private void populateFeatures(Attributes attribs) {
 
         ArrayList<String> featureItems = new ArrayList<>();
-        ArrayList<String> menuItems = new ArrayList<>();
+//        ArrayList<String> menuItems = new ArrayList<>();
 
         for (GroupsAttribute grp : attribs.getGroupsAttributes()) {
 
@@ -459,7 +465,7 @@ public class VenueInfoFragment extends Fragment {
     void menu() {
         venueInfoProgressBar.setVisibility(View.VISIBLE);
         VenueResult venue = getParcel();
-        final String venueName = venue.getName();
+//        final String venueName = venue.getName();
 
         FourSquareApi service = FourSquareServiceProvider.get();
         Call<FourSquResult> listsCall = service.getVenueMenu(venue.getId());

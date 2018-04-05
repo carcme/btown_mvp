@@ -1,5 +1,7 @@
 package me.carc.btown.data;
 
+import android.arch.lifecycle.ViewModel;
+
 import java.util.ArrayList;
 
 import me.carc.btown.tours.model.Attraction;
@@ -10,12 +12,11 @@ import me.carc.btown.tours.model.TourHolderResult;
  * Created by bamptonm on 26/02/2018.
  */
 
-public class ToursDataClass  {
+public class ToursDataClass extends ViewModel {
 
     private static volatile ToursDataClass sSoleInstance = new ToursDataClass();
 
-    private TourHolderResult mToursPreLoad;
-
+    private static volatile TourHolderResult mToursPreLoad;
 
     //private constructor.
     private ToursDataClass(){}

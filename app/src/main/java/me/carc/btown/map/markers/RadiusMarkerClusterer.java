@@ -17,6 +17,7 @@ import org.osmdroid.views.overlay.Marker;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import me.carc.btown.R;
 
 /**
@@ -114,6 +115,7 @@ public class RadiusMarkerClusterer extends MarkerClusterer {
         return cluster;
     }
 
+    @SuppressFBWarnings("ICAST_IDIV_CAST_TO_DOUBLE")
     @Override public Marker buildClusterMarker(StaticCluster cluster, MapView mapView) {
         Marker m = new Marker(mapView);
         m.setPosition(cluster.getPosition());

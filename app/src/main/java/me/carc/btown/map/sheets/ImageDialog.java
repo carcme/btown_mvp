@@ -38,6 +38,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import me.carc.btown.App;
 import me.carc.btown.R;
 import me.carc.btown.Utils.FileUtils;
@@ -54,6 +55,7 @@ import okhttp3.Response;
  * Created by bamptonm on 6/3/17.
  */
 
+@SuppressFBWarnings({"RV_RETURN_VALUE_IGNORED_BAD_PRACTICE"})
 public class ImageDialog extends DialogFragment {
 
     public static final String ID_TAG = "ImageDialog";
@@ -153,6 +155,7 @@ public class ImageDialog extends DialogFragment {
                 case 6:
                     image.setScaleType(ImageView.ScaleType.CENTER_CROP);
                     break;
+                default:
             }
         } else
             dismiss();
@@ -260,6 +263,7 @@ public class ImageDialog extends DialogFragment {
             helpContainer.setVisibility(View.GONE);
     }
 
+    @SuppressFBWarnings("REC_CATCH_EXCEPTION")  // using catch Exception which is a catch all (FindBugs doesn't like this)
     private void downloadAndSetOrShareImage(final boolean set) {
         String imageUrl = getArguments().getString(IMAGE_URL);
 
@@ -278,6 +282,7 @@ public class ImageDialog extends DialogFragment {
                     showDownloadError();
                 }
 
+                @SuppressFBWarnings("REC_CATCH_EXCEPTION")
                 @SuppressWarnings({"ConstantConditions", "ResultOfMethodCallIgnored"})
                 @Override
                 public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {

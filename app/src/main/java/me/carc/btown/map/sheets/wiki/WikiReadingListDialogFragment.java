@@ -31,16 +31,16 @@ import java.util.concurrent.Executors;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import me.carc.btown.App;
 import me.carc.btown.R;
 import me.carc.btown.Utils.FragmentUtil;
 import me.carc.btown.Utils.MapUtils;
 import me.carc.btown.Utils.ViewUtils;
 import me.carc.btown.common.Commons;
+import me.carc.btown.common.interfaces.WikiBookmarkClickListener;
 import me.carc.btown.db.AppDatabase;
 import me.carc.btown.db.bookmark.BookmarkEntry;
-import me.carc.btown.map.IconManager;
-import me.carc.btown.common.interfaces.WikiBookmarkClickListener;
 import me.carc.btown.map.sheets.ImageDialog;
 import me.carc.btown.map.sheets.share.ShareDialog;
 import me.carc.btown.map.sheets.wiki.listactions.ReadingListItemActionsDialog;
@@ -50,6 +50,7 @@ import me.carc.btown.ui.custom.DividerItemDecoration;
  * Show the favorites list
  * Created by bamptonm on 31/08/2017.
  */
+@SuppressFBWarnings("NM_METHOD_NAMING_CONVENTION")
 public class WikiReadingListDialogFragment extends DialogFragment implements WikiBookmarkClickListener {
     private static final String TAG = "DEAD";
 
@@ -243,7 +244,7 @@ public class WikiReadingListDialogFragment extends DialogFragment implements Wik
     private ArrayList<WikiBookmarksListAdapter.WikiItemAdpater> buildAdapterList(GeoPoint location, ArrayList<BookmarkEntry> readingList) {
 
         ArrayList<WikiBookmarksListAdapter.WikiItemAdpater> array = new ArrayList<>();
-        IconManager im = new IconManager(getActivity());
+//        IconManager im = new IconManager(getActivity());
 
         for (BookmarkEntry entry : readingList) {
             WikiBookmarksListAdapter.WikiItemAdpater item = new WikiBookmarksListAdapter.WikiItemAdpater();

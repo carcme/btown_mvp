@@ -14,6 +14,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.Scanner;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import me.carc.btown.common.C;
 import me.carc.btown.common.Commons;
 
@@ -71,6 +72,7 @@ public class FileUtils {
         }
     }
 
+    @SuppressFBWarnings("REC_CATCH_EXCEPTION")  // using catch Exception which is a catch all (FindBugs doesn't like this)
     public static String getFileAsString(File file) {
         try {
             FileInputStream fin = new FileInputStream(file);
@@ -87,7 +89,7 @@ public class FileUtils {
             fin.close();
             return sb.toString();
         } catch (Exception e) {
-            return null;
+            return "";
         }
     }
 
@@ -98,6 +100,8 @@ public class FileUtils {
      * @param inputStream
      * @return
      */
+    @SuppressFBWarnings("DM_DEFAULT_ENCODING")
+    @SuppressWarnings("Unused")
     public static String readInputStream(InputStream inputStream) {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
@@ -123,8 +127,9 @@ public class FileUtils {
      */
 
     public static void copyInputStreamToFile(InputStream in, File file) {
+        OutputStream out = null;
         try {
-            OutputStream out = new FileOutputStream(file);
+            out = new FileOutputStream(file);
             byte[] buf = new byte[1024];
             int len;
             while ((len = in.read(buf)) > 0) {
@@ -134,6 +139,11 @@ public class FileUtils {
             in.close();
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            try {
+                if (out != null) out.close();
+                if (in != null) in.close();
+            } catch (NullPointerException | IOException e) { e.printStackTrace(); }
         }
     }
 

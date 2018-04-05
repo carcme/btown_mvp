@@ -60,6 +60,7 @@ public abstract class QuickSearchListFragment extends BaseListFragment {
                 emptyText.setText(R.string.history_list_empty);
                 emptyText.setCompoundDrawablesRelativeWithIntrinsicBounds(null, ContextCompat.getDrawable(getContext(), R.drawable.ic_history_large), null, null);
                 break;
+            default:
         }
 
         if (listView != null) {
@@ -108,6 +109,7 @@ public abstract class QuickSearchListFragment extends BaseListFragment {
                     case MotionEvent.ACTION_CANCEL:
                         touching = false;
                         break;
+                    default:
                 }
                 return false;
             }

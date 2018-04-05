@@ -72,7 +72,7 @@ public class WebBrowser extends BaseActivity {
         assert getSupportActionBar() != null;
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        boolean disableJS = false;
+//        boolean disableJS = false;
         Intent intent = getIntent();
         if (Commons.isNotNull(intent) && Commons.isNull(savedInstanceState)) {
             if (intent.hasExtra(WEB_EXTRA_PAGE_URL)) {
@@ -88,9 +88,9 @@ public class WebBrowser extends BaseActivity {
                 getSupportActionBar().setSubtitle(intent.getStringExtra(WEB_EXTRA_PAGE_SUBHEADING));
             }
 
-            if (intent.hasExtra(WEB_DISABLE_JS)) {
-                disableJS = intent.getBooleanExtra(WEB_DISABLE_JS, false);
-            }
+//            if (intent.hasExtra(WEB_DISABLE_JS)) {
+//                disableJS = intent.getBooleanExtra(WEB_DISABLE_JS, false);
+//            }
         }
 
 

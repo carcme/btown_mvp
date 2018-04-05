@@ -124,8 +124,6 @@ public class VenueToOverpass {
     }
 
     private String buildOsmOpenTime(ArrayList<Timeframe> timeframes) {
-
-
         return "";
     }
 
@@ -134,7 +132,7 @@ public class VenueToOverpass {
         DateFormatSymbols dateFormatSymbols = DateFormatSymbols.getInstance(Locale.US);
         String[] daysStr = OpeningHoursParser.getTwoLettersStringArray(dateFormatSymbols.getShortWeekdays());;
         Calendar calendar = Calendar.getInstance();
-        int day1 = OpeningHoursParser.getDayIndex(calendar.get(Calendar.DAY_OF_WEEK));
+//        int day1 = OpeningHoursParser.getDayIndex(calendar.get(Calendar.DAY_OF_WEEK));
         int day = calendar.get(Calendar.DAY_OF_WEEK);
         return daysStr[day];
     }
@@ -175,5 +173,4 @@ public class VenueToOverpass {
 
         return new BoundingBox(north, east, south, west);
     }
-
 }

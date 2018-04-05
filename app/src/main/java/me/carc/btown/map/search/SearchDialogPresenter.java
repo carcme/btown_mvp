@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.Executors;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import me.carc.btown.App;
 import me.carc.btown.BuildConfig;
 import me.carc.btown.map.MapActivity;
@@ -61,12 +62,9 @@ public class SearchDialogPresenter implements ISearch.Presenter {
     private final ISearch.View view;
 
     private GeoPoint myLocation = null;
-    private GeoPoint centerLatLng;
     private GeoPoint mapCenter;
 
     private boolean paused;
-    private boolean show;
-    private boolean hidden;
 
 
     public SearchDialogPresenter(Context context, ISearch.View view) {
@@ -419,6 +417,7 @@ public class SearchDialogPresenter implements ISearch.Presenter {
     @SuppressWarnings("unused")
     private void addToHistoryDebug() {
         Executors.newSingleThreadExecutor().execute(new Runnable() {
+            @SuppressFBWarnings("ICAST_INTEGER_MULTIPLY_CAST_TO_LONG")
             @Override
             public void run() {
 

@@ -13,6 +13,8 @@ import java.util.ArrayList;
 
 public class Response implements Serializable, Parcelable {
 
+    private final static long serialVersionUID = 5894934532213494116L;
+
     @SerializedName("venue")
     @Expose
     private VenueResult venueResult;
@@ -123,5 +125,12 @@ public class Response implements Serializable, Parcelable {
         }
 
     };
-    private final static long serialVersionUID = 5894934532213494116L;
+
+    private void writeObject(java.io.ObjectOutputStream stream) throws java.io.IOException {
+        throw new java.io.NotSerializableException( getClass().getName() );
+    }
+
+    private void readObject(java.io.ObjectInputStream stream) throws java.io.IOException, ClassNotFoundException {
+        throw new java.io.NotSerializableException( getClass().getName() );
+    }
 }

@@ -415,6 +415,7 @@ public class MapActivity extends BaseActivity implements
                     }
                 }
                 break;
+            default:
         }
     }
 
@@ -446,6 +447,7 @@ public class MapActivity extends BaseActivity implements
                     Toast.makeText(MapActivity.this, "Permission denied to read your External storage", Toast.LENGTH_SHORT).show();
                 }
                 break;
+            default:
         }
     }
 

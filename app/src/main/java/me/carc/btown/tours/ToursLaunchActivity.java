@@ -125,6 +125,7 @@ public class ToursLaunchActivity extends BaseActivity {
                     finish();
                 }
                 break;
+            default:
         }
     }
 
@@ -258,6 +259,7 @@ public class ToursLaunchActivity extends BaseActivity {
                     case EXIT:
                         backgroundHolder.setBackgroundColor(ContextCompat.getColor(ToursLaunchActivity.this, android.R.color.transparent));
                         break;
+                    default:
                 }
 
                 preLoadProgress.setVisibility(View.GONE);  // hide in case user doesn't wait for the preload
@@ -282,6 +284,7 @@ public class ToursLaunchActivity extends BaseActivity {
                     case EXIT:
                         back();
                         break;
+                    default:
                 }
             }
         });

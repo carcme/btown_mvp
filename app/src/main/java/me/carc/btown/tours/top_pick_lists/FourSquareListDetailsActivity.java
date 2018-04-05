@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import org.osmdroid.util.GeoPoint;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -129,7 +130,7 @@ public class FourSquareListDetailsActivity extends BaseActivity {
     }
 
 
-    public class DistanceComparator implements Comparator<ItemsListItem> {
+    public static class DistanceComparator implements Comparator<ItemsListItem>, Serializable {
 
         @Override
         public int compare(ItemsListItem lhs, ItemsListItem rhs) {
@@ -227,6 +228,7 @@ public class FourSquareListDetailsActivity extends BaseActivity {
                     }
                 }
                 break;
+            default:
         }
     }
 

@@ -101,7 +101,7 @@ public class App extends Application {
             ex.printStackTrace();
         }
 
-        database = initDB();
+//        database = initDB();
 
         registerConnectivityRecver();
 

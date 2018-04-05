@@ -845,18 +845,18 @@ public class OpeningHoursParser {
             for (int i = 0; i < startTimes.size(); i++) {
                 int startTime = this.startTimes.get(i);
                 int endTime = this.endTimes.get(i);
-                if (startTime >= endTime && endTime != -1) {
+                if (startTime >= endTime && endTime != -1)
                     return true;
-                }
+
             }
             return false;
         }
 
         private int calculate(Calendar cal) {
             int month = cal.get(Calendar.MONTH);
-            if (!months[month]) {
+            if (!months[month])
                 return 0;
-            }
+
             int dmonth = cal.get(Calendar.DAY_OF_MONTH) - 1;
             int i = cal.get(Calendar.DAY_OF_WEEK);
             int day = (i + 5) % 7;
@@ -864,13 +864,13 @@ public class OpeningHoursParser {
             boolean thisDay = days[day] || dayMonths[dmonth];
             // potential error for Dec 31 12:00-01:00
             boolean previousDay = days[previous] || (dmonth > 0 && dayMonths[dmonth - 1]);
-            if (!thisDay && !previousDay) {
+            if (!thisDay && !previousDay)
                 return 0;
-            }
+
             int time = cal.get(Calendar.HOUR_OF_DAY) * 60 + cal.get(Calendar.MINUTE); // Time in minutes
             for (i = 0; i < startTimes.size(); i++) {
-                int startTime = this.startTimes.get(i);
-                int endTime = this.endTimes.get(i);
+                int startTime = startTimes.get(i);
+                int endTime = endTimes.get(i);
                 if (startTime < endTime || endTime == -1) {
                     // one day working like 10:00-20:00 (not 20:00-04:00)
                     if (time >= startTime && (endTime == -1 || time <= endTime) && thisDay) {
@@ -886,9 +886,8 @@ public class OpeningHoursParser {
                     }
                 }
             }
-            if (thisDay && (startTimes == null || startTimes.isEmpty() || !off)) {
+            if (thisDay && (startTimes == null || startTimes.isEmpty() || !off))
                 return -1;
-            }
             return 0;
         }
     }
@@ -1011,7 +1010,7 @@ public class OpeningHoursParser {
         BasicOpeningHourRule basic = new BasicOpeningHourRule();
         boolean[] days = basic.getDays();
         boolean[] months = basic.getMonths();
-        boolean[] dayMonths = basic.getDayMonths();
+//        boolean[] dayMonths = basic.getDayMonths();
         if ("24/7".equals(localRuleString)) {
             Arrays.fill(days, true);
             Arrays.fill(months, true);
@@ -1327,7 +1326,7 @@ public class OpeningHoursParser {
         Calendar cal = Calendar.getInstance();
         cal.setTime(new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.US).parse(time));
         boolean calculated = hours.isOpenedForTimeV2(cal);
-        System.out.printf("  %sok: Expected %s: %b = %b (rule %s)\n",
+        System.out.printf("  %sok: Expected %s: %b = %b (rule %s)%n",
                 ((calculated != expected) ? "NOT " : ""), time, expected, calculated, hours.getCurrentRuleTime(cal));
         if (calculated != expected) {
             throw new IllegalArgumentException("BUG!!!");
@@ -1337,7 +1336,7 @@ public class OpeningHoursParser {
     private static void testParsedAndAssembledCorrectly(String timeString, OpeningHours hours) {
         String assembledString = hours.toString();
         boolean isCorrect = assembledString.equalsIgnoreCase(timeString);
-        System.out.printf("  %sok: Expected: \"%s\" got: \"%s\"\n",
+        System.out.printf("  %sok: Expected: \"%s\" got: \"%s\"%n",
                 (!isCorrect ? "NOT " : ""), timeString, assembledString);
         if (!isCorrect) {
             throw new IllegalArgumentException("BUG!!!");

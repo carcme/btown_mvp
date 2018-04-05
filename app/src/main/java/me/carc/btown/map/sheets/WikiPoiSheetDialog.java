@@ -60,7 +60,7 @@ public class WikiPoiSheetDialog extends BottomSheetDialogFragment {
         void todo();
     }
 
-    private static final String TAG = C.DEBUG + Commons.getTag();
+    private static final String TAG = WikiPoiSheetDialog.class.getName();
     public static final String ID_TAG = "WikiPoiSheetDialog";
     public static final String ITEM = "ITEM";
 

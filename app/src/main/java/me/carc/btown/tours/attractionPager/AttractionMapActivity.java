@@ -2,6 +2,7 @@ package me.carc.btown.tours.attractionPager;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -22,6 +23,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import me.carc.btown.BaseActivity;
 import me.carc.btown.R;
 import me.carc.btown.common.Commons;
@@ -52,6 +54,7 @@ public class AttractionMapActivity extends BaseActivity {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 
+    @SuppressFBWarnings("NP_NULL_PARAM_DEREF_NONVIRTUAL")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,7 +79,7 @@ public class AttractionMapActivity extends BaseActivity {
             configureMap(true, attraction);
         } else if (intent.hasExtra(TITLE) && intent.hasExtra(GEOPOINT)) {
             getSupportActionBar().setTitle(getIntent().getStringExtra(TITLE));
-            configureMap(true, null);
+            configureMap(true, null);  //  Does FindBugs recognise the @Nullable annotation??
         } else
             finish();
     }
@@ -96,7 +99,7 @@ public class AttractionMapActivity extends BaseActivity {
         mapView.getOverlays().add(mPoiMarkers);
     }
 
-    private void configureMap(boolean enableControls, final Attraction data) {
+    private void configureMap(boolean enableControls, @Nullable final Attraction data) {
         final GeoPoint geoAttractionPoint;
         if(Commons.isNotNull(data))
             geoAttractionPoint = new GeoPoint(data.getLocation().lat, data.getLocation().lon);

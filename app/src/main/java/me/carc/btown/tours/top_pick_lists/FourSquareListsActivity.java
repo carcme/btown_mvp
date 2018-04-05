@@ -250,6 +250,7 @@ public class FourSquareListsActivity extends BaseActivity {
                     finish();
                 }
                 break;
+            default:
         }
     }
 

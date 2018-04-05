@@ -106,12 +106,17 @@ public class WikiUtils {
 
     public static String removeWikiLinkCountry(String osmWikiTag) {
 
+        // TODO: 20/03/2018 check this - the index != -1 and return value needs checking
         String ret = osmWikiTag;
-        int index = osmWikiTag.indexOf(":") + 1;
-        String[] arr = osmWikiTag.split(":");
+        int index = osmWikiTag.indexOf(":");
+        if(index != -1) {
+            String[] arr = osmWikiTag.split(":");
 
-        return arr[1];
+            return arr[1];
+        }
+        return "";
     }
+
 
     /**
      * http://stackoverflow.com/questions/3934331/android-how-to-encrypt-a-string

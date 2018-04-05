@@ -53,7 +53,7 @@ public class VenuePhotoAdapter extends RecyclerView.Adapter<PhotoViewHolder> {
     }
 
     @Override
-    public long getItemId(int position) { return Integer.valueOf(photos.get(position).getId()); }
+    public long getItemId(int position) { return Integer.parseInt(photos.get(position).getId()); }
 
     public Photo getPhoto(int pos) { return photos.get(pos); }
 

@@ -6,6 +6,7 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 
+import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Date;
 
@@ -94,7 +95,7 @@ public class FavoriteEntry {
     /**
      * Sort most recent to top
      */
-    public static class TimeStampComparator implements Comparator<FavoriteEntry> {
+    public static class TimeStampComparator implements Comparator<FavoriteEntry>, Serializable {
         @Override
         public int compare(FavoriteEntry lhs, FavoriteEntry rhs) {
             Long ts1 = lhs.getTimestamp();

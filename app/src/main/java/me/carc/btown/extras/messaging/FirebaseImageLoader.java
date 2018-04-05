@@ -40,7 +40,7 @@ public class FirebaseImageLoader implements StreamModelLoader<StorageReference> 
         return new FirebaseStorageFetcher(model);
     }
 
-    private class FirebaseStorageFetcher implements DataFetcher<InputStream> {
+    private static class FirebaseStorageFetcher implements DataFetcher<InputStream> {
 
         private StorageReference mRef;
         private StreamDownloadTask mStreamTask;

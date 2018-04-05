@@ -45,6 +45,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.Executors;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import me.carc.btown.App;
 import me.carc.btown.R;
 import me.carc.btown.Utils.AndroidUtils;
@@ -865,7 +866,7 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
                         if(Commons.isNotNull(result.osm_id)) {
                             OverpassQueryResult.Element element = new OverpassQueryResult.Element();
 
-                            element.id = Long.valueOf(result.osm_id);
+                            element.id = Long.parseLong(result.osm_id);
                             element.lat = result.lat;
                             element.lon = result.lon;
                             element.iconId = R.drawable.ic_pin;
@@ -1060,13 +1061,14 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
         mMap.getController().animateTo(new GeoPoint(venue.getLocation().getLat(), venue.getLocation().getLng()));
     }
 
+    @SuppressFBWarnings("NP_NULL_PARAM_DEREF_ALL_TARGETS_DANGEROUS") //  Does FindBugs recognise the @Nullable annotation??
     @Override
     public void showFsqVenues(ArrayList<VenueResult> venues) {
         VenueToOverpass converter = new VenueToOverpass();
         ArrayList<OverpassQueryResult.Element> elements = new ArrayList<>();
 
         for (VenueResult venue : venues) {
-            elements.add(converter.convertFsqToElement(venue, null));
+            elements.add(converter.convertFsqToElement(venue, null)); //  Does FindBugs recognise the @Nullable annotation??
         }
 
         if (elements.size() > 0) {

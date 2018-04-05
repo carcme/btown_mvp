@@ -21,6 +21,7 @@ import me.carc.btown.common.C;
 import me.carc.btown.common.CacheDir;
 import me.carc.btown.common.Commons;
 import me.carc.btown.common.TinyDB;
+import me.carc.btown.data.ToursDataClass;
 import me.carc.btown.tours.CatalogueActivity;
 import me.carc.btown.tours.model.Attraction;
 import me.carc.btown.tours.model.TourCatalogue;
@@ -53,7 +54,7 @@ public class GetFirebaseData {
 
     private void initValues() {
         mStorageRef = FirebaseStorage.getInstance().getReference();
-        dir = CacheDir.getCacheDir().cacheDirAsStr();
+        dir = CacheDir.getInstance().cacheDirAsStr();
     }
 
 
@@ -80,7 +81,7 @@ public class GetFirebaseData {
 
                 int version = TinyDB.getTinyDB().getInt(CatalogueActivity.JSON_VERSION, 0);
 
-                if(version < response.body().version) {
+                if (version < response.body().version) {
 
                     Executors.newSingleThreadExecutor().execute(new Runnable() {
                         @Override
@@ -89,8 +90,11 @@ public class GetFirebaseData {
                             TinyDB.getTinyDB().putInt(CatalogueActivity.JSON_VERSION, response.body().version);
 
                             String json = gson.toJson(response.body());
-                            TinyDB.getTinyDB().putString(CatalogueActivity.SERVER_FILE, json);
-                            new AsyncGetImagesEvent().execute(response.body());
+                            if (Commons.isNotNull(json)) {
+                                TinyDB.getTinyDB().putString(CatalogueActivity.SERVER_FILE, json);
+                                ToursDataClass.getInstance().setTourResult(gson.fromJson(json, TourHolderResult.class));
+                                new AsyncGetImagesEvent().execute(response.body());
+                            }
                         }
                     });
                 }
@@ -153,7 +157,7 @@ public class GetFirebaseData {
 
         StorageReference imageRef = mStorageRef.child(fromWhere + "/" + image);
 
-        File localFile = new File(CacheDir.getCacheDirAsFile(), image);
+        File localFile = new File(CacheDir.getInstance().getCacheDirAsFile(), image);
 
         imageRef.getFile(localFile)
                 .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {

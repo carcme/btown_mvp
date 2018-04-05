@@ -2,7 +2,6 @@ package me.carc.btown.map.markers;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Point;
 import android.view.MotionEvent;
 
 import org.osmdroid.views.MapView;
@@ -30,7 +29,6 @@ public abstract class MarkerClusterer extends Overlay {
     protected static final int FORCE_CLUSTERING = -1;
 
     protected ArrayList<Marker> mItems = new ArrayList<>();
-    protected Point mPoint = new Point();
     protected ArrayList<StaticCluster> mClusters = new ArrayList<>();
     protected int mLastZoomLevel;
     protected Bitmap mClusterIcon;
