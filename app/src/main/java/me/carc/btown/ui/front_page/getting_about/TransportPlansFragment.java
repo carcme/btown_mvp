@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.ContentLoadingProgressBar;
@@ -17,8 +16,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-
-import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -42,12 +39,12 @@ public class TransportPlansFragment extends Fragment {
     @BindView(R.id.catalogue_recycler)
     RecyclerView recyclerView;
 
-    @Nullable
-    @BindView(R.id.transportMapView)
-    SubsamplingScaleImageView imageView;
+//    @Nullable
+//    @BindView(R.id.transportMapView)
+//    SubsamplingScaleImageView imageView;
 
-    @BindView(R.id.toursApplicationToolBar)
-    View toursApplicationToolBar;
+//    @BindView(R.id.toursApplicationToolBar)
+//    View toursApplicationToolBar;
 
     @BindView(R.id.toursToolbar)
     Toolbar toolbar;

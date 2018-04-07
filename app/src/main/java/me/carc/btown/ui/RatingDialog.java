@@ -26,6 +26,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import me.carc.btown.R;
 
 /**
@@ -51,12 +52,12 @@ public class RatingDialog extends AppCompatDialog implements RatingBar.OnRatingB
 
     private float threshold;
     private int session;
-    private boolean thresholdPassed = true;
 
-    public RatingDialog(Context context, Builder builder) {
+    RatingDialog(Context context, Builder builder) {
         super(context);
 
-        getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+        if(getWindow() != null)
+            getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
 
         this.context = context;
         this.builder = builder;
@@ -69,7 +70,8 @@ public class RatingDialog extends AppCompatDialog implements RatingBar.OnRatingB
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        if(getWindow() != null)
+            getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         setContentView(R.layout.rating_dialog);
 
         tvTitle = findViewById(R.id.dialog_rating_title);
@@ -187,9 +189,11 @@ public class RatingDialog extends AppCompatDialog implements RatingBar.OnRatingB
 
     }
 
+    @SuppressFBWarnings("NP_NULL_ON_SOME_PATH")
     @Override
     public void onRatingChanged(RatingBar ratingBar, float v, boolean b) {
 
+        boolean thresholdPassed = true;
 
         if (ratingBar.getRating() >= threshold) {
             thresholdPassed = true;
@@ -252,34 +256,42 @@ public class RatingDialog extends AppCompatDialog implements RatingBar.OnRatingB
         }
     }
 
+    @SuppressWarnings("unused")
     public TextView getTitleTextView() {
         return tvTitle;
     }
 
+    @SuppressWarnings("unused")
     public TextView getPositiveButtonTextView() {
         return tvPositive;
     }
 
+    @SuppressWarnings("unused")
     public TextView getNegativeButtonTextView() {
         return tvNegative;
     }
 
+    @SuppressWarnings("unused")
     public TextView getFormTitleTextView() {
         return tvFeedback;
     }
 
+    @SuppressWarnings("unused")
     public TextView getFormSumbitTextView() {
         return tvSubmit;
     }
 
+    @SuppressWarnings("unused")
     public TextView getFormCancelTextView() {
         return tvCancel;
     }
 
+    @SuppressWarnings("unused")
     public ImageView getIconImageView() {
         return ivIcon;
     }
 
+    @SuppressWarnings("unused")
     public RatingBar getRatingBarView() {
         return ratingBar;
     }
@@ -309,18 +321,18 @@ public class RatingDialog extends AppCompatDialog implements RatingBar.OnRatingB
         if (session == count) {
             SharedPreferences.Editor editor = sharedpreferences.edit();
             editor.putInt(SESSION_COUNT, 1);
-            editor.commit();
+            editor.apply();
             return true;
         } else if (session > count) {
             count++;
             SharedPreferences.Editor editor = sharedpreferences.edit();
             editor.putInt(SESSION_COUNT, count);
-            editor.commit();
+            editor.apply();
             return false;
         } else {
             SharedPreferences.Editor editor = sharedpreferences.edit();
             editor.putInt(SESSION_COUNT, 2);
-            editor.commit();
+            editor.apply();
             return false;
         }
     }
@@ -329,7 +341,7 @@ public class RatingDialog extends AppCompatDialog implements RatingBar.OnRatingB
         sharedpreferences = context.getSharedPreferences(MyPrefs, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedpreferences.edit();
         editor.putBoolean(SHOW_NEVER, true);
-        editor.commit();
+        editor.apply();
     }
 
     public static class Builder {
@@ -379,6 +391,7 @@ public class RatingDialog extends AppCompatDialog implements RatingBar.OnRatingB
             feedbackFormHint = context.getString(R.string.rating_dialog_suggestions);
         }
 
+        @SuppressWarnings("unused")
         public Builder session(int session) {
             this.session = session;
             return this;
@@ -404,11 +417,13 @@ public class RatingDialog extends AppCompatDialog implements RatingBar.OnRatingB
             return this;
         }
 
+        @SuppressWarnings("unused")
         public Builder positiveButtonText(String positiveText) {
             this.positiveText = positiveText;
             return this;
         }
 
+        @SuppressWarnings("unused")
         public Builder negativeButtonText(String negativeText) {
             this.negativeText = negativeText;
             return this;
@@ -444,11 +459,13 @@ public class RatingDialog extends AppCompatDialog implements RatingBar.OnRatingB
             return this;
         }
 
+        @SuppressWarnings("unused")
         public Builder onThresholdFailed(RatingThresholdFailedListener ratingThresholdFailedListener) {
             this.ratingThresholdFailedListener = ratingThresholdFailedListener;
             return this;
         }
 
+        @SuppressWarnings("unused")
         public Builder onRatingChanged(RatingDialogListener ratingDialogListener) {
             this.ratingDialogListener = ratingDialogListener;
             return this;
@@ -484,6 +501,7 @@ public class RatingDialog extends AppCompatDialog implements RatingBar.OnRatingB
             return this;
         }
 
+        @SuppressWarnings("unused")
         public Builder feedbackTextColor(int feedBackTextColor) {
             this.feedBackTextColor = feedBackTextColor;
             return this;

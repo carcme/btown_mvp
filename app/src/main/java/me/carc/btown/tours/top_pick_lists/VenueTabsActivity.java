@@ -42,7 +42,6 @@ import me.carc.btown.common.C;
 import me.carc.btown.common.Commons;
 import me.carc.btown.common.interfaces.ToursScrollListener;
 import me.carc.btown.data.all4squ.entities.VenueResult;
-import me.carc.btown.tours.AttractionTabsStopsFragment;
 import me.carc.btown.tours.top_pick_lists.fragments.VenueInfoFragment;
 import me.carc.btown.tours.top_pick_lists.fragments.VenuePhotosFragment;
 import me.carc.btown.tours.top_pick_lists.fragments.VenueTipsFragment;
@@ -52,7 +51,6 @@ import me.carc.btown.ui.custom.MyFragmentPagerAdapter;
  * Created by Carc.me on 25.04.16.
  */
 public class VenueTabsActivity extends BaseActivity implements
-        AttractionTabsStopsFragment.AttractionListListener,
         ToursScrollListener {
 
     private static final String TAG = C.DEBUG + Commons.getTag();
@@ -370,14 +368,6 @@ public class VenueTabsActivity extends BaseActivity implements
                 return super.onOptionsItemSelected(item);
         }
         return true;
-    }
-
-
-    @Override
-    public void onItemSelected() {
-
-        Log.d(TAG, "onItemSelected: ");
-        showProgressDialog();
     }
 
     @Override

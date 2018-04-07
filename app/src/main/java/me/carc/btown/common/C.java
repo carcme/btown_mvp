@@ -2,6 +2,7 @@ package me.carc.btown.common;
 
 import android.os.Build;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import me.carc.btown.BuildConfig;
 
 /**
@@ -34,14 +35,15 @@ public class C {
     public static final String NOT_CONNECT = "NOT_CONNECT";
     final static String CONNECTIVITY_ACTION = "android.net.conn.CONNECTIVITY_CHANGE";
 
-    public static final int TYPE_NC     = 0;
-    public static final int TYPE_WIFI   = 1;
-    public static final int TYPE_MOBILE = 2;
+    static final int TYPE_NC     = 0;
+    static final int TYPE_WIFI   = 1;
+    static final int TYPE_MOBILE = 2;
 
 
+    @SuppressFBWarnings("MS_CANNOT_BE_FINAL")
     public static String USER_LANGUAGE = "en";
 
-    public static final String DATA_DIR = "data/BTown";
+    static final String DATA_DIR = "data/BTown";
 
     public static final String INTENT_MARKET = "market://details?id=";
 
@@ -61,9 +63,9 @@ public class C {
 
 
     public static final int TIME_ONE_SECOND = 1000;
-    public static final int TIME_ONE_MINUTE = 60 * TIME_ONE_SECOND;
-    public static final int TIME_ONE_HOUR = TIME_ONE_MINUTE * 60;
-    public static final int TIME_ONE_DAY = TIME_ONE_HOUR * 24;
+    private static final int TIME_ONE_MINUTE = 60 * TIME_ONE_SECOND;
+    private static final int TIME_ONE_HOUR = TIME_ONE_MINUTE * 60;
+    private static final int TIME_ONE_DAY = TIME_ONE_HOUR * 24;
     public static final int TIME_ONE_WEEK = TIME_ONE_DAY * 7;
 
 

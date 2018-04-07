@@ -5,7 +5,7 @@ import android.content.Context;
 import java.io.File;
 import java.io.IOException;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import me.carc.btown.App;
 
 /**
  * Created by Carc.me on 04.05.16.
@@ -14,22 +14,20 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  * Set the application cache directory
  */
 
-@SuppressFBWarnings("RV_RETURN_VALUE_IGNORED_BAD_PRACTICE")
 public class CacheDir {
 
-    private static CacheDir INSTANCE = null;
-    private static Context mContext;
+    private static final CacheDir INSTANCE = new CacheDir();
     private File cacheDirectory;
 
-
     public static CacheDir getInstance() {
-        if (INSTANCE == null) {
-            INSTANCE = new CacheDir(mContext);
-        }
-        return(INSTANCE);
+        return INSTANCE;
     }
 
-    public CacheDir(Context ctx) {
+    private CacheDir() {
+        init(App.getAC());
+    }
+
+    public void init(Context ctx) {
 
         // Find the dir to save cached images
         if(TinyDB.isExternalStorageWritable()) {
@@ -53,9 +51,6 @@ public class CacheDir {
         catch (IOException e) {
             e.printStackTrace();
         }
-
-        mContext = ctx;
-        INSTANCE = this;
     }
 
     public String getCachePath() {

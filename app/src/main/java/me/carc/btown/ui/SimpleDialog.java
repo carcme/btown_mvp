@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.TextView;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import me.carc.btown.R;
 
 /**
@@ -186,6 +187,7 @@ public class SimpleDialog extends AppCompatDialog implements View.OnClickListene
             return this;
         }
 
+        @SuppressFBWarnings("URF_UNREAD_FIELD")
         public Builder negativeButtonBackgroundColor(int resColor) {
             this.negativeBackgroundColor = resColor;
             return this;

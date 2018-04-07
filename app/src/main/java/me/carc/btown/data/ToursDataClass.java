@@ -15,7 +15,6 @@ import me.carc.btown.tours.model.TourHolderResult;
 public class ToursDataClass extends ViewModel {
 
     private static volatile ToursDataClass sSoleInstance = new ToursDataClass();
-
     private static volatile TourHolderResult mToursPreLoad;
 
     //private constructor.

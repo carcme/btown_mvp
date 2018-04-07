@@ -203,8 +203,8 @@ public class AttractionPagerActivity extends BaseActivity implements Placeholder
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // facebook stuff
-        callbackManager.onActivityResult(requestCode, resultCode, data);
-
+        if(Commons.isNotNull(callbackManager))
+            callbackManager.onActivityResult(requestCode, resultCode, data);
 
         switch (requestCode) {
             case RESULT_CAMERA_PREVIEW:

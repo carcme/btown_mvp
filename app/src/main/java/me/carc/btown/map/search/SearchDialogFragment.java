@@ -39,6 +39,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
 import butterknife.Unbinder;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import me.carc.btown.App;
 import me.carc.btown.R;
 import me.carc.btown.Utils.AndroidUtils;
@@ -71,6 +72,7 @@ public class SearchDialogFragment extends DialogFragment implements ISearch.View
         void doWikiLookup();
     }
 
+    @SuppressFBWarnings("URF_UNREAD_FIELD")  // bad warning??
     private SearchListener cbSearchListener;
 
     @SuppressWarnings("unused")
@@ -128,9 +130,6 @@ public class SearchDialogFragment extends DialogFragment implements ISearch.View
 
     @BindView(R.id.settingButton)
     ImageButton settingButton;
-
-    @BindView(R.id.bookmarkBtn)
-    ImageButton bookmarkBtn;
 
 
     @BindView(R.id.tab_toolbar_layout)

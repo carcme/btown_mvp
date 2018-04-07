@@ -1,6 +1,7 @@
 package me.carc.btown.tours.data.services;
 
 import android.app.IntentService;
+import android.app.Notification;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -50,11 +51,11 @@ public class FirebaseImageDownloader extends IntentService {
 
 
     private boolean updateInProgress() {
-        return ((App)getApplicationContext()).isUpdatingFirebase();
+        return ((App) getApplicationContext()).isUpdatingFirebase();
     }
 
-    private void  setUpdateInProgress(boolean update) {
-        ((App)getApplicationContext()).setUpdatingFirebase(update);
+    private void setUpdateInProgress(boolean update) {
+        ((App) getApplicationContext()).setUpdatingFirebase(update);
     }
 
     /**
@@ -65,9 +66,15 @@ public class FirebaseImageDownloader extends IntentService {
     }
 
     @Override
+    public void onCreate() {
+        super.onCreate();
+        startForeground(1, new Notification());
+    }
+
+    @Override
     protected void onHandleIntent(@Nullable Intent intent) {
 
-        if(!updateInProgress()) {
+        if (!updateInProgress()) {
             setUpdateInProgress(true);
             Boolean forceUpdate = intent.getBooleanExtra("FORCE_UPDATE", false);
             initValues();
@@ -77,11 +84,8 @@ public class FirebaseImageDownloader extends IntentService {
 
     private void initValues() {
         mStorageRef = FirebaseStorage.getInstance().getReference();
-
-        if(CacheDir.getInstance() == null)    // Crashlytics #131 - Make sure Cache is init'd
-            new CacheDir(getApplicationContext());
         dir = CacheDir.getInstance().cacheDirAsStr();
-        db = new TinyDB(getApplicationContext());    // ensure TinyDB is init'd
+        db = TinyDB.getTinyDB();    // ensure TinyDB is init'd
     }
 
     private void getLatestJsonTours(final boolean force) {
@@ -161,7 +165,7 @@ public class FirebaseImageDownloader extends IntentService {
                 .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                        Log.d(TAG, "onSuccess: "  +taskSnapshot.toString());
+                        Log.d(TAG, "onSuccess: " + taskSnapshot.toString());
 
                     }
                 }).addOnFailureListener(new OnFailureListener() {

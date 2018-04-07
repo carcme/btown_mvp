@@ -256,6 +256,7 @@
 
 
     <string name="building">Building</string>
+    <string name="shared_string_initialising">Initialising…</string>
 
 
 </resources>

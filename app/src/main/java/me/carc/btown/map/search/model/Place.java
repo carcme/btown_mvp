@@ -8,11 +8,14 @@ import org.osmdroid.util.GeoPoint;
 
 import java.util.Arrays;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 /**
  * Created by Carc.me on 13.10.16.
  * <p/>
  * TODO: Add a class header comment!
  */
+@SuppressFBWarnings({"EI_EXPOSE_REP", "EI_EXPOSE_REP2"})
 public class Place implements Parcelable {
 
     /**

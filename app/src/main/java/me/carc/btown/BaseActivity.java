@@ -1,7 +1,6 @@
 package me.carc.btown;
 
 import android.annotation.TargetApi;
-import android.app.ActivityManager;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.ComponentName;
@@ -54,6 +53,7 @@ import com.bumptech.glide.Glide;
 import com.facebook.Profile;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -73,7 +73,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.carc.btown.Utils.IntentUtils;
 import me.carc.btown.common.C;
-import me.carc.btown.common.CacheDir;
 import me.carc.btown.common.Commons;
 import me.carc.btown.common.TinyDB;
 import me.carc.btown.extras.PublicTransportPlanExtra;
@@ -130,27 +129,12 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onResume();
         getApp().setCurrentActivity(this);
 
-        if(isServiceRunning(IInAppBillingService.Stub.class)) {
+        if (GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this) == ConnectionResult.SUCCESS) {
             Intent serviceIntent = new Intent("com.android.vending.billing.InAppBillingService.BIND");
-            serviceIntent.setPackage("com.android.vending");
+            serviceIntent.setPackage(GooglePlayServicesUtil.GOOGLE_PLAY_STORE_PACKAGE);
             bindService(serviceIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
         }
     }
-
-    private boolean isServiceRunning(Class<?> serviceClass) {
-        try {
-            ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-            for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-                if (serviceClass.getName().equals(service.service.getClassName())) {
-                    return true;
-                }
-            }
-        }catch (NullPointerException e) {
-            Log.d(TAG, "isServiceRunning: " + e.getMessage());
-        }
-        return false;
-    }
-
 
     @edu.umd.cs.findbugs.annotations.SuppressFBWarnings("DE_MIGHT_IGNORE")
     @Override
@@ -169,14 +153,14 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        setupNavDrawer();
+//        setupNavDrawer();
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        if (Commons.isNotNull(mDrawerToggle))
-            mDrawerToggle.onConfigurationChanged(newConfig);
+//        if (Commons.isNotNull(mDrawerToggle))
+//            mDrawerToggle.onConfigurationChanged(newConfig);
     }
 
     @Override
@@ -247,23 +231,19 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     public void getBaseFunctions() {
         db = TinyDB.getTinyDB();
-        if (db == null)
-            db = new TinyDB(getApplicationContext());
-
-        new CacheDir(getApplicationContext());
-
         calculateImageHeight();
     }
 
 
+    @SuppressWarnings("unused")
     protected GeoPoint getCurrentLocation(GeoPoint point) {
         return currentLocation;
     }
 
+    @SuppressWarnings("unused")
     protected void setCurrentLocation(GeoPoint point) {
         currentLocation = point;
     }
-
 
     protected static boolean isGermanLanguage() {
         return C.USER_LANGUAGE.equals("de");
@@ -352,11 +332,13 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    @SuppressWarnings("unused")
     public void setTranslucentStatusBarLollipop(Window window) {
         setStatusBarColor(false, android.R.color.transparent);
     }
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
+    @SuppressWarnings("unused")
     private void setTranslucentStatusBarKiKat(Window window) {
         window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
     }
@@ -535,6 +517,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         db.putInt(SAVED_HEADER_BACKGROUND, imageRes);
     }
 
+    @Deprecated
     private void setupNavDrawer() {
         mDrawerLayout = findViewById(R.id.drawer_layout);
 
@@ -552,9 +535,10 @@ public abstract class BaseActivity extends AppCompatActivity {
         configureNavView();
     }
 
+    @Deprecated
     private void configureNavView() {
         NavigationView navigationView = findViewById(R.id.navigation_view);
-        if(Commons.isNotNull(navigationView)) {
+        if (Commons.isNotNull(navigationView)) {
             navigationView.setNavigationItemSelectedListener(navigationViewListener);
 
             if (!Preferences.showTours(this)) {
@@ -756,28 +740,40 @@ public abstract class BaseActivity extends AppCompatActivity {
             if (callback != null) {
                 callback.onSuccess(mPurchaseItems);
             }
-            return;
+        } else
+            new GetSkuDetails(callback, mDonateItems, getPackageName()).execute(mBillingService);
+    }
+
+    private static class GetSkuDetails extends AsyncTask<IInAppBillingService, Void, AsyncResult<List<PurchaseItem>>> {
+        AsyncCallback<List<PurchaseItem>> mCallback;
+        String[] mItems;
+        String mPackage;
+
+        private GetSkuDetails(final AsyncCallback<List<PurchaseItem>> callback, String[] items, String packName) {
+            mCallback = callback;
+            mItems = items;
+            mPackage = packName;
         }
-        new AsyncTask<IInAppBillingService, Void, AsyncResult<List<PurchaseItem>>>() {
 
-            @Override
-            protected AsyncResult<List<PurchaseItem>> doInBackground(IInAppBillingService... params) {
-                List<PurchaseItem> result = new ArrayList<>();
-                Throwable exception = null;
-                IInAppBillingService billingService = params[0];
+        @Override
+        protected AsyncResult<List<PurchaseItem>> doInBackground(IInAppBillingService... params) {
+            List<PurchaseItem> result = new ArrayList<>();
+            Throwable exception = null;
+            IInAppBillingService billingService = params[0];
 
-                if (billingService == null) {
-                    exception = new Exception("Unknown");
-                } else {
-                    ArrayList<String> skuList = new ArrayList<>(Arrays.asList(mDonateItems));
-                    Bundle querySkus = new Bundle();
-                    querySkus.putStringArrayList("ITEM_ID_LIST", skuList);
-                    try {
-                        Bundle skuDetails = billingService.getSkuDetails(3, getPackageName(), "inapp", querySkus);
-                        int response = skuDetails.getInt("RESPONSE_CODE");
-                        if (response == 0) {
-                            ArrayList<String> responseList = skuDetails.getStringArrayList("DETAILS_LIST");
-                            PurchaseItem purchaseItem;
+            if (billingService == null) {
+                exception = new Exception("Unknown");
+            } else {
+                ArrayList<String> skuList = new ArrayList<>(Arrays.asList(mItems));
+                Bundle querySkus = new Bundle();
+                querySkus.putStringArrayList("ITEM_ID_LIST", skuList);
+                try {
+                    Bundle skuDetails = billingService.getSkuDetails(3, mPackage, "inapp", querySkus);
+                    int response = skuDetails.getInt("RESPONSE_CODE");
+                    if (response == 0) {
+                        ArrayList<String> responseList = skuDetails.getStringArrayList("DETAILS_LIST");
+                        PurchaseItem purchaseItem;
+                        if (Commons.isNotNull(responseList)) {
                             for (String item : responseList) {
                                 purchaseItem = new PurchaseItem(new JSONObject(item));
                                 if (purchaseItem.isValid()) {
@@ -785,36 +781,36 @@ public abstract class BaseActivity extends AppCompatActivity {
                                 }
                             }
                         }
-                    } catch (RemoteException | JSONException e) {
-                        e.printStackTrace();
-                        exception = e;
                     }
+                } catch (RemoteException | JSONException e) {
+                    e.printStackTrace();
+                    exception = e;
                 }
-                return new AsyncResult<>(result, exception);
             }
+            return new AsyncResult<>(result, exception);
+        }
 
-            @Override
-            protected void onPostExecute(AsyncResult<List<PurchaseItem>> result) {
-                if (!isFinishing() && callback != null) {
-                    Throwable error = result.getError();
-                    if (error == null && (result.getResult() == null || result.getResult().size() == 0)) {
-                        error = new Exception("Unknow");
-                    }
-                    if (error != null) {
-                        callback.onError(error);
-                    } else {
-                        mPurchaseItems = result.getResult();
-                        Collections.sort(mPurchaseItems, new Comparator<PurchaseItem>() {
-                            @Override
-                            public int compare(PurchaseItem lhs, PurchaseItem rhs) {
-                                return (int) ((lhs.getPriceAmountMicros() - rhs.getPriceAmountMicros()) / 1000);
-                            }
-                        });
-                        callback.onSuccess(mPurchaseItems);
-                    }
+        @Override
+        protected void onPostExecute(AsyncResult<List<PurchaseItem>> result) {
+            if (mCallback != null) {
+                Throwable error = result.getError();
+                if (error == null && (result.getResult() == null || result.getResult().size() == 0)) {
+                    error = new Exception("Unknow");
+                }
+                if (error != null) {
+                    mCallback.onError(error);
+                } else {
+                    mPurchaseItems = result.getResult();
+                    Collections.sort(mPurchaseItems, new Comparator<PurchaseItem>() {
+                        @Override
+                        public int compare(PurchaseItem lhs, PurchaseItem rhs) {
+                            return (int) ((lhs.getPriceAmountMicros() - rhs.getPriceAmountMicros()) / 1000);
+                        }
+                    });
+                    mCallback.onSuccess(mPurchaseItems);
                 }
             }
-        }.execute(mBillingService);
+        }
     }
 
     public void showDonateDialogErrorCallback(Throwable throwable) {
@@ -854,45 +850,48 @@ public abstract class BaseActivity extends AppCompatActivity {
 
 
     public void consumeAllIAB() {
+        new consumeAllIAB(getPackageName()).execute(mBillingService);
+    }
 
-        new AsyncTask<IInAppBillingService, Void, Boolean>() {
+    private static class consumeAllIAB extends AsyncTask<IInAppBillingService, Void, Boolean> {
+        String mPackage;
 
-            @Override
-            protected Boolean doInBackground(IInAppBillingService... params) {
-                IInAppBillingService billingService = params[0];
+        private consumeAllIAB(String packName) {
+            mPackage = packName;
+        }
 
-                if (billingService != null) {
-                    try {
-                        Bundle ownedItems = billingService.getPurchases(3, getPackageName(), "inapp", null);
-                        int responseCode = ownedItems.getInt("RESPONSE_CODE");
-                        if (responseCode == 0) {
+        @Override
+        protected Boolean doInBackground(IInAppBillingService... params) {
+            IInAppBillingService billingService = params[0];
 
-                            ArrayList<String> purchaseDataList = ownedItems.getStringArrayList("INAPP_PURCHASE_DATA_LIST");
-                            if (Commons.isNotNull(purchaseDataList)) {
-                                for (String purchaseData : purchaseDataList) {
-                                    JSONObject o = new JSONObject(purchaseData);
-                                    String purchaseToken = o.optString("token", o.optString("purchaseToken"));
+            if (billingService != null) {
+                try {
+                    Bundle ownedItems = billingService.getPurchases(3, mPackage, "inapp", null);
+                    int responseCode = ownedItems.getInt("RESPONSE_CODE");
+                    if (responseCode == 0) {
 
-                                    responseCode = billingService.consumePurchase(3, getPackageName(), purchaseToken);
-                                    Log.d(TAG, "Consume IAB: " + responseCode);
-                                }
+                        ArrayList<String> purchaseDataList = ownedItems.getStringArrayList("INAPP_PURCHASE_DATA_LIST");
+                        if (Commons.isNotNull(purchaseDataList)) {
+                            for (String purchaseData : purchaseDataList) {
+                                JSONObject o = new JSONObject(purchaseData);
+                                String purchaseToken = o.optString("token", o.optString("purchaseToken"));
+
+                                responseCode = billingService.consumePurchase(3, mPackage, purchaseToken);
+                                Log.d(TAG, "Consume IAB: " + responseCode);
                             }
                         }
-                    } catch (RemoteException e) {
-                        e.printStackTrace();
-                        return false;
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        return false;
                     }
+                } catch (RemoteException | JSONException e) {
+                    e.printStackTrace();
+                    return false;
                 }
-                return true;
             }
+            return true;
+        }
 
-            @Override
-            protected void onPostExecute(Boolean res) {
-            }
-        }.execute(mBillingService);
+        @Override
+        protected void onPostExecute(Boolean res) {
+        }
     }
 
     public static abstract class AsyncCallback<T> {
@@ -972,23 +971,16 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
-    public static class PurchaseItem {
-
+    static class PurchaseItem {
         private String mDescription;
-
         private String mId;
-
         private String mPrice;
-
         private long mPriceAmountMicros;
-
         private String mPriceCurrencyCode;
-
         private String mTitle;
-
         private String mType;
 
-        public PurchaseItem(JSONObject item) {
+        PurchaseItem(JSONObject item) {
             try {
                 if (item != null) {
                     mId = item.getString("productId");
@@ -1004,35 +996,28 @@ public abstract class BaseActivity extends AppCompatActivity {
             }
         }
 
-        public String getDescription() {
+        String getDescription() {
             return mDescription;
         }
-
-        public String getId() {
+        String getId() {
             return mId;
         }
-
-        public String getPrice() {
+        String getPrice() {
             return mPrice;
         }
-
-        public long getPriceAmountMicros() {
+        long getPriceAmountMicros() {
             return mPriceAmountMicros;
         }
-
-        public String getPriceCurrencyCode() {
+        String getPriceCurrencyCode() {
             return mPriceCurrencyCode;
         }
-
-        public String getTitle() {
+        String getTitle() {
             return mTitle;
         }
-
-        public String getType() {
+        String getType() {
             return mType;
         }
-
-        public boolean isValid() {
+        boolean isValid() {
             return !TextUtils.isEmpty(mId);
         }
     }

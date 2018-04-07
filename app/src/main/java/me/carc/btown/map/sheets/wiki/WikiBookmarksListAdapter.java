@@ -33,8 +33,8 @@ public class WikiBookmarksListAdapter extends RecyclerView.Adapter<WikiBookmarks
         long pageId;
         String title;
         String desciption;
-        double lat;
-        double lon;
+//        double lat;
+//        double lon;
         String iconUrl;
         String fullUrl;
     }

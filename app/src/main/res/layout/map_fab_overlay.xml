@@ -111,7 +111,8 @@
         app:elevation="0dp"
         app:fabSize="normal"
         app:pressedTranslationZ="0dp"
-        app:srcCompat="@drawable/ic_burger_menu"/>
+        app:srcCompat="@drawable/ic_burger_menu"
+        android:visibility="gone"/>
 
     <TextView
         android:id="@+id/routeInfoText"

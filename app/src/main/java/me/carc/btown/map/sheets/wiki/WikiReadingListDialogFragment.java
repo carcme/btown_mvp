@@ -252,8 +252,8 @@ public class WikiReadingListDialogFragment extends DialogFragment implements Wik
             item.pageId = entry.getPageId();
             item.title = entry.getTitle();
             item.desciption = Commons.isEmpty(entry.getUserComment()) ? entry.getExtract() : entry.getUserComment();
-            item.lat = entry.getLat();
-            item.lon = entry.getLon();
+//            item.lat = entry.getLat();
+//            item.lon = entry.getLon();
             item.iconUrl = entry.getThumbnail();
             item.fullUrl = entry.getLinkUrl();
 

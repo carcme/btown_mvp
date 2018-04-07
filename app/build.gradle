@@ -24,8 +24,8 @@ android {
         applicationId 'me.carc.btown'
         minSdkVersion 21
         targetSdkVersion 26
-        versionCode 56
-        versionName "2.1.16"
+        versionCode 59
+        versionName "2.1.19"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         android.defaultConfig.vectorDrawables.useSupportLibrary = true
         javaCompileOptions {

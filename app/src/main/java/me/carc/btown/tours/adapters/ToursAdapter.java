@@ -9,8 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 
@@ -27,7 +25,7 @@ import me.carc.btown.tours.model.TourCatalogue;
 public class ToursAdapter extends RecyclerView.Adapter<CatalogueViewHolder> {
 
     private ArrayList<TourCatalogue> tours;
-    private StorageReference mCoverImageStorageRef;
+//    private StorageReference mCoverImageStorageRef;
     private boolean isGermanLanguage;
 
     public DrawableClickListener onClickListener;
@@ -36,7 +34,7 @@ public class ToursAdapter extends RecyclerView.Adapter<CatalogueViewHolder> {
         this.tours = tours;
         isGermanLanguage = language;
         onClickListener = listener;
-        mCoverImageStorageRef = FirebaseStorage.getInstance().getReference().child("coverImages/");
+//        mCoverImageStorageRef = FirebaseStorage.getInstance().getReference().child("coverImages/");
     }
 
     @Override

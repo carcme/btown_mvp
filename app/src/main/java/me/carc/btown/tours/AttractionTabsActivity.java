@@ -9,7 +9,6 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.util.SparseArray;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,11 +19,11 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import me.carc.btown.BaseActivity;
 import me.carc.btown.R;
 import me.carc.btown.Utils.AndroidUtils;
 import me.carc.btown.Utils.ViewUtils;
-import me.carc.btown.common.C;
 import me.carc.btown.common.CacheDir;
 import me.carc.btown.common.Commons;
 import me.carc.btown.common.interfaces.ToursScrollListener;
@@ -35,16 +34,15 @@ import me.carc.btown.ui.custom.MyFragmentPagerAdapter;
 /**
  * Created by Carc.me on 25.04.16.
  */
-public class AttractionTabsActivity extends BaseActivity implements
-        AttractionTabsStopsFragment.AttractionListListener,
-        ToursScrollListener {
+public class AttractionTabsActivity extends BaseActivity implements ToursScrollListener {
 
-    private static final String TAG = C.DEBUG + Commons.getTag();
+    private static final String TAG = AttractionTabsActivity.class.getName();
 
     private MyFragmentPagerAdapter adapter;
     private String tourTitle;
     private ArrayList<Attraction> attractions;
 
+    @SuppressFBWarnings("MS_CANNOT_BE_FINAL")
     public static SparseArray<GalleryItem> galleryItems;
 
     @BindView(R.id.tabsToolbar)
@@ -212,13 +210,6 @@ public class AttractionTabsActivity extends BaseActivity implements
                 return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onItemSelected() {
-
-        Log.d(TAG, "onItemSelected: ");
-        showProgressDialog();
     }
 
     @Override

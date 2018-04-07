@@ -1,6 +1,5 @@
 package me.carc.btown.common;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
@@ -17,19 +16,20 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
 
+import me.carc.btown.App;
+
 //import com.google.gson.Gson;
 
 
 public class TinyDB {
 
-    private static TinyDB tinyDB;
+    private static TinyDB tinyDB = new TinyDB();
     private SharedPreferences preferences;
     private String DEFAULT_APP_IMAGEDATA_DIRECTORY;
     private String lastImagePath = "";
 
-    public TinyDB(Context appContext) {
-        preferences = PreferenceManager.getDefaultSharedPreferences(appContext);
-        tinyDB = this;
+    public TinyDB() {
+        preferences = PreferenceManager.getDefaultSharedPreferences(App.getAC());
     }
 
     public static TinyDB getTinyDB() {

@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import gnu.trove.list.array.TIntArrayList;
 
 /**
@@ -368,6 +369,7 @@ public class OpeningHoursParser {
      * <p/>
      * This implementation only supports month, day of weeks and numeral times, or the value "off"
      */
+    @SuppressFBWarnings("EI_EXPOSE_REP")
     public static class BasicOpeningHourRule implements OpeningHoursRule {
         /**
          * represents the list on which days it is open.
@@ -852,6 +854,7 @@ public class OpeningHoursParser {
             return false;
         }
 
+        @SuppressFBWarnings("RCN_REDUNDANT_NULLCHECK_WOULD_HAVE_BEEN_A_NPE")
         private int calculate(Calendar cal) {
             int month = cal.get(Calendar.MONTH);
             if (!months[month])

@@ -31,8 +31,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import me.carc.btown.common.C;
-import me.carc.btown.common.Commons;
 
 /**
  * Author: Mario Velasco Casquero
@@ -42,13 +40,13 @@ import me.carc.btown.common.Commons;
 @SuppressFBWarnings("RV_RETURN_VALUE_IGNORED_BAD_PRACTICE")
 public class ImageUtils {
 
-    private static final String TAG = C.DEBUG + Commons.getTag();
+    private static final String TAG = ImageUtils.class.getName();
 
     private static final int DEFAULT_MIN_WIDTH_QUALITY = 400;        // min pixels
     private static final String TEMP_IMAGE_NAME = "tempImage.jpg";
 
-    public static int minWidthQuality = DEFAULT_MIN_WIDTH_QUALITY;
-    public static Uri selectedImage;
+    private static final int minWidthQuality = DEFAULT_MIN_WIDTH_QUALITY;
+    private static Uri selectedImage;
 
     public static Bitmap decodeSampledBitmapFromPath(String path, int reqWidth, int reqHeight) {
 
@@ -65,7 +63,7 @@ public class ImageUtils {
         return BitmapFactory.decodeFile(path, options);
     }
 
-    public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
+    private static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
         // Raw height and width of image
         final int height = options.outHeight;
         final int width = options.outWidth;
@@ -338,7 +336,7 @@ public class ImageUtils {
         return rotate;
     }
 
-    public static int getRotationFromGallery(Context context, Uri imageUri) {
+    private static int getRotationFromGallery(Context context, Uri imageUri) {
         int result = 0;
         String[] columns = {MediaStore.Images.Media.ORIENTATION};
         Cursor cursor = null;

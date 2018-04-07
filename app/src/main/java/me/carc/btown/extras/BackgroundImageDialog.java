@@ -20,6 +20,7 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import me.carc.btown.App;
 import me.carc.btown.R;
 import me.carc.btown.Utils.ViewUtils;
@@ -52,6 +53,7 @@ public class BackgroundImageDialog extends DialogFragment {
     FloatingActionButton fab;
 
 
+    @SuppressFBWarnings("MS_MUTABLE_ARRAY")
     public static final int[] BACKGROUNGS = new int[]{
             R.drawable.background_jewish_memorial,
             R.drawable.background_brandenburg_tor,

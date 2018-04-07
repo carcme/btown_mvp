@@ -2,7 +2,6 @@ package me.carc.btown.tours.top_pick_lists.adapters;
 
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
-import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +16,6 @@ import org.osmdroid.util.GeoPoint;
 import java.util.ArrayList;
 
 import me.carc.btown.R;
-import me.carc.btown.common.C;
 import me.carc.btown.common.Commons;
 import me.carc.btown.data.all4squ.entities.Category;
 import me.carc.btown.data.all4squ.entities.ItemsListItem;
@@ -28,11 +26,9 @@ import me.carc.btown.ui.CompassView;
  */
 public class ListDetailsAdapter extends RecyclerView.Adapter<ListDetailsAdapter.MyViewHolder> {
 
-    private static final String TAG = C.DEBUG + Commons.getTag();
+    private static final String TAG = ListDetailsAdapter.class.getName();
     private final ArrayList<ItemsListItem> mList;
     private final GeoPoint lastLocation;
-    private SparseArray<CompassView> compassArray = new SparseArray<>();
-    private SparseArray<TextView> distanceArray = new SparseArray<>();
 
     public ListDetailsAdapter(ArrayList<ItemsListItem> list, GeoPoint location) {
         this.mList = list;
@@ -97,12 +93,8 @@ public class ListDetailsAdapter extends RecyclerView.Adapter<ListDetailsAdapter.
             holder.ratingText.getBackground().setTint(ContextCompat.getColor(holder.mView.getContext(), R.color.tintLight));
         }
 
-        if(Commons.isNotNull(lastLocation)) {
+        if(Commons.isNotNull(lastLocation))
             holder.distanceText.setText(item.getVenue().getLocation().getDistanceFormatted());
-//            compassArray.put(position, holder.compassIcon);
-//            holder.compassIcon.rotationFromLocations(lastLocation, new GeoPoint(toWhere.getLat(), toWhere.getLng()), true);
-        }
-
     }
 
     public boolean isEmpty() {
@@ -114,7 +106,7 @@ public class ListDetailsAdapter extends RecyclerView.Adapter<ListDetailsAdapter.
         return mList.size();
     }
 
-    public static class MyViewHolder extends RecyclerView.ViewHolder {
+    static class MyViewHolder extends RecyclerView.ViewHolder {
         final View mView;
 
         final TextView title;
@@ -125,7 +117,7 @@ public class ListDetailsAdapter extends RecyclerView.Adapter<ListDetailsAdapter.
         final TextView distanceText;
 
 
-        public MyViewHolder(View itemView) {
+        MyViewHolder(View itemView) {
             super(itemView);
 
             mView = itemView;

@@ -13,8 +13,6 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 
@@ -31,14 +29,12 @@ import me.carc.btown.tours.top_pick_lists.FourSquareListsActivity;
 public class ListsAdapter extends RecyclerView.Adapter<ListsAdapter.CatalogueViewHolder> {
 
     private ArrayList<ItemsUserList> lists;
-    private StorageReference mCoverImageStorageRef;
 
-    public DrawableClickListener onClickListener;
+    private DrawableClickListener onClickListener;
 
     public ListsAdapter(ArrayList<ItemsUserList> lists, DrawableClickListener listener) {
         this.lists = lists;
         onClickListener = listener;
-        mCoverImageStorageRef = FirebaseStorage.getInstance().getReference().child("coverImages/");
     }
 
     @Override

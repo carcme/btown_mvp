@@ -27,14 +27,14 @@ import me.carc.btown.ui.custom.MyRecyclerItemClickListener;
 
 public class AttractionTabsStopsFragment extends Fragment {
 
-    private static final String TAG = C.DEBUG + Commons.getTag();
+    private static final String TAG = AttractionTabsStopsFragment.class.getName();
     public static final int RESULT_ATTRACTION = 1100;
 
-    public interface AttractionListListener {
-        void onItemSelected();
-    }
+//    public interface AttractionListListener {
+//        void onItemSelected();
+//    }
 
-    AttractionListListener cbListener;
+//    AttractionListListener cbListener;
     ToursScrollListener scrollListener;
 
     RecyclerView rv;
@@ -87,7 +87,7 @@ public class AttractionTabsStopsFragment extends Fragment {
         super.onAttach(ctx);
 
         try {
-            cbListener = (AttractionListListener) ctx;
+//            cbListener = (AttractionListListener) ctx;
             scrollListener = (ToursScrollListener) ctx;
         } catch (ClassCastException e) {
             throw new ClassCastException(ctx.toString() + " must implement AttractionListListener callbacks");
@@ -96,7 +96,7 @@ public class AttractionTabsStopsFragment extends Fragment {
 
     @Override
     public void onDetach() {
-        cbListener = null;
+//        cbListener = null;
         super.onDetach();
     }
 
@@ -148,7 +148,7 @@ public class AttractionTabsStopsFragment extends Fragment {
         mProgressBar.setProgressStyle(android.R.style.Widget_ProgressBar_Small);
         mProgressBar.setIndeterminate(true);
         mProgressBar.setCancelable(false);
-        mProgressBar.setTitle(R.string.com_facebook_loading);
+        mProgressBar.setTitle(R.string.shared_string_initialising);
     }
 
     private void showLoadingDialog() {

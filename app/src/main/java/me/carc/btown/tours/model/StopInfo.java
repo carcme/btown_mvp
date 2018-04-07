@@ -8,12 +8,14 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import me.carc.btown.common.Commons;
 
 
 /**
  * Created by bamptonm on 16/10/2017.
  */
+@SuppressFBWarnings("EI_EXPOSE_REP")
 @Keep
 public class StopInfo implements Serializable, Parcelable {
     @SuppressWarnings("unused")
@@ -28,7 +30,7 @@ public class StopInfo implements Serializable, Parcelable {
     private String[] teaser;
     public String[] getTeaser() { return teaser; }
     @SerializedName("teaser_title")
-    public String teaserTitle;
+    private String teaserTitle;
     public String getTeaserTitle() {
         return teaserTitle;
     }
@@ -40,7 +42,7 @@ public class StopInfo implements Serializable, Parcelable {
         return history;
     }
     @SerializedName("history_title")
-    public String historyTitle;
+    private String historyTitle;
     public String getHistoryTitle() {
         return historyTitle;
     }
@@ -52,19 +54,19 @@ public class StopInfo implements Serializable, Parcelable {
         return qi;
     }
     @SerializedName("qi_title")
-    public String qiTitle;
+    private String qiTitle;
     public String getQiTitle() {
         return qiTitle;
     }
 
     @SuppressWarnings("unused")
     @SerializedName("look_out")
-    public String[] look_out;
+    private String[] look_out;
     public String[] getLoookout() {
         return look_out;
     }
     @SerializedName("lookout_title")
-    public String lookoutTitle;
+    private String lookoutTitle;
     public String getLookoutTitle() {
         return lookoutTitle;
     }
@@ -76,7 +78,7 @@ public class StopInfo implements Serializable, Parcelable {
         return next_stop;
     }
     @SerializedName("next_stop_title")
-    public String nextstopTitle;
+    private String nextstopTitle;
     public String getNextStopTitle() {
         return nextstopTitle;
     }
@@ -89,7 +91,7 @@ public class StopInfo implements Serializable, Parcelable {
     }
     @SuppressWarnings("unused")
     @SerializedName("extra_title")
-    public String extraTitle;
+    private String extraTitle;
     public String getExtraTitle() {
         return extraTitle;
     }

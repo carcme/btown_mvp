@@ -8,6 +8,7 @@ import android.content.IntentFilter;
 import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 
 import com.crashlytics.android.Crashlytics;
@@ -16,7 +17,6 @@ import com.squareup.leakcanary.LeakCanary;
 import io.fabric.sdk.android.Fabric;
 import me.carc.btown.common.Commons;
 import me.carc.btown.common.NetworkChangeReceiver;
-import me.carc.btown.common.TinyDB;
 import me.carc.btown.common.injection.component.ApplicationComponent;
 import me.carc.btown.common.injection.component.DaggerApplicationComponent;
 import me.carc.btown.common.injection.module.ApplicationModule;
@@ -31,6 +31,7 @@ import me.carc.btown.tours.data.services.FirebaseImageDownloader;
 public class App extends Application {
 
     private static final String BTOWN_DATABASE_NAME = "btown.db";
+    private static Context applicationContext;
 
     private AppDatabase database;
     private NetworkChangeReceiver networkChangeReceiver;
@@ -50,6 +51,11 @@ public class App extends Application {
 
     private Intent imagesServiceIntent;
 
+    // Dont like this!!
+    public static Context getAC() {
+        return applicationContext;
+    }
+
     public static App get(Context context) {
         return (App) context.getApplicationContext();
     }
@@ -65,10 +71,6 @@ public class App extends Application {
         if (Commons.isNull(database))
             database = initDB();
         return database;
-    }
-
-    public TinyDB getTinyDB() {
-        return new TinyDB(App.this);
     }
 
     public ApplicationComponent getComponent() {
@@ -101,10 +103,8 @@ public class App extends Application {
             ex.printStackTrace();
         }
 
-//        database = initDB();
-
+        applicationContext = getApplicationContext();
         registerConnectivityRecver();
-
         getFirebaseTours();
     }
 
@@ -119,7 +119,11 @@ public class App extends Application {
     public void getFirebaseTours() {
         if(isNetworkAvailable() && !isUpdatingFirebase()) {
             imagesServiceIntent = new Intent(getApplicationContext(), FirebaseImageDownloader.class);
-            startService(imagesServiceIntent);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                startForegroundService(imagesServiceIntent);
+            } else {
+                startService(imagesServiceIntent);
+            }
         }
     }
 
@@ -154,6 +158,5 @@ public class App extends Application {
         try {
             unregisterReceiver(networkChangeReceiver);
         } catch (IllegalArgumentException e) { /*EMPTY*/ }
-
     }
 }

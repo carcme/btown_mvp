@@ -156,7 +156,7 @@ public class SearchDialogPresenter implements ISearch.Presenter {
 
         HashMap<String, String> map = new HashMap<>();
         map.put("q", text);
-        map.put("lng", String.valueOf(mapCenter.getLongitude()));
+        map.put("lon", String.valueOf(mapCenter.getLongitude()));
         map.put("lat", String.valueOf(mapCenter.getLatitude()));
         map.put("lang", Locale.getDefault().getLanguage());
 
@@ -168,7 +168,7 @@ public class SearchDialogPresenter implements ISearch.Presenter {
             @Override
             public void onResponse(@NonNull Call<AutoCompleteResult> call, @NonNull Response<AutoCompleteResult> response) {
 
-                ArrayList<Place> places = new ArrayList<>();
+                    ArrayList<Place> places = new ArrayList<>();
                 List<AutoCompleteResult.Features> features;
 
                 try {

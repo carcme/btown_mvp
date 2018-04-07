@@ -1222,9 +1222,13 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
         mMarkersOverlay.clear();
 
         if (mSearchOverlay.getSize() > 0) {
-            mSearchOverlay.clear();
-            if(mFsqOverlay.getSize() == 0)
+            if(mFsqOverlay.getSize() == 0) {
                 view.setListMode(false);
+                if (mSearchOverlay.getSize() == 1) {
+                    showQuickSearch(true);
+                }
+            }
+            mSearchOverlay.clear();
 
         } else if (mFsqOverlay.getSize() > 0) {
             mFsqOverlay.clear();

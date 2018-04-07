@@ -32,7 +32,7 @@ public class ReadingListItemActionsDialog extends BottomSheetDialogFragment {
 
     private Callback callback;
 
-    private int pageIndex;
+//    private int pageIndex;
     private ReadingListItemActionsView actionsView;
     private ItemActionsCallback itemActionsCallback = new ItemActionsCallback();
 
@@ -61,7 +61,7 @@ public class ReadingListItemActionsDialog extends BottomSheetDialogFragment {
         actionsView = new ReadingListItemActionsView(getContext());
         actionsView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.paper_color));
         actionsView.setCallback(itemActionsCallback);
-        pageIndex = getArguments().getInt(TITLE);
+//        pageIndex = getArguments().getInt(TITLE);
         actionsView.setState(getArguments().getString(TITLE, getString(R.string.shared_string_options)));
         return actionsView;
     }

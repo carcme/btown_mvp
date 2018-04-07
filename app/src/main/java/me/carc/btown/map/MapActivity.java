@@ -14,7 +14,6 @@ import android.support.annotation.StringRes;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.GravityCompat;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -102,7 +101,7 @@ public class MapActivity extends BaseActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_map);
         unbinder = ButterKnife.bind(this);
 
         presenter = new MapPresenter(this, this, mMap);
@@ -578,10 +577,10 @@ public class MapActivity extends BaseActivity implements
     @OnClick(R.id.fabBack)
     void back() { super.onBackPressed(); }
 
-    @OnClick(R.id.fab_menu)
-    void onMenuFab() {
-        mDrawerLayout.openDrawer(GravityCompat.START);
-    }
+//    @OnClick(R.id.fab_menu)
+//    void onMenuFab() {
+//        mDrawerLayout.openDrawer(GravityCompat.START);
+//    }
 
     @OnClick(R.id.fab_location)
     void onLocationFab() {

@@ -56,10 +56,9 @@ import me.carc.btown.ui.custom.MyRecyclerItemClickListener;
 
 public class FirebaseImageActivity extends BaseActivity {
 
-    private static final String TAG = C.DEBUG + Commons.getTag();
+    private static final String TAG = FirebaseImageActivity.class.getName();
 
-    public static final String MSG_BOARD_CAT_PHOTO     = "PHOTO_BOARD";
-
+    private static final String MSG_BOARD_CAT_PHOTO     = "PHOTO_BOARD";
 
     private static final int RESULT_CAMERA_PREVIEW = 102;
     private static final String COLUMN_COUNT = "COLUMN_COUNT"; // use sp to save user preferences
@@ -89,7 +88,7 @@ public class FirebaseImageActivity extends BaseActivity {
         private DrawerItemCustomAdapter adapter;
 
     */
-    public static FirebaseRecyclerAdapter<UserPhotograph, PhotoViewHolder> mFirebaseAdapter;
+    private static FirebaseRecyclerAdapter<UserPhotograph, PhotoViewHolder> mFirebaseAdapter;
 
 
     private final View.OnClickListener navigationOnClickListener =
