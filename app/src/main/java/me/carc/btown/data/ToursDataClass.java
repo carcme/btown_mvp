@@ -4,9 +4,9 @@ import android.arch.lifecycle.ViewModel;
 
 import java.util.ArrayList;
 
-import me.carc.btown.tours.model.Attraction;
-import me.carc.btown.tours.model.TourCatalogue;
-import me.carc.btown.tours.model.TourHolderResult;
+import me.carc.btown.db.tours.model.Attraction;
+import me.carc.btown.db.tours.model.TourCatalogueItem;
+import me.carc.btown.db.tours.model.ToursResponse;
 
 /**
  * Created by bamptonm on 26/02/2018.
@@ -15,7 +15,7 @@ import me.carc.btown.tours.model.TourHolderResult;
 public class ToursDataClass extends ViewModel {
 
     private static volatile ToursDataClass sSoleInstance = new ToursDataClass();
-    private static volatile TourHolderResult mToursPreLoad;
+    private static volatile ToursResponse mToursPreLoad;
 
     //private constructor.
     private ToursDataClass(){}
@@ -24,7 +24,7 @@ public class ToursDataClass extends ViewModel {
         return sSoleInstance;
     }
 
-    public void setTourResult(TourHolderResult tourResult) {
+    public void setTourResult(ToursResponse tourResult) {
         mToursPreLoad = tourResult;
     }
 
@@ -32,16 +32,16 @@ public class ToursDataClass extends ViewModel {
         return mToursPreLoad != null;
     }
 
-    public ArrayList<TourCatalogue> getAllTours() {
+    public ArrayList<TourCatalogueItem> getAllTours() {
         return mToursPreLoad.tours;
     }
 
-    public TourCatalogue getTourCatalogue(int index) {
+    public TourCatalogueItem getTourCatalogue(int index) {
         return mToursPreLoad.tours.get(index);
     }
 
     public ArrayList<Attraction> getTourAttractions(int index) {
-        return mToursPreLoad.tours.get(index).getAttractions();
+        return new ArrayList<Attraction>(mToursPreLoad.tours.get(index).getAttractions());
     }
 
     /**

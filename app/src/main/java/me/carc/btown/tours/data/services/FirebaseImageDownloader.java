@@ -16,6 +16,9 @@ import com.google.gson.Gson;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.concurrent.Executors;
+
+import javax.annotation.Nonnull;
 
 import me.carc.btown.App;
 import me.carc.btown.BuildConfig;
@@ -25,11 +28,12 @@ import me.carc.btown.common.CacheDir;
 import me.carc.btown.common.Commons;
 import me.carc.btown.common.TinyDB;
 import me.carc.btown.data.ToursDataClass;
+import me.carc.btown.db.tours.AttractionDao;
+import me.carc.btown.db.tours.TourCatalogueDao;
+import me.carc.btown.db.tours.model.Attraction;
+import me.carc.btown.db.tours.model.TourCatalogueItem;
+import me.carc.btown.db.tours.model.ToursResponse;
 import me.carc.btown.tours.CatalogueActivity;
-import me.carc.btown.tours.data.FirebaseService;
-import me.carc.btown.tours.model.Attraction;
-import me.carc.btown.tours.model.TourCatalogue;
-import me.carc.btown.tours.model.TourHolderResult;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -48,7 +52,6 @@ public class FirebaseImageDownloader extends IntentService {
     private String dir;
     private StorageReference mStorageRef;
     private TinyDB db;
-
 
     private boolean updateInProgress() {
         return ((App) getApplicationContext()).isUpdatingFirebase();
@@ -76,7 +79,9 @@ public class FirebaseImageDownloader extends IntentService {
 
         if (!updateInProgress()) {
             setUpdateInProgress(true);
-            Boolean forceUpdate = intent.getBooleanExtra("FORCE_UPDATE", false);
+            Boolean forceUpdate = false;
+            if(intent != null)
+                forceUpdate = intent.getBooleanExtra("FORCE_UPDATE", false);
             initValues();
             getLatestJsonTours(forceUpdate);
         }
@@ -88,6 +93,8 @@ public class FirebaseImageDownloader extends IntentService {
         db = TinyDB.getTinyDB();    // ensure TinyDB is init'd
     }
 
+
+
     private void getLatestJsonTours(final boolean force) {
         FirebaseService service = new Retrofit.Builder()
                 .baseUrl(BuildConfig.FIREBASE_ENDPOINT)
@@ -95,13 +102,31 @@ public class FirebaseImageDownloader extends IntentService {
                 .build()
                 .create(FirebaseService.class);
 
-        Call<TourHolderResult> call = service.getTours(BuildConfig.FIREBASE_ALT, BuildConfig.FIREBASE_TOKEN);
+        Call<ToursResponse> call = service.getTours(BuildConfig.FIREBASE_ALT, BuildConfig.FIREBASE_TOKEN);
 
-        call.enqueue(new Callback<TourHolderResult>() {
+        call.enqueue(new Callback<ToursResponse>() {
             @Override
-            public void onResponse(@NonNull Call<TourHolderResult> call, @NonNull final Response<TourHolderResult> response) {
+            public void onResponse(@NonNull Call<ToursResponse> call, @NonNull final Response<ToursResponse> response) {
 
                 int version = db.getInt(CatalogueActivity.JSON_VERSION, 0);
+
+                Executors.newSingleThreadExecutor().execute(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        if ((response.body() != null) && (response.body().version > 0)) {
+                            TourCatalogueDao tourDao = ((App) getApplicationContext()).getDB().catalogueDao();
+                            AttractionDao attrDao = ((App) getApplicationContext()).getDB().attractionDao();
+                            for (TourCatalogueItem item : response.body().tours) {
+                                tourDao.insert(item);
+
+                                for (Attraction attr : item.getAttractions()) {
+                                    attrDao.insert(attr);
+                                }
+                            }
+                        }
+                    }
+                });
 
                 if (version < response.body().version || force) {
 
@@ -110,7 +135,7 @@ public class FirebaseImageDownloader extends IntentService {
 
                     String json = gson.toJson(response.body());
                     db.putString(CatalogueActivity.SERVER_FILE, json);
-                    ToursDataClass.getInstance().setTourResult(gson.fromJson(json, TourHolderResult.class));
+                    ToursDataClass.getInstance().setTourResult(gson.fromJson(json, ToursResponse.class));
                 }
                 // check we have the images - download any that are missing
                 getImages(response.body());
@@ -119,7 +144,7 @@ public class FirebaseImageDownloader extends IntentService {
             }
 
             @Override
-            public void onFailure(Call<TourHolderResult> call, Throwable t) {
+            public void onFailure(@Nonnull Call<ToursResponse> call, @Nonnull Throwable t) {
                 Log.d(TAG, "onResponse: ");
                 setUpdateInProgress(false);
             }
@@ -127,10 +152,10 @@ public class FirebaseImageDownloader extends IntentService {
     }
 
 
-    private void getImages(TourHolderResult holder) {
-        ArrayList<TourCatalogue> catalogues = holder.tours;
+    private void getImages(ToursResponse holder) {
+        ArrayList<TourCatalogueItem> catalogues = holder.tours;
         initValues();
-        for (TourCatalogue catalogue : catalogues) {
+        for (TourCatalogueItem catalogue : catalogues) {
             getImage("coverImages", catalogue.getCatalogueImage());
             for (Attraction attraction : catalogue.getAttractions()) {
                 getImage("coverImages", attraction.getImage());

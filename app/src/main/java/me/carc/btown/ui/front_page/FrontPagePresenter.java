@@ -16,7 +16,7 @@ import me.carc.btown.common.TinyDB;
 import me.carc.btown.data.ToursDataClass;
 import me.carc.btown.extras.BackgroundImageDialog;
 import me.carc.btown.tours.CatalogueActivity;
-import me.carc.btown.tours.model.TourHolderResult;
+import me.carc.btown.db.tours.model.ToursResponse;
 import me.carc.btown.ui.base.MvpBasePresenter;
 
 /**
@@ -72,7 +72,7 @@ public class FrontPagePresenter extends MvpBasePresenter<FrontPageMvpView> {
                 String json = TinyDB.getTinyDB().getString(CatalogueActivity.SERVER_FILE, null);
                 if (Commons.isNotNull(json)) {
 //                    toursPreLoad = gson.fromJson(json, TourHolderResult.class);
-                    ToursDataClass.getInstance().setTourResult(gson.fromJson(json, TourHolderResult.class));
+                    ToursDataClass.getInstance().setTourResult(gson.fromJson(json, ToursResponse.class));
                 }
             }
         });

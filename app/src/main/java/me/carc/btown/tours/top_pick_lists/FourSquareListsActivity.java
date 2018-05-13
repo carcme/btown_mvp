@@ -181,18 +181,21 @@ public class FourSquareListsActivity extends BaseActivity {
                     public void onResponse(@NonNull Call<FourSquResult> call, @NonNull Response<FourSquResult> response) {
 
                         FourSquResult body = response.body();
-                        ListResult resp = body.getResponse().getListResult();
+                        if(Commons.isNotNull(body)) {
+                            ListResult resp = body.getResponse().getListResult();
 
-                        if (Commons.isNotNull(resp) && resp.getListItems().getCount() > 0) {
+                            if (Commons.isNotNull(resp) && resp.getListItems().getCount() > 0) {
 
-                            Intent intent = new Intent(FourSquareListsActivity.this, FourSquareListDetailsActivity.class);
-                            intent.putExtra(EXTRA_TITLE, item.getName());
+                                Intent intent = new Intent(FourSquareListsActivity.this, FourSquareListDetailsActivity.class);
+                                intent.putExtra(EXTRA_TITLE, item.getName());
 //                            intent.putExtra("TEST", (Parcelable) resp.getListItems().getItemsListItems().get(0).getVenue());
-                            intent.putExtra(EXTRA_LISTS, (Parcelable) resp.getListItems());
-                            startActivityForResult(intent, RESULT_SHOW_MAP_ALL);
+                                intent.putExtra(EXTRA_LISTS, (Parcelable) resp.getListItems());
+                                startActivityForResult(intent, RESULT_SHOW_MAP_ALL);
 
-                            setProgressItems(View.GONE);
-                        }
+                                setProgressItems(View.GONE);
+                            }
+                        } else
+                            Commons.Toast(FourSquareListsActivity.this, R.string.network_not_available_error, Color.RED, Toast.LENGTH_SHORT);
                     }
 
                     @Override

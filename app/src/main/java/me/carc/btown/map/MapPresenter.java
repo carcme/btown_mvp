@@ -20,6 +20,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.location.LocationAvailability;
 import com.google.android.gms.location.LocationResult;
 
@@ -93,8 +94,8 @@ import me.carc.btown.map.sheets.SinglePoiOptionsDialog;
 import me.carc.btown.map.sheets.TourSheetDialog;
 import me.carc.btown.map.sheets.WikiPoiSheetDialog;
 import me.carc.btown.map.sheets.marker_list.MarkerListDialogFragment;
-import me.carc.btown.tours.model.Attraction;
-import me.carc.btown.tours.model.TourCatalogue;
+import me.carc.btown.db.tours.model.Attraction;
+import me.carc.btown.db.tours.model.TourCatalogueItem;
 import me.carc.btown.ui.custom.MySimplePointOverlayOptions;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -142,7 +143,7 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
     private SimpleFastPointOverlay mTourOverlay;
     private Polyline tourLine;
 
-    private TourCatalogue mCatalogue;
+    private TourCatalogueItem mCatalogue;
 
     private Context mContext;
     private MapView mMap;
@@ -563,6 +564,7 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
 
         String[] array = poi.getTags();
         for (int i = 2; i < array.length; i++) {
+            Crashlytics.log(array[i]);     // Try catch where the ArrayIndexOutOfBoundsException occurs (Crashlytics #162)
             String[] tag = array[i].split("=");
             tags.put(tag[1], tag[0]);
         }
@@ -883,14 +885,14 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
                             Field[] tagFields = OverpassQueryResult.Element.Tags.class.getDeclaredFields();
                             for (Field field : resFields) {
                                 for (Field tag : tagFields) {
-                                    if (tag.getName().equals(result.tagCategory)) {
+                                    if (Commons.equals(tag.getName(), result.tagCategory)) {
                                         try {
                                             tag.set(element.tags, result.tagType);
                                         } catch (IllegalAccessException e) {
                                             e.printStackTrace();
                                             Log.d(TAG, "onResponse: WRONG TYPE:: " + field.getName());
                                         }
-                                    } else if (field.getName().equals(tag.getName())) {
+                                    } else if (Commons.equals(field.getName(), tag.getName())) {
                                         try {
                                             tag.set(element.tags, field.get(result.extratags));
                                         } catch (IllegalAccessException e) {
@@ -977,7 +979,7 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
             for(Overlay overlay : overlays) {
                 if(overlay instanceof RadiusMarkerClusterer) {
                     RadiusMarkerClusterer obj = (RadiusMarkerClusterer)overlay;
-                    if(obj.getName().equals(OVERLAY_PIN)){
+                    if(Commons.equals(obj.getName(), OVERLAY_PIN)){
                         view.addClearDropMenuItem(obj.getItems().size() > 1);
                         obj.getItems().remove(marker);
                         break;
@@ -1094,7 +1096,7 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
 
     @Override
     public boolean onMarkerClick(final Marker marker, MapView mapView) {
-        if (marker.getTitle().equals("SEARCH_INDICATOR")) {
+        if (Commons.equals(marker.getTitle(), "SEARCH_INDICATOR")) {
             // bit of a hack - using the callback thats already available
             ((MapActivity) mContext).runOnUiThread(new Runnable() {
                 @Override
@@ -1103,7 +1105,7 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
                 }
             });
 
-        } else if (marker.getTitle().equals("DROP_PIN")) {
+        } else if (Commons.equals(marker.getTitle(), "DROP_PIN")) {
             showPoiDialog(marker.getRelatedObject());
             return true;
 
@@ -1394,7 +1396,7 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
 
 
     @Override
-    public void showTour(TourCatalogue catalogue) {
+    public void showTour(TourCatalogueItem catalogue) {
 
         mCatalogue = catalogue;
         List<GeoPoint> geoPoints = new ArrayList<>();   // tour lines

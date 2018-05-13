@@ -20,7 +20,7 @@ import me.carc.btown.Utils.FileUtils;
 import me.carc.btown.common.C;
 import me.carc.btown.common.CacheDir;
 import me.carc.btown.common.Commons;
-import me.carc.btown.tours.model.Attraction;
+import me.carc.btown.db.tours.model.Attraction;
 
 /**
  * Display the different stops of the tour

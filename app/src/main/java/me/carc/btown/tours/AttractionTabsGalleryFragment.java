@@ -22,7 +22,7 @@ import me.carc.btown.common.C;
 import me.carc.btown.common.Commons;
 import me.carc.btown.common.interfaces.ToursScrollListener;
 import me.carc.btown.tours.adapters.AttractionGalleryViewerAdapter;
-import me.carc.btown.tours.model.Attraction;
+import me.carc.btown.db.tours.model.Attraction;
 import me.carc.btown.ui.custom.MyCustomLayoutManager;
 import me.carc.btown.ui.custom.MyRecyclerItemClickListener;
 

@@ -2,6 +2,8 @@ package me.carc.btown.tours;
 
 import android.annotation.TargetApi;
 import android.app.ActivityOptions;
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -10,6 +12,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
@@ -20,6 +23,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -34,10 +38,11 @@ import me.carc.btown.Utils.ViewUtils;
 import me.carc.btown.common.C;
 import me.carc.btown.common.interfaces.DrawableClickListener;
 import me.carc.btown.data.ToursDataClass;
+import me.carc.btown.db.TourViewModel;
+import me.carc.btown.db.tours.model.TourCatalogueItem;
+import me.carc.btown.db.tours.model.ToursResponse;
 import me.carc.btown.tours.adapters.ToursAdapter;
-import me.carc.btown.tours.data.FirebaseService;
-import me.carc.btown.tours.model.TourCatalogue;
-import me.carc.btown.tours.model.TourHolderResult;
+import me.carc.btown.tours.data.services.FirebaseService;
 import me.carc.btown.ui.custom.MyCustomLayoutManager;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -57,6 +62,7 @@ public class CatalogueActivity extends BaseActivity {
     public static final String EXTRA_SHOW_ON_MAP = "EXTRA_SHOW_ON_MAP";
 
     private ToursAdapter mAdapter;
+    private TourViewModel mTourViewModel;
 
     @BindView(R.id.catalogue_recycler)      RecyclerView recyclerView;
     @BindView(R.id.toursToolbar)            Toolbar toolbar;
@@ -83,7 +89,11 @@ public class CatalogueActivity extends BaseActivity {
         supportStartPostponedEnterTransition();
 
         // Display the collections
-        getJsonCollections();
+//        getJsonCollections();
+
+        setupRecycler(new ArrayList<TourCatalogueItem>());
+
+
     }
 
     private void setupUI(Bundle savedInstanceState) {
@@ -107,7 +117,7 @@ public class CatalogueActivity extends BaseActivity {
         setProgressItems(View.VISIBLE);
 
         if(ToursDataClass.getInstance().hasTours()/*serverFile*/){
-            ArrayList<TourCatalogue> tours = ToursDataClass.getInstance().getAllTours()/*serverFile.tours*/;
+            ArrayList<TourCatalogueItem> tours = ToursDataClass.getInstance().getAllTours()/*serverFile.tours*/;
             setupRecycler(tours);
         } else {
 
@@ -117,19 +127,19 @@ public class CatalogueActivity extends BaseActivity {
                     .build()
                     .create(FirebaseService.class);
 
-            Call<TourHolderResult> call = service.getTours(BuildConfig.FIREBASE_ALT, BuildConfig.FIREBASE_TOKEN);
+            Call<ToursResponse> call = service.getTours(BuildConfig.FIREBASE_ALT, BuildConfig.FIREBASE_TOKEN);
 
-            call.enqueue(new Callback<TourHolderResult>() {
+            call.enqueue(new Callback<ToursResponse>() {
 
                 @Override
                 @SuppressWarnings({"ConstantConditions"})
-                public void onResponse(@NonNull Call<TourHolderResult> call, @NonNull Response<TourHolderResult> response) {
-                    ArrayList<TourCatalogue> tours = response.body().tours;
+                public void onResponse(@NonNull Call<ToursResponse> call, @NonNull Response<ToursResponse> response) {
+                    ArrayList<TourCatalogueItem> tours = response.body().tours;
                     setupRecycler(tours);
                 }
 
                 @Override
-                public void onFailure(@NonNull Call<TourHolderResult> call, @NonNull Throwable t) {
+                public void onFailure(@NonNull Call<ToursResponse> call, @NonNull Throwable t) {
                     Log.d(TAG, "onResponse: ");
                     setProgressItems(View.GONE);
                 }
@@ -139,7 +149,8 @@ public class CatalogueActivity extends BaseActivity {
 
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private void setupRecycler(ArrayList<TourCatalogue> tours) {
+    private void setupRecycler(ArrayList<TourCatalogueItem> tours) {
+        setProgressItems(View.VISIBLE);
 
         mAdapter = new ToursAdapter(tours, isGermanLanguage(),  new DrawableClickListener() {
 
@@ -160,7 +171,7 @@ public class CatalogueActivity extends BaseActivity {
                     return;
                 }
 
-                TourCatalogue catalogue = mAdapter.getItem(pos);
+                TourCatalogueItem catalogue = mAdapter.getItem(pos);
 
                 // show tour on map?
                 if(getIntent().hasExtra(EXTRA_SHOW_ON_MAP)) {
@@ -201,6 +212,16 @@ public class CatalogueActivity extends BaseActivity {
             recyclerView.setAdapter(mAdapter);
 
             scrollHider(recyclerView, fabExit);
+
+
+            mTourViewModel = ViewModelProviders.of(this).get(TourViewModel.class);
+            mTourViewModel.getAllTours().observe(this, new Observer<List<TourCatalogueItem>>() {
+                @Override
+                public void onChanged(@Nullable final List<TourCatalogueItem> tours) {
+                    // Update the cached copy of the words in the adapter.
+                    mAdapter.setTours(tours);
+                }
+            });
         }
 
         fabExit.setVisibility(View.VISIBLE);

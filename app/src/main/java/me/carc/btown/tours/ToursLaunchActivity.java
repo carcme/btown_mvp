@@ -33,7 +33,7 @@ import me.carc.btown.common.Commons;
 import me.carc.btown.common.TinyDB;
 import me.carc.btown.login.LoginActivity;
 import me.carc.btown.tours.data.services.FirebaseImageDownloader;
-import me.carc.btown.tours.model.TourHolderResult;
+import me.carc.btown.db.tours.model.ToursResponse;
 import me.carc.btown.tours.top_pick_lists.FourSquareListsActivity;
 
 public class ToursLaunchActivity extends BaseActivity {
@@ -46,7 +46,7 @@ public class ToursLaunchActivity extends BaseActivity {
     public static final int LOGIN = 2;
     public static final int EXIT = 3;
 
-    public static TourHolderResult jsonPreLoad;
+    public static ToursResponse jsonPreLoad;
     private Animation animation;
 
     @BindView(R.id.backgroundHolder)
@@ -164,7 +164,7 @@ public class ToursLaunchActivity extends BaseActivity {
                 final Gson gson = new Gson();
                 String json = TinyDB.getTinyDB().getString(CatalogueActivity.SERVER_FILE, null);
                 if (Commons.isNotNull(json))
-                    jsonPreLoad = gson.fromJson(json, TourHolderResult.class);
+                    jsonPreLoad = gson.fromJson(json, ToursResponse.class);
 
                 runOnUiThread(new Runnable() {
                     @Override

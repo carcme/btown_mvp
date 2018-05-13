@@ -28,7 +28,7 @@ import me.carc.btown.Utils.ViewUtils;
 import me.carc.btown.common.C;
 import me.carc.btown.common.Commons;
 import me.carc.btown.data.ToursDataClass;
-import me.carc.btown.tours.model.TourCatalogue;
+import me.carc.btown.db.tours.model.TourCatalogueItem;
 import me.carc.btown.ui.custom.ExploreButton;
 import me.carc.btown.ui.custom.GalleryBottomView;
 
@@ -56,7 +56,7 @@ public class CataloguePreviewActivity extends BaseActivity implements View.OnCli
 //            backFab.setEnabled(true);
         }
     };
-    private TourCatalogue card;
+    private TourCatalogueItem card;
     private boolean isGermanLanguage;
 
     @BindView(R.id.root)

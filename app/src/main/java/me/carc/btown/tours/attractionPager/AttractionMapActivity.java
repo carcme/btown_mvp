@@ -28,8 +28,8 @@ import me.carc.btown.BaseActivity;
 import me.carc.btown.R;
 import me.carc.btown.common.Commons;
 import me.carc.btown.map.markers.MarkersOverlay;
-import me.carc.btown.tours.model.Attraction;
-import me.carc.btown.tours.model.POIs;
+import me.carc.btown.db.tours.model.Attraction;
+import me.carc.btown.db.tours.model.POIs;
 import me.carc.btown.ui.custom.MySimplePointOverlayOptions;
 
 /**

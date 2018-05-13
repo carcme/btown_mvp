@@ -178,8 +178,8 @@ public class BackgroundImageDialog extends DialogFragment {
 
     @Override
     public void dismiss() {
-        super.dismiss();
         dlgFinishedListener.onImageChanged();
+        super.dismiss();
     }
 
     private static class BackgroundChooserAdapter extends RecyclerView.Adapter<BackgroundImageHolder> {
@@ -263,8 +263,7 @@ public class BackgroundImageDialog extends DialogFragment {
         @Override
         public void onClick(View v) {
 
-            AppCompatActivity currActivity = ((App) itemView.getContext()
-                    .getApplicationContext()).getCurrentActivity();
+            AppCompatActivity currActivity = ((App) itemView.getContext().getApplicationContext()).getCurrentActivity();
 
             if (Commons.isNotNull(currActivity)) {
                 if (currActivity instanceof MapActivity) {

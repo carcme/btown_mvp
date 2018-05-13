@@ -26,7 +26,7 @@ import me.carc.btown.common.C;
 import me.carc.btown.common.Commons;
 import me.carc.btown.data.results.OverpassQueryResult;
 import me.carc.btown.map.IconManager;
-import me.carc.btown.tours.model.POIs;
+import me.carc.btown.db.tours.model.POIs;
 
 /**
  * Overlay for handling markers

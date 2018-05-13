@@ -11,27 +11,34 @@ import android.view.ViewGroup;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import me.carc.btown.R;
 import me.carc.btown.common.C;
 import me.carc.btown.common.CacheDir;
 import me.carc.btown.common.interfaces.DrawableClickListener;
 import me.carc.btown.common.viewHolders.CatalogueViewHolder;
-import me.carc.btown.tours.model.TourCatalogue;
+import me.carc.btown.db.tours.model.TourCatalogueItem;
 
 /**
  * A custom adapter to use with the RecyclerView widget.
  */
 public class ToursAdapter extends RecyclerView.Adapter<CatalogueViewHolder> {
 
-    private ArrayList<TourCatalogue> tours;
+    private ArrayList<TourCatalogueItem> tours;
 //    private StorageReference mCoverImageStorageRef;
     private boolean isGermanLanguage;
 
     public DrawableClickListener onClickListener;
 
-    public ToursAdapter(ArrayList<TourCatalogue> tours, boolean language, DrawableClickListener listener) {
+    public ToursAdapter(ArrayList<TourCatalogueItem> tours, boolean language, DrawableClickListener listener) {
         this.tours = tours;
+        isGermanLanguage = language;
+        onClickListener = listener;
+//        mCoverImageStorageRef = FirebaseStorage.getInstance().getReference().child("coverImages/");
+    }
+
+    public ToursAdapter(boolean language, DrawableClickListener listener) {
         isGermanLanguage = language;
         onClickListener = listener;
 //        mCoverImageStorageRef = FirebaseStorage.getInstance().getReference().child("coverImages/");
@@ -45,7 +52,7 @@ public class ToursAdapter extends RecyclerView.Adapter<CatalogueViewHolder> {
 
     @Override
     public void onBindViewHolder(final CatalogueViewHolder holder, final int pos) {
-        final TourCatalogue card = tours.get(pos);
+        final TourCatalogueItem card = tours.get(pos);
 
         holder.catalogueTitle.setText(card.getCatalogueName(isGermanLanguage));
         holder.supportingText.setText(card.getCatalogueBrief(isGermanLanguage));
@@ -100,12 +107,17 @@ public class ToursAdapter extends RecyclerView.Adapter<CatalogueViewHolder> {
         });
     }
 
+    public void setTours(List<TourCatalogueItem> tours) {
+        this.tours =  new ArrayList<>(tours);
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getItemCount() {
         return tours.size();
     }
 
-    public TourCatalogue getItem(int position) {
+    public TourCatalogueItem getItem(int position) {
         return tours.get(position);
     }
 /*

@@ -13,7 +13,7 @@ import me.carc.btown.data.all4squ.entities.ListItems;
 import me.carc.btown.data.all4squ.entities.VenueResult;
 import me.carc.btown.db.bookmark.BookmarkEntry;
 import me.carc.btown.map.search.model.Place;
-import me.carc.btown.tours.model.TourCatalogue;
+import me.carc.btown.db.tours.model.TourCatalogueItem;
 
 /** Interface between the mapActivity adn the mapPresenter
  * Created by nawin on 6/14/17.
@@ -81,7 +81,7 @@ public interface IMap {
 
         Bundle getBundle(Bundle outstate);
 
-        void showTour(TourCatalogue catalogue);
+        void showTour(TourCatalogueItem catalogue);
         void clearTourIcons();
     }
 }

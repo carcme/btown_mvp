@@ -102,6 +102,19 @@ public class Commons {
         return sb.toString();
     }
 
+    public static String buildStringFromArray(List<String> arr) {
+        int size = arr.size();
+        int loop = 1;
+        StringBuilder sb = new StringBuilder();
+        for(String str : arr) {
+            sb.append(str);
+            if(loop != size)
+                sb.append("\n\n");
+            loop++;
+        }
+        return sb.toString();
+    }
+
     public static String getString(Context ctx, int strID) {
         return ctx.getApplicationContext().getString(strID);
     }
@@ -133,6 +146,10 @@ public class Commons {
         if(s1 == null || s2 == null)
             return false;
         return Pattern.compile(Pattern.quote(s2), Pattern.CASE_INSENSITIVE).matcher(s1).find();
+    }
+
+    public static boolean equals(String s1, String s2) {
+        return !(s1 == null || s2 == null) && Pattern.compile(s1).matcher(s2).matches();
     }
 
     public static boolean isEmpty(List list) {

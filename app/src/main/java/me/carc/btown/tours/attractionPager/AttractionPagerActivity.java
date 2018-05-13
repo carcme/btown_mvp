@@ -50,7 +50,7 @@ import me.carc.btown.extras.messaging.CommentsActivity;
 import me.carc.btown.map.sheets.ImageDialog;
 import me.carc.btown.tours.CatalogueActivity;
 import me.carc.btown.tours.data.services.FirebaseImageDownloader;
-import me.carc.btown.tours.model.Attraction;
+import me.carc.btown.db.tours.model.Attraction;
 import me.carc.btown.ui.custom.LockableViewPager;
 
 public class AttractionPagerActivity extends BaseActivity implements PlaceholderFragment.TourListener {

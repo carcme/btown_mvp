@@ -76,9 +76,9 @@ import me.carc.btown.map.sheets.wiki.WikiWebViewActivity;
 import me.carc.btown.tours.AttractionTabsActivity;
 import me.carc.btown.tours.GalleryItem;
 import me.carc.btown.tours.adapters.PoiInfoListAdapter;
-import me.carc.btown.tours.model.Attraction;
-import me.carc.btown.tours.model.ImageSize;
-import me.carc.btown.tours.model.StopInfo;
+import me.carc.btown.db.tours.model.Attraction;
+import me.carc.btown.db.tours.model.ImageSize;
+import me.carc.btown.db.tours.model.StopInfo;
 
 /**
  * Inflate card items depending on what is available in the JSON tour

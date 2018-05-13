@@ -50,7 +50,7 @@ import me.carc.btown.map.search.model.Place;
 import me.carc.btown.map.sheets.WikiPoiSheetDialog;
 import me.carc.btown.map.sheets.wiki.WikiReadingListDialogFragment;
 import me.carc.btown.tours.CatalogueActivity;
-import me.carc.btown.tours.model.TourCatalogue;
+import me.carc.btown.db.tours.model.TourCatalogueItem;
 import me.carc.btown.tours.top_pick_lists.FourSquareListsActivity;
 import me.carc.btown.tours.top_pick_lists.FourSquareSearchResultActivity;
 import me.carc.btown.tours.top_pick_lists.VenueTabsActivity;
@@ -406,7 +406,7 @@ public class MapActivity extends BaseActivity implements
             case RESULT_SHOW_TOURS_MAP:
                 if (resultCode == RESULT_OK) {
                     if(data.hasExtra(CatalogueActivity.CATALOGUE)) {
-                        TourCatalogue catalogue = data.getParcelableExtra(CatalogueActivity.CATALOGUE);
+                        TourCatalogueItem catalogue = data.getParcelableExtra(CatalogueActivity.CATALOGUE);
                         presenter.showTour(catalogue);
 
                         ViewUtils.changeFabColour(this, fabTours, R.color.fabSearchCancelColor);

@@ -28,7 +28,7 @@ import me.carc.btown.common.CacheDir;
 import me.carc.btown.common.Commons;
 import me.carc.btown.common.interfaces.ToursScrollListener;
 import me.carc.btown.data.ToursDataClass;
-import me.carc.btown.tours.model.Attraction;
+import me.carc.btown.db.tours.model.Attraction;
 import me.carc.btown.ui.custom.MyFragmentPagerAdapter;
 
 /**

@@ -76,8 +76,8 @@ import me.carc.btown.common.Commons;
 import me.carc.btown.map.sheets.wiki.WikiWebViewActivity;
 import me.carc.btown.tours.adapters.PoiInfoListAdapter;
 import me.carc.btown.tours.attractionPager.InfoCard;
-import me.carc.btown.tours.model.Attraction;
-import me.carc.btown.tours.model.StopInfo;
+import me.carc.btown.db.tours.model.Attraction;
+import me.carc.btown.db.tours.model.StopInfo;
 
 /**
  * Bottom Sheet Dialog for points of interest

@@ -30,7 +30,7 @@ import me.carc.btown.tours.data.services.FirebaseImageDownloader;
 
 public class App extends Application {
 
-    private static final String BTOWN_DATABASE_NAME = "btown.db";
+    public static final String BTOWN_DATABASE_NAME = "btown.db";
     private static Context applicationContext;
 
     private AppDatabase database;

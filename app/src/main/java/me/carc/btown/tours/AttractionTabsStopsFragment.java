@@ -21,7 +21,7 @@ import me.carc.btown.common.Commons;
 import me.carc.btown.common.interfaces.ToursScrollListener;
 import me.carc.btown.tours.adapters.TourDataAdapter;
 import me.carc.btown.tours.attractionPager.AttractionPagerActivity;
-import me.carc.btown.tours.model.Attraction;
+import me.carc.btown.db.tours.model.Attraction;
 import me.carc.btown.ui.custom.MyCustomLayoutManager;
 import me.carc.btown.ui.custom.MyRecyclerItemClickListener;
 
