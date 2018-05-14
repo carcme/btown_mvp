@@ -18,7 +18,7 @@ public class TourRepository {
 
     private TourCatalogueDao mTourDao;
     private LiveData<List<TourCatalogueItem>> mAllTours;
-    private LiveData<TourCatalogueItem> mTours;
+    private LiveData<TourCatalogueItem> mTour;
 
     public TourRepository(Application application) {
         AppDatabase db = AppDatabase.getDatabase(application);
@@ -31,9 +31,9 @@ public class TourRepository {
     }
 
     public LiveData<TourCatalogueItem> getTour(int id) {
-        return mTours;
+        mTour  = mTourDao.getTour(id);
+        return mTour;
     }
-
 
     public void insert (TourCatalogueItem tour) {
         new insertAsyncTask(mTourDao).execute(tour);

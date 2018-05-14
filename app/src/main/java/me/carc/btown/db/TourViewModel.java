@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import java.util.List;
 
 import me.carc.btown.db.tours.TourRepository;
+import me.carc.btown.db.tours.model.Attraction;
 import me.carc.btown.db.tours.model.TourCatalogueItem;
 
 
@@ -19,6 +20,7 @@ public class TourViewModel extends AndroidViewModel {
 
     private TourRepository mRepository;
     private LiveData<List<TourCatalogueItem>> mAllTours;
+    private LiveData<List<Attraction>> mAllAttractions;
 
 
     public TourViewModel(@NonNull Application application) {
@@ -27,11 +29,14 @@ public class TourViewModel extends AndroidViewModel {
         mAllTours = mRepository.getAllTours();
     }
 
-    public TourCatalogueItem getTour(int pos) {
-        return mAllTours.getValue().get(pos);
+    public LiveData<List<TourCatalogueItem>> getAllTours() {
+        return mAllTours;
     }
 
-    public LiveData<List<TourCatalogueItem>> getAllTours() { return mAllTours; }
+    public LiveData<TourCatalogueItem> getTour(int id) {
+        return mRepository.getTour(id);
+    }
+
 
     public void insert(TourCatalogueItem tour) { mRepository.insert(tour); }
 }

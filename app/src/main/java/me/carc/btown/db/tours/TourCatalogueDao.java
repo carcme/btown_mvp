@@ -23,7 +23,7 @@ public interface TourCatalogueDao {
     LiveData<List<TourCatalogueItem>> getAllTours();
 
     @Query("SELECT * FROM catalogue_table WHERE tourId LIKE :tourId LIMIT 1")
-    TourCatalogueItem getTour(int tourId);
+    LiveData<TourCatalogueItem> getTour(int tourId);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(TourCatalogueItem catalogueItem);

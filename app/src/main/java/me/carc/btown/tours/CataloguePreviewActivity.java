@@ -3,10 +3,13 @@ package me.carc.btown.tours;
 import android.animation.Animator;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.view.MotionEvent;
@@ -27,7 +30,7 @@ import me.carc.btown.Utils.Holder;
 import me.carc.btown.Utils.ViewUtils;
 import me.carc.btown.common.C;
 import me.carc.btown.common.Commons;
-import me.carc.btown.data.ToursDataClass;
+import me.carc.btown.db.TourViewModel;
 import me.carc.btown.db.tours.model.TourCatalogueItem;
 import me.carc.btown.ui.custom.ExploreButton;
 import me.carc.btown.ui.custom.GalleryBottomView;
@@ -58,6 +61,8 @@ public class CataloguePreviewActivity extends BaseActivity implements View.OnCli
     };
     private TourCatalogueItem card;
     private boolean isGermanLanguage;
+
+    TourViewModel mTourViewModel;
 
     @BindView(R.id.root)
     ViewGroup filler;
@@ -102,26 +107,35 @@ public class CataloguePreviewActivity extends BaseActivity implements View.OnCli
 
         if (getIntent().hasExtra(CatalogueActivity.CATALOGUE_INDEX)) {
 //            card = getIntent().getParcelableExtra(CatalogueActivity.CATALOGUE);
-            card = ToursDataClass.getInstance().getTourCatalogue(getIntent().getIntExtra(CatalogueActivity.CATALOGUE_INDEX, -1));
+            int tourID = getIntent().getIntExtra(CatalogueActivity.CATALOGUE_INDEX, 0);
 
-            title.setText(card.getCatalogueName(isGermanLanguage));
-            collection_Title.setText(title.getText());
-            collectionDescription.setText(card.getCatalogueBrief(isGermanLanguage));
-            summary.setText(card.getCatalogueDesc(isGermanLanguage));
+            mTourViewModel = ViewModelProviders.of(this).get(TourViewModel.class);
+            mTourViewModel.getTour(tourID).observe(this, new Observer<TourCatalogueItem>() {
+                @Override
+                public void onChanged(@Nullable final TourCatalogueItem tour) {
+                    // Update the cached copy of the words in the adapter.
+                    card = tour;
 
-            launchBtn.setOnClickListener(this);
-            launchEndBtn.setOnClickListener(this);  // add second button to end of description (does same thing)
+                    title.setText(card.getCatalogueName(isGermanLanguage));
+                    collection_Title.setText(title.getText());
+                    collectionDescription.setText(card.getCatalogueBrief(isGermanLanguage));
+                    summary.setText(card.getCatalogueDesc(isGermanLanguage));
 
-            catalogueImage.setImageDrawable(Holder.get());
+                    launchBtn.setOnClickListener(CataloguePreviewActivity.this);
+                    launchEndBtn.setOnClickListener(CataloguePreviewActivity.this);  // add second button to end of description (does same thing)
 
-            backFab.setOnClickListener(this);
-            final Animation a = AnimationUtils.loadAnimation(this, R.anim.fade_in);
-            a.setDuration(getResources().getInteger(R.integer.gallery_alpha_duration));
-            backFab.setAnimation(a);
-            launchSrollview.setOnTouchListener(this);
-            catalogueImage.setOnTouchListener(this);
+                    catalogueImage.setImageDrawable(Holder.get());
 
-            ViewUtils.changeFabColour(this, backFab, R.color.toursBackButtonBackgroundColor);
+                    backFab.setOnClickListener(CataloguePreviewActivity.this);
+                    final Animation a = AnimationUtils.loadAnimation(CataloguePreviewActivity.this, R.anim.fade_in);
+                    a.setDuration(getResources().getInteger(R.integer.gallery_alpha_duration));
+                    backFab.setAnimation(a);
+                    launchSrollview.setOnTouchListener(CataloguePreviewActivity.this);
+                    catalogueImage.setOnTouchListener(CataloguePreviewActivity.this);
+
+                    ViewUtils.changeFabColour(CataloguePreviewActivity.this, backFab, R.color.toursBackButtonBackgroundColor);
+                }
+            });
         } else {
             finish();
         }
@@ -167,11 +181,11 @@ public class CataloguePreviewActivity extends BaseActivity implements View.OnCli
     public void onBackPressed() {
         ViewUtils.createAlphaAnimator(backFab, false, getResources().getInteger(R.integer.gallery_alpha_duration) * 2)
                 .withEndAction(new Runnable() {
-            @Override
-            public void run() {
-                finishAfterTransition();
-            }
-        }).start();
+                    @Override
+                    public void run() {
+                        finishAfterTransition();
+                    }
+                }).start();
     }
 
     @Override
@@ -180,7 +194,7 @@ public class CataloguePreviewActivity extends BaseActivity implements View.OnCli
         switch (v.getId()) {
             case R.id.launchBtn:
             case R.id.launchEndBtn:
-                    launchCollection();
+                launchCollection();
                 break;
 
             case R.id.galleryFab:

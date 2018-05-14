@@ -17,12 +17,9 @@ import android.widget.RelativeLayout;
 import com.facebook.Profile;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.gson.Gson;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.iconics.IconicsDrawable;
-
-import java.util.concurrent.Executors;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -30,12 +27,12 @@ import butterknife.OnClick;
 import me.carc.btown.BaseActivity;
 import me.carc.btown.R;
 import me.carc.btown.common.Commons;
-import me.carc.btown.common.TinyDB;
+import me.carc.btown.db.tours.model.ToursResponse;
 import me.carc.btown.login.LoginActivity;
 import me.carc.btown.tours.data.services.FirebaseImageDownloader;
-import me.carc.btown.db.tours.model.ToursResponse;
 import me.carc.btown.tours.top_pick_lists.FourSquareListsActivity;
 
+@Deprecated
 public class ToursLaunchActivity extends BaseActivity {
 
     public static final int RESULT_LOGIN = 156;
@@ -83,9 +80,7 @@ public class ToursLaunchActivity extends BaseActivity {
         icon = new IconicsDrawable(ToursLaunchActivity.this, CommunityMaterial.Icon.cmd_lightbulb_on).color(Color.WHITE).sizeDp(60);
         top10_icon.setImageDrawable(icon);
 
-
         FirebaseAuth.getInstance().addAuthStateListener(stateListener);
-        preloadTourCatalogues();
     }
 
     private FirebaseAuth.AuthStateListener stateListener = new FirebaseAuth.AuthStateListener() {
@@ -154,28 +149,6 @@ public class ToursLaunchActivity extends BaseActivity {
             }
         }
     };
-
-    private void preloadTourCatalogues() {
-        handler.postDelayed(preLoadRunner, 10);
-
-        Executors.newSingleThreadExecutor().execute(new Runnable() {
-            @Override
-            public void run() {
-                final Gson gson = new Gson();
-                String json = TinyDB.getTinyDB().getString(CatalogueActivity.SERVER_FILE, null);
-                if (Commons.isNotNull(json))
-                    jsonPreLoad = gson.fromJson(json, ToursResponse.class);
-
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        preLoadProgress.setProgress(100);
-                        handler.removeCallbacks(preLoadRunner);
-                    }
-                });
-            }
-        });
-    }
 
     @Override
     protected void onPause() {

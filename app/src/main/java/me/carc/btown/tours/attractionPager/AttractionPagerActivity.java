@@ -2,6 +2,8 @@ package me.carc.btown.tours.attractionPager;
 
 import android.Manifest;
 import android.annotation.TargetApi;
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
@@ -13,6 +15,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
 import android.provider.MediaStore;
+import android.support.annotation.Nullable;
 import android.support.v4.view.OnApplyWindowInsetsListener;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
@@ -34,8 +37,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -45,12 +48,13 @@ import me.carc.btown.Utils.IntentUtils;
 import me.carc.btown.camera.CameraActivity;
 import me.carc.btown.common.C;
 import me.carc.btown.common.Commons;
-import me.carc.btown.data.ToursDataClass;
+import me.carc.btown.db.TourViewModel;
+import me.carc.btown.db.tours.model.Attraction;
+import me.carc.btown.db.tours.model.TourCatalogueItem;
 import me.carc.btown.extras.messaging.CommentsActivity;
 import me.carc.btown.map.sheets.ImageDialog;
 import me.carc.btown.tours.CatalogueActivity;
 import me.carc.btown.tours.data.services.FirebaseImageDownloader;
-import me.carc.btown.db.tours.model.Attraction;
 import me.carc.btown.ui.custom.LockableViewPager;
 
 public class AttractionPagerActivity extends BaseActivity implements PlaceholderFragment.TourListener {
@@ -60,11 +64,10 @@ public class AttractionPagerActivity extends BaseActivity implements Placeholder
     public static final String ATTRACTION = "ATTRACTION";
     public static final String ATTRACTION_INDEX = "ATTRACTION_INDEX";
 
-
     private static final int RESULT_DETAIL = 10;
     private static final int RESULT_CAMERA_PREVIEW = 101;
 
-    private String mOnCameraLocation;
+//    private String mOnCameraLocation;
     private TourPagerAdapter tourAdapter;
 //    private ArrayList<Attraction> attractions;
     private CallbackManager callbackManager;
@@ -73,6 +76,7 @@ public class AttractionPagerActivity extends BaseActivity implements Placeholder
 //    FloatingActionButton fabShowMap;
 //    @BindView(R.id.fabCamera)
 //    FloatingActionButton fabCamera;
+
     @BindView(R.id.attractionViewPager)
     LockableViewPager mViewPager;
 
@@ -109,21 +113,47 @@ public class AttractionPagerActivity extends BaseActivity implements Placeholder
         if (intent.hasExtra(CatalogueActivity.CATALOGUE_INDEX)) {
 
             int CATALOGUE_INDEX = intent.getIntExtra(CatalogueActivity.CATALOGUE_INDEX, -1);
-            ArrayList<Attraction> attractions = ToursDataClass.getInstance().getTourAttractions(CATALOGUE_INDEX);
-//            attractions = intent.getParcelableArrayListExtra(CataloguePreviewActivity.ATTRACTIONS_LIST);
+            final int selectedAttraction = intent.getIntExtra(ATTRACTION_INDEX, 0);
 
-            int index = intent.getIntExtra(ATTRACTION_INDEX, 0);
+            TourViewModel mTourViewModel = ViewModelProviders.of(this).get(TourViewModel.class);
+            mTourViewModel.getTour(CATALOGUE_INDEX).observe(this, new Observer<TourCatalogueItem>() {
+                @Override
+                public void onChanged(@Nullable final TourCatalogueItem tour) {
+                    List<Attraction> attractions = tour.getAttractions();
 
-            tourAdapter = new TourPagerAdapter(getSupportFragmentManager(), attractions, isGermanLanguage());
+                    tourAdapter = new TourPagerAdapter(getSupportFragmentManager(), attractions, isGermanLanguage());
 
-            // Set up the ViewPager with the sections adapter.
-            mViewPager.setOffscreenPageLimit(2);
-            mViewPager.setAdapter(tourAdapter);
-            mViewPager.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
-            mViewPager.addOnPageChangeListener(onPagerChangedListener);
-            mViewPager.setCurrentItem(index, true);
-        }
+                    // Set up the ViewPager with the sections adapter.
+                    mViewPager.setOffscreenPageLimit(2);
+                    mViewPager.setAdapter(tourAdapter);
+                    mViewPager.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
+                    mViewPager.addOnPageChangeListener(onPagerChangedListener);
+                    mViewPager.setCurrentItem(selectedAttraction, true);
 
+
+                    // Android Team solution to status bar overlay problem
+                    ViewCompat.setOnApplyWindowInsetsListener(mViewPager, new OnApplyWindowInsetsListener() {
+                        @Override
+                        public WindowInsetsCompat onApplyWindowInsets(View v, WindowInsetsCompat insets) {
+                            insets = ViewCompat.onApplyWindowInsets(v, insets);
+                            if (insets.isConsumed()) {
+                                return insets;
+                            }
+
+                            boolean consumed = false;
+                            for (int i = 0, count = mViewPager.getChildCount(); i < count; i++) {
+                                ViewCompat.dispatchApplyWindowInsets(mViewPager.getChildAt(i), insets);
+                                if (insets.isConsumed()) {
+                                    consumed = true;
+                                }
+                            }
+                            return consumed ? insets.consumeSystemWindowInsets() : insets;
+                        }
+                    });
+                }
+
+
+            });
 /*
         fabShowMap.getDrawable().setColorFilter(ContextCompat.getColor(this, R.color.white), PorterDuff.Mode.MULTIPLY);
         ViewUtils.changeFabColour(this, fabShowMap, R.color.colorPrimary);
@@ -146,28 +176,7 @@ public class AttractionPagerActivity extends BaseActivity implements Placeholder
             }
         });
 */
-
-
-        // Android Team solution to status bar overlay problem
-        ViewCompat.setOnApplyWindowInsetsListener(mViewPager,
-                new OnApplyWindowInsetsListener() {
-                    @Override
-                    public WindowInsetsCompat onApplyWindowInsets(View v, WindowInsetsCompat insets) {
-                        insets = ViewCompat.onApplyWindowInsets(v, insets);
-                        if (insets.isConsumed()) {
-                            return insets;
-                        }
-
-                        boolean consumed = false;
-                        for (int i = 0, count = mViewPager.getChildCount(); i < count; i++) {
-                            ViewCompat.dispatchApplyWindowInsets(mViewPager.getChildAt(i), insets);
-                            if (insets.isConsumed()) {
-                                consumed = true;
-                            }
-                        }
-                        return consumed ? insets.consumeSystemWindowInsets() : insets;
-                    }
-                });
+        }
     }
 
 
@@ -203,7 +212,7 @@ public class AttractionPagerActivity extends BaseActivity implements Placeholder
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // facebook stuff
-        if(Commons.isNotNull(callbackManager))
+        if (Commons.isNotNull(callbackManager))
             callbackManager.onActivityResult(requestCode, resultCode, data);
 
         switch (requestCode) {

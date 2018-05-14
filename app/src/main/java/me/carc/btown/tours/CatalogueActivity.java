@@ -11,14 +11,12 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 
@@ -31,24 +29,15 @@ import butterknife.OnClick;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import me.carc.btown.App;
 import me.carc.btown.BaseActivity;
-import me.carc.btown.BuildConfig;
 import me.carc.btown.R;
 import me.carc.btown.Utils.Holder;
 import me.carc.btown.Utils.ViewUtils;
 import me.carc.btown.common.C;
 import me.carc.btown.common.interfaces.DrawableClickListener;
-import me.carc.btown.data.ToursDataClass;
 import me.carc.btown.db.TourViewModel;
 import me.carc.btown.db.tours.model.TourCatalogueItem;
-import me.carc.btown.db.tours.model.ToursResponse;
 import me.carc.btown.tours.adapters.ToursAdapter;
-import me.carc.btown.tours.data.services.FirebaseService;
 import me.carc.btown.ui.custom.MyCustomLayoutManager;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class CatalogueActivity extends BaseActivity {
     private static final String TAG = CatalogueActivity.class.getName();
@@ -58,6 +47,7 @@ public class CatalogueActivity extends BaseActivity {
 
     public static final String SERVER_FILE = "SERVER_FILE";
     public static final String JSON_VERSION= "JSON_VERSION";
+    public static final String LAST_JSON_UPDATE = "LAST_JSON_UPDATE";
 
     public static final String EXTRA_SHOW_ON_MAP = "EXTRA_SHOW_ON_MAP";
 
@@ -113,41 +103,6 @@ public class CatalogueActivity extends BaseActivity {
             toolbar.setPadding(0, getStatusBarHeight(), 0, 0);
     }
 
-    private void getJsonCollections() {
-        setProgressItems(View.VISIBLE);
-
-        if(ToursDataClass.getInstance().hasTours()/*serverFile*/){
-            ArrayList<TourCatalogueItem> tours = ToursDataClass.getInstance().getAllTours()/*serverFile.tours*/;
-            setupRecycler(tours);
-        } else {
-
-            FirebaseService service = new Retrofit.Builder()
-                    .baseUrl(BuildConfig.FIREBASE_ENDPOINT)
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build()
-                    .create(FirebaseService.class);
-
-            Call<ToursResponse> call = service.getTours(BuildConfig.FIREBASE_ALT, BuildConfig.FIREBASE_TOKEN);
-
-            call.enqueue(new Callback<ToursResponse>() {
-
-                @Override
-                @SuppressWarnings({"ConstantConditions"})
-                public void onResponse(@NonNull Call<ToursResponse> call, @NonNull Response<ToursResponse> response) {
-                    ArrayList<TourCatalogueItem> tours = response.body().tours;
-                    setupRecycler(tours);
-                }
-
-                @Override
-                public void onFailure(@NonNull Call<ToursResponse> call, @NonNull Throwable t) {
-                    Log.d(TAG, "onResponse: ");
-                    setProgressItems(View.GONE);
-                }
-            });
-        }
-    }
-
-
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void setupRecycler(ArrayList<TourCatalogueItem> tours) {
         setProgressItems(View.VISIBLE);
@@ -158,7 +113,7 @@ public class CatalogueActivity extends BaseActivity {
             @Override
             public void OnClick(View v, Drawable drawable, int pos) {
                 // Check if the tours are being updated. Try again later if they are
-                if(((App)getApplication()).isUpdatingFirebase() || !ToursDataClass.getInstance().hasTours()) {
+                if(((App)getApplication()).isUpdatingFirebase()) {
                     AlertDialog.Builder dlg = new AlertDialog.Builder(CatalogueActivity.this)
                             .setTitle(R.string.getting_tours)
                             .setMessage(R.string.getting_tours_desc)
@@ -168,6 +123,7 @@ public class CatalogueActivity extends BaseActivity {
                                     finish();
                                 }
                             });
+                    dlg.show();
                     return;
                 }
 
@@ -181,7 +137,7 @@ public class CatalogueActivity extends BaseActivity {
                 } else {  // show tour in tabs and pager
                     Holder.set(drawable);
                     Intent intent = new Intent(CatalogueActivity.this, CataloguePreviewActivity.class);
-                    intent.putExtra(CATALOGUE_INDEX, pos);
+                    intent.putExtra(CATALOGUE_INDEX, catalogue.getTourId());
 
                     Bundle options = null;
                     if (C.HAS_L)
@@ -212,7 +168,6 @@ public class CatalogueActivity extends BaseActivity {
             recyclerView.setAdapter(mAdapter);
 
             scrollHider(recyclerView, fabExit);
-
 
             mTourViewModel = ViewModelProviders.of(this).get(TourViewModel.class);
             mTourViewModel.getAllTours().observe(this, new Observer<List<TourCatalogueItem>>() {
@@ -258,7 +213,6 @@ public class CatalogueActivity extends BaseActivity {
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
     }
-
 
     @Override
     public void onBackPressed() {

@@ -1,9 +1,13 @@
 package me.carc.btown.tours;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Parcelable;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -16,6 +20,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -27,8 +32,9 @@ import me.carc.btown.Utils.ViewUtils;
 import me.carc.btown.common.CacheDir;
 import me.carc.btown.common.Commons;
 import me.carc.btown.common.interfaces.ToursScrollListener;
-import me.carc.btown.data.ToursDataClass;
+import me.carc.btown.db.TourViewModel;
 import me.carc.btown.db.tours.model.Attraction;
+import me.carc.btown.db.tours.model.TourCatalogueItem;
 import me.carc.btown.ui.custom.MyFragmentPagerAdapter;
 
 /**
@@ -40,7 +46,6 @@ public class AttractionTabsActivity extends BaseActivity implements ToursScrollL
 
     private MyFragmentPagerAdapter adapter;
     private String tourTitle;
-    private ArrayList<Attraction> attractions;
 
     @SuppressFBWarnings("MS_CANNOT_BE_FINAL")
     public static SparseArray<GalleryItem> galleryItems;
@@ -66,39 +71,44 @@ public class AttractionTabsActivity extends BaseActivity implements ToursScrollL
         Intent intent = getIntent();
         if (intent.hasExtra(CatalogueActivity.CATALOGUE_INDEX)) {
             tourTitle = intent.getStringExtra(CataloguePreviewActivity.CATALOGUE_TITLE);
-//            attractions = intent.getParcelableArrayListExtra(CataloguePreviewActivity.ATTRACTIONS_LIST);
 
-            int catalogueIndex = intent.getIntExtra(CatalogueActivity.CATALOGUE_INDEX, -1);
+            int tourID = intent.getIntExtra(CatalogueActivity.CATALOGUE_INDEX, -1);
 
-            attractions = ToursDataClass.getInstance().getTourAttractions(catalogueIndex);
+            TourViewModel mTourViewModel = ViewModelProviders.of(this).get(TourViewModel.class);
+            mTourViewModel.getTour(tourID).observe(this, new Observer<TourCatalogueItem>() {
+                @Override
+                public void onChanged(@Nullable final TourCatalogueItem tour) {
+                    List<Attraction> attractions = tour.getAttractions();
+                    // populate the various lists
+                    if (Commons.isNotNull(attractions)) {
+                        getImageURLs(attractions);
 
-            // populate the various lists
-            if(Commons.isNotNull(attractions)) {
-                getImageURLs(attractions);
+                        // Add colour selection for this??
+                        ViewUtils.changeFabColour(AttractionTabsActivity.this, fab, R.color.toursBackButtonBackgroundColor);
 
-                // Add colour selection for this??
-                ViewUtils.changeFabColour(this, fab, R.color.toursBackButtonBackgroundColor);
+                        setupUI();
+                        setupViewPager(attractions);
 
-                setupUI();
-                setupViewPager(attractions, catalogueIndex);
+                    } else {
+                        new AlertDialog.Builder(AttractionTabsActivity.this)
+                                .setTitle("Thats Unexpected!!")
+                                .setMessage("Looks like the tours didn't download... ")
+                                .setCancelable(false)
+                                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        finish();
+                                    }
+                                })
+                                .show();
+                    }
 
-            } else {
-                new AlertDialog.Builder(this)
-                        .setTitle("Thats Unexpected!!")
-                        .setMessage("Looks like the tours didn't download... ")
-                        .setCancelable(false)
-                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                finish();
-                            }
-                        })
-                        .show();
-            }
+                }
+            });
         }
     }
 
-    private void getImageURLs(ArrayList<Attraction> attractions) {
+    private void getImageURLs(List<Attraction> attractions) {
         galleryItems = new SparseArray<>(1);
 
         int index = 0;
@@ -135,14 +145,14 @@ public class AttractionTabsActivity extends BaseActivity implements ToursScrollL
         fab.setAnimation(a);
     }
 
-    private void setupViewPager(ArrayList<Attraction> attractions, int catalogueIndex) {
+    private void setupViewPager(List<Attraction> attractions) {
         adapter = new MyFragmentPagerAdapter(getSupportFragmentManager());
 
         Bundle bundle = null;
         if (Commons.isNotNull(attractions)) {
             bundle = new Bundle();
-            bundle.putParcelableArrayList(CataloguePreviewActivity.ATTRACTIONS_LIST, attractions);
-            bundle.putInt(CatalogueActivity.CATALOGUE_INDEX, catalogueIndex);
+            bundle.putParcelableArrayList(CataloguePreviewActivity.ATTRACTIONS_LIST, new ArrayList<Parcelable>(attractions));
+            bundle.putInt(CatalogueActivity.CATALOGUE_INDEX, getIntent().getIntExtra(CatalogueActivity.CATALOGUE_INDEX, -1));
         }
 
         adapter.addFragment(new AttractionTabsStopsFragment(), getString(R.string.attractions), bundle);
@@ -151,7 +161,7 @@ public class AttractionTabsActivity extends BaseActivity implements ToursScrollL
         viewPager.setAdapter(adapter);
 
         tabs.setupWithViewPager(viewPager);
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener(){
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {

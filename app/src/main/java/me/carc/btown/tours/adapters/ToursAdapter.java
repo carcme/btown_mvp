@@ -120,39 +120,5 @@ public class ToursAdapter extends RecyclerView.Adapter<CatalogueViewHolder> {
     public TourCatalogueItem getItem(int position) {
         return tours.get(position);
     }
-/*
-    static class CatalogueViewHolder extends RecyclerView.ViewHolder {
 
-        View mView;
-
-        CardView card;
-        TextView catalogueTitle;
-        TextView supportingText;
-        ImageView catalogueImage;
-
-        TextView time;
-        TextView rating;
-        TextView stops;
-        TextView distance;
-
-        private CatalogueViewHolder(View itemView) {
-            super(itemView);
-
-            mView = itemView;
-            this.card = itemView.findViewById(R.id.tourCardView);
-
-            // enable long press on cardview
-            itemView.setOnCreateContextMenuListener((CatalogueActivity) itemView.getContext());
-
-            this.catalogueImage = itemView.findViewById(R.id.catalogueImage);
-            this.catalogueTitle = itemView.findViewById(R.id.catalogueTitle);
-            this.supportingText = itemView.findViewById(R.id.supportingText);
-
-            this.time = itemView.findViewById(R.id.clock);
-            this.rating = itemView.findViewById(R.id.rating);
-            this.stops = itemView.findViewById(R.id.stops);
-            this.distance = itemView.findViewById(R.id.distance);
-        }
-    }
-*/
 }

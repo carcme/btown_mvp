@@ -12,7 +12,6 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.gson.Gson;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -27,7 +26,6 @@ import me.carc.btown.common.C;
 import me.carc.btown.common.CacheDir;
 import me.carc.btown.common.Commons;
 import me.carc.btown.common.TinyDB;
-import me.carc.btown.data.ToursDataClass;
 import me.carc.btown.db.tours.AttractionDao;
 import me.carc.btown.db.tours.TourCatalogueDao;
 import me.carc.btown.db.tours.model.Attraction;
@@ -108,39 +106,40 @@ public class FirebaseImageDownloader extends IntentService {
             @Override
             public void onResponse(@NonNull Call<ToursResponse> call, @NonNull final Response<ToursResponse> response) {
 
-                int version = db.getInt(CatalogueActivity.JSON_VERSION, 0);
+                 db.remove(CatalogueActivity.SERVER_FILE);
 
-                Executors.newSingleThreadExecutor().execute(new Runnable() {
-                    @Override
-                    public void run() {
+                long updateTime = db.getLong(CatalogueActivity.LAST_JSON_UPDATE, 0);
+                if(BuildConfig.DEBUG)
+                    updateTime = 0;
 
-                        if ((response.body() != null) && (response.body().version > 0)) {
-                            TourCatalogueDao tourDao = ((App) getApplicationContext()).getDB().catalogueDao();
-                            AttractionDao attrDao = ((App) getApplicationContext()).getDB().attractionDao();
-                            for (TourCatalogueItem item : response.body().tours) {
-                                tourDao.insert(item);
+                if((System.currentTimeMillis() - updateTime) > C.TIME_ONE_WEEK) {
+                    Executors.newSingleThreadExecutor().execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            int version = db.getInt(CatalogueActivity.JSON_VERSION, 0);
+                            if(BuildConfig.DEBUG)
+                                version = 0;
 
-                                for (Attraction attr : item.getAttractions()) {
-                                    attrDao.insert(attr);
+                            if ((response.body() != null) && (response.body().version > version)) {
+                                TourCatalogueDao tourDao = ((App) getApplicationContext()).getDB().catalogueDao();
+                                AttractionDao attrDao = ((App) getApplicationContext()).getDB().attractionDao();
+                                for (TourCatalogueItem item : response.body().tours) {
+                                    tourDao.insert(item);
+
+                                    for (Attraction attr : item.getAttractions()) {
+                                        attrDao.insert(attr);
+                                    }
                                 }
+                                // check we have the images - download any that are missing
+                                getImages(response.body());
+
+                                setUpdateInProgress(false);
+                                db.putLong(CatalogueActivity.LAST_JSON_UPDATE, System.currentTimeMillis());
+                                db.putInt(CatalogueActivity.JSON_VERSION, response.body().version);
                             }
                         }
-                    }
-                });
-
-                if (version < response.body().version || force) {
-
-                    final Gson gson = new Gson();
-                    db.putInt(CatalogueActivity.JSON_VERSION, response.body().version);
-
-                    String json = gson.toJson(response.body());
-                    db.putString(CatalogueActivity.SERVER_FILE, json);
-                    ToursDataClass.getInstance().setTourResult(gson.fromJson(json, ToursResponse.class));
+                    });
                 }
-                // check we have the images - download any that are missing
-                getImages(response.body());
-
-                setUpdateInProgress(false);
             }
 
             @Override

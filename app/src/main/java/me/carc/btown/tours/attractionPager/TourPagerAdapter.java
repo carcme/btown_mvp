@@ -4,7 +4,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import me.carc.btown.db.tours.model.Attraction;
 
@@ -15,10 +15,10 @@ import me.carc.btown.db.tours.model.Attraction;
 
 class TourPagerAdapter extends FragmentStatePagerAdapter {
 
-    private ArrayList<Attraction> attractionsData;
+    private List<Attraction> attractionsData;
     private boolean isGermanLanguage;
 
-    TourPagerAdapter(FragmentManager fm, ArrayList<Attraction> data, boolean isGermanLanguage) {
+    TourPagerAdapter(FragmentManager fm, List<Attraction> data, boolean isGermanLanguage) {
         super(fm);
         attractionsData = data;
         this.isGermanLanguage = isGermanLanguage;

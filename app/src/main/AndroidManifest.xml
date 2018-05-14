@@ -209,7 +209,6 @@
 
         <activity
             android:name="me.carc.btown.tours.CataloguePreviewActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
@@ -252,6 +251,7 @@
 
         <service
             android:name=".tours.data.services.FirebaseImageDownloader"
+            android:stopWithTask="true"
             android:exported="false"/>
 
 

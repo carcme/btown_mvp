@@ -553,6 +553,7 @@ public class PlaceholderFragment extends Fragment {
         });
 
         final CardView informationCard = rootView.findViewById(R.id.information_card);
+        final Resources res = getResources();
         informationCard.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
             @Override
             public boolean onPreDraw() {
@@ -568,9 +569,12 @@ public class PlaceholderFragment extends Fragment {
                 RelativeLayout infoElement = rootView.findViewById(R.id.layout_information);
                 if (infoElement == null)
                     return false;
+                if(!isAdded()){
+                    Log.d(TAG, "onPreDraw: ");
+                }
                 infoHeight = infoElement.getHeight();
                 infoHeight = infoHeight * items.size();
-                infoHeight = infoHeight + (AndroidUtils.getPixelsFromDPs(getResources(), 4) * items.size());  // inc padding (2dp top, 2dp bottom)
+                infoHeight = infoHeight + (AndroidUtils.getPixelsFromDPs(res, 4) * items.size());  // inc padding (2dp top, 2dp bottom)
                 infoHeight = infoHeight + minHeight;
                 return true;
             }
