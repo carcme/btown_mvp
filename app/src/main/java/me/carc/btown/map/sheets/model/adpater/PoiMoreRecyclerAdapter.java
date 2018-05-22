@@ -1,5 +1,6 @@
 package me.carc.btown.map.sheets.model.adpater;
 
+import android.graphics.Paint;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.util.Linkify;
@@ -58,22 +59,23 @@ public class PoiMoreRecyclerAdapter extends RecyclerView.Adapter<PoiMoreRecycler
             case TWITTER:
             case INSTAGRAM:
                 holder.infoText.setAutoLinkMask(Linkify.ALL);
+                holder.infoText.setPaintFlags(holder.infoText.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+                holder.infoText.setTextColor(ContextCompat.getColor(holder.infoText.getContext(), R.color.colorAccent));
                 break;
 
             case PHONE:
                 holder.infoText.setAutoLinkMask(Linkify.PHONE_NUMBERS);
                 break;
+
             default:
         }
 
-        // set the text
-        holder.infoText.setText(list.get(pos).getData());
-
+        holder.infoText.setText(list.get(pos).getDisplay());
 
         // Click Handlers
         holder.infoText.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(final View v) {
                 onClickListener.OnClick(v, holder.getAdapterPosition());
             }
         });

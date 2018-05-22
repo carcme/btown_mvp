@@ -22,6 +22,7 @@ import me.carc.btown.R;
 import me.carc.btown.SplashActivity;
 import me.carc.btown.Utils.ViewUtils;
 import me.carc.btown.common.C;
+import me.carc.btown.common.interfaces.OnItemSelectedListener;
 import me.carc.btown.extras.BackgroundImageDialog;
 import me.carc.btown.map.MapActivity;
 import me.carc.btown.ui.base.MvpBaseActivity;
@@ -41,10 +42,6 @@ public class FrontPageActivity extends MvpBaseActivity implements FrontPageMvpVi
         mPresenter.setupHeader();
     }
 
-    public interface ClickListener {
-        void onClick(MenuItem item);
-    }
-
     private static final String TAG = FrontPageActivity.class.getName();
     public static final int RESULT_NONE = 0;
     public static final int RESULT_SETTINGS = 41;
@@ -58,16 +55,12 @@ public class FrontPageActivity extends MvpBaseActivity implements FrontPageMvpVi
 
     @BindView(R.id.detailsAppBar)
     AppBarLayout detailsAppBar;
-
     @BindView(R.id.collapsing_toolbar)
     CollapsingToolbarLayout collapsingToolbar;
-
     @BindView(R.id.profileImage)
     ImageView profileImage;
-
     @BindView(R.id.detailsToolbar)
     Toolbar detailsToolbar;
-
     @BindView(R.id.detailsRecycleView)
     RecyclerView mRecyclerView;
 
@@ -164,20 +157,21 @@ public class FrontPageActivity extends MvpBaseActivity implements FrontPageMvpVi
     }
 
     @Override
-    public void loadFrontPageMenu(List<MenuItem> items) {
+    public void loadFrontPageMenu(final List<MenuItem> items) {
+        mAdapter.setData(items);
+        mAdapter.notifyDataSetChanged();
 
-        mAdapter.setData(items, new ClickListener() {
+        mRecyclerView.addOnItemTouchListener(new OnItemSelectedListener(this) {
             @Override
-            public void onClick(MenuItem item) {
+            public void onItemSelected(RecyclerView.ViewHolder holder, int pos) {
+                MenuItem item = mAdapter.getItem(pos);
                 Intent intent = new Intent(FrontPageActivity.this, item.getStartActivityClass());
-                if(item.getResultKey() == RESULT_NONE)
+                if (item.getResultKey() == RESULT_NONE)
                     startActivity(intent);
                 else
                     startActivityForResult(intent, item.getResultKey());
             }
         });
-
-        mAdapter.notifyDataSetChanged();
     }
 
     @Override

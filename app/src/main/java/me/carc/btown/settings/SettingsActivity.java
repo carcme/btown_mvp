@@ -1,6 +1,5 @@
 package me.carc.btown.settings;
 
-import android.app.Activity;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
@@ -10,6 +9,7 @@ import android.support.v4.content.ContextCompat;
 import android.text.Html;
 import android.view.MenuItem;
 
+import me.carc.btown.BaseActivity;
 import me.carc.btown.R;
 
 /**
@@ -18,21 +18,22 @@ import me.carc.btown.R;
  * Created by bamptonm on 24/10/17.
  */
 
-public class SettingsActivity extends Activity {
+public class SettingsActivity extends BaseActivity implements AboutFragment.BtnClickListener {
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if(getActionBar() != null) {
-            getActionBar().setDisplayHomeAsUpEnabled(true);
+        if(getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             final Drawable upArrow = ContextCompat.getDrawable(this, R.drawable.ic_arrow_back);
             upArrow.setColorFilter(Color.parseColor("#FFFFFF"), PorterDuff.Mode.SRC_ATOP);
-            getActionBar().setHomeAsUpIndicator(upArrow);
+            getSupportActionBar().setHomeAsUpIndicator(upArrow);
 
             // TODO: 22/12/2017 dont like this - find way to change actionbar text color that is correct/nice
-            getActionBar().setTitle(Html.fromHtml("<font color=\"#FFFFFF\">" + getString(R.string.shared_string_settings) + "</font>"));
-            getActionBar().setBackgroundDrawable(new ColorDrawable(ContextCompat.getColor(this, R.color.color_settings)));
+            getSupportActionBar().setTitle(Html.fromHtml("<font color=\"#FFFFFF\">" + getString(R.string.shared_string_settings) + "</font>"));
+            getSupportActionBar().setBackgroundDrawable(new ColorDrawable(ContextCompat.getColor(this, R.color.color_settings)));
             getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.color_settings_dark));
         }
 
@@ -56,5 +57,10 @@ public class SettingsActivity extends Activity {
             setResult(RESULT_OK, getIntent());
         }
         super.onBackPressed();
+    }
+
+    @Override
+    public void onDonateClick() {
+        showDonateDialog();
     }
 }

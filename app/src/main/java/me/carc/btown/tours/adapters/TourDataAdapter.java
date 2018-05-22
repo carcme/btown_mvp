@@ -14,12 +14,11 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import me.carc.btown.R;
 import me.carc.btown.Utils.FileUtils;
-import me.carc.btown.common.C;
 import me.carc.btown.common.CacheDir;
-import me.carc.btown.common.Commons;
 import me.carc.btown.db.tours.model.Attraction;
 
 /**
@@ -27,14 +26,19 @@ import me.carc.btown.db.tours.model.Attraction;
  */
 public class TourDataAdapter extends RecyclerView.Adapter<TourDataAdapter.MyViewHolder> {
 
-    private static final String TAG = C.DEBUG + Commons.getTag();
+    private static final String TAG =TourDataAdapter.class.getName();
     private boolean userDE;
     private final ArrayList<Attraction> mAttractions;
     private StorageReference mCoverImageStorageRef;
 
-
     public TourDataAdapter(ArrayList<Attraction> list, boolean isGermanLanguage) {
         this.mAttractions = list;
+        this.userDE = isGermanLanguage;
+        mCoverImageStorageRef = FirebaseStorage.getInstance().getReference().child("coverImages/");
+    }
+
+    public TourDataAdapter(boolean isGermanLanguage) {
+        this.mAttractions = new ArrayList<>();
         this.userDE = isGermanLanguage;
         mCoverImageStorageRef = FirebaseStorage.getInstance().getReference().child("coverImages/");
     }
@@ -75,19 +79,24 @@ public class TourDataAdapter extends RecyclerView.Adapter<TourDataAdapter.MyView
         return mAttractions.isEmpty();
     }
 
+    public void setItems(List<Attraction> attractions) {
+        mAttractions.addAll(attractions);
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getItemCount() {
         return mAttractions.size();
     }
 
-    public static class MyViewHolder extends RecyclerView.ViewHolder {
+    static class MyViewHolder extends RecyclerView.ViewHolder {
         final View mView;
 
         final TextView title;
         final TextView summary;
         final ImageView icon;
 
-        public MyViewHolder(View itemView) {
+        MyViewHolder(View itemView) {
             super(itemView);
 
             mView = itemView;

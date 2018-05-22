@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executors;
 
 import me.carc.btown.R;
 import me.carc.btown.common.Commons;
@@ -23,6 +24,7 @@ public class GalleryItem implements Serializable {
     private String filename;
     private String url;
     private String cacheFile;
+    private File file;
     private String title;
     private String desc;
     private Bitmap bm;
@@ -47,18 +49,34 @@ public class GalleryItem implements Serializable {
         return url;
     }
 
-    public File getCachedFile() {
-        if (cacheFile != null)
-            return new File(cacheFile);
-        return null;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
 
     public void setCachedFilePath(String path) {
         this.cacheFile = path;
+        Executors.newSingleThreadExecutor().execute(new Runnable() {
+            @Override
+            public void run() {
+                setFile(new File(cacheFile));
+            }
+        });
+    }
+
+    public File getCachedFile() {
+        if (file == null)
+            return new File(cacheFile);
+        return file;
+    }
+
+    public void setFile(File file) {
+        this.file = file;
+    }
+
+    public File getFile() {
+        return file;
+    }
+
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     public String getTitle() {
@@ -136,14 +154,19 @@ public class GalleryItem implements Serializable {
     }
 
 
-    public void setFilename(String filename) { this.filename = filename; }
-    public String getFilename() { return filename; }
+    public void setFilename(String filename) {
+        this.filename = filename;
+    }
+
+    public String getFilename() {
+        return filename;
+    }
 
     private void writeObject(java.io.ObjectOutputStream stream) throws java.io.IOException {
-        throw new java.io.NotSerializableException( getClass().getName() );
+        throw new java.io.NotSerializableException(getClass().getName());
     }
 
     private void readObject(java.io.ObjectInputStream stream) throws java.io.IOException, ClassNotFoundException {
-        throw new java.io.NotSerializableException( getClass().getName() );
+        throw new java.io.NotSerializableException(getClass().getName());
     }
 }

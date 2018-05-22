@@ -29,16 +29,15 @@ import me.carc.btown.R;
 class FrontPageAdapter extends RecyclerView.Adapter<FrontPageAdapter.ViewHolder> {
 
     private List<MenuItem> mMenuItems;
-    private FrontPageActivity.ClickListener emailListener;
 
     @Inject
     public FrontPageAdapter() {
         mMenuItems = new ArrayList<>();
     }
 
-    public void setData(List<MenuItem> profileData, FrontPageActivity.ClickListener listener) {
+
+    public void setData(List<MenuItem> profileData) {
         mMenuItems = profileData;
-        emailListener = listener;
     }
 
     @Override
@@ -62,12 +61,6 @@ class FrontPageAdapter extends RecyclerView.Adapter<FrontPageAdapter.ViewHolder>
             holder.detailsDescription.setText(data.getSubTitleResourceId());
         holder.detailsTitle.setText(data.getTitleResourceId());
         holder.elementHolder.setBackgroundColor(ContextCompat.getColor(ctx, data.geticonColorId()));
-        holder.elementHolder.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                emailListener.onClick(data);
-            }
-        });
     }
 
     @Override

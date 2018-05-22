@@ -22,10 +22,8 @@ import com.google.firebase.storage.StorageReference;
 
 import me.carc.btown.R;
 import me.carc.btown.Utils.ViewUtils;
-import me.carc.btown.common.C;
 import me.carc.btown.common.Commons;
 import me.carc.btown.common.interfaces.OnItemClickListener;
-
 import me.carc.btown.tours.AttractionTabsActivity;
 import me.carc.btown.tours.GalleryItem;
 
@@ -35,10 +33,8 @@ import me.carc.btown.tours.GalleryItem;
  */
 public class AttractionGalleryViewerAdapter extends RecyclerView.Adapter<AttractionGalleryViewerAdapter.MyViewHolder> {
 
-    private static final String TAG = C.DEBUG + Commons.getTag();
+    private static final String TAG = AttractionGalleryViewerAdapter.class.getName();
 
-
-    private Context ctx;
     private StorageReference mCoverImageStorageRef;
 
     //    private int mScreenWidth;
@@ -57,12 +53,10 @@ public class AttractionGalleryViewerAdapter extends RecyclerView.Adapter<Attract
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        this.ctx = parent.getContext();
+        Log.d(TAG, "onCreateViewHolder: ");
+        Context ctx = parent.getContext();
         View rowView = LayoutInflater.from(ctx).inflate(R.layout.gallery_image_item, parent, false);
 
-//        mScreenWidth = ctx.getResources().getDisplayMetrics().widthPixels;
-        //get the colors
-//        mDefaultTextColor = ctx.getResources().getColor(R.color.text_without_palette);
         mDefaultBackgroundColor = ctx.getResources().getColor(R.color.imageWithoutPaletteColor);
 
         return new MyViewHolder(rowView, onItemClickListener);
@@ -70,9 +64,13 @@ public class AttractionGalleryViewerAdapter extends RecyclerView.Adapter<Attract
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
+        Log.d(TAG, "onBindViewHolder: ");
 
         GalleryItem galleryItem = AttractionTabsActivity.galleryItems.get(position);
         holder.gallleryTitle.setText(galleryItem.getTitle());
+
+        if(Commons.isNotNull(galleryItem.getBitmap()) && galleryItem.getBitmap().isRecycled())
+            galleryItem.setBitmap(null);
 
         if (galleryItem.hasCachedFile() && Commons.isNull(galleryItem.getBitmap())) {
             Glide.with(holder.mView.getContext())
@@ -85,7 +83,6 @@ public class AttractionGalleryViewerAdapter extends RecyclerView.Adapter<Attract
                             new Palette.Builder(bitmap).generate(new Palette.PaletteAsyncListener() {
                                 @Override
                                 public void onGenerated(Palette palette) {
-
                                     if (!bitmap.isRecycled()) {
                                         if (palette != null) {
                                             Palette.Swatch s = palette.getVibrantSwatch();

@@ -18,10 +18,10 @@ import me.carc.btown.common.CacheDir;
 
 public class Bahns {
 
-    public static final String FIREBASE_UBAHN    = "berlin_transport_map.png";
-    public static final String FIREBASE_TRAM     = "berlin-tram-map.jpg";
-    public static final String FIREBASE_REGIONAL = "berlin_regional.jpg";
-    public static final String FIREBASE_ZOO      = "berlIn_zoo_map.jpg";
+    static final String FIREBASE_UBAHN    = "berlin_transport_map.png";
+    static final String FIREBASE_TRAM     = "berlin-tram-map.jpg";
+    static final String FIREBASE_REGIONAL = "berlin_regional.jpg";
+    static final String FIREBASE_ZOO      = "berlIn_zoo_map.jpg";
 
 
     public enum BahnItem {

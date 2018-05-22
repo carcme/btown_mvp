@@ -7,7 +7,6 @@ import android.widget.TextView;
 
 import java.lang.ref.WeakReference;
 
-import me.carc.btown.common.C;
 import me.carc.btown.common.Commons;
 import me.carc.btown.data.results.ReverseResult;
 import retrofit2.Call;
@@ -20,7 +19,7 @@ import retrofit2.Response;
  */
 
 public class ReverseLookupLoader {
-    private static final String TAG = C.DEBUG + Commons.getTag();
+    private static final String TAG = ReverseLookupLoader.class.getName();
 
     private final WeakReference<TextView> imageViewRef;
     private String completeAddress;
@@ -64,7 +63,8 @@ public class ReverseLookupLoader {
             final TextView textView = imageViewRef.get();
             if (textView != null) {
                 if (hasAddress)
-                    textView.setText(completeAddress);
+                    textView.setText(Commons.startsWith(completeAddress, ",") ?
+                            completeAddress.substring(1).trim() : completeAddress);
                 else
                     textView.setVisibility(View.GONE);
             }

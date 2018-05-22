@@ -12,26 +12,28 @@
         android:layout_height="50dp"
         android:contentDescription="@null"
         android:scaleType="centerCrop"
-        android:textColor="@color/venueImageTextColor"
+        android:textColor="@color/venueTipTextColor"
         tools:src="@drawable/no_image"/>
-
-    <me.carc.btown.ui.custom.CapitalisedTextView
-        android:id="@+id/tipsUserName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_tiny"
-        android:layout_toEndOf="@+id/tipsUserPhoto"
-        android:textColor="@color/venueImageTextColor"
-        tools:text="UserName"/>
 
     <TextView
         android:id="@+id/tipsDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:textColor="@color/venueImageTextColor"
+        android:textColor="@color/venueTipTextColor"
         android:textSize="@dimen/tiny_list_text_size"
         tools:text="12th Dec 1235"/>
+
+    <me.carc.btown.ui.custom.CapitalisedTextView
+        android:id="@+id/tipsUserName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_tiny"
+        android:layout_toStartOf="@id/tipsDate"
+        android:layout_toEndOf="@+id/tipsUserPhoto"
+        android:textColor="@color/venueTipTextColor"
+        tools:text="UserName"/>
+
 
     <me.carc.btown.ui.custom.CapitalisedTextView
         android:id="@+id/tipsTip"
@@ -55,7 +57,7 @@
         android:layout_toEndOf="@id/tipsUserPhoto"
         android:contentDescription="@null"
         android:scaleType="centerCrop"
-        android:textColor="@color/venueImageTextColor"
+        android:textColor="@color/venueTipTextColor"
         android:visibility="gone"
         tools:src="@drawable/no_image"
         tools:visibility="visible"/>

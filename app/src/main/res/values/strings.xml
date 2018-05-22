@@ -83,7 +83,7 @@
     <string name="shared_string_browser">Open in Browser</string>
     <string name="shared_string_show_on_map">Show on Map</string>
     <string name="shared_string_use_on_home_screen">Use on Home Screen</string>
-    <string name="shared_string_bookmark">Bookmarks</string>
+    <string name="shared_string_bookmark">Reading List</string>
     <string name="shared_string_options">Options</string>
     <string name="shared_string_user_guide">User Guide</string>
     <string name="shared_string_help_toggle">Toggle Help</string>
@@ -105,6 +105,10 @@
     <string name="shared_string_none">None</string>
     <string name="shared_string_success">Success</string>
     <string name="shared_string_search">Search</string>
+    <string name="shared_string_download">Download</string>
+    <string name="shared_string_offline">Offline</string>
+
+    <string name="home_screen_updated">Home Screen Updated</string>
 
 
     <string name="shared_string_phone">Phone</string>
@@ -141,10 +145,15 @@
 
     <!--PRODUCT NAMES AND TEXTS-->
     <string name="wikipedia" translatable="false">Wikipedia</string>
+    <string name="wikipedia_underline" translatable="false"><u>Wikipedia</u></string>
     <string name="facebook" translatable="false">Facebook</string>
+    <string name="facebook_underline" translatable="false"><u>Facebook</u></string>
     <string name="google" translatable="false">Google</string>
+    <string name="google_underline" translatable="false"><u>Google</u></string>
     <string name="instagram" translatable="false">Instagram</string>
+    <string name="instagram_underline" translatable="false"><u>Instagram</u></string>
     <string name="twitter" translatable="false">Twitter</string>
+    <string name="twitter_underline" translatable="false"><u>Twitter</u></string>
     <string name="install_instagram">Install Instagram</string>
     <string name="install_transportr">Install TransportR</string>
     <string name="install_translate">Install Translator</string>
@@ -170,7 +179,7 @@
     <string name="permission_rejected_msg">B-Town really needs those permissions for the map functions. Hope you change your mind and grant the permissions another time.</string>
     <string name="enable_gps_request">Please enable the device GPS</string>
     <string name="no_gps">No GPS</string>
-    <string name="rationale_camera">I need access to your camera so you can take pictures.</string>
+    <string name="rationale_camera">You need to grant accto your camera so you can take pictures.</string>
 
 
 
@@ -202,10 +211,10 @@
     <string name="about_top">© 2017 Marc Bampton\nFree Software License: GPLv3</string>
 
     <string name="about"><![CDATA[
-<p>The idea of B-Town came while travelling and wanting something that would give insider tips for various cities. If you have any suggestions of what you\'d like to see, let me know via the feedback button</p>
-<p>Use the app to get details of your area, whether you\'re interested in local bars, restaurtants or sightseeing and included Wikipedia lookups to make it easy those to find extra places you may be interested in.</p>
-<p>OpenStreetMap is updated daily by contributors all over the world… although I can\'t guarantee the correctness of their data. </p>
-
+<p>The idea of B-Town came while travelling and wanting something that would give insider tips for various cities. As Berlin has so much to offer, this seemed like a good place to start</p>
+<p>Whether you\'re interested in local bars, restaurtants or sightseeing or trending places, B-Town makes playing in Berlin easier. We\'ve got hidden places, insider tips and, for more general info, Wikipedia lookups</p>
+<p>OpenStreetMap is updated daily by contributors all over the world… so the map should be up to date… mostly :)</p>
+<p>If you have any suggestions of what you\'d like to see, let me know via the feedback button</p>
 ]]></string>
 
     <string name="about_bottom">
@@ -234,7 +243,7 @@
 
     <!-- PUBLIC TRANSPORT ROUTE PLAN-->
     <string name="alert_title_pt_route_map">Map download</string>
-    <string name="alert_msg_pt_route_map">%s is downloading. Please be patient. If you want a new map, let me know using the feedback above.</string>
+    <string name="alert_msg_pt_route_map">\"%s\" is downloading. Please be patient.\n\nIf you want a new map, let me know using the feedback above.</string>
 
 
 

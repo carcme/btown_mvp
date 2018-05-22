@@ -15,8 +15,6 @@ import me.carc.btown.R;
 
 public class CatalogueViewHolder extends RecyclerView.ViewHolder {
 
-    public View mView;
-
     public CardView card;
     public TextView catalogueTitle;
     public TextView supportingText;
@@ -31,7 +29,6 @@ public class CatalogueViewHolder extends RecyclerView.ViewHolder {
     public CatalogueViewHolder(View itemView) {
         super(itemView);
 
-        mView = itemView;
         this.card = itemView.findViewById(R.id.tourCardView);
 
         // enable long press on cardview

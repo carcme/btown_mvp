@@ -2,6 +2,8 @@ package me.carc.btown.tours;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,36 +11,33 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import me.carc.btown.R;
 import me.carc.btown.common.C;
 import me.carc.btown.common.Commons;
 import me.carc.btown.common.interfaces.ToursScrollListener;
+import me.carc.btown.db.tours.TourViewModel;
+import me.carc.btown.db.tours.model.TourCatalogueItem;
 import me.carc.btown.tours.adapters.TourDataAdapter;
 import me.carc.btown.tours.attractionPager.AttractionPagerActivity;
-import me.carc.btown.db.tours.model.Attraction;
 import me.carc.btown.ui.custom.MyCustomLayoutManager;
 import me.carc.btown.ui.custom.MyRecyclerItemClickListener;
 
 public class AttractionTabsStopsFragment extends Fragment {
 
     private static final String TAG = AttractionTabsStopsFragment.class.getName();
+    public static final String TAG_ID = "AttractionTabsStopsFragment";
+
     public static final int RESULT_ATTRACTION = 1100;
 
-//    public interface AttractionListListener {
-//        void onItemSelected();
-//    }
-
-//    AttractionListListener cbListener;
     ToursScrollListener scrollListener;
-
     RecyclerView rv;
-
     ProgressDialog mProgressBar;
 
     public AttractionTabsStopsFragment() {
@@ -47,7 +46,7 @@ public class AttractionTabsStopsFragment extends Fragment {
     private RecyclerView.OnScrollListener onScrollListener = new RecyclerView.OnScrollListener() {
         @Override
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-            if(dy > 0)
+            if (dy > 0)
                 scrollListener.onScrollView(true);
             else
                 scrollListener.onScrollView(false);
@@ -57,10 +56,12 @@ public class AttractionTabsStopsFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        rv = (RecyclerView)inflater.inflate( R.layout.tour_list_recycler, container, false);
+        Log.d(TAG, "onCreateView: ");
+        rv = (RecyclerView) inflater.inflate(R.layout.tour_list_recycler, container, false);
         setupRecyclerView(rv);
         rv.setNestedScrollingEnabled(true);
-        if(C.HAS_M)
+
+        if (C.HAS_M)
             rv.addOnScrollListener(onScrollListener);
         else
             rv.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -72,7 +73,7 @@ public class AttractionTabsStopsFragment extends Fragment {
                 @Override
                 public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                     super.onScrolled(recyclerView, dx, dy);
-                    if(dy > 0)
+                    if (dy > 0)
                         scrollListener.onScrollView(true);
                     else
                         scrollListener.onScrollView(false);
@@ -87,7 +88,6 @@ public class AttractionTabsStopsFragment extends Fragment {
         super.onAttach(ctx);
 
         try {
-//            cbListener = (AttractionListListener) ctx;
             scrollListener = (ToursScrollListener) ctx;
         } catch (ClassCastException e) {
             throw new ClassCastException(ctx.toString() + " must implement AttractionListListener callbacks");
@@ -96,21 +96,33 @@ public class AttractionTabsStopsFragment extends Fragment {
 
     @Override
     public void onDetach() {
-//        cbListener = null;
         super.onDetach();
     }
 
-    private void setupRecyclerView(final RecyclerView recyclerView) {
-        final Bundle args = getArguments();
-        if(Commons.isNotNull(args)) {
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG, "onDestroy: ");
+    }
 
-            ArrayList<Attraction> list = args.getParcelableArrayList(CataloguePreviewActivity.ATTRACTIONS_LIST);
+    private void setupRecyclerView(final RecyclerView recyclerView) {
+        Log.d(TAG, "setupRecyclerView: ");
+        final Bundle args = getArguments();
+        if (Commons.isNotNull(args)) {
+            final TourDataAdapter adapter = new TourDataAdapter(C.USER_LANGUAGE.equals("de"));
+            recyclerView.setAdapter(adapter);
+
+            TourViewModel tourViewModel = ViewModelProviders.of(this).get(TourViewModel.class);
+            tourViewModel.getAllTours().observe(this, new Observer<List<TourCatalogueItem>>() {
+                @Override
+                public void onChanged(@Nullable final List<TourCatalogueItem> tours) {
+                    Log.d(TAG, "onChanged: is good? -> " + (tours != null));
+                    if (tours != null)
+                        adapter.setItems(tours.get(args.getInt(CatalogueActivity.CATALOGUE_INDEX)).getAttractions());
+                }
+            });
 
             recyclerView.setLayoutManager(new MyCustomLayoutManager(recyclerView.getContext()));
-            final TourDataAdapter adapter = new TourDataAdapter(list, C.USER_LANGUAGE.equals("de"));
-            recyclerView.setAdapter(adapter);
-            recyclerView.setHasFixedSize(true);
-
             // Is this needed
             RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL);
             recyclerView.addItemDecoration(itemDecoration);
@@ -120,8 +132,7 @@ public class AttractionTabsStopsFragment extends Fragment {
                 @Override
                 public void onItemClick(View view, int position) {
                     // lots of info to process and views to build - show a modal dialog so user doesn't press stuff while loading
-                    showLoadingDialog();
-
+//                    showLoadingDialog();
                     Intent intent = new Intent(getActivity(), AttractionPagerActivity.class);
                     intent.putExtra(CatalogueActivity.CATALOGUE_INDEX, args.getInt(CatalogueActivity.CATALOGUE_INDEX));
                     intent.putExtra(AttractionPagerActivity.ATTRACTION_INDEX, position);
@@ -132,34 +143,12 @@ public class AttractionTabsStopsFragment extends Fragment {
                 public void onItemLongClick(View view, int position) {
                 }
             }));
-
-            createProgressBar();
         }
     }
 
     @Override
     public void onResume() {
-        hideLoadingDialog();
         super.onResume();
-    }
-
-    private void createProgressBar() {
-        mProgressBar = new ProgressDialog(getActivity(), R.style.LoadingDialog);
-        mProgressBar.setProgressStyle(android.R.style.Widget_ProgressBar_Small);
-        mProgressBar.setIndeterminate(true);
-        mProgressBar.setCancelable(false);
-        mProgressBar.setTitle(R.string.shared_string_initialising);
-    }
-
-    private void showLoadingDialog() {
-        if (mProgressBar == null) {
-            createProgressBar();
-        }
-        mProgressBar.show();
-    }
-
-    private void hideLoadingDialog() {
-        if(Commons.isNotNull(mProgressBar)) mProgressBar.dismiss();
     }
 
     @Override

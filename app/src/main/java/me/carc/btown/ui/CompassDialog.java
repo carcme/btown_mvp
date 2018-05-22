@@ -17,7 +17,6 @@ import butterknife.Unbinder;
 import me.carc.btown.App;
 import me.carc.btown.R;
 import me.carc.btown.Utils.MapUtils;
-import me.carc.btown.common.C;
 import me.carc.btown.common.Commons;
 
 /**
@@ -27,7 +26,8 @@ import me.carc.btown.common.Commons;
 
 public class CompassDialog extends DialogFragment {
 
-    private static final String TAG = C.DEBUG + Commons.getTag();
+    private static final String TAG = CompassDialog.class.getName();
+
     public static final String ID_TAG = "CompassDialog";
     private static final String TITLE = "TITLE";
     private static final String SUBTITLE = "SUBTITLE";

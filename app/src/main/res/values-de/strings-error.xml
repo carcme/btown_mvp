@@ -6,7 +6,7 @@
     <string name="login_required">Um fortzufahren, musst du eingeloggt sein. Oder klicke das \'X\' zum Schließen der Datei%s</string>
     <string name="auth_failed">Authentifizierung fehlgeschlagen</string>
     <string name="network_offline">Überprüfe deine Internetverbindung.</string>
-    <string name="check_network">Überprüfe deine Internetverbindung. Du musst online sein, um B-Town nutzen zu können.</string>
+    <string name="check_network">Überprüfe deine Internetverbindung.</string>
     <string name="text_donate_error">Hmmm&#8230; Irgendetwas hat nicht funktioniert und du kannst momentan leider nicht spenden. Wir haben noch viel Arbeit vor uns. Vielen Dank für den Versuch. Gib uns doch bitte ein Feedback.</string>
     <string name="error_sd_card_required">Externer Speicherplatz (SD Karte) wird gebraucht. Momentaner Zustand:</string>
     <string name="technical_error_route">Technische Probleme beim Finden der Route</string>
@@ -15,6 +15,9 @@
     <string name="serious_error_body">In der Database fand sich ein schwerer Fehler. Die Seite muss neu geladen werden.</string>
 
     <string name="retry">Wiederholen</string>
+
+    <string name="network_offline_title">Netzwerk Offline</string>
+    <string name="tours_network_message">Sie müssen online sein, um die Touren herunterzuladen</string>
 
 
     <string name="network_not_available_error">Stellen Sie sicher, dass Sie mit dem Internet verbunden sind</string>

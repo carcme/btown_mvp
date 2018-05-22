@@ -39,18 +39,17 @@ import me.carc.btown.BaseActivity;
 import me.carc.btown.R;
 import me.carc.btown.Utils.ViewUtils;
 import me.carc.btown.camera.CameraActivity;
-import me.carc.btown.common.C;
 import me.carc.btown.common.Commons;
 import me.carc.btown.data.all4squ.entities.ExploreItem;
 import me.carc.btown.data.all4squ.entities.ListItems;
 import me.carc.btown.data.all4squ.entities.VenueResult;
 import me.carc.btown.db.bookmark.BookmarkEntry;
+import me.carc.btown.db.tours.model.TourCatalogueItem;
 import me.carc.btown.map.search.SearchDialogFragment;
 import me.carc.btown.map.search.model.Place;
 import me.carc.btown.map.sheets.WikiPoiSheetDialog;
 import me.carc.btown.map.sheets.wiki.WikiReadingListDialogFragment;
 import me.carc.btown.tours.CatalogueActivity;
-import me.carc.btown.db.tours.model.TourCatalogueItem;
 import me.carc.btown.tours.top_pick_lists.FourSquareListsActivity;
 import me.carc.btown.tours.top_pick_lists.FourSquareSearchResultActivity;
 import me.carc.btown.tours.top_pick_lists.VenueTabsActivity;
@@ -64,7 +63,7 @@ public class MapActivity extends BaseActivity implements
         WikiPoiSheetDialog.WikiCallback,
         WikiReadingListDialogFragment.BookmarksCallback {
 
-    private static final String TAG = C.DEBUG + Commons.getTag();
+    private static final String TAG = MapActivity.class.getName();
 
     public static final int PERMISSION_FINE_LOCATION = 100;
 
@@ -338,9 +337,20 @@ public class MapActivity extends BaseActivity implements
     @Override
     protected void onDestroy() {
         unbinder.unbind();
+        presenter.destroy();
         super.onDestroy();
     }
 
+    /**
+     * Bug #164 - Make sure intent is {@link javax.annotation.Nonnull}
+     */
+    @Override
+    public void startActivityForResult(Intent intent, int requestCode) {
+        if (intent == null) {
+            intent = new Intent();
+        }
+        super.startActivityForResult(intent, requestCode);
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -406,11 +416,11 @@ public class MapActivity extends BaseActivity implements
             case RESULT_SHOW_TOURS_MAP:
                 if (resultCode == RESULT_OK) {
                     if(data.hasExtra(CatalogueActivity.CATALOGUE)) {
-                        TourCatalogueItem catalogue = data.getParcelableExtra(CatalogueActivity.CATALOGUE);
-                        presenter.showTour(catalogue);
-
                         ViewUtils.changeFabColour(this, fabTours, R.color.fabSearchCancelColor);
                         ViewUtils.changeFabIcon(this, fabTours, R.drawable.ic_times_white);
+
+                        TourCatalogueItem catalogue = data.getParcelableExtra(CatalogueActivity.CATALOGUE);
+                        presenter.showTour(catalogue);
                     }
                 }
                 break;
@@ -622,7 +632,7 @@ public class MapActivity extends BaseActivity implements
     @Override
     public void resetToursBtn() {
         ViewUtils.changeFabColour(this, fabTours, R.color.fabColorAlmostClear);
-        ViewUtils.changeFabIcon(this, fabTours, R.drawable.ic_tours);
+        ViewUtils.changeFabIcon(this, fabTours, R.drawable.ic_tours_white);
     }
 
 

@@ -88,7 +88,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/size_8"
                     android:orientation="vertical">
-                    <include layout="@layout/attraction_information_expand_layout"/>
+                    <include layout="@layout/attraction_card_info_expand_layout"/>
 
                     <ListView
                         android:id="@+id/informationListView"

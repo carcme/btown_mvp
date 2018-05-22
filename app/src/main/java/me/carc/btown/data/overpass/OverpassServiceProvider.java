@@ -3,7 +3,6 @@ package me.carc.btown.data.overpass;
 
 import android.support.annotation.NonNull;
 
-import me.carc.btown.common.C;
 import me.carc.btown.common.Commons;
 import me.carc.btown.data.results.OverpassQueryResult;
 import retrofit2.Call;
@@ -18,7 +17,7 @@ public class OverpassServiceProvider {
         void onFailure(@NonNull Call call, @NonNull Throwable t);
     }
 
-    private static final String TAG = C.DEBUG + Commons.getTag();
+    private static final String TAG = OverpassServiceProvider.class.getName();
 
     private static OverpassApi service;
 

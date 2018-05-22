@@ -1,5 +1,6 @@
 package me.carc.btown.db.bookmark;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
@@ -18,10 +19,10 @@ import java.util.List;
 public interface BookmarkDao {
 
     @Query("SELECT * FROM BookmarkEntry")
-    List<BookmarkEntry> getAllBookmarks();
+    LiveData<List<BookmarkEntry>> getAllBookmarks();
 
-    @Query("SELECT * FROM BookmarkEntry WHERE pageId LIKE :osmId LIMIT 1")
-    BookmarkEntry findByPageId(long osmId);
+    @Query("SELECT * FROM BookmarkEntry WHERE pageId LIKE :id LIMIT 1")
+    BookmarkEntry findByPageId(long id);
 
     @Insert
     void insertAll(List<BookmarkEntry> entries);
@@ -34,6 +35,9 @@ public interface BookmarkDao {
 
     @Delete
     void delete(BookmarkEntry entry);
+
+    @Query("DELETE FROM BookmarkEntry WHERE pageId = :id")
+    void delete(long id);
 
     @Query("DELETE FROM BookmarkEntry")
     void nukeTable();

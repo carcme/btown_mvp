@@ -18,7 +18,6 @@ import java.util.List;
 
 import me.carc.btown.R;
 import me.carc.btown.Utils.AndroidUtils;
-import me.carc.btown.common.interfaces.DrawableClickListener;
 import me.carc.btown.common.viewHolders.CatalogueViewHolder;
 import me.carc.btown.extras.bahns.Bahns;
 
@@ -30,11 +29,8 @@ public class TransportPlanSelectionAdapter extends RecyclerView.Adapter<Catalogu
 
     private List<Bahns.BahnItem> plans;
 
-    public DrawableClickListener onClickListener;
-
-    public TransportPlanSelectionAdapter(DrawableClickListener listener) {
+    public TransportPlanSelectionAdapter() {
         this.plans = new Bahns().getItems();
-        onClickListener = listener;
     }
 
     @Override
@@ -47,7 +43,7 @@ public class TransportPlanSelectionAdapter extends RecyclerView.Adapter<Catalogu
     public void onBindViewHolder(final CatalogueViewHolder holder, final int pos) {
 
         final Bahns.BahnItem plan = plans.get(pos);
-        Context ctx = holder.mView.getContext();
+        Context ctx = holder.catalogueImage.getContext();
 
         holder.supportingText.setText(plan.getDescriptionResourceId());
         holder.supportingText.setTextColor(ContextCompat.getColor(ctx, R.color.white));
@@ -75,20 +71,6 @@ public class TransportPlanSelectionAdapter extends RecyclerView.Adapter<Catalogu
         int paddingDp = AndroidUtils.getPixelsFromDPs(r, 8);
         params.setMargins(paddingDp, pos == 0 ? paddingDp: 0, paddingDp, paddingDp);
         holder.card.setLayoutParams(params);
-
-        holder.card.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onClickListener.OnClick(v, holder.catalogueImage.getDrawable(), holder.getAdapterPosition());
-            }
-        });
-        holder.card.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                onClickListener.OnLongClick(v, holder.getAdapterPosition());
-                return true;
-            }
-        });
     }
 
     @Override

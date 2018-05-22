@@ -50,10 +50,8 @@ import me.carc.btown.ui.custom.MyFragmentPagerAdapter;
 /**
  * Created by Carc.me on 25.04.16.
  */
-public class VenueTabsActivity extends BaseActivity implements
-        ToursScrollListener {
-
-    private static final String TAG = C.DEBUG + Commons.getTag();
+public class VenueTabsActivity extends BaseActivity implements ToursScrollListener {
+    private static final String TAG = VenueTabsActivity.class.getName();
 
     public static final String EXTRA_VENUE      = "EXTRA_VENUE";
     public static final String EXTRA_VENUE_URL  = "EXTRA_VENUE_URL";
@@ -65,32 +63,15 @@ public class VenueTabsActivity extends BaseActivity implements
     private String tourTitle;
 //    private ItemsListItem mVenueItem;
 
-
     private VenueResult mVenueResult;
 
-
-    @BindView(R.id.venueAppbar)
-    AppBarLayout venueAppbar;
-
-    @BindView(R.id.venueCollapsingToolbar)
-    CollapsingToolbarLayout venueCollapsingToolbar;
-
-    @BindView(R.id.venueToolbar)
-    Toolbar tabsToolbar;
-
-    @BindView(R.id.venueViewpager)
-    ViewPager viewPager;
-
-    @BindView(R.id.venueTabs)
-    TabLayout tabs;
-
-    @BindView(R.id.venueHeaderImage)
-    KenBurnsView venueHeaderImage;
-
-    @BindView(R.id.venueFab)
-    FloatingActionButton fab;
-
-
+    @BindView(R.id.venueAppbar) AppBarLayout venueAppbar;
+    @BindView(R.id.venueCollapsingToolbar) CollapsingToolbarLayout venueCollapsingToolbar;
+    @BindView(R.id.venueToolbar) Toolbar tabsToolbar;
+    @BindView(R.id.venueViewpager) ViewPager viewPager;
+    @BindView(R.id.venueTabs) TabLayout tabs;
+    @BindView(R.id.venueHeaderImage) KenBurnsView venueHeaderImage;
+    @BindView(R.id.venueFab) FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,13 +80,11 @@ public class VenueTabsActivity extends BaseActivity implements
         ButterKnife.bind(this);
 
         Intent intent = getIntent();
-
         if (intent.hasExtra(EXTRA_VENUE)) {
             mVenueResult = intent.getParcelableExtra(EXTRA_VENUE);
 
             // populate the various lists
             if (Commons.isNotNull(mVenueResult)) {
-
                 // Add colour selection for this??
                 ViewUtils.changeFabColour(this, fab, R.color.toursBackButtonBackgroundColor);
 

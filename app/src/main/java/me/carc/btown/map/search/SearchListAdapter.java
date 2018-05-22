@@ -20,7 +20,6 @@ import java.util.List;
 import me.carc.btown.R;
 import me.carc.btown.Utils.AndroidUtils;
 import me.carc.btown.Utils.MapUtils;
-import me.carc.btown.common.C;
 import me.carc.btown.common.Commons;
 import me.carc.btown.map.IconManager;
 import me.carc.btown.map.search.model.Place;
@@ -29,7 +28,7 @@ import me.carc.btown.map.search.model.Place;
  *
  */
 public class SearchListAdapter extends ArrayAdapter<Place> {
-    private static final String TAG = C.DEBUG + Commons.getTag();
+    private static final String TAG = SearchListAdapter.class.getName();
 
 	private Context ctx;
 	private GeoPoint location;

@@ -1,29 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/colorPrimaryDark">
 
     <include
-        layout="@layout/tours_application_bar"
         android:id="@+id/toursApplicationToolBar"
+        layout="@layout/tours_application_bar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"/>
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"/>
 
     <android.support.v4.widget.ContentLoadingProgressBar
-        android:id="@+id/inventoryProgressBar"
+        android:id="@+id/tourProgressBar"
         style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerInParent="true"
         android:layout_centerVertical="true"
+        android:visibility="gone"
         tools:ignore="Suspicious0dp"/>
+
+
+    <RelativeLayout
+        android:id="@+id/downloadLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/tintLight"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/no_network_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_standard"
+            android:layout_centerInParent="true"
+            android:drawableTop="@drawable/ic_offline_icon"
+            android:text="Tours Not Downloaded"
+            android:textSize="25sp"/>
+
+        <TextView
+            android:id="@+id/no_network_msg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_standard"
+            android:layout_below="@id/no_network_icon"
+            android:layout_centerInParent="true"
+            android:text="Check your network connection and then download"
+            android:textAlignment="center"
+            android:textSize="20sp"/>
+
+        <me.carc.btown.ui.custom.DownloadButton
+            android:id="@+id/startDownloadBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_large"
+            android:layout_marginEnd="@dimen/margin_large"
+            android:layout_below="@id/no_network_msg"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/shared_string_download"
+            android:textColor="@color/colorPrimary"
+            app:roundedCorner="true"
+            app:iconCenterAligned="false"
+            app:transparentBackground="false"
+            app:iconSize="30dp"
+            />
+
+
+    </RelativeLayout>
 
 
     <android.support.design.widget.FloatingActionButton
@@ -33,9 +82,9 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_margin="@dimen/fab_margin"
+        android:visibility="gone"
         app:backgroundTint="@color/accentColorRed"
         app:fabSize="normal"
-        app:srcCompat="@drawable/ic_times_white"
-        android:visibility="gone"/>
+        app:srcCompat="@drawable/ic_times_white"/>
 
 </RelativeLayout>

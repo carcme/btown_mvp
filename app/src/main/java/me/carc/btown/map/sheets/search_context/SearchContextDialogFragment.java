@@ -24,14 +24,12 @@ import com.mikepenz.iconics.IconicsDrawable;
 import java.util.List;
 
 import me.carc.btown.R;
-import me.carc.btown.common.C;
-import me.carc.btown.common.Commons;
 import me.carc.btown.map.search.SearchDialogFragment;
 
 
 public class SearchContextDialogFragment extends BottomSheetDialogFragment implements OnItemClickListener {
+    private static final String TAG = SearchContextDialogFragment.class.getName();
     public static final String ID_TAG = "ShareMenuDialogFragment";
-    private static final String TAG = C.DEBUG + Commons.getTag();
 
     private ArrayAdapter<SearchContextMenu.ContextItem> listAdapter;
     private SearchContextMenu menu;

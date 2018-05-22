@@ -73,7 +73,7 @@ import me.carc.btown.Utils.WikiUtils;
 import me.carc.btown.common.C;
 import me.carc.btown.common.CacheDir;
 import me.carc.btown.common.Commons;
-import me.carc.btown.map.sheets.wiki.WikiWebViewActivity;
+import me.carc.btown.extras.WikiWebViewActivity;
 import me.carc.btown.tours.adapters.PoiInfoListAdapter;
 import me.carc.btown.tours.attractionPager.InfoCard;
 import me.carc.btown.db.tours.model.Attraction;
@@ -715,7 +715,6 @@ public class TourSheetDialog extends BottomSheetDialogFragment {
         titleTxt.setText(title);
 
         Button btnPostcard = card.findViewById(R.id.btnPostcard);
-        Button btnCheckin = card.findViewById(R.id.btnCheckin);
         Button btnComment = card.findViewById(R.id.btnComment);
         Button btnCamera = card.findViewById(R.id.btnCamera);
         Button btnDonate = card.findViewById(R.id.btnDonate);
@@ -723,25 +722,14 @@ public class TourSheetDialog extends BottomSheetDialogFragment {
 
 
         btnPostcard.setCompoundDrawablesWithIntrinsicBounds(new IconicsDrawable(getActivity(), FontAwesome.Icon.faw_share_alt_square).color(Color.WHITE).sizeDp(20), null, null, null);
-        btnCheckin.setCompoundDrawablesWithIntrinsicBounds(new IconicsDrawable(getActivity(), FontAwesome.Icon.faw_check_square_o).color(Color.WHITE).sizeDp(20), null, null, null);
         btnComment.setCompoundDrawablesWithIntrinsicBounds(new IconicsDrawable(getActivity(), FontAwesome.Icon.faw_comment).color(Color.WHITE).sizeDp(20), null, null, null);
         btnCamera.setCompoundDrawablesWithIntrinsicBounds(new IconicsDrawable(getActivity(), FontAwesome.Icon.faw_camera_retro).color(Color.WHITE).sizeDp(20), null, null, null);
         btnDonate.setCompoundDrawablesWithIntrinsicBounds(new IconicsDrawable(getActivity(), FontAwesome.Icon.faw_gift).color(Color.WHITE).sizeDp(20), null, null, null);
         btnMap.setCompoundDrawablesWithIntrinsicBounds(new IconicsDrawable(getActivity(), FontAwesome.Icon.faw_map).color(Color.WHITE).sizeDp(20), null, null, null);
 
-/*
-        btnPostcard.setOnClickListener(onShareBtnClickListener);
-        btnCheckin.setOnClickListener(onCheckinBtnClickListener);
-        btnComment.setOnClickListener(onCommentBtnClickListener);
-        btnCamera.setOnClickListener(onCameraBtnClickListener);
-        btnDonate.setOnClickListener(onDonateBtnClickListener);
-        btnMap.setOnClickListener(onShowMapClickListener);
-*/
-
         int bgColor = ContextCompat.getColor(getActivity(), R.color.interactiveButtonsBgColor);
 
         btnPostcard.getBackground().setColorFilter(bgColor, PorterDuff.Mode.MULTIPLY);
-        btnCheckin.getBackground().setColorFilter(bgColor, PorterDuff.Mode.MULTIPLY);
         btnComment.getBackground().setColorFilter(bgColor, PorterDuff.Mode.MULTIPLY);
         btnCamera.getBackground().setColorFilter(bgColor, PorterDuff.Mode.MULTIPLY);
         btnDonate.getBackground().setColorFilter(bgColor, PorterDuff.Mode.MULTIPLY);

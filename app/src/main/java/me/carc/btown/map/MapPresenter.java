@@ -1,6 +1,5 @@
 package me.carc.btown.map;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Point;
@@ -36,6 +35,7 @@ import org.osmdroid.views.overlay.Overlay;
 import org.osmdroid.views.overlay.Polyline;
 import org.osmdroid.views.overlay.ScaleBarOverlay;
 import org.osmdroid.views.overlay.simplefastpoint.SimpleFastPointOverlay;
+import org.osmdroid.views.overlay.simplefastpoint.SimpleFastPointOverlayOptions;
 import org.osmdroid.views.overlay.simplefastpoint.SimplePointTheme;
 
 import java.lang.reflect.Field;
@@ -48,6 +48,7 @@ import java.util.concurrent.Executors;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import me.carc.btown.App;
+import me.carc.btown.BuildConfig;
 import me.carc.btown.R;
 import me.carc.btown.Utils.AndroidUtils;
 import me.carc.btown.Utils.ImageUtils;
@@ -85,6 +86,8 @@ import me.carc.btown.db.AppDatabase;
 import me.carc.btown.db.bookmark.BookmarkEntry;
 import me.carc.btown.db.favorite.FavoriteEntry;
 import me.carc.btown.db.history.HistoryEntry;
+import me.carc.btown.db.tours.model.Attraction;
+import me.carc.btown.db.tours.model.TourCatalogueItem;
 import me.carc.btown.map.markers.MarkersOverlay;
 import me.carc.btown.map.markers.RadiusMarkerClusterer;
 import me.carc.btown.map.overlays.MyDirectedLocationOverlay;
@@ -94,8 +97,6 @@ import me.carc.btown.map.sheets.SinglePoiOptionsDialog;
 import me.carc.btown.map.sheets.TourSheetDialog;
 import me.carc.btown.map.sheets.WikiPoiSheetDialog;
 import me.carc.btown.map.sheets.marker_list.MarkerListDialogFragment;
-import me.carc.btown.db.tours.model.Attraction;
-import me.carc.btown.db.tours.model.TourCatalogueItem;
 import me.carc.btown.ui.custom.MySimplePointOverlayOptions;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -108,7 +109,7 @@ import retrofit2.Response;
 
 public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmdroid.views.overlay.Marker.OnMarkerClickListener {
 
-    private static final String TAG = C.DEBUG + Commons.getTag();
+    private static final String TAG = MapPresenter.class.getName();
 
     private static int MIN_POI_LOOKUP_ZOOM_LVL = 16;
     private static final int ZOOM_IN_TIME_DELAY = 500;
@@ -121,10 +122,10 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
     private static final String LOCATION = "LOCATION";
 
     private static final String OVERLAY_SINGLE_TAP = "OVERLAY_SINGLE_TAP";
-    private static final String OVERLAY_SEARCH  = "OVERLAY_SEARCH";
-    private static final String OVERLAY_FSQ     = "OVERLAY_FSQ";
-    private static final String OVERLAY_PIN     = "OVERLAY_PIN";
-    private static final String OVERLAY_TOUR    = "OVERLAY_TOUR";
+    private static final String OVERLAY_SEARCH = "OVERLAY_SEARCH";
+    private static final String OVERLAY_FSQ = "OVERLAY_FSQ";
+    private static final String OVERLAY_PIN = "OVERLAY_PIN";
+    private static final String OVERLAY_TOUR = "OVERLAY_TOUR";
 
 
     private static final int DEFAULT_WIKI_SEARCH_RADIUS = 10000;
@@ -172,12 +173,12 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
 
     @Override
     public void onUpdateLocation() {
-        if(Commons.isNull(btLocation)) {
+        if (Commons.isNull(btLocation)) {
             btLocation = new BTownFusedLocation(mContext);
             btLocation.setCallback(locationCallbackListener);
         } else btLocation.setCallback(locationCallbackListener);
 
-        if(Commons.isNotNull(compassSensor))
+        if (Commons.isNotNull(compassSensor))
             compassSensor = new CompassSensor(mContext, onCompassCallback);
         compassSensor.enableSensors();
     }
@@ -200,7 +201,7 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
         public void onLocationResult(LocationResult result) {
             updateLocationOverlay(result.getLocations().get(0));    // update the location overlay
             view.enableLocationDependantFab(true);                  // hide UI dependant controls
-            ((App)mContext.getApplicationContext()).setLatestLocation(result.getLocations().get(0));
+            ((App) mContext.getApplicationContext()).setLatestLocation(result.getLocations().get(0));
 
             if (mTrackingMode)
                 mMap.getController().animateTo(mLocation); //keep the map view centered on current location:
@@ -296,8 +297,12 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
         TinyDB db = TinyDB.getTinyDB();
         mMap.setMinZoomLevel(2.0);
         mMap.getController().setZoom(db.getInt(LAST_ZOOM_LEVEL, 9));
-        GeoPoint savedCenter = new GeoPoint(db.getDouble(LAST_CENTER_LAT, BERLIN_LAT), db.getDouble(LAST_CENTER_LNG, BERLIN_LNG));
-        mMap.getController().animateTo(savedCenter);
+
+        // Don't zoom to location when showing tours on the map
+        if(Commons.isNull(mTourOverlay)) {
+            GeoPoint savedCenter = new GeoPoint(db.getDouble(LAST_CENTER_LAT, BERLIN_LAT), db.getDouble(LAST_CENTER_LNG, BERLIN_LNG));
+            mMap.getController().animateTo(savedCenter);
+        }
         compassSensor = new CompassSensor(mContext, onCompassCallback);
 
         initLocationProvider();
@@ -325,9 +330,23 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
         clearBackStack();
     }
 
+    @Override
+    public void destroy() {
+
+        btLocation = null;
+
+        // Clean up overlays
+        mMap.getOverlays().remove(mTourOverlay);
+        mMap.getOverlayManager().remove(tourLine);
+        mMap.getOverlays().remove(myLocationOverlay);
+        mMap.getOverlays().remove(mMarkersOverlay);
+        mMap.getOverlays().remove(mSearchOverlay);
+        mMap.getOverlays().remove(mFsqOverlay);
+        mMap.getOverlays().remove(mPinOverlay);
+    }
 
     private void initLocationProvider() {
-        if(Commons.isNull(btLocation)) {
+        if (Commons.isNull(btLocation)) {
             btLocation = new BTownFusedLocation(mContext);
             btLocation.setCallback(locationCallbackListener);
         }
@@ -564,7 +583,8 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
 
         String[] array = poi.getTags();
         for (int i = 2; i < array.length; i++) {
-            Crashlytics.log(array[i]);     // Try catch where the ArrayIndexOutOfBoundsException occurs (Crashlytics #162)
+            if (BuildConfig.USE_CRASHLYTICS)
+                Crashlytics.log(array[i]);     // Try catch where the ArrayIndexOutOfBoundsException occurs (Crashlytics #162)
             String[] tag = array[i].split("=");
             tags.put(tag[1], tag[0]);
         }
@@ -865,7 +885,7 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
                 try {
                     if (Commons.isNotNull(response.body())) {
                         ReverseResult result = response.body();
-                        if(Commons.isNotNull(result.osm_id)) {
+                        if (Commons.isNotNull(result.osm_id)) {
                             OverpassQueryResult.Element element = new OverpassQueryResult.Element();
 
                             element.id = Long.parseLong(result.osm_id);
@@ -976,10 +996,10 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
         public void onMarkerDragStart(Marker marker) {
             List<Overlay> overlays = mMap.getOverlayManager().overlays();
 
-            for(Overlay overlay : overlays) {
-                if(overlay instanceof RadiusMarkerClusterer) {
-                    RadiusMarkerClusterer obj = (RadiusMarkerClusterer)overlay;
-                    if(Commons.equals(obj.getName(), OVERLAY_PIN)){
+            for (Overlay overlay : overlays) {
+                if (overlay instanceof RadiusMarkerClusterer) {
+                    RadiusMarkerClusterer obj = (RadiusMarkerClusterer) overlay;
+                    if (Commons.equals(obj.getName(), OVERLAY_PIN)) {
                         view.addClearDropMenuItem(obj.getItems().size() > 1);
                         obj.getItems().remove(marker);
                         break;
@@ -1027,7 +1047,7 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
         FourSquareApi service = FourSquareServiceProvider.get();
         listsCall = service.explore(latLon, 50, 500);
 
-        if(listsCall.isExecuted()) {
+        if (listsCall.isExecuted()) {
             listsCall.cancel();
             view.showSearching(false);
             return;
@@ -1039,7 +1059,7 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
             public void onResponse(@NonNull Call<FourSquResult> call, @NonNull Response<FourSquResult> response) {
 
                 FourSquResult body = response.body();
-                if(body != null && body.getResponse() != null) {
+                if (body != null && body.getResponse() != null) {
                     ArrayList<GroupExplore> resp = body.getResponse().getExplore();
 
                     if (Commons.isNotNull(resp) && resp.size() > 0) {
@@ -1122,7 +1142,6 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
 
     @Override
     public void showPoiDialog(final Object obj) {
-
         if (obj instanceof OverpassQueryResult.Element) {
             new Handler().postDelayed(new Runnable() {
                 @Override
@@ -1151,11 +1170,9 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
      * Override the map touch listener
      */
     private MapView.OnTouchListener onMapTouchListener = new View.OnTouchListener() {
-        @SuppressLint("ClickableViewAccessibility")
         @Override
         public boolean onTouch(View v, MotionEvent event) {
             switch (event.getAction()) {
-
                 case MotionEvent.ACTION_DOWN:
                     break;
 
@@ -1224,7 +1241,7 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
         mMarkersOverlay.clear();
 
         if (mSearchOverlay.getSize() > 0) {
-            if(mFsqOverlay.getSize() == 0) {
+            if (mFsqOverlay.getSize() == 0) {
                 view.setListMode(false);
                 if (mSearchOverlay.getSize() == 1) {
                     showQuickSearch(true);
@@ -1397,11 +1414,10 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
 
     @Override
     public void showTour(TourCatalogueItem catalogue) {
-
         mCatalogue = catalogue;
         List<GeoPoint> geoPoints = new ArrayList<>();   // tour lines
         List<IGeoPoint> points = new ArrayList<>();     // tour points
-        for (Attraction attraction: mCatalogue.getAttractions()) {
+        for (Attraction attraction : mCatalogue.getAttractions()) {
             points.add(new GeoPoint(attraction.getLocation().lat, attraction.getLocation().lon));
             geoPoints.add(new GeoPoint(attraction.getLocation().lat, attraction.getLocation().lon));
         }
@@ -1419,6 +1435,7 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
                 .setRadius(24)
                 .setSelectedRadius(24)
                 .setIsClickable(true)
+                .setSymbol(SimpleFastPointOverlayOptions.Shape.CIRCLE)
                 .setCellSize(20);
 
         mTourOverlay = new SimpleFastPointOverlay(theme, opt);
@@ -1430,7 +1447,7 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
                     public void run() {
                         TourSheetDialog.showInstance(mContext.getApplicationContext(), mCatalogue.getAttractions().get(point));
 
-                   }
+                    }
                 }, 200);
 
                 // Show the selected point in top quarter of screen
@@ -1439,7 +1456,7 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
                 projection.toPixels(points.get(point), p);
                 int y = projection.getScreenRect().height() / 4;
 
-                IGeoPoint geoPoint = projection.fromPixels(p.x, p.y + y) ;
+                IGeoPoint geoPoint = projection.fromPixels(p.x, p.y + y);
                 mMap.getController().animateTo(geoPoint);
 
             }
@@ -1450,6 +1467,14 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
         mMap.getOverlays().add(mTourOverlay);
 
         mMap.zoomToBoundingBox(mTourOverlay.getBoundingBox(), true);
+
+        // Disable tracking mode if enabled
+        if(mTrackingMode) {
+            bAllowReturnLocation = false;
+            mTrackingMode = false;
+            updateUIWithTrackingMode();
+        }
+//        mMap.invalidate();
     }
 
 

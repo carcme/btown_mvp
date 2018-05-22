@@ -8,9 +8,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
-import com.facebook.AccessToken;
-import com.facebook.Profile;
-import com.facebook.login.LoginManager;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -28,12 +25,9 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.auth.TwitterAuthProvider;
 
-import java.util.Arrays;
-
 import me.carc.btown.App;
 import me.carc.btown.BuildConfig;
 import me.carc.btown.R;
-import me.carc.btown.common.C;
 import me.carc.btown.common.Commons;
 
 
@@ -42,7 +36,7 @@ import me.carc.btown.common.Commons;
  */
 class LoginPresenter implements IfLogin.Presenter, GoogleApiClient.OnConnectionFailedListener {
 
-    private static final String TAG = C.DEBUG + Commons.getTag();
+    private static final String TAG = LoginPresenter.class.getName();
 
     private IfLogin.View view;
     private final Context mContext;
@@ -93,7 +87,10 @@ class LoginPresenter implements IfLogin.Presenter, GoogleApiClient.OnConnectionF
         if (authListener != null) {
             auth.removeAuthStateListener(authListener);
         }
+    }
 
+    @Override
+    public void destroy() {
     }
 
     private GoogleApiClient getGoogleApiClient() {
@@ -131,10 +128,6 @@ class LoginPresenter implements IfLogin.Presenter, GoogleApiClient.OnConnectionF
                     }
                 }
             }
-
-            if (Profile.getCurrentProfile() != null) {
-                view.setButtonText(LoginActivity.FACEBOOK_BUTTON, R.string.sign_out);
-            }
         }
     }
 
@@ -161,46 +154,10 @@ class LoginPresenter implements IfLogin.Presenter, GoogleApiClient.OnConnectionF
         }
     }
 
-    public void onFacebookGoogleLogin() {
-        if (Commons.isNotNull(Profile.getCurrentProfile())) {
-            LoginManager.getInstance().logOut();
-            view.setButtonText(LoginActivity.FACEBOOK_BUTTON, R.string.sign_in_with);
-        } else  if (checkNetworkAvailable()) {
-            LoginManager.getInstance().logInWithReadPermissions(getActivity(), Arrays.asList("public_profile", "user_friends", "email"));
-        }
-    }
-
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         view.showNetworkNotAvailableError();
     }
-
-    @Override
-    public void handleFacebookAccessToken(AccessToken token) {
-
-        if (token != null) {
-            view.showLoginProgress();
-
-            AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
-            auth.signInWithCredential(credential).addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
-                @Override
-                public void onComplete(@NonNull Task<AuthResult> res) {
-
-                    if (!res.isSuccessful()) {
-                        view.showLoginError(res.getException().getMessage());
-                        Log.w(TAG, "signInWithCredential", res.getException());
-                    } else {
-                        view.setButtonText(LoginActivity.FACEBOOK_BUTTON, R.string.sign_out);
-                        view.onFinishActivity();
-                    }
-                }
-            });
-        } else {
-            //Logged out of Facebook so do a logout from the Firebase app
-            auth.signOut();
-        }
-    }
-
 
     @Override
     public void processGoogleSignin(Intent data) {

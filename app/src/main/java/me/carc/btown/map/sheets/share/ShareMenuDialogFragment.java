@@ -25,14 +25,11 @@ import com.mikepenz.iconics.IconicsDrawable;
 import java.util.List;
 
 import me.carc.btown.R;
-import me.carc.btown.common.C;
-import me.carc.btown.common.Commons;
 
 
 public class ShareMenuDialogFragment extends BottomSheetDialogFragment implements OnItemClickListener {
-
+    private static final String TAG = ShareMenuDialogFragment.class.getName();
     public static final String ID_TAG = "ShareMenuDialogFragment";
-    private static final String TAG = C.DEBUG + Commons.getTag();
 
     private ArrayAdapter<ShareMenu.ShareItem> listAdapter;
     private ShareMenu menu;

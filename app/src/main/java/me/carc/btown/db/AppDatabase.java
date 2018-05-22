@@ -42,7 +42,8 @@ public abstract class AppDatabase extends RoomDatabase {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             AppDatabase.class, App.BTOWN_DATABASE_NAME)
-                            .fallbackToDestructiveMigration()  // TODO: REMOVE FOR RELEASE
+                            .addMigrations(Migrations.MIGRATION_1_2)
+//                            .fallbackToDestructiveMigration()  // TODO: REMOVE FOR RELEASE
                             .build();
                 }
             }

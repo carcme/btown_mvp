@@ -1,4 +1,4 @@
-package me.carc.btown.db;
+package me.carc.btown.db.tours;
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
@@ -7,7 +7,6 @@ import android.support.annotation.NonNull;
 
 import java.util.List;
 
-import me.carc.btown.db.tours.TourRepository;
 import me.carc.btown.db.tours.model.Attraction;
 import me.carc.btown.db.tours.model.TourCatalogueItem;
 
@@ -36,7 +35,6 @@ public class TourViewModel extends AndroidViewModel {
     public LiveData<TourCatalogueItem> getTour(int id) {
         return mRepository.getTour(id);
     }
-
 
     public void insert(TourCatalogueItem tour) { mRepository.insert(tour); }
 }

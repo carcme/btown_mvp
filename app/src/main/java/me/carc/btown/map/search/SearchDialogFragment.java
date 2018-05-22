@@ -43,7 +43,6 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import me.carc.btown.App;
 import me.carc.btown.R;
 import me.carc.btown.Utils.AndroidUtils;
-import me.carc.btown.common.C;
 import me.carc.btown.common.Commons;
 import me.carc.btown.common.TinyDB;
 import me.carc.btown.map.search.fragments.QuickSearchCategoriesListFragment;
@@ -76,8 +75,11 @@ public class SearchDialogFragment extends DialogFragment implements ISearch.View
     private SearchListener cbSearchListener;
 
     @SuppressWarnings("unused")
-    private static final String TAG = C.DEBUG + Commons.getTag();
+    private static final String TAG = SearchDialogFragment.class.getName();
     public static final String ID_TAG = "SearchDialogFragment";
+
+    private static final String HAS_SHOWN_SEARCH_HELP = "HAS_SHOWN_SEARCH_HELP";  // show reason for sign in
+
 
     private ISearch.Presenter presenter;
     private Unbinder unbinder;
@@ -110,36 +112,18 @@ public class SearchDialogFragment extends DialogFragment implements ISearch.View
     private QuickSearchCategoriesListFragment categoriesSearchFragment;
     private QuickSearchFavoriteListFragment favoriteSearchFragment;
 
-    @BindView(R.id.search_toolbar)
-    Toolbar searchToolbar;
+    @BindView(R.id.search_toolbar) Toolbar searchToolbar;
+    @BindView(R.id.search_pager) LockableViewPager viewPager;
+    @BindView(R.id.search_tab_layout) TabLayout tabLayout;
+    @BindView(R.id.searchEditText) EditText searchEditText;
+    @BindView(R.id.searchProgressBar) ProgressBar progressBar;
+    @BindView(R.id.clearButton) ImageButton clearButton;
+    @BindView(R.id.bookmarkBtn) ImageButton bookmarkBtn;
+    @BindView(R.id.settingButton) ImageButton settingButton;
 
-    @BindView(R.id.search_pager)
-    LockableViewPager viewPager;
-
-    @BindView(R.id.search_tab_layout)
-    TabLayout tabLayout;
-
-    @BindView(R.id.searchEditText)
-    EditText searchEditText;
-
-    @BindView(R.id.searchProgressBar)
-    ProgressBar progressBar;
-
-    @BindView(R.id.clearButton)
-    ImageButton clearButton;
-
-    @BindView(R.id.settingButton)
-    ImageButton settingButton;
-
-
-    @BindView(R.id.tab_toolbar_layout)
-    View tabToolbarView;
-
-    @BindView(R.id.tabs_view)
-    View tabsView;
-
-    @BindView(R.id.search_view)
-    View searchView;
+    @BindView(R.id.tab_toolbar_layout) View tabToolbarView;
+    @BindView(R.id.tabs_view) View tabsView;
+    @BindView(R.id.search_view) View searchView;
 
 
     @Override
@@ -202,7 +186,6 @@ public class SearchDialogFragment extends DialogFragment implements ISearch.View
 
         if (searchQuery == null)
             searchQuery = "";
-
 
         setupUI();
 

@@ -1,4 +1,4 @@
-package me.carc.btown.map.sheets.wiki;
+package me.carc.btown.extras;
 
 import android.Manifest;
 import android.annotation.TargetApi;
@@ -42,11 +42,14 @@ import me.carc.btown.ui.custom.NonLeakingWebView;
 
 public class WikiWebViewActivity extends BaseActivity {
 
-    private static final String TAG = C.DEBUG + Commons.getTag();
+    private static final String TAG = WikiWebViewActivity.class.getName();
 
     public static final String WIKI_EXTRA_PAGE_TITLE = "WIKI_EXTRA_PAGE_TITLE";
     public static final String WIKI_EXTRA_PAGE_SUBHEADING = "WIKI_EXTRA_PAGE_SUBHEADING";
     public static final String WIKI_EXTRA_PAGE_URL = "WIKI_EXTRA_PAGE_URL";
+
+    public static final String WIKI_BOOKMARK_ENTRY = "WIKI_BOOKMARK_ENTRY";
+
     public static final String DISABLE_JS = "DISABLE_JS";
 
 
@@ -102,6 +105,7 @@ public class WikiWebViewActivity extends BaseActivity {
         setSupportActionBar(toolbar);
         assert getSupportActionBar() != null;
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_times_white);
 
 //        boolean disableJS = false;
         Intent intent = getIntent();

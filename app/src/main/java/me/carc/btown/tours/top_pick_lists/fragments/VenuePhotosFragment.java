@@ -23,7 +23,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import me.carc.btown.R;
-import me.carc.btown.common.C;
 import me.carc.btown.common.Commons;
 import me.carc.btown.common.interfaces.OnItemSelectedListener;
 import me.carc.btown.common.interfaces.ToursScrollListener;
@@ -44,7 +43,7 @@ import retrofit2.Response;
 
 
 public class VenuePhotosFragment extends Fragment {
-    private static final String TAG = C.DEBUG + Commons.getTag();
+    private static final String TAG = VenuePhotosFragment.class.getName();
 
     public static final int PHOTO_LIMIT = 30;
 

@@ -7,17 +7,17 @@ import org.osmdroid.util.GeoPoint;
  * Created by bamptonm on 09/08/2017.
  */
 
-public class BrowsingLocation {
+class BrowsingLocation {
 
     private int zoomLvl;
     private GeoPoint browsingLocation;
 
-    public BrowsingLocation(GeoPoint browsingLocation, int zoom) {
+    BrowsingLocation(GeoPoint browsingLocation, int zoom) {
         this.browsingLocation = browsingLocation;
         this.zoomLvl = zoom;
     }
 
-    public int getZoomLvl() { return zoomLvl; }
+    int getZoomLvl() { return zoomLvl; }
 
-    public GeoPoint getBrowsingLocation() { return browsingLocation; }
+    GeoPoint getBrowsingLocation() { return browsingLocation; }
 }

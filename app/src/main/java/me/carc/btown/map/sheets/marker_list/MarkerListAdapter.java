@@ -35,13 +35,13 @@ public class MarkerListAdapter extends RecyclerView.Adapter<MarkerListAdapter.Po
     private boolean allowUpdates = false;
     private GeoPoint currentLocation;
     private ArrayList<PoiAdpaterItem> items;
-    public MarkerListListener onClickListener;
+    MarkerListListener onClickListener;
 
     private SparseArray<CompassView> compassArray = new SparseArray<>();
     private SparseArray<TextView> distanceArray = new SparseArray<>();
 
 
-    public static class PoiAdpaterItem {
+    static class PoiAdpaterItem {
         String name;
         String poiType;
         double lat;
@@ -52,7 +52,7 @@ public class MarkerListAdapter extends RecyclerView.Adapter<MarkerListAdapter.Po
     }
 
 
-    public MarkerListAdapter(GeoPoint loc, ArrayList<PoiAdpaterItem> list, MarkerListListener listener) {
+    MarkerListAdapter(GeoPoint loc, ArrayList<PoiAdpaterItem> list, MarkerListListener listener) {
         currentLocation = loc;
         this.items = list;
         onClickListener = listener;
@@ -80,11 +80,12 @@ public class MarkerListAdapter extends RecyclerView.Adapter<MarkerListAdapter.Po
         if(Commons.isNotNull(item.thumb)) {
             Glide.with(holder.mView.getContext())
                     .load(item.thumb)
-//                    .placeholder(R.drawable.checkered_background)
                     .error(R.drawable.no_image)
                     .into(holder.icon);
-        } else
+        } else {
             holder.icon.setImageDrawable(item.icon);
+            holder.icon.setBackgroundResource(R.color.transparent);
+        }
 
 
         // point out the direction - todo: needs to be updated on device rotation

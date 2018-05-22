@@ -24,7 +24,6 @@ import android.widget.OverScroller;
 import android.widget.Scroller;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import me.carc.btown.common.C;
 import me.carc.btown.common.Commons;
 
 
@@ -35,7 +34,7 @@ import me.carc.btown.common.Commons;
  */
 public class TouchImageView extends android.support.v7.widget.AppCompatImageView {
 
-    private static final String TAG = C.DEBUG + Commons.getTag();
+    private static final String TAG = TouchImageView.class.getName();
 
     //
     // SuperMin and SuperMax multipliers. Determine how much the image can be

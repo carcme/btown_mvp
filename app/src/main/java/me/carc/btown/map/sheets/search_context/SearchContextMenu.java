@@ -25,7 +25,7 @@ import me.carc.btown.db.history.HistoryEntry;
 import me.carc.btown.map.search.SearchDialogFragment;
 import me.carc.btown.map.search.model.Place;
 import me.carc.btown.map.sheets.share.ShareMenu;
-import me.carc.btown.map.sheets.wiki.WikiWebViewActivity;
+import me.carc.btown.extras.WikiWebViewActivity;
 
 /**
  * Display search list options in bottomsheet

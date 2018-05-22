@@ -13,9 +13,6 @@ import com.google.firebase.storage.StreamDownloadTask;
 import java.io.IOException;
 import java.io.InputStream;
 
-import me.carc.btown.common.C;
-import me.carc.btown.common.Commons;
-
 /**
  * ModelLoader implementation to download images from FirebaseStorage with Glide.
  *
@@ -33,7 +30,7 @@ import me.carc.btown.common.Commons;
 @Keep
 public class FirebaseImageLoader implements StreamModelLoader<StorageReference> {
 
-    private static final String TAG = C.DEBUG + Commons.getTag();
+    private static final String TAG = FirebaseImageLoader.class.getName();
 
     @Override
     public DataFetcher<InputStream> getResourceFetcher(StorageReference model, int width, int height) {

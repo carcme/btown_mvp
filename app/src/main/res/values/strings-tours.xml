@@ -29,6 +29,7 @@
     <string name="checking_in">Checking In</string>
 
     <string name="view_homepage">View Homepage</string>
+    <string name="view_homepage_underline"><![CDATA[<u>View Homepage</u>]]></string>
     <string name="facebook_page">Facebook Page</string>
     <string name="cost_free">Free</string>
     <string name="always_open">All year, every day, all day</string>

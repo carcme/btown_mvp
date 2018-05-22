@@ -17,8 +17,6 @@ import java.util.Locale;
 
 import me.carc.btown.R;
 import me.carc.btown.Utils.IntentUtils;
-import me.carc.btown.common.C;
-import me.carc.btown.common.Commons;
 import me.carc.btown.ui.FeedbackDialog;
 import me.carc.btown.ui.RatingDialog;
 
@@ -28,7 +26,7 @@ import me.carc.btown.ui.RatingDialog;
  */
 
 public class SendFeedback {
-    private static final String TAG = C.DEBUG + Commons.getTag();
+    private static final String TAG = SendFeedback.class.getName();
 
     public static final int TYPE_FEEDBACK = 0;
     public static final int TYPE_RATE = 1;

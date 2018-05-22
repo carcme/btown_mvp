@@ -15,20 +15,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import java.util.ArrayList;
-
 import me.carc.btown.R;
 import me.carc.btown.common.C;
 import me.carc.btown.common.Commons;
 import me.carc.btown.common.interfaces.ToursScrollListener;
 import me.carc.btown.tours.adapters.AttractionGalleryViewerAdapter;
-import me.carc.btown.db.tours.model.Attraction;
 import me.carc.btown.ui.custom.MyCustomLayoutManager;
 import me.carc.btown.ui.custom.MyRecyclerItemClickListener;
 
 
 public class AttractionTabsGalleryFragment extends Fragment {
-//    private static final String TAG = C.DEBUG + Commons.getTag();
+    private static final String TAG = AttractionTabsGalleryFragment.class.getName();
 
     ToursScrollListener scrollListener;
 
@@ -93,11 +90,6 @@ public class AttractionTabsGalleryFragment extends Fragment {
         Bundle args = getArguments();
 
         if(Commons.isNotNull(args)) {
-            ArrayList<Attraction> attractions = args.getParcelableArrayList("ATTRACTIONS_LIST");
-
-            if(Commons.isNull(attractions))
-                return;
-
             AttractionGalleryViewerAdapter adapter = new AttractionGalleryViewerAdapter();
             recyclerView.setAdapter(adapter);
             recyclerView.setHasFixedSize(true);

@@ -15,8 +15,8 @@ import android.util.DisplayMetrics;
 
 public class MyCustomLayoutManager extends LinearLayoutManager {
     private static final float MILLISECONDS_PER_INCH = 50f;
-    private Context mContext;
     private static final int DEFAULT_EXTRA_LAYOUT_SPACE = 600;
+    private Context mContext;
     private int extraLayoutSpace = -1;
 
 

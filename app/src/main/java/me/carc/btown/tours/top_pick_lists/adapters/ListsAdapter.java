@@ -1,5 +1,7 @@
 package me.carc.btown.tours.top_pick_lists.adapters;
 
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,18 +9,18 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 
 import java.util.ArrayList;
 
 import me.carc.btown.R;
 import me.carc.btown.common.Commons;
-import me.carc.btown.common.interfaces.DrawableClickListener;
 import me.carc.btown.data.all4squ.entities.ItemsUserList;
 import me.carc.btown.tours.top_pick_lists.FourSquareListsActivity;
 
@@ -30,11 +32,8 @@ public class ListsAdapter extends RecyclerView.Adapter<ListsAdapter.CatalogueVie
 
     private ArrayList<ItemsUserList> lists;
 
-    private DrawableClickListener onClickListener;
-
-    public ListsAdapter(ArrayList<ItemsUserList> lists, DrawableClickListener listener) {
+    public ListsAdapter(ArrayList<ItemsUserList> lists) {
         this.lists = lists;
-        onClickListener = listener;
     }
 
     @Override
@@ -52,41 +51,31 @@ public class ListsAdapter extends RecyclerView.Adapter<ListsAdapter.CatalogueVie
         holder.itemStops.setText(String.valueOf(item.getListItems().getCount()));
 
         if (Commons.isNotNull(item.getPhoto())) {
-
             try {
                 String photoUrl = item.getPhoto().getPrefix() + "width300" + item.getPhoto().getSuffix();
-
-                Glide.with(holder.mView.getContext())
+                Glide.with(holder.itemImage.getContext())
                         .load(photoUrl)
+                        .crossFade(500)
                         .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-//                        .placeholder(R.drawable.background_jewish_memorial)
-//                        .crossFade()
-                        .into(new SimpleTarget<GlideDrawable>() {
+                        .placeholder(R.drawable.checkered_background)
+                        .error(R.drawable.no_image)
+                        .into(new GlideDrawableImageViewTarget(holder.itemImage) {
+                            @Override
+                            public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                                super.onLoadFailed(e, errorDrawable);
+                                Commons.Toast(holder.itemImage.getContext(), R.string.network_not_available_error, Color.RED, Toast.LENGTH_SHORT);
+                            }
+
                             @Override
                             public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
-                                holder.itemImage.setImageDrawable(resource);
-                                holder.mainFrame.animate().setDuration(1800);
-                    //            holder.mainFrame.setVisibility(View.VISIBLE);
+                                super.onResourceReady(resource, glideAnimation);
                             }
                         });
             } catch (Exception e) {
                 holder.itemImage.setImageResource(R.drawable.no_image);
             }
-        }
-
-        holder.itemImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onClickListener.OnClick(v, holder.itemImage.getDrawable(), holder.getAdapterPosition());
-            }
-        });
-        holder.itemImage.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                onClickListener.OnLongClick(v, holder.getAdapterPosition());
-                return true;
-            }
-        });
+        } else
+            Commons.Toast(holder.itemImage.getContext(), R.string.network_not_available_error, Color.RED, Toast.LENGTH_SHORT);
     }
 
     @Override

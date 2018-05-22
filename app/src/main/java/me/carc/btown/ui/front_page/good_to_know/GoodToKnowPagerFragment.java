@@ -1,24 +1,9 @@
-/*    Transportr
- *    Copyright (C) 2013 - 2016 Torsten Grote
- *
- *    This program is Free Software: you can redistribute it and/or modify
- *    it under the terms of the GNU General Public License as
- *    published by the Free Software Foundation, either version 3 of the
- *    License, or (at your option) any later version.
- *
- *    This program is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *    GNU General Public License for more details.
- *
- *    You should have received a copy of the GNU General Public License
- *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 package me.carc.btown.ui.front_page.good_to_know;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -34,6 +19,7 @@ import android.widget.ImageView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.carc.btown.R;
+import me.carc.btown.common.interfaces.ToursScrollListener;
 
 
 public class GoodToKnowPagerFragment extends Fragment {
@@ -51,6 +37,28 @@ public class GoodToKnowPagerFragment extends Fragment {
     @BindView(R.id.tab_layout) TabLayout tabLayout;
     @BindView(R.id.collapsing_toolbar) CollapsingToolbarLayout collapsing_toolbar;
     @BindView(R.id.headerImage) ImageView headerImage;
+
+    ToursScrollListener scrollListener;
+
+    @Override
+    public void onAttach(Context ctx) {
+        super.onAttach(ctx);
+        try {
+            scrollListener = (ToursScrollListener) ctx;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(ctx.toString() + " must implement TourListener callbacks");
+        }
+    }
+    @Override
+    public void onAttach(Activity act) {
+        super.onAttach(act);
+        try {
+            scrollListener = (ToursScrollListener) act;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(act.toString() + " must implement TourListener callbacks");
+        }
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -73,6 +81,8 @@ public class GoodToKnowPagerFragment extends Fragment {
                     headerImage.setImageResource(R.drawable.ic_atm);
                 else if (i == INTERNET_TAB)
                     headerImage.setImageResource(R.drawable.ic_wifi);
+
+                scrollListener.onScrollView(false);
             }
 
             @Override
@@ -91,6 +101,7 @@ public class GoodToKnowPagerFragment extends Fragment {
 
         return view;
     }
+
 
     private class PagerAdapter extends FragmentPagerAdapter {
         private PagerAdapter(FragmentManager fm) {

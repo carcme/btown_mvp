@@ -25,7 +25,8 @@
     <string name="send_postcard">Verschicke eine Postkarte via</string>
     <string name="checking_in">Check-In</string>
 
-    <string name="view_homepage">Besuche unsere Homepage</string>
+    <string name="view_homepage">Homepage anzeigen</string>
+    <string name="view_homepage_underline"><![CDATA[<u>Homepage anzeigen</u>]]></string>
     <string name="facebook_page">Facebook Seite</string>
     <string name="cost_free">Kostenlos</string>
     <string name="always_open">Jeden Tag, den ganzen Tag, das ganze Jahr</string>

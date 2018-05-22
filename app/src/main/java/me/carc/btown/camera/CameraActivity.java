@@ -27,7 +27,7 @@ import me.carc.btown.common.Commons;
 
 public class CameraActivity extends BaseActivity {
 
-    private static final String TAG = C.DEBUG + Commons.getTag();
+    private static final String TAG = CameraActivity.class.getName();
 
     private final int RESULT_CAMERA_PREVIEW = 102;
     public static final int RESULT_LAUNCH_CAMERA = 6000;

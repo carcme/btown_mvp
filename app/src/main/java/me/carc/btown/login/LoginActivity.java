@@ -10,12 +10,6 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.facebook.CallbackManager;
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookException;
-import com.facebook.Profile;
-import com.facebook.login.LoginManager;
-import com.facebook.login.LoginResult;
 import com.shaishavgandhi.loginbuttons.FacebookButton;
 import com.shaishavgandhi.loginbuttons.GooglePlusButton;
 
@@ -24,14 +18,12 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import me.carc.btown.BaseActivity;
 import me.carc.btown.R;
-import me.carc.btown.common.C;
-import me.carc.btown.common.Commons;
-import me.carc.btown.map.sheets.wiki.WikiWebViewActivity;
+import me.carc.btown.extras.WikiWebViewActivity;
 
 
 public class LoginActivity extends BaseActivity implements IfLogin.View {
 
-    private static final String TAG = C.DEBUG + Commons.getTag();
+    private static final String TAG = LoginActivity.class.getName();
     private static final int RC_SIGN_IN = 9001;
 
     private static final String SHOWN_RATIONAL = "SHOWN_RATIONAL";  // show reason for sign in
@@ -40,7 +32,6 @@ public class LoginActivity extends BaseActivity implements IfLogin.View {
     public static final int FACEBOOK_BUTTON = 2;
 
     private IfLogin.Presenter presenter;
-    private CallbackManager callbackManager;
 
     @BindView(R.id.googleBtn)
     GooglePlusButton googleBtn;
@@ -71,26 +62,6 @@ public class LoginActivity extends BaseActivity implements IfLogin.View {
         presenter = new LoginPresenter(this, this);
 
         googleBtn.setText(String.format(getString(R.string.sign_in_with), getString(R.string.google)));
-
-        Profile fbProfile = Profile.getCurrentProfile();
-        facebookBtn.setText(fbProfile == null ? String.format(getString(R.string.sign_in_with), getString(R.string.facebook)) : getString(R.string.sign_out));
-        callbackManager = CallbackManager.Factory.create();
-
-        LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-            @Override
-            public void onSuccess(LoginResult loginResult) {
-                presenter.handleFacebookAccessToken(loginResult.getAccessToken());
-            }
-
-            @Override
-            public void onCancel() {
-            }
-
-            @Override
-            public void onError(FacebookException error) {
-                Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        });
     }
 
     @Override
@@ -187,11 +158,6 @@ public class LoginActivity extends BaseActivity implements IfLogin.View {
         presenter.onGoogleLogin();
     }
 
-    @OnClick(R.id.facebookBtn)
-    void facebookLogin(){
-        presenter.onFacebookGoogleLogin();
-    }
-
     @OnClick(R.id.exitLogin)
     void exitLogin(){ finish(); }
 
@@ -203,8 +169,6 @@ public class LoginActivity extends BaseActivity implements IfLogin.View {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        callbackManager.onActivityResult(requestCode, resultCode, data);
 
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {

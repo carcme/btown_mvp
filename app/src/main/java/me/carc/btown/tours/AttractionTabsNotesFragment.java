@@ -12,27 +12,22 @@ import android.widget.EditText;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.carc.btown.R;
-import me.carc.btown.common.C;
-import me.carc.btown.common.Commons;
 import me.carc.btown.common.TinyDB;
 import me.carc.btown.common.interfaces.ToursScrollListener;
 
 
 public class AttractionTabsNotesFragment extends Fragment {
-    private static final String TAG = C.DEBUG + Commons.getTag();
+    private static final String TAG = AttractionTabsNotesFragment.class.getName();
     public static final String PREFKEY_SAVED_TOUR_NOTES = "PREFKEY_SAVED_TOUR_NOTES";
 
     ToursScrollListener scrollListener;
 
-    @BindView(R.id.notesNestedScrollView)
-    NestedScrollView notesNestedScrollView;
-    @BindView(R.id.notesText)
-    EditText notesText;
+    @BindView(R.id.notesNestedScrollView) NestedScrollView notesNestedScrollView;
+    @BindView(R.id.notesText) EditText notesText;
 
     @Override
     public void onAttach(Context ctx) {
         super.onAttach(ctx);
-
         try {
             scrollListener = (ToursScrollListener) ctx;
         } catch (ClassCastException e) {

@@ -7,7 +7,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.annotation.ColorInt;
 import android.support.annotation.StringRes;
-import android.support.v7.appcompat.BuildConfig;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
@@ -32,6 +31,7 @@ import me.carc.btown.R;
 
 public class Commons {
 
+/*
     public static String getTag() {
         String tag = "";
         if (BuildConfig.DEBUG) {
@@ -44,6 +44,7 @@ public class Commons {
         }
         return tag;
     }
+*/
 
     @SuppressFBWarnings("NM_METHOD_NAMING_CONVENTION")
     public static void Toast(Context context, @StringRes int resId, @ColorInt int bgColor, int duration) {
@@ -170,6 +171,10 @@ public class Commons {
 
     public static boolean isEmpty(String s) {
         return s == null || s.length() == 0;
+    }
+
+    public static boolean startsWith(String s, String ch) {
+        return !isEmpty(s) && s.startsWith(ch);
     }
 
     public static boolean isNull(Object obj) {

@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/tourCardView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:focusable="true"
     app:cardBackgroundColor="@color/colorPrimary"
     app:cardCornerRadius="@dimen/card_corner_radius"
     app:cardElevation="@dimen/card_elevation">
@@ -27,14 +29,14 @@
                 android:scaleType="fitStart"
                 android:transitionName="imageCover"
                 tools:ignore="UnusedAttribute"
-                tools:src="@drawable/placeholder" />
+                android:src="@drawable/checkered_background"/>
 
             <TextView
                 android:id="@+id/catalogueTitle"
                 style="@style/Card_Title"
-                android:transitionName="@string/catalogue_title"
-                android:fontFamily="serif"
                 android:drawablePadding="@dimen/margin_standard"
+                android:fontFamily="serif"
+                android:transitionName="@string/catalogue_title"
                 tools:ignore="UnusedAttribute"
                 tools:text="Heading here"/>
         </FrameLayout>
@@ -44,12 +46,12 @@
             android:id="@+id/iconsHolder"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:elevation="@dimen/button_press_elevation"
             android:gravity="end"
             android:orientation="horizontal"
             android:paddingLeft="@dimen/margin_tiny"
             android:paddingRight="@dimen/margin_tiny"
-            android:paddingTop="@dimen/margin_small"
-            android:elevation="@dimen/button_press_elevation">
+            android:paddingTop="@dimen/margin_small">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -65,7 +67,9 @@
                     android:paddingEnd="@dimen/card_icon_padding_right"
                     android:paddingStart="0dp"
                     android:textColor="@color/card_text_color"
-                    tools:text="2.5km" />
+                    tools:targetApi="m"
+                    tools:text="2.5km"/>
+
             </LinearLayout>
 
             <LinearLayout
@@ -82,7 +86,8 @@
                     android:paddingEnd="@dimen/card_icon_padding_right"
                     android:paddingStart="0dp"
                     android:textColor="@color/card_text_color"
-                    tools:text="2.5h" />
+                    tools:targetApi="m"
+                    tools:text="2.5h"/>
             </LinearLayout>
 
             <LinearLayout
@@ -99,7 +104,7 @@
                     android:paddingEnd="@dimen/card_icon_padding_right"
                     android:paddingStart="0dp"
                     android:textColor="@color/card_text_color"
-                    tools:text="4.7" />
+                    tools:text="4.7"/>
 
             </LinearLayout>
 
@@ -117,7 +122,8 @@
                     android:paddingEnd="@dimen/card_icon_padding_right"
                     android:paddingStart="0dp"
                     android:textColor="@color/card_text_color"
-                    tools:text="52" />
+                    tools:targetApi="m"
+                    tools:text="52"/>
             </LinearLayout>
 
         </LinearLayout>
@@ -128,7 +134,7 @@
             style="@style/Card_Subtitle_16dp"
             android:ellipsize="end"
             android:maxLines="2"
-            tools:text="Tour Short Description and make it a bit longer to check the word wrap" />
+            tools:text="Tour Short Description and make it a bit longer to check the word wrap"/>
 
     </LinearLayout>
 

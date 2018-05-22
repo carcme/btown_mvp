@@ -73,6 +73,7 @@
     <color name="tintStandard">#80000000</color>
     <color name="tintDark">#A0000000</color>
 
+    <color name="orange">#ff7700</color>
 
 
 
@@ -184,6 +185,8 @@
 
 
     <color name="venueImageTextColor">#ddd</color>
+    <color name="venueTipTextColor">#aaa</color>
+
 
 
     <!-- Referenced from the Foursquare Brand Guide: https://foursquare.com/about/logos -->

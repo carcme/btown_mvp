@@ -34,33 +34,27 @@ import me.carc.btown.BaseActivity;
 import me.carc.btown.R;
 import me.carc.btown.Utils.FileUtils;
 import me.carc.btown.Utils.ViewUtils;
-import me.carc.btown.common.C;
 import me.carc.btown.common.CacheDir;
-import me.carc.btown.common.Commons;
 import me.carc.btown.settings.SendFeedback;
+import me.carc.btown.ui.front_page.getting_about.TransportPlansFragment;
 
 public class PublicTransportPlan extends BaseActivity implements SubsamplingScaleImageView.OnImageEventListener {
 
-    private static final String TAG = C.DEBUG + Commons.getTag();
-    public static final String ANSWERS_PLAN_OPEN = "U_S_BAHN_PLAN_OPENED";
+    private static final String TAG = PublicTransportPlan.class.getName();
 
+    public static final String ANSWERS_PLAN_DOWNLOADED = "U_S_BAHN_PLAN_DOWNLOADED";
+    public static final String ANSWERS_PLAN_DOWNLOAD_FAIL = "U_S_BAHN_PLAN_DOWNLOAD_FAILED";
+    public static final String ANSWERS_PLAN_OPEN = "U_S_BAHN_PLAN_OPENED";
     public static final String FIREBASE_DIR = "resource";
 
-
-    @BindView(R.id.transportMapView)
-    SubsamplingScaleImageView imageView;
-
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
-
-    @BindView(R.id.fabPlansExit)
-    FloatingActionButton fabPlansExit;
+    @BindView(R.id.transportMapView) SubsamplingScaleImageView imageView;
+    @BindView(R.id.fabPlansExit) FloatingActionButton fabPlansExit;
+    @BindView(R.id.toolbar) Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.public_transport_plan_activity);
-
         ButterKnife.bind(this);
 
         setSupportActionBar(toolbar);
@@ -68,17 +62,16 @@ public class PublicTransportPlan extends BaseActivity implements SubsamplingScal
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        showProgressDialog();
-
         String firebaseFile = "";
         String title = "";
 
-        if (getIntent().hasExtra("MAP_ID")) {
-            firebaseFile = getIntent().getStringExtra("MAP_ID");
-            title = getString(getIntent().getIntExtra("MAP_DESC", R.string.menu_train_route_map));
+        if (getIntent().hasExtra(TransportPlansFragment.MAP_ID)) {
+            firebaseFile = getIntent().getStringExtra(TransportPlansFragment.MAP_ID);
+            title = getString(getIntent().getIntExtra(TransportPlansFragment.MAP_DESC, R.string.menu_train_route_map));
             getSupportActionBar().setTitle(title);
         }
 
+        // TODO: 22/05/2018 check if the network is available
         // is file already downloaded and saved?
         String planPath = CacheDir.getInstance().cacheDirAsStr() + "/" + firebaseFile;
         if (FileUtils.checkValidFilePath(planPath)) {
@@ -97,7 +90,6 @@ public class PublicTransportPlan extends BaseActivity implements SubsamplingScal
                         }
                     })
                     .show();
-
             // get the tranport plan
             downloadFirebaseImage(FIREBASE_DIR, firebaseFile);
         }
@@ -105,14 +97,12 @@ public class PublicTransportPlan extends BaseActivity implements SubsamplingScal
         final Animation a = AnimationUtils.loadAnimation(this, R.anim.fade_in);
         a.setDuration(getResources().getInteger(R.integer.gallery_alpha_duration) * 2);
         fabPlansExit.setAnimation(a);
-
     }
 
     /**
      * Moved storage to Firebase - get the images from there
      */
     private void downloadFirebaseImage(final String fromWhere, final String image) {
-
         StorageReference mStorageRef = FirebaseStorage.getInstance().getReference();
         StorageReference imageRef = mStorageRef.child(fromWhere + "/" + image);
 
@@ -123,6 +113,10 @@ public class PublicTransportPlan extends BaseActivity implements SubsamplingScal
                     public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
                         imageView.setImage(ImageSource.uri(localFile.toString()));
                         imageView.setOnImageEventListener(PublicTransportPlan.this);
+                        setResult(RESULT_OK, getIntent());
+
+                        if (me.carc.btown.BuildConfig.USE_CRASHLYTICS)
+                            Answers.getInstance().logRating(new RatingEvent().putCustomAttribute(ANSWERS_PLAN_DOWNLOADED, ANSWERS_PLAN_DOWNLOADED));
 
                     }
                 }).addOnFailureListener(new OnFailureListener() {
@@ -130,6 +124,8 @@ public class PublicTransportPlan extends BaseActivity implements SubsamplingScal
             public void onFailure(@NonNull Exception exception) {
                 showError("download from Firebase", exception);
                 Log.d(TAG, "onFailure: " + image + "::" + exception.getMessage());
+                if (me.carc.btown.BuildConfig.USE_CRASHLYTICS)
+                    Answers.getInstance().logRating(new RatingEvent().putCustomAttribute(ANSWERS_PLAN_DOWNLOAD_FAIL, ANSWERS_PLAN_DOWNLOAD_FAIL));
             }
         });
     }
@@ -146,8 +142,6 @@ public class PublicTransportPlan extends BaseActivity implements SubsamplingScal
         imageView.setMinimumScaleType(SubsamplingScaleImageView.SCALE_TYPE_CENTER_CROP);
         imageView.setMinScale(0.6f);
         imageView.setDoubleTapZoomStyle(SubsamplingScaleImageView.ZOOM_FOCUS_CENTER);
-
-        hideProgressDialog();
 
         if (me.carc.btown.BuildConfig.USE_CRASHLYTICS)
             Answers.getInstance().logRating(new RatingEvent().putCustomAttribute(ANSWERS_PLAN_OPEN, ANSWERS_PLAN_OPEN));

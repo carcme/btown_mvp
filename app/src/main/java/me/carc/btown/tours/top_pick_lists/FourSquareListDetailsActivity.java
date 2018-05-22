@@ -52,24 +52,14 @@ import retrofit2.Response;
 
 public class FourSquareListDetailsActivity extends BaseActivity {
 
-    private static final String TAG = C.DEBUG + Commons.getTag();
+    private static final String TAG = FourSquareListDetailsActivity.class.getName();
     public static final int RESULT_SHOW_ITEM = 148;
 
-    @BindView(R.id.catalogue_recycler)
-    RecyclerView recyclerView;
-
-    @BindView(R.id.toursToolbar)
-    Toolbar toolbar;
-
-    @BindView(R.id.inventoryProgressBar)
-    ProgressBar progressLayout;
-
-    @BindView(R.id.appBarProgressBar)
-    ProgressBar appBarProgressBar;
-
-    @BindView(R.id.fab)
-    FloatingActionButton fab;
-
+    @BindView(R.id.catalogue_recycler) RecyclerView recyclerView;
+    @BindView(R.id.toursToolbar) Toolbar toolbar;
+    @BindView(R.id.inventoryProgressBar) ProgressBar progressLayout;
+    @BindView(R.id.appBarProgressBar) ProgressBar appBarProgressBar;
+    @BindView(R.id.fab) FloatingActionButton fab;
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override

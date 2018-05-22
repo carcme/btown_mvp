@@ -2,12 +2,13 @@ package me.carc.btown.tours.attractionPager;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewTreeObserver;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import org.osmdroid.api.IGeoPoint;
@@ -23,13 +24,15 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import me.carc.btown.BaseActivity;
 import me.carc.btown.R;
+import me.carc.btown.Utils.ViewUtils;
 import me.carc.btown.common.Commons;
-import me.carc.btown.map.markers.MarkersOverlay;
 import me.carc.btown.db.tours.model.Attraction;
 import me.carc.btown.db.tours.model.POIs;
+import me.carc.btown.map.markers.MarkersOverlay;
 import me.carc.btown.ui.custom.MySimplePointOverlayOptions;
 
 /**
@@ -49,10 +52,16 @@ public class AttractionMapActivity extends BaseActivity {
 
     @BindView(R.id.attractionsMmap)
     MapView mapView;
-    @BindView(R.id.distanceIndicatorTours)
-    TextView distance;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+    @BindView(R.id.fabMapExit)
+    FloatingActionButton fabMapExit;
+
+    @OnClick(R.id.fabMapExit)
+    void done() {
+        onBackPressed();
+    }
+
 
     @SuppressFBWarnings("NP_NULL_PARAM_DEREF_NONVIRTUAL")
     @Override
@@ -106,7 +115,7 @@ public class AttractionMapActivity extends BaseActivity {
         else
             geoAttractionPoint = getIntent().getParcelableExtra(GEOPOINT);
 
-        mapView.getController().setZoom(17);
+        mapView.getController().setZoom(17f);
         mapView.getController().setCenter(geoAttractionPoint);
         mapView.setBuiltInZoomControls(false);
         mapView.setMultiTouchControls(enableControls);
@@ -162,11 +171,6 @@ public class AttractionMapActivity extends BaseActivity {
     }
 
     @Override
-    public void onBackPressed() {
-        finish();
-    }
-
-    @Override
     protected void onPause() {
         if(Commons.isNotNull(mPoiMarkers)) {
             mPoiMarkers.closeInfoWidows();
@@ -174,12 +178,27 @@ public class AttractionMapActivity extends BaseActivity {
             mPoiMarkers.clear();
             mPoiMarkers = null;
             mapView.getOverlays().remove(mTourOverlay);
+            mapView.getOverlays().remove(mPoiMarkers);
         }
         super.onPause();
     }
 
     @Override
+    public void onBackPressed() {
+        float temp = getResources().getDimension(R.dimen.fab_margin);
+        int duration = getResources().getInteger(R.integer.gallery_alpha_duration);
+        ViewUtils.hideView(fabMapExit, duration, (int) temp);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                finish();
+            }
+        }, duration * 2);
+    }
+
+    @Override
     protected void onDestroy() {
+        mapView.removeAllViews();
         mapView = null;
         super.onDestroy();
     }

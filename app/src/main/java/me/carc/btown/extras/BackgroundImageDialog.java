@@ -1,5 +1,6 @@
 package me.carc.btown.extras;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.os.Bundle;
@@ -24,7 +25,6 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import me.carc.btown.App;
 import me.carc.btown.R;
 import me.carc.btown.Utils.ViewUtils;
-import me.carc.btown.common.C;
 import me.carc.btown.common.Commons;
 import me.carc.btown.common.TinyDB;
 import me.carc.btown.map.MapActivity;
@@ -42,7 +42,7 @@ public class BackgroundImageDialog extends DialogFragment {
 
     public BgImageDialogListener dlgFinishedListener;
 
-    private static final String TAG = C.DEBUG + Commons.getTag();
+    private static final String TAG = BackgroundImageDialog.class.getName();
     public static final String ID_TAG = "BackgroundImageDialog";
     public static final String FRONT_PAGE_IMAGE = "FRONT_PAGE_IMAGE";
 
@@ -110,6 +110,16 @@ public class BackgroundImageDialog extends DialogFragment {
             dlgFinishedListener = (BgImageDialogListener) ctx;
         } catch (ClassCastException e) {
             throw new ClassCastException(ctx.toString() + " must implement TourListener callbacks");
+        }
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            dlgFinishedListener = (BgImageDialogListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString() + " must implement TourListener callbacks");
         }
     }
 

@@ -10,9 +10,11 @@ import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,7 +34,7 @@ import me.carc.btown.Utils.ViewUtils;
 import me.carc.btown.common.CacheDir;
 import me.carc.btown.common.Commons;
 import me.carc.btown.common.interfaces.ToursScrollListener;
-import me.carc.btown.db.TourViewModel;
+import me.carc.btown.db.tours.TourViewModel;
 import me.carc.btown.db.tours.model.Attraction;
 import me.carc.btown.db.tours.model.TourCatalogueItem;
 import me.carc.btown.ui.custom.MyFragmentPagerAdapter;
@@ -49,18 +51,12 @@ public class AttractionTabsActivity extends BaseActivity implements ToursScrollL
 
     @SuppressFBWarnings("MS_CANNOT_BE_FINAL")
     public static SparseArray<GalleryItem> galleryItems;
+    private List<Attraction> attractions;
 
-    @BindView(R.id.tabsToolbar)
-    Toolbar tabsToolbar;
-
-    @BindView(R.id.viewpager)
-    ViewPager viewPager;
-
-    @BindView(R.id.tabs)
-    TabLayout tabs;
-
-    @BindView(R.id.tour_tab_fab)
-    FloatingActionButton fab;
+    @BindView(R.id.tabsToolbar) Toolbar tabsToolbar;
+    @BindView(R.id.viewpager) ViewPager viewPager;
+    @BindView(R.id.tabs) TabLayout tabs;
+    @BindView(R.id.tour_tab_fab) FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,59 +64,114 @@ public class AttractionTabsActivity extends BaseActivity implements ToursScrollL
         setContentView(R.layout.tour_tabs_activity);
         ButterKnife.bind(this);
 
+        Log.d(TAG, "onCreate: ");
+
         Intent intent = getIntent();
         if (intent.hasExtra(CatalogueActivity.CATALOGUE_INDEX)) {
             tourTitle = intent.getStringExtra(CataloguePreviewActivity.CATALOGUE_TITLE);
 
-            int tourID = intent.getIntExtra(CatalogueActivity.CATALOGUE_INDEX, -1);
+            Fragment fragment = getSupportFragmentManager().findFragmentByTag(AttractionTabsStopsFragment.TAG_ID);
 
-            TourViewModel mTourViewModel = ViewModelProviders.of(this).get(TourViewModel.class);
-            mTourViewModel.getTour(tourID).observe(this, new Observer<TourCatalogueItem>() {
-                @Override
-                public void onChanged(@Nullable final TourCatalogueItem tour) {
-                    List<Attraction> attractions = tour.getAttractions();
-                    // populate the various lists
-                    if (Commons.isNotNull(attractions)) {
-                        getImageURLs(attractions);
+//            if (Commons.isNull(fragment) && Commons.isNull(savedInstanceState)) {
+                adapter = new MyFragmentPagerAdapter(getSupportFragmentManager());
 
-                        // Add colour selection for this??
-                        ViewUtils.changeFabColour(AttractionTabsActivity.this, fab, R.color.toursBackButtonBackgroundColor);
+/*
+            if(savedInstanceState != null) {
+                attractions = savedInstanceState.getParcelableArrayList(CataloguePreviewActivity.ATTRACTIONS_LIST);
+                getImageURLs(attractions);
+                setupViewPager(attractions);
+            } else {
+*/
+                int tourID = intent.getIntExtra(CatalogueActivity.CATALOGUE_INDEX, -1);
 
-                        setupUI();
-                        setupViewPager(attractions);
+                TourViewModel mTourViewModel = ViewModelProviders.of(this).get(TourViewModel.class);
+                mTourViewModel.getTour(tourID).observe(this, new Observer<TourCatalogueItem>() {
+                    @Override
+                    public void onChanged(@Nullable final TourCatalogueItem tour) {
+                        if (tour != null) {
+                            attractions = tour.getAttractions();
+                            // populate the various lists
+                            if (Commons.isNotNull(attractions)) {
+                                getImageURLs(attractions);
+                                setupViewPager(attractions);
+                            } else {
+                                new AlertDialog.Builder(AttractionTabsActivity.this)
+                                        .setTitle("Thats Unexpected!!")
+                                        .setMessage("Looks like the tours didn't download... ")
+                                        .setCancelable(false)
+                                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                finish();
+                                            }
+                                        })
+                                        .show();
+                            }
+                        }
+                    }
+                });
+/*
+            } else {
+                attractions = savedInstanceState.getParcelableArrayList(CataloguePreviewActivity.ATTRACTIONS_LIST);
+                getImageURLs(attractions);
+                viewPager.setAdapter(adapter);
+                tabs.setupWithViewPager(viewPager);
+                viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
-                    } else {
-                        new AlertDialog.Builder(AttractionTabsActivity.this)
-                                .setTitle("Thats Unexpected!!")
-                                .setMessage("Looks like the tours didn't download... ")
-                                .setCancelable(false)
-                                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        finish();
-                                    }
-                                })
-                                .show();
+                    @Override
+                    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                        AndroidUtils.hideSoftKeyboard(AttractionTabsActivity.this, viewPager);
                     }
 
-                }
-            });
+                    @Override
+                    public void onPageSelected(int position) {
+
+                    }
+
+                    @Override
+                    public void onPageScrollStateChanged(int state) {
+
+                    }
+                });
+            }
+
+*/
         }
+
+        // Add colour selection for this??
+        ViewUtils.changeFabColour(AttractionTabsActivity.this, fab, R.color.toursBackButtonBackgroundColor);
+        setupUI();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList(CataloguePreviewActivity.ATTRACTIONS_LIST, new ArrayList<Parcelable>(attractions));
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG, "onDestroy: ");
     }
 
     private void getImageURLs(List<Attraction> attractions) {
-        galleryItems = new SparseArray<>(1);
+        Log.d(TAG, "getImageURLs: ");
 
-        int index = 0;
-        for (Attraction attraction : attractions) {
-            GalleryItem gallery = new GalleryItem();
+        if (galleryItems == null) {
+            int index = 0;
+            galleryItems = new SparseArray<>(1);
 
-            gallery.setFilename(attraction.getImage());
-            gallery.setCachedFilePath(CacheDir.getInstance().getCachePath() + attraction.getImage());
-            gallery.setTitle(attraction.getStopName());
-            gallery.setDesc(attraction.getAttractionStopInfo(isGermanLanguage()).getTeaser()[0]);
+            for (Attraction attraction : attractions) {
+                GalleryItem gallery = new GalleryItem();
 
-            galleryItems.put(index++, gallery);
+                gallery.setFilename(attraction.getImage());
+                gallery.setCachedFilePath(CacheDir.getInstance().getCachePath() + attraction.getImage());
+                gallery.setTitle(attraction.getStopName());
+                gallery.setDesc(attraction.getAttractionStopInfo(isGermanLanguage()).getTeaser()[0]);
+
+                galleryItems.put(index++, gallery);
+            }
         }
     }
 
@@ -146,12 +197,12 @@ public class AttractionTabsActivity extends BaseActivity implements ToursScrollL
     }
 
     private void setupViewPager(List<Attraction> attractions) {
-        adapter = new MyFragmentPagerAdapter(getSupportFragmentManager());
+        Log.d(TAG, "setupViewPager: ");
 
         Bundle bundle = null;
         if (Commons.isNotNull(attractions)) {
             bundle = new Bundle();
-            bundle.putParcelableArrayList(CataloguePreviewActivity.ATTRACTIONS_LIST, new ArrayList<Parcelable>(attractions));
+//            bundle.putParcelableArrayList(CataloguePreviewActivity.ATTRACTIONS_LIST, new ArrayList<>(attractions));
             bundle.putInt(CatalogueActivity.CATALOGUE_INDEX, getIntent().getIntExtra(CatalogueActivity.CATALOGUE_INDEX, -1));
         }
 
@@ -185,11 +236,20 @@ public class AttractionTabsActivity extends BaseActivity implements ToursScrollL
         float temp = getResources().getDimension(R.dimen.fab_margin);
         int duration = getResources().getInteger(R.integer.gallery_alpha_duration);
 
+        // Clear up gallery cache
+        galleryItems.clear();
+        galleryItems = null;
+
         ViewUtils.hideView(fab, duration, (int) temp);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
+                // Skip the preview screen and return to tour catalogue screen
+                Intent goToCatalogueActivity = new Intent(AttractionTabsActivity.this, CatalogueActivity.class);
+                goToCatalogueActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(goToCatalogueActivity);
                 finish();
+                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
             }
         }, duration * 2);
     }
@@ -216,7 +276,7 @@ public class AttractionTabsActivity extends BaseActivity implements ToursScrollL
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                finish();
+                onBackPressed();
                 return true;
         }
         return super.onOptionsItemSelected(item);

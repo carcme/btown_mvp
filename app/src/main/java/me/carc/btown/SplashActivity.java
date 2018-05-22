@@ -12,7 +12,6 @@ import android.support.v7.app.AppCompatActivity;
 import java.util.List;
 
 import me.carc.btown.common.C;
-import me.carc.btown.common.Commons;
 import me.carc.btown.ui.front_page.FrontPageActivity;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
@@ -25,10 +24,7 @@ import pub.devrel.easypermissions.EasyPermissions;
  */
 public class SplashActivity extends AppCompatActivity implements EasyPermissions.PermissionCallbacks {
 
-    private static final String TAG = C.DEBUG + Commons.getTag();
-
-//    private FirebaseAuth auth;
-//    private FirebaseAuth.AuthStateListener authListener;
+    private static final String TAG = SplashActivity.class.getName();
 
     private boolean hasStorage = false;
     private boolean hasLocation = false;
@@ -47,6 +43,9 @@ public class SplashActivity extends AppCompatActivity implements EasyPermissions
 
     private void launchNextActivity() {
         if(hasStorage && hasLocation /*&& hasUser && attemptedLogin*/) {
+            // have permissions, get the tours and images
+            ((App)getApplicationContext()).getFirebaseTours();
+
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {

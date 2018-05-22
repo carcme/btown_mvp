@@ -26,7 +26,7 @@ public abstract class OnItemSelectedListener implements RecyclerView.OnItemTouch
 
     private final GestureDetector gestureDetector;
 
-    public OnItemSelectedListener(Context context) {
+    protected OnItemSelectedListener(Context context) {
         gestureDetector = new GestureDetector(context,
                 new GestureDetector.SimpleOnGestureListener() {
                     @Override
@@ -42,8 +42,9 @@ public abstract class OnItemSelectedListener implements RecyclerView.OnItemTouch
     public final boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
         if (gestureDetector.onTouchEvent(e)) {
             View touchedView = rv.findChildViewUnder(e.getX(), e.getY());
-            onItemSelected(rv.findContainingViewHolder(touchedView),
-                    rv.getChildAdapterPosition(touchedView));
+            if (touchedView != null)
+                onItemSelected(rv.findContainingViewHolder(touchedView),
+                        rv.getChildAdapterPosition(touchedView));
         }
         return false;
     }

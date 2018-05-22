@@ -15,7 +15,7 @@
         android:contentDescription="@null"
         android:background="@drawable/rating_background"
         android:backgroundTint="@color/tintStandard"
-        tools:src="@drawable/background_blue" />
+        tools:src="@drawable/checkered_background" />
 
     <RelativeLayout
         android:id="@+id/textHolder"

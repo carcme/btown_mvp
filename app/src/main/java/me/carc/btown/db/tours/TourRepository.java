@@ -20,22 +20,22 @@ public class TourRepository {
     private LiveData<List<TourCatalogueItem>> mAllTours;
     private LiveData<TourCatalogueItem> mTour;
 
-    public TourRepository(Application application) {
+    TourRepository(Application application) {
         AppDatabase db = AppDatabase.getDatabase(application);
         mTourDao = db.catalogueDao();
         mAllTours = mTourDao.getAllTours();
     }
 
-    public LiveData<List<TourCatalogueItem>> getAllTours() {
+    LiveData<List<TourCatalogueItem>> getAllTours() {
         return mAllTours;
     }
 
-    public LiveData<TourCatalogueItem> getTour(int id) {
+    LiveData<TourCatalogueItem> getTour(int id) {
         mTour  = mTourDao.getTour(id);
         return mTour;
     }
 
-    public void insert (TourCatalogueItem tour) {
+    void insert (TourCatalogueItem tour) {
         new insertAsyncTask(mTourDao).execute(tour);
     }
 

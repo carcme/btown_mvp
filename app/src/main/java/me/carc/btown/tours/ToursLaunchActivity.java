@@ -14,7 +14,6 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
-import com.facebook.Profile;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
@@ -87,10 +86,9 @@ public class ToursLaunchActivity extends BaseActivity {
         @Override
         public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
             FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
-            Profile facebookUser = Profile.getCurrentProfile();
 
             // bug fix - gets called twice for some reason
-            if (Commons.isNull(firebaseUser) && Commons.isNull(facebookUser)) {
+            if (Commons.isNull(firebaseUser)) {
                 startActivityForResult(new Intent(ToursLaunchActivity.this, LoginActivity.class), RESULT_LOGIN);
             } else {
                 showLoggedInIcon();
@@ -104,8 +102,7 @@ public class ToursLaunchActivity extends BaseActivity {
         switch (requestCode) {
             case RESULT_LOGIN:
                 FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-                Profile facebookUser = Profile.getCurrentProfile();
-                if (Commons.isNotNull(firebaseUser) || Commons.isNotNull(facebookUser)) {
+                if (Commons.isNotNull(firebaseUser)) {
                     Intent getImagesIntent = new Intent(this, FirebaseImageDownloader.class);
                     startService(getImagesIntent);
                     showLoggedInIcon();

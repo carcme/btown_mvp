@@ -15,15 +15,13 @@ import java.io.OutputStream;
 import java.util.Scanner;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import me.carc.btown.common.C;
-import me.carc.btown.common.Commons;
 
 /**
  * Created by bamptonm on 19/10/2017.
  */
 
 public class FileUtils {
-    private static final String TAG = C.DEBUG + Commons.getTag();
+    private static final String TAG = FileUtils.class.getName();
 
     /**
      * Is this a valid filename and path - does it exist?

@@ -84,7 +84,7 @@
     <string name="shared_my_location">Meine Location</string>
     <string name="shared_string_show_on_map">Auf der Karte zeigen</string>
     <string name="shared_string_use_on_home_screen">Als Home Screen nutzen</string>
-    <string name="shared_string_bookmark">Lesezeichen</string>
+    <string name="shared_string_bookmark">Leseliste</string>
     <string name="shared_string_options">Optionen</string>
     <string name="shared_string_about">Über</string>
     <string name="shared_string_thankyou">Danke!</string>
@@ -93,7 +93,12 @@
     <string name="shared_string_none">Keine</string>
     <string name="shared_string_success">Erfolg</string>
     <string name="shared_string_search">Suche</string>
+    <string name="shared_string_download">Herunterladen</string>
+    <string name="shared_string_offline">Offline</string>
 
+
+
+    <string name="home_screen_updated">Home Screen aktualisiert</string>
 
     <!--TODO-->
     <string name="shared_string_phone">Phone</string>
@@ -211,7 +216,7 @@
 
     <!-- PUBLIC TRANSPORT ROUTE PLAN-->
     <string name="alert_title_pt_route_map">Karte herunterladen</string>
-    <string name="alert_msg_pt_route_map">%s wird heruntergeladen. Bitte haben Sie Geduld. Wenn Sie eine neue Karte wünschen, lassen Sie es mich wissen, indem Sie das obige Feedback verwenden.</string>
+    <string name="alert_msg_pt_route_map">\"%s\" wird heruntergeladen. Bitte haben Sie Geduld.\n\nWenn Sie eine neue Karte wünschen, lassen Sie es mich wissen, indem Sie das obige Feedback verwenden.</string>
 
 
 

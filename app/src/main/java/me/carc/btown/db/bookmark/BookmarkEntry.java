@@ -53,6 +53,8 @@ public class BookmarkEntry implements Serializable, Parcelable {
     @ColumnInfo(name = "userComment")
     private String userComment;
 
+    @Ignore
+    public double distance;
 
 
     @Ignore

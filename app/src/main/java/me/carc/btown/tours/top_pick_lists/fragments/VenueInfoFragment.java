@@ -61,8 +61,8 @@ import me.carc.btown.data.all4squ.entities.Open;
 import me.carc.btown.data.all4squ.entities.Reason;
 import me.carc.btown.data.all4squ.entities.Timeframe;
 import me.carc.btown.data.all4squ.entities.VenueResult;
+import me.carc.btown.extras.WikiWebViewActivity;
 import me.carc.btown.map.sheets.share.ShareMenu;
-import me.carc.btown.map.sheets.wiki.WikiWebViewActivity;
 import me.carc.btown.tours.attractionPager.AttractionMapActivity;
 import me.carc.btown.tours.top_pick_lists.VenueTabsActivity;
 import me.carc.btown.tours.top_pick_lists.adapters.VenueFeaturesAdapter;
@@ -73,82 +73,45 @@ import retrofit2.Response;
 
 
 public class VenueInfoFragment extends Fragment {
-    private static final String TAG = C.DEBUG + Commons.getTag();
+    private static final String TAG = VenueInfoFragment.class.getName();
     public static final String PREFKEY_SAVED_TOUR_NOTES = "PREFKEY_SAVED_TOUR_NOTES";
 
-
-    @BindView(R.id.venueInfoNestedScrollView)
-    NestedScrollView venueInfoNestedScrollView;
-
-    @BindView(R.id.venueInfoProgressBar)
-    ProgressBar venueInfoProgressBar;
-
-
-    @BindView(R.id.venueAddressLayout)
-    LinearLayout venueAddressLayout;
-
-    @BindView(R.id.descLayout)
-    LinearLayout descLayout;
-
-    @BindView(R.id.venueDescription)
-    TextView venueDescription;
-
-    @BindView(R.id.venueAddressMap)
-    ImageView venueAddressMap;
-    @BindView(R.id.venueAddress)
-    TextView venueAddress;
-    @BindView(R.id.venueHours)
-    TextView venueHours;
-    @BindView(R.id.venueOpeningTimes)
-    TextView venueOpeningTimes;
-    @BindView(R.id.venueCategory)
-    TextView venueCategory;
-    @BindView(R.id.addressDivider)
-    View addressDivider;
-    @BindView(R.id.hoursDivider)
-    View hoursDivider;
+    @BindView(R.id.venueInfoNestedScrollView) NestedScrollView venueInfoNestedScrollView;
+    @BindView(R.id.venueInfoProgressBar) ProgressBar venueInfoProgressBar;
+    @BindView(R.id.venueAddressLayout) LinearLayout venueAddressLayout;
+    @BindView(R.id.descLayout) LinearLayout descLayout;
+    @BindView(R.id.venueDescription) TextView venueDescription;
+    @BindView(R.id.venueAddressMap) ImageView venueAddressMap;
+    @BindView(R.id.venueAddress) TextView venueAddress;
+    @BindView(R.id.venueHours) TextView venueHours;
+    @BindView(R.id.venueOpeningTimes) TextView venueOpeningTimes;
+    @BindView(R.id.venueCategory) TextView venueCategory;
+    @BindView(R.id.addressDivider) View addressDivider;
+    @BindView(R.id.hoursDivider) View hoursDivider;
 
     // CONTACT
-    @BindView(R.id.venuePhoneCall)
-    View venuePhoneCall;
-    @BindView(R.id.venuePhoneDiv)
-    View venuePhoneDiv;
-    @BindView(R.id.venueWebsite)
-    View venueWebsite;
-    @BindView(R.id.venueWebDiv)
-    View venueWebDiv;
+    @BindView(R.id.venuePhoneCall) View venuePhoneCall;
+    @BindView(R.id.venuePhoneDiv) View venuePhoneDiv;
+    @BindView(R.id.venueWebsite) View venueWebsite;
+    @BindView(R.id.venueWebDiv) View venueWebDiv;
 
     // FEATURES
-    @BindView(R.id.venueFeaturesContainer)
-    View venueFeaturesContainer;
-    @BindView(R.id.venueFeaturesList)
-    RecyclerView venueFeaturesList;
+    @BindView(R.id.venueFeaturesContainer) View venueFeaturesContainer;
+    @BindView(R.id.venueFeaturesList) RecyclerView venueFeaturesList;
 
     //MENU
-    @BindView(R.id.venueFeaturesMenuContainer)
-    View venueFeaturesMenuContainer;
-    @BindView(R.id.venueFeaturesMenuItemFood)
-    TextView venueFeaturesMenuItemFood;
-    @BindView(R.id.venueFeaturesMenuItemDrinks)
-    TextView venueFeaturesMenuItemDrinks;
-    @BindView(R.id.venueFeaturesMenuBtn)
-    Button venueFeaturesMenuBtn;
-    @BindView(R.id.venueFeaturesReserveBtn)
-    Button venueFeaturesReserveBtn;
-
+    @BindView(R.id.venueFeaturesMenuContainer) View venueFeaturesMenuContainer;
+    @BindView(R.id.venueFeaturesMenuItemFood) TextView venueFeaturesMenuItemFood;
+    @BindView(R.id.venueFeaturesMenuItemDrinks) TextView venueFeaturesMenuItemDrinks;
+    @BindView(R.id.venueFeaturesMenuBtn) Button venueFeaturesMenuBtn;
+    @BindView(R.id.venueFeaturesReserveBtn) Button venueFeaturesReserveBtn;
 
     // POPULAR
-    @BindView(R.id.venuePopularBarChart)
-    DonutProgress venuePopularBarChart;
-    @BindView(R.id.venuePopularReasonRating)
-    TextView venuePopularReasonRating;
-    @BindView(R.id.venuePopularPeopleHere)
-    TextView venuePopularPeopleHere;
-    @BindView(R.id.venuePopularReasonSummary)
-    TextView venuePopularReasonSummary;
-    @BindView(R.id.venuePopularLikes)
-    TextView venuePopularLikes;
-
+    @BindView(R.id.venuePopularBarChart) DonutProgress venuePopularBarChart;
+    @BindView(R.id.venuePopularReasonRating) TextView venuePopularReasonRating;
+    @BindView(R.id.venuePopularPeopleHere) TextView venuePopularPeopleHere;
+    @BindView(R.id.venuePopularReasonSummary) TextView venuePopularReasonSummary;
+    @BindView(R.id.venuePopularLikes) TextView venuePopularLikes;
 
     ToursScrollListener scrollListener;
 
@@ -183,11 +146,8 @@ public class VenueInfoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
         View v = inflater.inflate(R.layout.venue_fragment_info, container, false);
         ButterKnife.bind(this, v);
-
         setup();
-
         venueInfoNestedScrollView.setOnScrollChangeListener(onScrollListener);
-
         return v;
     }
 
@@ -205,7 +165,6 @@ public class VenueInfoFragment extends Fragment {
             VenueResult venue = args.getParcelable(VenueTabsActivity.EXTRA_VENUE);
 
             if (Commons.isNotNull(venue)) {
-
                 if(C.DEBUG_ENABLED)
                     try {
                         if (!Commons.isEmpty(venue.getPage().getPageInfo().getDescription())) {
@@ -218,7 +177,6 @@ public class VenueInfoFragment extends Fragment {
     }
 
     private class SetupMore implements Runnable {
-
         VenueResult venue;
 
         SetupMore(VenueResult venue) {
@@ -231,8 +189,6 @@ public class VenueInfoFragment extends Fragment {
         }
 
         private void populateMore() {
-
-            // todo check for both en and de lang options in the B-Town tips
             String btownComment = "";
             try {
                 if(venue.getTips().getGroupsTips().size() > 0) {
@@ -242,6 +198,8 @@ public class VenueInfoFragment extends Fragment {
                                 btownComment = tip.getText();
                                 btownComment = btownComment + " - " + getString(R.string.app_name);
                                 break;
+                            } else if (Commons.isEmpty(btownComment) && tip.getLang().equalsIgnoreCase(C.USER_LANGUAGE)) {
+                                btownComment = tip.getText().concat(" - ").concat(tip.getUser().getFullName());
                             }
                         }
                     }

@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView
-    android:id="@+id/interact_card"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/interact_card"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="16dp"
@@ -26,72 +25,105 @@
             android:text="@string/interact"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"/>
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center">
-
-                <Button
-                    android:id="@+id/btnPostcard"
-                    android:layout_width="150dp"
-                    android:layout_height="wrap_content"
-                    android:text="@string/postcard"
-                    android:textAllCaps="false"
-                    android:textColor="@color/almostWhite" />
-                <Button
-                    android:id="@+id/btnComment"
-                    android:layout_width="150dp"
-                    android:layout_height="wrap_content"
-                    android:layout_toEndOf="@id/btnPostcard"
-                    android:text="@string/comment"
-                    android:textAllCaps="false"
-                    android:textColor="@color/almostWhite"/>
-                <Button
-                    android:id="@+id/btnCheckin"
-                    android:layout_width="150dp"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/btnPostcard"
-                    android:text="@string/check_in"
-                    android:textAllCaps="false"
-                    android:textColor="@color/almostWhite"/>
-                <Button
-                    android:id="@+id/btnCamera"
-                    android:layout_width="150dp"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/btnComment"
-                    android:layout_toEndOf="@id/btnCheckin"
-                    android:text="@string/camera"
-                    android:textAllCaps="false"
-                    android:textColor="@color/almostWhite"/>
+            android:orientation="horizontal"
+            android:weightSum="4">
 
             <Button
-                    android:id="@+id/btnMap"
-                    android:layout_width="150dp"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/btnCheckin"
-                    android:text="@string/map"
-                    android:textAllCaps="false"
-                    android:textColor="@color/almostWhite"/>
-            <Button
-                    android:id="@+id/btnDonate"
-                    android:layout_width="150dp"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/btnCamera"
-                    android:layout_toEndOf="@id/btnMap"
-                    android:text="@string/donate"
-                    android:textAllCaps="false"
-                    android:textColor="@color/almostWhite"/>
-
-        </RelativeLayout>
-
-            <RatingBar
-                android:id="@+id/rating_bar"
-                style="@style/storyRatingBar"
-                android:layout_width="wrap_content"
+                android:id="@+id/btnPostcard"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_standard"
-                android:layout_gravity="center"
-                android:numStars="5"/>
+                android:layout_weight="1"
+                android:contentDescription="@string/shared_string_share"
+                android:drawableTop="@drawable/ic_menu_share"
+                android:text="@string/shared_string_share"
+                android:textColor="@color/buttonTextColor"
+                android:textSize="12sp"
+                />
+
+            <include layout="@layout/divider_faded_vert"/>
+
+            <Button
+                android:id="@+id/btnMap"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:contentDescription="@string/route_to"
+                android:drawableTop="@drawable/ic_google_maps"
+                android:text="@string/map"
+                android:textColor="@color/buttonTextColor"
+                android:textSize="12sp"
+                />
+
+            <include layout="@layout/divider_faded_vert"/>
+
+            <Button
+                android:id="@+id/btnCamera"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:contentDescription="@string/route_to"
+                android:drawableTop="@drawable/ic_camera"
+                android:text="@string/camera"
+                android:textColor="@color/buttonTextColor"
+                android:textSize="12sp"
+                />
+
+            <include layout="@layout/divider_faded_vert"/>
+
+            <Button
+                android:id="@+id/btnDonate"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:contentDescription="@string/route_to"
+                android:drawableTop="@drawable/ic_donate"
+                android:text="@string/donate"
+                android:textColor="@color/buttonTextColor"
+                android:textSize="12sp"
+                />
+
+            <include layout="@layout/divider_faded_vert"
+                android:visibility="gone"/>
+
+            <Button
+                android:id="@+id/btnComment"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:contentDescription="@string/more"
+                android:drawableTop="@drawable/ic_comment"
+                android:text="Chat"
+                android:textColor="@color/buttonTextColor"
+                android:textSize="12sp"
+                android:visibility="gone"
+                />
+
+        </LinearLayout>
+
+        <include
+            layout="@layout/divider_faded"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="@dimen/margin_small"
+            android:visibility="gone"/>
+
+        <RatingBar
+            android:id="@+id/rating_bar"
+            style="@style/storyRatingBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/margin_small"
+            android:numStars="5"
+            android:visibility="gone"/>
 
     </LinearLayout>
 

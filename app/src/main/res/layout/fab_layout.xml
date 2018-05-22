@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.FloatingActionButton
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/fabMapExit"
+    android:layout_width="@dimen/fab_size"
+    android:layout_height="@dimen/fab_size"
+    android:layout_alignParentBottom="true"
+    android:layout_alignParentEnd="true"
+    android:layout_margin="@dimen/fab_margin"
+    android:stateListAnimator="@drawable/button_raise"
+    android:transitionName="@string/fab_move_transition"
+    app:backgroundTint="@color/accentColorRed"
+    app:fabSize="normal"
+    app:srcCompat="@drawable/ic_times_white"/>

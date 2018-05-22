@@ -13,6 +13,7 @@ import java.io.Serializable;
  */
 public class InfoCard implements Serializable {
 
+    private String displayString;
     private String dataString;
     private IIcon icon;
     private ItemType type;
@@ -30,12 +31,21 @@ public class InfoCard implements Serializable {
         CLIPBOARD
     }
 
-    public InfoCard(String info, ItemType type, @NonNull IIcon icon) {
-        this.dataString = info;
+    public InfoCard(String display, String data, ItemType type, @NonNull IIcon icon) {
+        this.displayString = display;
+        this.dataString = data;
         this.type = type;
         this.icon = icon;
     }
 
+    public InfoCard(String data, ItemType type, @NonNull IIcon icon) {
+        this.displayString = data;
+        this.dataString = data;
+        this.type = type;
+        this.icon = icon;
+    }
+
+    public String getDisplay() { return displayString; }
     public String getData() { return dataString; }
     public IIcon getIcon() { return icon; }
     public ItemType getType() { return type; }

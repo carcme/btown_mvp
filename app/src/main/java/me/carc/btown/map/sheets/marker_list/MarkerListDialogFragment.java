@@ -59,27 +59,18 @@ public class MarkerListDialogFragment extends DialogFragment {
     private static final String MY_LAT = "MY_LAT";
     private static final String MY_LNG = "MY_LNG";
     private static final String MARKER_LIST = "MARKER_LIST";
-    private MarkerListAdapter adapter;
 
+    private MarkerListAdapter adapter;
     private GeoPoint myLocation;
     private Unbinder unbinder;
 
     private ArrayList<Object> relatedObjects;
 
-    @BindView(R.id.collapsing_toolbar)
-    CollapsingToolbarLayout collapsingToolbar;
-
-    @BindView(R.id.bookmarksToolbar)
-    Toolbar toolbar;
-
-    @BindView(R.id.backdrop)
-    ImageView imageBackDrop;
-
-    @BindView(R.id.recyclerview)
-    RecyclerView recyclerView;
-
-    @BindView(R.id.fabClose)
-    FloatingActionButton fabClose;
+    @BindView(R.id.collapsing_toolbar) CollapsingToolbarLayout collapsingToolbar;
+    @BindView(R.id.bookmarksToolbar) Toolbar toolbar;
+    @BindView(R.id.backdrop) ImageView imageBackDrop;
+    @BindView(R.id.recyclerview) RecyclerView recyclerView;
+    @BindView(R.id.fabClose) FloatingActionButton fabClose;
 
 /*
     @BindView(R.id.readingListHeaderImageContainer)

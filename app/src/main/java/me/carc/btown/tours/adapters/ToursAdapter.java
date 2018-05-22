@@ -9,6 +9,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +23,6 @@ import java.util.List;
 import me.carc.btown.R;
 import me.carc.btown.common.C;
 import me.carc.btown.common.CacheDir;
-import me.carc.btown.common.interfaces.DrawableClickListener;
 import me.carc.btown.common.viewHolders.CatalogueViewHolder;
 import me.carc.btown.db.tours.model.TourCatalogueItem;
 
@@ -25,23 +31,13 @@ import me.carc.btown.db.tours.model.TourCatalogueItem;
  */
 public class ToursAdapter extends RecyclerView.Adapter<CatalogueViewHolder> {
 
-    private ArrayList<TourCatalogueItem> tours;
-//    private StorageReference mCoverImageStorageRef;
+    private ArrayList<TourCatalogueItem> tours = new ArrayList<>();
+    private StorageReference mCoverImageStorageRef;
     private boolean isGermanLanguage;
 
-    public DrawableClickListener onClickListener;
-
-    public ToursAdapter(ArrayList<TourCatalogueItem> tours, boolean language, DrawableClickListener listener) {
-        this.tours = tours;
+    public ToursAdapter(boolean language) {
+        mCoverImageStorageRef = FirebaseStorage.getInstance().getReference().child("coverImages/");
         isGermanLanguage = language;
-        onClickListener = listener;
-//        mCoverImageStorageRef = FirebaseStorage.getInstance().getReference().child("coverImages/");
-    }
-
-    public ToursAdapter(boolean language, DrawableClickListener listener) {
-        isGermanLanguage = language;
-        onClickListener = listener;
-//        mCoverImageStorageRef = FirebaseStorage.getInstance().getReference().child("coverImages/");
     }
 
     @Override
@@ -62,17 +58,29 @@ public class ToursAdapter extends RecyclerView.Adapter<CatalogueViewHolder> {
         holder.stops.setText(String.valueOf(card.getCatalogueNumberOfStops()));
 
         // Load image from Local storeage using Glide
-        Glide.with(holder.mView.getContext())
+        Glide.with(holder.catalogueImage.getContext())
                 .load(CacheDir.getInstance().getCachePath() + card.getCatalogueImage())
-                .into(holder.catalogueImage);
-/*
-        // Load image from Firebase using Glide
-        Glide.with(holder.mView.getContext())
-                .using(new FirebaseImageLoader()) // cannot resolve method using!
-                .load(mCoverImageStorageRef.child(card.getCatalogueImage()))
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .into(holder.catalogueImage);
-*/
+                .crossFade(500)
+                .placeholder(R.drawable.checkered_background)
+                .into(new GlideDrawableImageViewTarget(holder.catalogueImage) {
+                    @Override
+                    public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                        super.onLoadFailed(e, errorDrawable);
+                        // Load image from Firebase using Glide
+                        Glide.with(holder.catalogueImage.getContext())
+                                .using(new FirebaseImageLoader()) // cannot resolve method using!
+                                .load(mCoverImageStorageRef.child(card.getCatalogueImage()))
+                                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                                .into(holder.catalogueImage);
+                    }
+
+                    @Override
+                    public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
+                        super.onResourceReady(resource, glideAnimation);
+                    }
+                });
+
+
         if (!C.HAS_M) {
             int colorRes = R.color.card_text_color;
             if (C.HAS_L) {
@@ -91,24 +99,10 @@ public class ToursAdapter extends RecyclerView.Adapter<CatalogueViewHolder> {
                 drawables[0].setColorFilter(ContextCompat.getColor(holder.itemView.getContext(), colorRes), PorterDuff.Mode.MULTIPLY);
             }
         }
-
-        holder.card.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onClickListener.OnClick(v, holder.catalogueImage.getDrawable(), holder.getAdapterPosition());
-            }
-        });
-        holder.card.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                onClickListener.OnLongClick(v, holder.getAdapterPosition());
-                return true;
-            }
-        });
     }
 
     public void setTours(List<TourCatalogueItem> tours) {
-        this.tours =  new ArrayList<>(tours);
+        this.tours = new ArrayList<>(tours);
         notifyDataSetChanged();
     }
 

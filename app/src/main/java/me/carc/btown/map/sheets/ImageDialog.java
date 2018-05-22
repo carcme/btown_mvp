@@ -317,7 +317,7 @@ public class ImageDialog extends DialogFragment {
                                         @Override
                                         public void run() {
                                             imageLoadProgress.setVisibility(View.GONE);
-                                            Commons.Toast(getActivity(), R.string.shared_string_success, Color.GREEN, Toast.LENGTH_SHORT);
+                                            Commons.Toast(getActivity(), R.string.home_screen_updated, Color.GREEN, Toast.LENGTH_SHORT);
                                         }
                                     });
                                 }

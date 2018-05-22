@@ -3,19 +3,16 @@ package me.carc.btown;
 import android.annotation.TargetApi;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
-import android.content.ServiceConnection;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.os.RemoteException;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
@@ -50,10 +47,8 @@ import android.widget.TextView;
 
 import com.android.vending.billing.IInAppBillingService;
 import com.bumptech.glide.Glide;
-import com.facebook.Profile;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -94,8 +89,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     public static final String TRANSPORTR_INTENT = "de.grobox.liberario";
     public static final String TRANSLATE_INTENT = "com.google.android.apps.translate";
 
-
-    private static IInAppBillingService mBillingService;
     private static List<PurchaseItem> mPurchaseItems;
     private String[] mDonateItems;
 
@@ -116,6 +109,11 @@ public abstract class BaseActivity extends AppCompatActivity {
         return (App) getApplication();
     }
 
+    public IInAppBillingService getBillingService() {
+        return getApp().getmBillingService();
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         getBaseFunctions();
@@ -128,12 +126,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         getApp().setCurrentActivity(this);
-
-        if (GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this) == ConnectionResult.SUCCESS) {
-            Intent serviceIntent = new Intent("com.android.vending.billing.InAppBillingService.BIND");
-            serviceIntent.setPackage(GooglePlayServicesUtil.GOOGLE_PLAY_STORE_PACKAGE);
-            bindService(serviceIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
-        }
     }
 
     @edu.umd.cs.findbugs.annotations.SuppressFBWarnings("DE_MIGHT_IGNORE")
@@ -142,12 +134,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onPause();
         hideProgressDialog();
         clearReferences();
-
-        try {
-            if (mBillingService != null) {
-                unbindService(mServiceConnection);
-            }
-        } catch (Exception e) {/* EMPTY CATCH */ }
     }
 
     @Override
@@ -170,12 +156,6 @@ public abstract class BaseActivity extends AppCompatActivity {
 
 
     private void restart() {
-        try {
-            if (mBillingService != null) {
-                unbindService(mServiceConnection);
-            }
-        } catch (IllegalArgumentException e) { /* EMPTY */ }
-
         finish();
         startActivity(new Intent(BaseActivity.this, SplashActivity.class));
     }
@@ -289,10 +269,10 @@ public abstract class BaseActivity extends AppCompatActivity {
 
                 // IMAGE DIMENSIONS
                 C.IMAGE_WIDTH = C.SCREEN_WIDTH;
-                if (C.SCREEN_HEIGHT > 1200)
-                    C.IMAGE_HEIGHT = (int) (C.SCREEN_HEIGHT * 3 / 4.0f);
-                else
-                    C.IMAGE_HEIGHT = (int) (C.SCREEN_HEIGHT * 2 / 3.0f);
+//                if (C.SCREEN_HEIGHT > 1200)
+//                    C.IMAGE_HEIGHT = (int) (C.SCREEN_HEIGHT * 3 / 4.0f);
+//                else
+                C.IMAGE_HEIGHT = (int) (C.SCREEN_HEIGHT * 2 / 3.0f);
             }
         }
     }
@@ -390,7 +370,6 @@ public abstract class BaseActivity extends AppCompatActivity {
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             intent.setData(Uri.parse(IntentUtils.getUrlWithRef(packageToInstall)));
                             startActivity(intent);
-
                         } else {
                             if (googleAPI.isUserResolvableError(result)) {
                                 googleAPI.getErrorDialog(BaseActivity.this, result, RESULT_PLAY_SERVICES_RESOLUTION).show();
@@ -562,11 +541,10 @@ public abstract class BaseActivity extends AppCompatActivity {
             });
 
             FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-            Profile facebookUser = Profile.getCurrentProfile();
-            if (Commons.isNotNull(firebaseUser) || Commons.isNotNull(facebookUser)) {
-                headeUser.setText(facebookUser != null ? facebookUser.getName() : firebaseUser.getDisplayName());
+            if (Commons.isNotNull(firebaseUser)) {
+                headeUser.setText(firebaseUser.getDisplayName());
                 Glide.with(this)
-                        .load(facebookUser != null ? facebookUser.getProfilePictureUri(50, 50) : firebaseUser.getPhotoUrl())
+                        .load(firebaseUser.getPhotoUrl())
                         .into(userImage);
             } else {
                 userImage.setImageResource(R.mipmap.ic_launcher_skyline_rnd_blue);
@@ -574,7 +552,6 @@ public abstract class BaseActivity extends AppCompatActivity {
             }
         }
     }
-
 
     private NavigationView.OnNavigationItemSelectedListener navigationViewListener = new NavigationView.OnNavigationItemSelectedListener() {
         @Override
@@ -708,25 +685,12 @@ public abstract class BaseActivity extends AppCompatActivity {
         });
     }
 
-    private static ServiceConnection mServiceConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            mBillingService = IInAppBillingService.Stub.asInterface(service);
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            mBillingService = null;
-        }
-    };
-
-
     private void onDonate(PurchaseItem item) {
-        if (item == null || !item.isValid() || mBillingService == null) {
+        if (item == null || !item.isValid() || getBillingService() == null) {
             return;
         }
         try {
-            Bundle buyIntentBundle = mBillingService.getBuyIntent(3, getPackageName(), item.getId(), "inapp", "");
+            Bundle buyIntentBundle = getBillingService().getBuyIntent(3, getPackageName(), item.getId(), "inapp", "");
             PendingIntent pendingIntent = buyIntentBundle.getParcelable("BUY_INTENT");
             if (pendingIntent != null)
                 startIntentSenderForResult(pendingIntent.getIntentSender(), RESULT_DONATE, new Intent(), 0, 0, 0);
@@ -741,7 +705,7 @@ public abstract class BaseActivity extends AppCompatActivity {
                 callback.onSuccess(mPurchaseItems);
             }
         } else
-            new GetSkuDetails(callback, mDonateItems, getPackageName()).execute(mBillingService);
+            new GetSkuDetails(callback, mDonateItems, getPackageName()).execute(getBillingService());
     }
 
     private static class GetSkuDetails extends AsyncTask<IInAppBillingService, Void, AsyncResult<List<PurchaseItem>>> {
@@ -813,14 +777,14 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
-    public void showDonateDialogErrorCallback(Throwable throwable) {
+    public void showDonateDialogErrorCallback(Throwable t) {
+        if (t != null)
+            Log.d(TAG, "showDonateDialogErrorCallback: " + t.getLocalizedMessage());
         showAlertDialog(R.string.shared_string_error, R.string.text_donate_error, -1);
     }
 
     private void showDonateDialogSuccessCallback(final List<PurchaseItem> data) {
-
         PurchaseAdapter adapter = new PurchaseAdapter(this, data);
-
         AlertDialog.Builder builder = new AlertDialog.Builder(this)
                 .setTitle(R.string.text_donate_title)
                 .setCancelable(false)
@@ -848,9 +812,8 @@ public abstract class BaseActivity extends AppCompatActivity {
         builder.show();
     }
 
-
     public void consumeAllIAB() {
-        new consumeAllIAB(getPackageName()).execute(mBillingService);
+        new consumeAllIAB(getPackageName()).execute(getBillingService());
     }
 
     private static class consumeAllIAB extends AsyncTask<IInAppBillingService, Void, Boolean> {
@@ -902,7 +865,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         private WeakReference<Context> mContextWeakReference;
 
-        public AsyncCallback(Context context) {
+        AsyncCallback(Context context) {
             mContextWeakReference = new WeakReference<>(context);
         }
 
@@ -917,7 +880,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         private T mResult;
 
-        public AsyncResult(T result, Throwable error) {
+        AsyncResult(T result, Throwable error) {
             mResult = result;
             mError = error;
         }
@@ -942,7 +905,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         private List<PurchaseItem> mItems;
 
-        public PurchaseAdapter(Context context, List<PurchaseItem> items) {
+        PurchaseAdapter(Context context, List<PurchaseItem> items) {
             super(context, 0);
             mItems = items == null ? new ArrayList<PurchaseItem>() : items;
         }
@@ -999,24 +962,31 @@ public abstract class BaseActivity extends AppCompatActivity {
         String getDescription() {
             return mDescription;
         }
+
         String getId() {
             return mId;
         }
+
         String getPrice() {
             return mPrice;
         }
+
         long getPriceAmountMicros() {
             return mPriceAmountMicros;
         }
+
         String getPriceCurrencyCode() {
             return mPriceCurrencyCode;
         }
+
         String getTitle() {
             return mTitle;
         }
+
         String getType() {
             return mType;
         }
+
         boolean isValid() {
             return !TextUtils.isEmpty(mId);
         }

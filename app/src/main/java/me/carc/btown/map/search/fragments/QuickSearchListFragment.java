@@ -45,8 +45,8 @@ public abstract class QuickSearchListFragment extends BaseListFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        ListView listView = (ListView)view.findViewById(android.R.id.list);
-        TextView emptyText = (TextView)view.findViewById(android.R.id.empty);
+        ListView listView = view.findViewById(android.R.id.list);
+        TextView emptyText = view.findViewById(android.R.id.empty);
 
         SearchListFragmentType type = getType();
 
@@ -116,6 +116,7 @@ public abstract class QuickSearchListFragment extends BaseListFragment {
         });
     }
 
+
     @Override
     public SearchListAdapter getListAdapter() {
         return mylistAdapter;
@@ -164,6 +165,7 @@ public abstract class QuickSearchListFragment extends BaseListFragment {
         getListView().setVisibility(View.VISIBLE);
     }
 
+    @SuppressWarnings("unused")
     public void addListItem(Place listItem) {
         if (listItem != null) {
             mylistAdapter.addListItem(listItem);

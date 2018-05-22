@@ -64,7 +64,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class AttractionShowcaseImageActivity extends BaseActivity {
-    private static final String TAG = C.DEBUG + Commons.getTag();
+    private static final String TAG = AttractionShowcaseImageActivity.class.getName();
 
     private static final String TEXT_COLOR = "TEXT_COLOR";
     private static final String RGB = "RGB";

@@ -56,7 +56,7 @@
 <!--        <item>@drawable/ic_beer</item>			spati-->
         <item>@drawable/ic_attractions</item>
 
-        <item>@drawable/ic_attractions</item>
+        <item>@drawable/ic_tours</item>
         <item>@drawable/ic_castle</item>
         <item>@drawable/ic_art</item>
         <item>@drawable/ic_nature</item>
@@ -65,7 +65,7 @@
 
         <item>@drawable/ic_music</item>
         <item>@drawable/ic_shop</item>
-        <item>@drawable/ic_hospital</item>
+        <item>@drawable/ic_local_hospital</item>
         <item>@drawable/ic_hotel</item>
         <item>@drawable/ic_directions_bus</item>
     </array>

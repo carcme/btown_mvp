@@ -48,17 +48,16 @@ import me.carc.btown.Utils.IntentUtils;
 import me.carc.btown.Utils.MapUtils;
 import me.carc.btown.Utils.OpeningHoursParser;
 import me.carc.btown.Utils.WikiUtils;
-import me.carc.btown.common.C;
 import me.carc.btown.common.Commons;
 import me.carc.btown.data.results.OverpassQueryResult;
 import me.carc.btown.data.reverse.ReverseLookupLoader;
 import me.carc.btown.db.AppDatabase;
 import me.carc.btown.db.favorite.FavoriteEntry;
+import me.carc.btown.extras.WikiWebViewActivity;
 import me.carc.btown.map.interfaces.MyClickListener;
 import me.carc.btown.map.sheets.model.InfoCard;
 import me.carc.btown.map.sheets.model.adpater.PoiMoreRecyclerAdapter;
 import me.carc.btown.map.sheets.share.ShareMenu;
-import me.carc.btown.map.sheets.wiki.WikiWebViewActivity;
 import me.carc.btown.ui.CompassDialog;
 import me.carc.btown.ui.CompassView;
 import me.carc.btown.ui.FeedbackDialog;
@@ -71,8 +70,8 @@ import pub.devrel.easypermissions.EasyPermissions;
  */
 public class SinglePoiOptionsDialog extends BottomSheetDialogFragment {
 
+    private static final String TAG = SinglePoiOptionsDialog.class.getName();
     public static final String ID_TAG = "SinglePoiOptionsDialog";
-    private static final String TAG = C.DEBUG + Commons.getTag();
 
     public static final String ITEM = "ITEM";
 
@@ -360,19 +359,19 @@ public class SinglePoiOptionsDialog extends BottomSheetDialogFragment {
                 items.add(new InfoCard(node.tags.contactPhone, InfoCard.ItemType.PHONE, CommunityMaterial.Icon.cmd_phone));
 
             if (Commons.isNotNull(node.tags.contactWebsite))
-                items.add(new InfoCard(node.tags.contactWebsite, InfoCard.ItemType.WEB, CommunityMaterial.Icon.cmd_web));
+                items.add(new InfoCard(getString(R.string.view_homepage), node.tags.contactWebsite, InfoCard.ItemType.WEB, CommunityMaterial.Icon.cmd_web));
 
             if (Commons.isNotNull(node.tags.contactEmail))
                 items.add(new InfoCard(node.tags.contactEmail, InfoCard.ItemType.EMAIL, CommunityMaterial.Icon.cmd_email));
 
             if (Commons.isNotNull(node.tags.facebook))
-                items.add(new InfoCard("https://www.facebook.com/".concat(node.tags.facebook), InfoCard.ItemType.FACEBOOK, CommunityMaterial.Icon.cmd_facebook));
+                items.add(new InfoCard(getString(R.string.facebook), "https://www.facebook.com/".concat(node.tags.facebook), InfoCard.ItemType.FACEBOOK, CommunityMaterial.Icon.cmd_facebook));
 
             if (Commons.isNotNull(node.tags.instagram))
-                items.add(new InfoCard("https://www.instagram.com/".concat(node.tags.instagram), InfoCard.ItemType.INSTAGRAM, CommunityMaterial.Icon.cmd_instagram));
+                items.add(new InfoCard(getString(R.string.instagram), "https://www.instagram.com/".concat(node.tags.instagram), InfoCard.ItemType.INSTAGRAM, CommunityMaterial.Icon.cmd_instagram));
 
             if (Commons.isNotNull(node.tags.twitter))
-                items.add(new InfoCard("https://twitter.com/".concat(node.tags.twitter), InfoCard.ItemType.TWITTER, CommunityMaterial.Icon.cmd_twitter));
+                items.add(new InfoCard(getString(R.string.twitter), "https://twitter.com/".concat(node.tags.twitter), InfoCard.ItemType.TWITTER, CommunityMaterial.Icon.cmd_twitter));
 
             if (Commons.isNotNull(node.tags.smoking))
                 items.add(new InfoCard(getString(R.string.poi_res_smoking) + node.tags.smoking, InfoCard.ItemType.INFO, CommunityMaterial.Icon.cmd_smoking));
@@ -399,9 +398,9 @@ public class SinglePoiOptionsDialog extends BottomSheetDialogFragment {
                 items.add(new InfoCard(getString(R.string.poi_res_note) + node.tags.note, InfoCard.ItemType.INFO, CommunityMaterial.Icon.cmd_note));
 
             if (Commons.isNotNull(node.tags.wikipedia))
-                items.add(new InfoCard(node.tags.wikipedia, InfoCard.ItemType.WIKI, CommunityMaterial.Icon.cmd_wikipedia));
+                items.add(new InfoCard(getString(R.string.wikipedia), node.tags.wikipedia, InfoCard.ItemType.WIKI, CommunityMaterial.Icon.cmd_wikipedia));
 
-            items.add(new InfoCard("Lat " + node.lat + ", Lon " + node.lon, InfoCard.ItemType.CLIPBOARD, CommunityMaterial.Icon.cmd_crosshairs_gps));
+            items.add(new InfoCard("Lat " + node.lat + ", Lon " + node.lon, node.lat + ", " + node.lon, InfoCard.ItemType.CLIPBOARD, CommunityMaterial.Icon.cmd_crosshairs_gps));
 
 
             if (items.isEmpty()) {
@@ -412,8 +411,8 @@ public class SinglePoiOptionsDialog extends BottomSheetDialogFragment {
 
                 final PoiMoreRecyclerAdapter mAdapter = new PoiMoreRecyclerAdapter(items, new MyClickListener() {
                     @Override
-                    public void OnClick(View v, int pos) {
-                        InfoCard item = items.get(pos);
+                    public void OnClick(final View v, int pos) {
+                        final InfoCard item = items.get(pos);
                         Intent intent;
 
                         switch (item.getType()) {
@@ -429,8 +428,8 @@ public class SinglePoiOptionsDialog extends BottomSheetDialogFragment {
                                 break;
 
                             case WIKI:
-                                intent = new Intent(getActivity(), WikiWebViewActivity.class);
-                                intent.putExtra(WikiWebViewActivity.WIKI_EXTRA_PAGE_TITLE, getActivity().getString(R.string.wikipedia));
+                                intent = new Intent(v.getContext(), WikiWebViewActivity.class);
+                                intent.putExtra(WikiWebViewActivity.WIKI_EXTRA_PAGE_TITLE, v.getContext().getString(R.string.wikipedia));
                                 intent.putExtra(WikiWebViewActivity.WIKI_EXTRA_PAGE_URL, WikiUtils.createWikiLink(item.getData()));
                                 startActivity(intent);
                                 break;
@@ -465,19 +464,17 @@ public class SinglePoiOptionsDialog extends BottomSheetDialogFragment {
                                 startActivity(intent);
                                 break;
 */
-
                             case CLIPBOARD:
                                 AndroidUtils.copyToClipboard(getActivity(), item.getData());
                                 Toast.makeText(getActivity(), "Copied to clipboard:\n" + item.getData(), Toast.LENGTH_SHORT).show();
                                 break;
+
                             default:
                         }
                     }
 
                     @Override
-                    public void OnLongClick(View v, int position) {
-
-                    }
+                    public void OnLongClick(View v, int position) { /* EMPTY */ }
                 });
 
                 moreRecyclerView.setNestedScrollingEnabled(true);
@@ -487,7 +484,6 @@ public class SinglePoiOptionsDialog extends BottomSheetDialogFragment {
             }
         }
     }
-
 
     @Override
     public void onDismiss(DialogInterface dialog) {
@@ -588,6 +584,14 @@ public class SinglePoiOptionsDialog extends BottomSheetDialogFragment {
                 Toast.makeText(getActivity(), R.string.error_no_maps_app, Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    @Override
+    public void startActivityForResult(Intent intent, int requestCode) {
+        if (intent == null) {
+            intent = new Intent();
+        }
+        super.startActivityForResult(intent, requestCode);
     }
 
     @OnClick(R.id.titleContainer)

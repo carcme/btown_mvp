@@ -2,6 +2,7 @@ package me.carc.btown.settings;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -20,6 +21,31 @@ import me.carc.btown.BuildConfig;
 import me.carc.btown.R;
 
 public class AboutFragment extends Fragment {
+
+    interface BtnClickListener {
+        void onDonateClick();
+    }
+    BtnClickListener btnClickListener;
+
+    @Override
+    public void onAttach(Context ctx) {
+        super.onAttach(ctx);
+        try {
+            btnClickListener = (BtnClickListener) ctx;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(ctx.toString() + " must implement BtnClickListener callbacks");
+        }
+    }
+
+    @Override
+    public void onAttach(Activity act) {
+        super.onAttach(act);
+        try {
+            btnClickListener = (BtnClickListener) act;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(act.toString() + " must implement BtnClickListener callbacks");
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -65,13 +91,14 @@ public class AboutFragment extends Fragment {
         return view;
     }/**/
 
+
     @OnClick(R.id.websiteButton)
     void website() {
         Intent launchBrowser = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.website)));
         startActivity(launchBrowser);
     }
 
-    @OnClick(R.id.shareButton)
+    @OnClick(R.id.shareApp)
     void share() {
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setAction(Intent.ACTION_SEND);
@@ -89,5 +116,10 @@ public class AboutFragment extends Fragment {
     @OnClick(R.id.feedbackButton)
     void feebback() {
         new SendFeedback(getActivity(), SendFeedback.TYPE_FEEDBACK);
+    }
+
+    @OnClick(R.id.donateButton)
+    void donate() {
+        btnClickListener.onDonateClick();
     }
 }

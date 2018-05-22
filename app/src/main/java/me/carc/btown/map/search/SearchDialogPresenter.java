@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -22,22 +21,21 @@ import java.util.concurrent.Executors;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import me.carc.btown.App;
 import me.carc.btown.BuildConfig;
-import me.carc.btown.map.MapActivity;
 import me.carc.btown.R;
 import me.carc.btown.Utils.MapUtils;
 import me.carc.btown.common.C;
 import me.carc.btown.common.Commons;
+import me.carc.btown.common.interfaces.SimpleClickListener;
 import me.carc.btown.data.autocomplete.AutoCompleteApi;
 import me.carc.btown.data.autocomplete.AutoCompleteServiceProvider;
 import me.carc.btown.data.results.AutoCompleteResult;
 import me.carc.btown.data.results.OverpassQueryResult;
 import me.carc.btown.data.results.PlaceToOverpass;
 import me.carc.btown.db.AppDatabase;
-import me.carc.btown.db.bookmark.BookmarkEntry;
 import me.carc.btown.db.favorite.FavoriteEntry;
 import me.carc.btown.db.history.HistoryEntry;
 import me.carc.btown.map.IconManager;
-import me.carc.btown.common.interfaces.SimpleClickListener;
+import me.carc.btown.map.MapActivity;
 import me.carc.btown.map.search.model.Place;
 import me.carc.btown.map.sheets.search_context.SearchContextMenu;
 import me.carc.btown.map.sheets.wiki.WikiReadingListDialogFragment;
@@ -52,7 +50,7 @@ import retrofit2.Response;
 
 public class SearchDialogPresenter implements ISearch.Presenter {
 
-    private static final String TAG = C.DEBUG + Commons.getTag();
+    private static final String TAG = SearchDialogPresenter.class.getName();
 
     public static final int SEARCH_RADIUS = 20000;  // TODO: 5/12/17 make this a user setting
     public static final int AUTOCOMPLETE_THRESHOLD = 3;
@@ -83,6 +81,10 @@ public class SearchDialogPresenter implements ISearch.Presenter {
 
     @Override
     public void stop() {
+    }
+
+    @Override
+    public void destroy() {
     }
 
     @Override
@@ -327,7 +329,6 @@ public class SearchDialogPresenter implements ISearch.Presenter {
                         view.updateListAdapter(SearchDialogFragment.SEARCH_ITEM_FAVORITE, places);
                     }
                 });
-//                }
             }
         });
     }
@@ -365,7 +366,7 @@ public class SearchDialogPresenter implements ISearch.Presenter {
                         view.updateListAdapter(SearchDialogFragment.SEARCH_ITEM_HISTORY, places);
                     }
                 });
-//                }
+
             }
         });
     }
@@ -375,7 +376,6 @@ public class SearchDialogPresenter implements ISearch.Presenter {
         Executors.newSingleThreadExecutor().execute(new Runnable() {
             @Override
             public void run() {
-
                 HistoryEntry entry = new HistoryEntry(new PlaceToOverpass(null).convertPlace(place));
                 getDatabase().historyDao().insert(entry);
 
@@ -391,27 +391,7 @@ public class SearchDialogPresenter implements ISearch.Presenter {
 
     @Override
     public void onShowWikiReadingList() {
-        view.onShowProgressBar(true);
-
-        final AppCompatActivity activity = ((App) mContext.getApplicationContext()).getCurrentActivity();
-
-        Executors.newSingleThreadExecutor().execute(new Runnable() {
-            @Override
-            public void run() {
-
-                final List<BookmarkEntry> list = getDatabase().bookmarkDao().getAllBookmarks();
-
-                activity.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        ArrayList<BookmarkEntry> arrayList = new ArrayList<>(list);
-
-                        WikiReadingListDialogFragment.showInstance(mContext.getApplicationContext(), myLocation, arrayList);
-                        view.onShowProgressBar(false);
-                    }
-                });
-            }
-        });
+        WikiReadingListDialogFragment.showInstance(mContext.getApplicationContext(), myLocation);
     }
 
     @SuppressWarnings("unused")
@@ -420,7 +400,6 @@ public class SearchDialogPresenter implements ISearch.Presenter {
             @SuppressFBWarnings("ICAST_INTEGER_MULTIPLY_CAST_TO_LONG")
             @Override
             public void run() {
-
                 final List<Place> places = new ArrayList<>();
                 if (BuildConfig.DEBUG) {
 

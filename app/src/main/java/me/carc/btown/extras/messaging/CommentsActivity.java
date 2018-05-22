@@ -27,7 +27,6 @@ import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.BuildConfig;
 import com.crashlytics.android.answers.CustomEvent;
 import com.crashlytics.android.answers.ShareEvent;
-import com.facebook.Profile;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -162,14 +161,10 @@ public class CommentsActivity extends BaseActivity {
     private void loggedIn() {
 
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        Profile facebookUser = Profile.getCurrentProfile();
 
         if (Commons.isNotNull(firebaseUser)) {
             mUsername = firebaseUser.getDisplayName();
             mPhotoUrl = firebaseUser.getPhotoUrl().toString();
-        } else if (Commons.isNotNull(facebookUser)) {
-            mUsername = facebookUser.getName();
-            mPhotoUrl = facebookUser.getProfilePictureUri(16, 16).toString();
         } else {
             progressBar.setVisibility(View.GONE);
             showAlertDialog(R.string.shared_string_error, R.string.login_error, -1);

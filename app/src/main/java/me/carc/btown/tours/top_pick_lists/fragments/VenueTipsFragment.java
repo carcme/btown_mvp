@@ -45,7 +45,7 @@ import retrofit2.Response;
  * todo if user pages away, possible part of the list is lost/skipped and not shown - fix it after Egypt holiday :)
  */
 public class VenueTipsFragment extends Fragment {
-    private static final String TAG = C.DEBUG + Commons.getTag();
+    private static final String TAG = VenueTipsFragment.class.getName();
 
     public static final int TIPS_LIMIT = 30;
     private int TIPS_OFFSET = 0;

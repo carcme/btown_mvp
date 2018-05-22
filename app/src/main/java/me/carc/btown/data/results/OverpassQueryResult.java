@@ -17,7 +17,6 @@ import java.util.Comparator;
 import java.util.List;
 
 import me.carc.btown.BuildConfig;
-import me.carc.btown.common.C;
 import me.carc.btown.common.Commons;
 
 /**
@@ -27,7 +26,7 @@ import me.carc.btown.common.Commons;
  */
 public class OverpassQueryResult {
 
-    private static final String TAG = C.DEBUG + Commons.getTag();
+    private static final String TAG = OverpassQueryResult.class.getName();
 
     @SerializedName("elements")
     public List<Element> elements = new ArrayList<>();
@@ -329,6 +328,7 @@ public class OverpassQueryResult {
 
             public String getAddress() {
                 StringBuilder str = new StringBuilder();
+                String retString;
 
                 if (addressStreet != null)
                     str.append(addressStreet).append(", ");
@@ -345,7 +345,11 @@ public class OverpassQueryResult {
                 if (addressCity != null)
                     str.append(addressCity);
 
-                return str.toString();
+                retString = str.toString();
+                if(Commons.startsWith(retString, ","))
+                    retString = retString.substring(1).trim();
+
+                return retString.trim();
             }
 
             public String getPrimaryType() {

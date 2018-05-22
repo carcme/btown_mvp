@@ -9,7 +9,6 @@ import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.ColorFilter;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
@@ -51,13 +50,11 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.flaviofaria.kenburnsview.KenBurnsView;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.mikepenz.fontawesome_typeface_library.FontAwesome;
-import com.mikepenz.iconics.IconicsDrawable;
 
 import java.util.ArrayList;
 
@@ -72,13 +69,13 @@ import me.carc.btown.Utils.ViewUtils;
 import me.carc.btown.Utils.WikiUtils;
 import me.carc.btown.common.C;
 import me.carc.btown.common.Commons;
-import me.carc.btown.map.sheets.wiki.WikiWebViewActivity;
-import me.carc.btown.tours.AttractionTabsActivity;
-import me.carc.btown.tours.GalleryItem;
-import me.carc.btown.tours.adapters.PoiInfoListAdapter;
 import me.carc.btown.db.tours.model.Attraction;
 import me.carc.btown.db.tours.model.ImageSize;
 import me.carc.btown.db.tours.model.StopInfo;
+import me.carc.btown.extras.WikiWebViewActivity;
+import me.carc.btown.tours.AttractionTabsActivity;
+import me.carc.btown.tours.GalleryItem;
+import me.carc.btown.tours.adapters.PoiInfoListAdapter;
 
 /**
  * Inflate card items depending on what is available in the JSON tour
@@ -87,50 +84,30 @@ import me.carc.btown.db.tours.model.StopInfo;
 
 public class PlaceholderFragment extends Fragment {
 
-    private static final String TAG = C.DEBUG + Commons.getTag();
-    public static final String JSON_EMBEDDED_IMAGE_TAG = "<img src=";
+    private static final String TAG = PlaceholderFragment.class.getName();
+    private static final String ID_TAG = "PlaceholderFragment";
 
-    int minTVHeight, minHeight, infoHeight;
+    public static final String JSON_EMBEDDED_IMAGE_TAG = "<img src=";
 
     private Attraction attractionData;
     private ArrayList<CardView> cards;
     private ArrayList<InfoCard> items;
 
+    int minTVHeight, minHeight, infoHeight;
+
     private Unbinder unbinder;
 
-    @BindView(R.id.main_content)
-    CoordinatorLayout root;
-
-    @Nullable
-    @BindView(R.id.collapsing_toolbar)
-    CollapsingToolbarLayout collapsingToolbar;
-
-    @Nullable
-    @BindView(R.id.catalogueToolbar)
-    Toolbar toolbar;
-
-
-    @Nullable
-    @BindView(R.id.nestedScroll)
-    NestedScrollView nestedScroll;
-
-    @Nullable
-    @BindView(R.id.backFab)
-    FloatingActionButton backFab;
-
-    @BindView(R.id.backdrop)
-    KenBurnsView imageBackDrop;
-//    @BindView(R.id.backdrop) ImageView imageBackDrop;
-
-    @Nullable
-    @BindView(R.id.appbar)
-    AppBarLayout appbar;
+    @BindView(R.id.main_content) CoordinatorLayout root;
+    @Nullable @BindView(R.id.collapsing_toolbar) CollapsingToolbarLayout collapsingToolbar;
+    @Nullable @BindView(R.id.catalogueToolbar) Toolbar toolbar;
+    @Nullable @BindView(R.id.nestedScroll) NestedScrollView nestedScroll;
+    @Nullable @BindView(R.id.backFab) FloatingActionButton backFab;
+    @BindView(R.id.backdrop) KenBurnsView imageBackDrop;
+    @Nullable @BindView(R.id.appbar) AppBarLayout appbar;
 
 
     interface TourListener {
         void onSendPostCard(Bitmap bitmap, String title);
-
-        void onCheckin(final String id, final double lat, final double lng, final String title);
 
         void onAddComment(String ratingID);
 
@@ -163,16 +140,14 @@ public class PlaceholderFragment extends Fragment {
         PlaceholderFragment fragment = new PlaceholderFragment();
         Bundle args = new Bundle();
         args.putInt("position", pos);
-        args.putParcelable("data", data);
+        args.putParcelable("attractionsData", data);
         fragment.setArguments(args);
-
         return fragment;
     }
 
     @Override
     public void onAttach(Context ctx) {
         super.onAttach(ctx);
-
         try {
             cbTourListener = (TourListener) ctx;
             cbTourListener.onUnlockPager();  // unlock the pager once everything is settled
@@ -192,23 +167,16 @@ public class PlaceholderFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.attraction_display_activity, container, false);
         unbinder = ButterKnife.bind(this, rootView);
 
-        attractionData = getArguments().getParcelable("data");
+        attractionData = getArguments().getParcelable("attractionsData");
 
         if (toolbar != null) {
             Drawable drawable = ViewUtils.changeIconColor(getContext(), R.drawable.ic_arrow_back, R.color.white);
             toolbar.setNavigationIcon(drawable);
-            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    getActivity().onBackPressed();
-                }
-            });
+            toolbar.setNavigationOnClickListener(onBackFabClickListener);
         }
 
         if (AndroidUtils.isPortrait(getContext())) {
-
             new LoadHeaderImage().run();
-            //loadImage();
 
             ViewUtils.setViewHeight(appbar, C.IMAGE_HEIGHT, true);
             ViewUtils.setViewHeight(imageBackDrop, C.IMAGE_HEIGHT, false);
@@ -223,12 +191,13 @@ public class PlaceholderFragment extends Fragment {
             assert nestedScroll != null;
             nestedScroll.setOnScrollChangeListener(onScrollListener);
 
+            final long start = System.currentTimeMillis();
             buildViews(rootView, C.USER_LANGUAGE.equals("de"));
+            Log.d(TAG, "TIMING: Build Views time = " + (System.currentTimeMillis() - start));
 
             imageBackDrop.setOnClickListener(onShowMapClickListener);
 
         } else {
-
             Window w = getActivity().getWindow();
             w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
 
@@ -236,6 +205,7 @@ public class PlaceholderFragment extends Fragment {
             //loadImage();
 
             ViewUtils.setViewHeight(imageBackDrop, ImageSize.SCREEN[1], false);
+            imageBackDrop.setOnClickListener(onShowMapClickListener);
         }
 
         return rootView;
@@ -255,39 +225,52 @@ public class PlaceholderFragment extends Fragment {
         }
 
         private void loadImage() {
+            final long start = System.currentTimeMillis();
             // see if we have a local version
-            for (int i = 0; i < AttractionTabsActivity.galleryItems.size(); i++) {
-                int key = AttractionTabsActivity.galleryItems.keyAt(i);
-                // get the object by the key.
-                GalleryItem item = AttractionTabsActivity.galleryItems.get(key);
-                if (item.getFilename().equals(attractionData.getImage())) {
-                    Glide.with(PlaceholderFragment.this)
-                            .load(item.getCachedFile())
-                            .into(new SimpleTarget<GlideDrawable>() {
-                                @Override
-                                public void onLoadFailed(Exception e, Drawable errorDrawable) {
-                                    super.onLoadFailed(e, errorDrawable);
+                for (int i = 0; i < AttractionTabsActivity.galleryItems.size(); i++) {
+                    int key = AttractionTabsActivity.galleryItems.keyAt(i);
+                    // get the object by the key.
+                    GalleryItem item = AttractionTabsActivity.galleryItems.get(key);
 
-                                    // NO LOCAL VERSION FOUND - Load the image from Firebase
-                                    StorageReference mCoverImageStorageRef = FirebaseStorage.getInstance().getReference().child("coverImages/");
-                                    Glide.with(getActivity())
-                                            .using(new FirebaseImageLoader())
-                                            .load(mCoverImageStorageRef.child(attractionData.getImage()))
-                                            .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                                            .into(imageBackDrop);
-                                }
+                    if (item.getFilename().equals(attractionData.getImage())) {
 
-                                @Override
-                                public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
-                                    imageBackDrop.setImageDrawable(resource);
-                                }
-                            });
-                    return;
+                        Glide.with(PlaceholderFragment.this)
+                                .load(item.getCachedFile())
+                                .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                                .crossFade(500)
+                                .placeholder(R.drawable.checkered_background)
+                                .into(new GlideDrawableImageViewTarget(imageBackDrop) {
+                                    @Override
+                                    public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                                        super.onLoadFailed(e, errorDrawable);
+                                        loadFromFirebase();
+                                    }
+
+                                    @Override
+                                    public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
+                                        super.onResourceReady(resource, glideAnimation);
+                                        Log.d(TAG, "TIMING: Image load time = " + (System.currentTimeMillis() - start));
+                                    }
+                                });
+                        return;
+                    }
                 }
-            }
+
+            loadFromFirebase();
             cbTourListener.firebaseUpdateRequired();
         }
     }
+
+    private void loadFromFirebase() {
+        // NO LOCAL VERSION FOUND - Load the image from Firebase
+        StorageReference mCoverImageStorageRef = FirebaseStorage.getInstance().getReference().child("coverImages/");
+        Glide.with(getActivity())
+                .using(new FirebaseImageLoader())
+                .load(mCoverImageStorageRef.child(attractionData.getImage()))
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(imageBackDrop);
+    }
+
 
     private void buildViews(View rootView, boolean germanLanguage) {
         int text = ContextCompat.getColor(getActivity(), R.color.almostBlack);
@@ -557,7 +540,7 @@ public class PlaceholderFragment extends Fragment {
         informationCard.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
             @Override
             public boolean onPreDraw() {
-                informationCard.getViewTreeObserver().removeOnPreDrawListener(this);
+                Log.d(TAG, "onPreDraw: ");
                 LinearLayout headerInfo = rootView.findViewById(R.id.headerInfo);
                 minHeight = headerInfo.getHeight();
                 minTVHeight = minHeight;
@@ -569,17 +552,15 @@ public class PlaceholderFragment extends Fragment {
                 RelativeLayout infoElement = rootView.findViewById(R.id.layout_information);
                 if (infoElement == null)
                     return false;
-                if(!isAdded()){
-                    Log.d(TAG, "onPreDraw: ");
-                }
                 infoHeight = infoElement.getHeight();
                 infoHeight = infoHeight * items.size();
                 infoHeight = infoHeight + (AndroidUtils.getPixelsFromDPs(res, 4) * items.size());  // inc padding (2dp top, 2dp bottom)
                 infoHeight = infoHeight + minHeight;
+                informationCard.getViewTreeObserver().removeOnPreDrawListener(this);
+
                 return true;
             }
         });
-
 
         final TextView txt = rootView.findViewById(R.id.infoTitle);
         txt.setTypeface(font, Typeface.BOLD);
@@ -701,57 +682,33 @@ public class PlaceholderFragment extends Fragment {
         params.setMargins(paddingPixel, 0, paddingPixel, paddingDp);
         card.setLayoutParams(params);
 
-        CardView cardView = card.findViewById(R.id.interact_card);
-
         TextView titleTxt = card.findViewById(R.id.interact_title);
         titleTxt.setTypeface(font, Typeface.BOLD);
         titleTxt.setTextColor(textColor);
         titleTxt.setText(title);
 
         Button btnPostcard = card.findViewById(R.id.btnPostcard);
-        Button btnCheckin = card.findViewById(R.id.btnCheckin);
         Button btnComment = card.findViewById(R.id.btnComment);
         Button btnCamera = card.findViewById(R.id.btnCamera);
         Button btnDonate = card.findViewById(R.id.btnDonate);
         Button btnMap = card.findViewById(R.id.btnMap);
 
 
-        btnPostcard.setCompoundDrawablesWithIntrinsicBounds(new IconicsDrawable(getActivity(), FontAwesome.Icon.faw_share_alt_square).color(Color.WHITE).sizeDp(20), null, null, null);
-        btnPostcard.setOnClickListener(onShareBtnClickListener);
+        baseLayout.addView(card);
 
-        btnCheckin.setCompoundDrawablesWithIntrinsicBounds(new IconicsDrawable(getActivity(), FontAwesome.Icon.faw_check_square_o).color(Color.WHITE).sizeDp(20), null, null, null);
-        btnCheckin.setOnClickListener(onCheckinBtnClickListener);
-
-        btnComment.setCompoundDrawablesWithIntrinsicBounds(new IconicsDrawable(getActivity(), FontAwesome.Icon.faw_comment).color(Color.WHITE).sizeDp(20), null, null, null);
-        btnComment.setOnClickListener(onCommentBtnClickListener);
-
-        btnCamera.setCompoundDrawablesWithIntrinsicBounds(new IconicsDrawable(getActivity(), FontAwesome.Icon.faw_camera_retro).color(Color.WHITE).sizeDp(20), null, null, null);
-        btnCamera.setOnClickListener(onCameraBtnClickListener);
-
-        btnDonate.setCompoundDrawablesWithIntrinsicBounds(new IconicsDrawable(getActivity(), FontAwesome.Icon.faw_gift).color(Color.WHITE).sizeDp(20), null, null, null);
-        btnDonate.setOnClickListener(onDonateBtnClickListener);
-
-        btnMap.setCompoundDrawablesWithIntrinsicBounds(new IconicsDrawable(getActivity(), FontAwesome.Icon.faw_map).color(Color.WHITE).sizeDp(20), null, null, null);
-        btnMap.setOnClickListener(onShowMapClickListener);
-
-        int bgColor = ContextCompat.getColor(getActivity(), R.color.interactiveButtonsBgColor);
-
-        btnPostcard.getBackground().setColorFilter(bgColor, PorterDuff.Mode.MULTIPLY);
-        btnCheckin.getBackground().setColorFilter(bgColor, PorterDuff.Mode.MULTIPLY);
-        btnComment.getBackground().setColorFilter(bgColor, PorterDuff.Mode.MULTIPLY);
-        btnCamera.getBackground().setColorFilter(bgColor, PorterDuff.Mode.MULTIPLY);
-        btnDonate.getBackground().setColorFilter(bgColor, PorterDuff.Mode.MULTIPLY);
-        btnMap.getBackground().setColorFilter(bgColor, PorterDuff.Mode.MULTIPLY);
-
+        btnPostcard.setOnClickListener(interactClickListener);
+        btnComment.setOnClickListener(interactClickListener);
+        btnCamera.setOnClickListener(interactClickListener);
+        btnDonate.setOnClickListener(interactClickListener);
+        btnMap.setOnClickListener(interactClickListener);
 
 //        TextView imageSrc = (TextView) card.findViewById(R.id.image_source_link);
 //        imageSrc.setText(" get image src from JSON");
 
         //ratingBar = (RatingBar)card.findViewById(R.id.rating_bar);
 
-        baseLayout.addView(card);
-        cardView.setTag(title);
-        return cardView;
+        card.setTag(title);
+        return (CardView) card;
     }
 
     private void setElevation(Resources r, String id) {
@@ -763,17 +720,48 @@ public class PlaceholderFragment extends Fragment {
         }
     }
 
+    private View.OnClickListener interactClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.btnMap:
+                    cbTourListener.onShowMap(attractionData);
+                    break;
+                case R.id.btnPostcard:
+                    Bitmap bitmap = ImageUtils.drawableToBitmap(imageBackDrop.getDrawable());
+                    cbTourListener.onSendPostCard(bitmap, attractionData.getStopName());
+                    break;
+                case R.id.btnComment:
+                    cbTourListener.onAddComment(attractionData.getStopName());
+                    break;
+                case R.id.btnCamera:
+                    cbTourListener.onCamera(attractionData.getStopName());
+                    break;
+                case R.id.btnDonate:
+                    cbTourListener.onDonate();
+                    break;
+                default:
+            }
+        }
+    };
+
+
     /**
      * Map button action
      */
     private View.OnClickListener onBackFabClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            ViewUtils.createAlphaAnimator(backFab, false, getResources()
-                    .getInteger(R.integer.gallery_alpha_duration) * 2).start();
-            getActivity().onBackPressed();
+            onBack() ;
         }
     };
+
+    private void onBack() {
+        // animate back
+        ViewUtils.createAlphaAnimator(backFab, false, getResources()
+                .getInteger(R.integer.gallery_alpha_duration) * 2).start();
+        getActivity().onBackPressed();
+    }
 
     /**
      * Map button action
@@ -788,6 +776,7 @@ public class PlaceholderFragment extends Fragment {
     /**
      * Share button action
      */
+/*
     private View.OnClickListener onShareBtnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -795,47 +784,42 @@ public class PlaceholderFragment extends Fragment {
             cbTourListener.onSendPostCard(bitmap, attractionData.getStopName());
         }
     };
-
-    /**
-     * Checkin button action
-     */
-    private View.OnClickListener onCheckinBtnClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            cbTourListener.onCheckin(attractionData.getFacebookPageIdString(), attractionData.getLocation().lat, attractionData.getLocation().lon, attractionData.getStopName());
-        }
-    };
+*/
 
     /**
      * Comment button action
      */
+/*
     private View.OnClickListener onCommentBtnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             cbTourListener.onAddComment(attractionData.getStopName());
         }
     };
+*/
 
     /**
      * Camera button action
      */
-    private View.OnClickListener onCameraBtnClickListener = new View.OnClickListener() {
-        @TargetApi(Build.VERSION_CODES.M)
-        @Override
-        public void onClick(View v) {
-            cbTourListener.onCamera(attractionData.getStopName());
-        }
-    };
+//    private View.OnClickListener onCameraBtnClickListener = new View.OnClickListener() {
+//        @TargetApi(Build.VERSION_CODES.M)
+//        @Override
+//        public void onClick(View v) {
+//            cbTourListener.onCamera(attractionData.getStopName());
+//        }
+//    };
 
     /**
      * Donate button action
      */
+/*
     private View.OnClickListener onDonateBtnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             cbTourListener.onDonate();
         }
     };
+*/
 
     /**
      * Donate button action

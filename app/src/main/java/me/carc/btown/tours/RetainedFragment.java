@@ -3,6 +3,10 @@ package me.carc.btown.tours;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
+import java.io.File;
+
+import me.carc.btown.db.tours.model.Attraction;
+
 /**
  * Created by bamptonm on 31/10/2017.
  */
@@ -14,6 +18,9 @@ public class RetainedFragment extends Fragment {
     private GalleryItem galleryItem;
     private int textColor;
     private int rgb;
+
+    private Attraction attractionData;
+    private File attractionImage;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -29,4 +36,18 @@ public class RetainedFragment extends Fragment {
 
     public int getRgb() { return rgb; }
     public void setRgb(int rgb) { this.rgb = rgb; }
+
+    public Attraction getAttractionData() {
+        return attractionData;
+    }
+    public void setAttractionData(Attraction attractionData) {
+        this.attractionData = attractionData;
+    }
+
+    public File getAttractionImage() {
+        return attractionImage;
+    }
+    public void setAttractionImage(File attractionImage) {
+        this.attractionImage = attractionImage;
+    }
 }

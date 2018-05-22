@@ -24,7 +24,6 @@ import me.carc.btown.BuildConfig;
 import me.carc.btown.Utils.FileUtils;
 import me.carc.btown.common.C;
 import me.carc.btown.common.CacheDir;
-import me.carc.btown.common.Commons;
 import me.carc.btown.common.TinyDB;
 import me.carc.btown.db.tours.AttractionDao;
 import me.carc.btown.db.tours.TourCatalogueDao;
@@ -45,11 +44,15 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class FirebaseImageDownloader extends IntentService {
 
-    private static final String TAG = C.DEBUG + Commons.getTag();
+    private static final String TAG = FirebaseImageDownloader.class.getName();
 
     private String dir;
     private StorageReference mStorageRef;
     private TinyDB db;
+
+    private boolean hasNetworkConnection() {
+        return ((App) getApplicationContext()).isNetworkAvailable();
+    }
 
     private boolean updateInProgress() {
         return ((App) getApplicationContext()).isUpdatingFirebase();
@@ -76,12 +79,11 @@ public class FirebaseImageDownloader extends IntentService {
     protected void onHandleIntent(@Nullable Intent intent) {
 
         if (!updateInProgress()) {
-            setUpdateInProgress(true);
             Boolean forceUpdate = false;
-            if(intent != null)
+            if (intent != null)
                 forceUpdate = intent.getBooleanExtra("FORCE_UPDATE", false);
             initValues();
-            getLatestJsonTours(forceUpdate);
+            getLatestJsonTours(checkForUpdates(forceUpdate));
         }
     }
 
@@ -91,34 +93,48 @@ public class FirebaseImageDownloader extends IntentService {
         db = TinyDB.getTinyDB();    // ensure TinyDB is init'd
     }
 
+    private boolean checkForUpdates(boolean forceUpdate) {
+        boolean update = false;
+        if (hasNetworkConnection()) {
+            if(forceUpdate)
+                update = true;
 
+            // Check if upgrading to database - tours still stored in shared prefs
+//             db.putString(CatalogueActivity.SERVER_FILE, "SIMULATE SHARED PREFS - REMOVE THIS LINE");
+            boolean upgradeToDB = !db.getString(CatalogueActivity.SERVER_FILE, "").equals("");
+            if (upgradeToDB) {
+                db.remove(CatalogueActivity.LAST_JSON_UPDATE);
+                db.remove(CatalogueActivity.JSON_VERSION);
+                update = true;
+            }
 
-    private void getLatestJsonTours(final boolean force) {
-        FirebaseService service = new Retrofit.Builder()
-                .baseUrl(BuildConfig.FIREBASE_ENDPOINT)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-                .create(FirebaseService.class);
+            long updateTime = db.getLong(CatalogueActivity.LAST_JSON_UPDATE, 0);
+            if ((System.currentTimeMillis() - updateTime) > C.TIME_ONE_WEEK)  // todo: make one week configurable from Firebase
+                update = true;
 
-        Call<ToursResponse> call = service.getTours(BuildConfig.FIREBASE_ALT, BuildConfig.FIREBASE_TOKEN);
+            setUpdateInProgress(update);
+            return update;
+        }
+        return update;
+    }
 
-        call.enqueue(new Callback<ToursResponse>() {
-            @Override
-            public void onResponse(@NonNull Call<ToursResponse> call, @NonNull final Response<ToursResponse> response) {
+    private void getLatestJsonTours(final boolean shouldConnect) {
+        if(shouldConnect) {
+            FirebaseService service = new Retrofit.Builder()
+                    .baseUrl(BuildConfig.FIREBASE_ENDPOINT)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build()
+                    .create(FirebaseService.class);
 
-                 db.remove(CatalogueActivity.SERVER_FILE);
+            Call<ToursResponse> call = service.getTours(BuildConfig.FIREBASE_ALT, BuildConfig.FIREBASE_TOKEN);
+            call.enqueue(new Callback<ToursResponse>() {
+                @Override
+                public void onResponse(@NonNull Call<ToursResponse> call, @NonNull final Response<ToursResponse> response) {
 
-                long updateTime = db.getLong(CatalogueActivity.LAST_JSON_UPDATE, 0);
-                if(BuildConfig.DEBUG)
-                    updateTime = 0;
-
-                if((System.currentTimeMillis() - updateTime) > C.TIME_ONE_WEEK) {
                     Executors.newSingleThreadExecutor().execute(new Runnable() {
                         @Override
                         public void run() {
                             int version = db.getInt(CatalogueActivity.JSON_VERSION, 0);
-                            if(BuildConfig.DEBUG)
-                                version = 0;
 
                             if ((response.body() != null) && (response.body().version > version)) {
                                 TourCatalogueDao tourDao = ((App) getApplicationContext()).getDB().catalogueDao();
@@ -133,23 +149,23 @@ public class FirebaseImageDownloader extends IntentService {
                                 // check we have the images - download any that are missing
                                 getImages(response.body());
 
-                                setUpdateInProgress(false);
                                 db.putLong(CatalogueActivity.LAST_JSON_UPDATE, System.currentTimeMillis());
                                 db.putInt(CatalogueActivity.JSON_VERSION, response.body().version);
+                                db.remove(CatalogueActivity.SERVER_FILE);
                             }
+                            setUpdateInProgress(false);
                         }
                     });
                 }
-            }
 
-            @Override
-            public void onFailure(@Nonnull Call<ToursResponse> call, @Nonnull Throwable t) {
-                Log.d(TAG, "onResponse: ");
-                setUpdateInProgress(false);
-            }
-        });
+                @Override
+                public void onFailure(@Nonnull Call<ToursResponse> call, @Nonnull Throwable t) {
+                    Log.d(TAG, "onResponse: ");
+                    setUpdateInProgress(false);
+                }
+            });
+        }
     }
-
 
     private void getImages(ToursResponse holder) {
         ArrayList<TourCatalogueItem> catalogues = holder.tours;

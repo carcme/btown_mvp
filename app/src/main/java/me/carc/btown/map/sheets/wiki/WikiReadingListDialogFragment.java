@@ -1,12 +1,16 @@
 package me.carc.btown.map.sheets.wiki;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -25,11 +29,12 @@ import com.bumptech.glide.Glide;
 import org.osmdroid.util.GeoPoint;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
-import java.util.concurrent.Executors;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import me.carc.btown.App;
@@ -41,6 +46,8 @@ import me.carc.btown.common.Commons;
 import me.carc.btown.common.interfaces.WikiBookmarkClickListener;
 import me.carc.btown.db.AppDatabase;
 import me.carc.btown.db.bookmark.BookmarkEntry;
+import me.carc.btown.db.bookmark.BookmarkViewModel;
+import me.carc.btown.extras.WikiWebViewActivity;
 import me.carc.btown.map.sheets.ImageDialog;
 import me.carc.btown.map.sheets.share.ShareDialog;
 import me.carc.btown.map.sheets.wiki.listactions.ReadingListItemActionsDialog;
@@ -63,28 +70,21 @@ public class WikiReadingListDialogFragment extends DialogFragment implements Wik
     public static final String ID_TAG = "WikiReadingListDialogFragment";
     private static final String MY_LAT = "MY_LAT";
     private static final String MY_LNG = "MY_LNG";
-    private static final String BOOKMARK_LIST = "BOOKMARK_LIST";
+//    private static final String BOOKMARK_LIST = "BOOKMARK_LIST";
+
     private WikiBookmarksListAdapter adapter;
+    private BookmarkViewModel mViewModel;
 
-    @BindView(R.id.collapsing_toolbar)
-    CollapsingToolbarLayout collapsingToolbar;
-
-    @BindView(R.id.bookmarksToolbar)
-    Toolbar toolbar;
-
-    @BindView(R.id.backdrop)
-    ImageView imageBackDrop;
-
-    @BindView(R.id.recyclerview)
-    RecyclerView recyclerView;
-
-    @BindView(R.id.emptyListView)
-    TextView emptyListView;
+    @BindView(R.id.collapsing_toolbar) CollapsingToolbarLayout collapsingToolbar;
+    @BindView(R.id.bookmarksToolbar) Toolbar toolbar;
+    @BindView(R.id.backdrop) ImageView imageBackDrop;
+    @BindView(R.id.recyclerview) RecyclerView recyclerView;
+    @BindView(R.id.emptyListView) TextView emptyListView;
+    @BindView(R.id.fabClose) FloatingActionButton fabClose;
 
     private Unbinder unbinder;
 
-
-    public static boolean showInstance(final Context appContext, final GeoPoint currLocation, ArrayList<BookmarkEntry> bookmarks) {
+    public static boolean showInstance(final Context appContext, final GeoPoint currLocation/*, ArrayList<BookmarkEntry> bookmarks*/) {
 
         AppCompatActivity activity = ((App) appContext).getCurrentActivity();
 
@@ -94,10 +94,6 @@ public class WikiReadingListDialogFragment extends DialogFragment implements Wik
             if (currLocation != null) {
                 bundle.putDouble(MY_LAT, currLocation.getLatitude());
                 bundle.putDouble(MY_LNG, currLocation.getLongitude());
-            }
-
-            if (Commons.isNotNull(bookmarks)) {
-                bundle.putParcelableArrayList(BOOKMARK_LIST, bookmarks);
             }
 
             WikiReadingListDialogFragment fragment = new WikiReadingListDialogFragment();
@@ -110,6 +106,17 @@ public class WikiReadingListDialogFragment extends DialogFragment implements Wik
             return false;
         }
     }
+
+    private RecyclerView.OnScrollListener onScrollListener = new RecyclerView.OnScrollListener() {
+        @Override
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            if (dy > 0)
+                fabClose.hide();
+            else
+                fabClose.show();
+        }
+    };
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -132,13 +139,11 @@ public class WikiReadingListDialogFragment extends DialogFragment implements Wik
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.marker_list_recyclerview_layout, container, false);
-
         unbinder = ButterKnife.bind(this, view);
 
         view.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.almostWhite));
 
         Bundle args = getArguments();
-        if (args != null) {
 
             double lat = args.getDouble(MY_LAT, Double.NaN);
             double lng = args.getDouble(MY_LNG, Double.NaN);
@@ -146,12 +151,44 @@ public class WikiReadingListDialogFragment extends DialogFragment implements Wik
             if (!Double.isNaN(lat) && !Double.isNaN(lng))
                 myLocation = new GeoPoint(lat, lng);
 
-            ArrayList<BookmarkEntry> bookmarks = args.getParcelableArrayList(BOOKMARK_LIST);
-
             RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST);
             recyclerView.addItemDecoration(itemDecoration);
 
-            adapter = new WikiBookmarksListAdapter(myLocation, buildAdapterList(myLocation, bookmarks), this);
+            adapter = new WikiBookmarksListAdapter(myLocation, this);
+
+            mViewModel = ViewModelProviders.of(this).get(BookmarkViewModel.class);
+            mViewModel.getmAllBookmarks().observe(this, new Observer<List<BookmarkEntry>>() {
+                @Override
+                public void onChanged(@Nullable final List<BookmarkEntry> entries) {
+                    if(entries == null || entries.size() == 0) {
+                        emptyListView.setVisibility(View.VISIBLE);
+                    } else {
+                        List<BookmarkEntry> adapterItems = adapter.getItems();
+                        if(adapterItems.size() == 0) {
+                            adapter.addItems(entries);
+                        } else {
+                            // find the deleted entry and update the list
+                            for (BookmarkEntry list : adapterItems) {
+                                boolean exists = false;
+                                long pageId = list.getPageId();
+
+                                for (BookmarkEntry compare : entries) {
+                                    if(compare.getPageId() == pageId) {
+                                        exists = true;
+                                        break;
+                                    }
+                                }
+
+                                if(!exists) {
+                                    adapter.removeItem(pageId);
+                                    break;
+                                }
+                            }
+                        }
+                        new PopulateHeader(entries).run();
+                    }
+                }
+            });
 
             if (recyclerView != null) {
                 recyclerView.setHasFixedSize(true);
@@ -159,8 +196,8 @@ public class WikiReadingListDialogFragment extends DialogFragment implements Wik
                 LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
                 layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
                 recyclerView.setLayoutManager(layoutManager);
-
                 recyclerView.setAdapter(adapter);
+                recyclerView.addOnScrollListener(onScrollListener);
             }
 
             assert collapsingToolbar != null;
@@ -179,17 +216,13 @@ public class WikiReadingListDialogFragment extends DialogFragment implements Wik
             collapsingToolbar.setCollapsedTitleTextColor(ContextCompat.getColor(getActivity(), R.color.white));
             collapsingToolbar.setExpandedTitleColor(ContextCompat.getColor(getActivity(), R.color.white));
 
-
-            new PopulateHeader(bookmarks).run();
-        }
         return view;
     }
 
     private class PopulateHeader implements Runnable {
+        List<BookmarkEntry> bookmarks;
 
-        ArrayList<BookmarkEntry> bookmarks;
-
-        PopulateHeader(ArrayList<BookmarkEntry> bookmarks) {
+        PopulateHeader(List<BookmarkEntry> bookmarks) {
             this.bookmarks = bookmarks;
         }
 
@@ -199,9 +232,7 @@ public class WikiReadingListDialogFragment extends DialogFragment implements Wik
         }
 
         private void buildIt() {
-
             ArrayList<String> randomImageList = new ArrayList<>();
-
             for(BookmarkEntry entry : bookmarks) {
                 if(!Commons.isEmpty(entry.getThumbnail()))
                     randomImageList.add(entry.getThumbnail());
@@ -231,66 +262,36 @@ public class WikiReadingListDialogFragment extends DialogFragment implements Wik
         getDialog().show();
     }
 
-    public void closeFavorites() {
+    @OnClick(R.id.fabClose)
+    public void closeBookmarks() {
         dismiss();
-    }
-
-
-    /**
-     * Load favorites from shared preferences
-     *
-     * @return the list of favorites
-     */
-    private ArrayList<WikiBookmarksListAdapter.WikiItemAdpater> buildAdapterList(GeoPoint location, ArrayList<BookmarkEntry> readingList) {
-
-        ArrayList<WikiBookmarksListAdapter.WikiItemAdpater> array = new ArrayList<>();
-//        IconManager im = new IconManager(getActivity());
-
-        for (BookmarkEntry entry : readingList) {
-            WikiBookmarksListAdapter.WikiItemAdpater item = new WikiBookmarksListAdapter.WikiItemAdpater();
-
-            item.pageId = entry.getPageId();
-            item.title = entry.getTitle();
-            item.desciption = Commons.isEmpty(entry.getUserComment()) ? entry.getExtract() : entry.getUserComment();
-//            item.lat = entry.getLat();
-//            item.lon = entry.getLon();
-            item.iconUrl = entry.getThumbnail();
-            item.fullUrl = entry.getLinkUrl();
-
-            array.add(item);
-        }
-
-        if (array.size() == 0) emptyListView.setVisibility(View.VISIBLE);
-
-        return array;
     }
 
 
     /* Adapter click events */
 
     @Override
-    public void OnClick(WikiBookmarksListAdapter.WikiItemAdpater item) {
+    public void OnClick(BookmarkEntry item) {
         Intent intent = new Intent(getActivity(), WikiWebViewActivity.class);
-        intent.putExtra(WikiWebViewActivity.WIKI_EXTRA_PAGE_TITLE, item.title);
-        intent.putExtra(WikiWebViewActivity.WIKI_EXTRA_PAGE_URL, item.fullUrl);
+        intent.putExtra(WikiWebViewActivity.WIKI_EXTRA_PAGE_TITLE, item.getTitle());
+        intent.putExtra(WikiWebViewActivity.WIKI_EXTRA_PAGE_URL, item.getLinkUrl());
+        intent.putExtra(WikiWebViewActivity.WIKI_BOOKMARK_ENTRY, (Parcelable) item);
         startActivity(intent);
     }
 
     @Override
-    public void OnLongClick(WikiBookmarksListAdapter.WikiItemAdpater item) {
-        Toast.makeText(getActivity(), "Long Press " + item.title, Toast.LENGTH_SHORT).show();
+    public void OnLongClick(BookmarkEntry item) {
+        Toast.makeText(getActivity(), "Long Press " + item.getTitle(), Toast.LENGTH_SHORT).show();
     }
 
     @Override
-    public void OnImageClick(WikiBookmarksListAdapter.WikiItemAdpater item) {
-        ImageDialog.showInstance(getActivity().getApplicationContext(), item.iconUrl, item.fullUrl, item.title, item.desciption);
+    public void OnImageClick(BookmarkEntry item) {
+        ImageDialog.showInstance(getActivity().getApplicationContext(), item.getThumbnail(), item.getLinkUrl(), item.getTitle(), item.getDescription());
     }
 
     @Override
     public void OnMoreClick(int position) {
-
-        ArrayList<BookmarkEntry> bookmarks = getArguments().getParcelableArrayList(BOOKMARK_LIST);
-        BookmarkEntry entry = bookmarks.get(position);
+        BookmarkEntry entry = adapter.addItem(position);
 
         if (Commons.isNotNull(entry)) {
             ReadingListItemActionsDialog dlg = ReadingListItemActionsDialog.newInstance(getActivity().getApplicationContext(), entry);
@@ -299,10 +300,8 @@ public class WikiReadingListDialogFragment extends DialogFragment implements Wik
                 @Override
                 public void onShareItem(BookmarkEntry entry) {
                     if (Commons.isNotNull(entry)) {
-
                         // build the share message - Title, web address and location (web link format)
                         final String httpUrl = MapUtils.buildOsmMapLink(entry.getLat(), entry.getLon());
-
                         StringBuilder sb = new StringBuilder();
                         if (!Commons.isEmpty(entry.getTitle())) {
                             sb.append(entry.getTitle()).append("\n");
@@ -325,24 +324,7 @@ public class WikiReadingListDialogFragment extends DialogFragment implements Wik
 
                 @Override
                 public void onDeleteItem(final BookmarkEntry entry) {
-                    if (Commons.isNotNull(entry)) {
-                        Executors.newSingleThreadExecutor().execute(new Runnable() {
-                            @Override
-                            public void run() {
-                                getDatabase().bookmarkDao().delete(entry);
-
-                                getActivity().runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        adapter.removeItem(entry.getPageId());
-                                        if (adapter.getItemCount() == 0)
-                                            emptyListView.setVisibility(View.VISIBLE);
-                                        Toast.makeText(getActivity(), getActivity().getText(R.string.bookmark_removed), Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                            }
-                        });
-                    }
+                    mViewModel.delete(entry.getPageId());
                 }
             });
         }

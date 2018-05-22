@@ -1,6 +1,8 @@
 package me.carc.btown.map.sheets;
 
 import android.app.Dialog;
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -31,6 +33,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import org.osmdroid.util.GeoPoint;
 
+import java.util.List;
 import java.util.concurrent.Executors;
 
 import butterknife.BindView;
@@ -46,8 +49,9 @@ import me.carc.btown.common.Commons;
 import me.carc.btown.data.wiki.WikiQueryPage;
 import me.carc.btown.db.AppDatabase;
 import me.carc.btown.db.bookmark.BookmarkEntry;
+import me.carc.btown.db.bookmark.BookmarkViewModel;
+import me.carc.btown.extras.WikiWebViewActivity;
 import me.carc.btown.map.sheets.share.ShareMenu;
-import me.carc.btown.map.sheets.wiki.WikiWebViewActivity;
 import me.carc.btown.ui.FeedbackDialog;
 import me.carc.btown.ui.custom.CapitalisedTextView;
 
@@ -64,50 +68,28 @@ public class WikiPoiSheetDialog extends BottomSheetDialogFragment {
     public static final String ID_TAG = "WikiPoiSheetDialog";
     public static final String ITEM = "ITEM";
 
+    private BookmarkViewModel mViewModel;
+
     private String address;
     private String userComment;
     private BottomSheetBehavior behavior;
     private Unbinder unbinder;
 
-    @BindView(R.id.wikiDialogContainer)
-    LinearLayout wikiDialogContainer;
-
-    @BindView(R.id.wikiToolbar)
-    LinearLayout wikiToolbar;
-
-    @BindView(R.id.wikiThumbnail)
-    ImageView wikiThumbnail;
-
-    @BindView(R.id.wikiTitle)
-    TextView wikiTitle;
-
-    @BindView(R.id.wikiOverflowBtn)
-    ImageView wikiOverflowBtn;
-
-    @BindView(R.id.featureSave)
-    Button featureSave;
-
-    @BindView(R.id.featureMore)
-    Button featureMore;
-
-    @BindView(R.id.featureRead)
-    Button featureRead;
-
-    @BindView(R.id.wikiDialogContentContainer)
-    LinearLayout wikiDialogContentContainer;
-
-    @BindView(R.id.wikiDescription)
-    CapitalisedTextView wikiDescription;
-
-    @BindView(R.id.wikiExtract)
-    TextView wikiExtract;
-
-    @BindView(R.id.wikiProgress)
-    ProgressBar wikiProgress;
+    @BindView(R.id.wikiDialogContainer) LinearLayout wikiDialogContainer;
+    @BindView(R.id.wikiToolbar) LinearLayout wikiToolbar;
+    @BindView(R.id.wikiThumbnail) ImageView wikiThumbnail;
+    @BindView(R.id.wikiTitle) TextView wikiTitle;
+    @BindView(R.id.wikiOverflowBtn) ImageView wikiOverflowBtn;
+    @BindView(R.id.featureSave) Button featureSave;
+    @BindView(R.id.featureMore) Button featureMore;
+    @BindView(R.id.featureRead) Button featureRead;
+    @BindView(R.id.wikiDialogContentContainer) LinearLayout wikiDialogContentContainer;
+    @BindView(R.id.wikiDescription) CapitalisedTextView wikiDescription;
+    @BindView(R.id.wikiExtract) TextView wikiExtract;
+    @BindView(R.id.wikiProgress) ProgressBar wikiProgress;
 
 
     public static boolean showInstance(final Context appContext, WikiQueryPage element) {
-
         AppCompatActivity activity = ((App) appContext).getCurrentActivity();
 
         try {
@@ -142,7 +124,6 @@ public class WikiPoiSheetDialog extends BottomSheetDialogFragment {
             }
         }
 
-
         @Override
         public void onSlide(@NonNull View bottomSheet, float slideOffset) {
             if (Float.isNaN(slideOffset) && !sliding) {
@@ -151,7 +132,6 @@ public class WikiPoiSheetDialog extends BottomSheetDialogFragment {
             }
         }
     };
-
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -167,6 +147,32 @@ public class WikiPoiSheetDialog extends BottomSheetDialogFragment {
     public void setupDialog(final Dialog dialog, int style) {
         View rootView = View.inflate(getContext(), R.layout.sheet_wiki_dialog, null);
         unbinder = ButterKnife.bind(this, rootView);
+
+        mViewModel = ViewModelProviders.of(this).get(BookmarkViewModel.class);
+        mViewModel.getmAllBookmarks().observe(this, new Observer<List<BookmarkEntry>>() {
+            @Override
+            public void onChanged(@Nullable final List<BookmarkEntry> entries) {
+                WikiQueryPage page = (WikiQueryPage) getArguments().getSerializable(ITEM);
+                if(Commons.isNotNull(page) && Commons.isNotNull(entries)) {
+                    Drawable icon = null;
+                    int pageId = page.pageId();
+
+                    for (BookmarkEntry entry : entries) {
+                        if (entry.getPageId() == pageId) {
+                            icon = ContextCompat.getDrawable(getActivity(), R.drawable.ic_bookmark);
+                            featureSave.setTag(R.drawable.ic_bookmark);
+                            break;
+                        }
+                    }
+
+                    if (Commons.isNull(icon)) {
+                        icon = ContextCompat.getDrawable(getActivity(), R.drawable.ic_bookmark_empty);
+                        featureSave.setTag(R.drawable.ic_bookmark_empty);
+                    }
+                    featureSave.setCompoundDrawablesRelativeWithIntrinsicBounds(null, icon, null, null);
+                }
+            }
+        });
 
         dialog.setContentView(rootView);
 
@@ -312,44 +318,19 @@ public class WikiPoiSheetDialog extends BottomSheetDialogFragment {
     }
 
     public void addReadingList(final WikiQueryPage page) {
-        Executors.newSingleThreadExecutor().execute(new Runnable() {
-            @Override
-            public void run() {
-                BookmarkEntry entry = new BookmarkEntry(page);
-                getDatabase().bookmarkDao().insert(entry);
+        mViewModel.insert(new BookmarkEntry(page));
 
-                checkReadingList(page.pageId());
+        // no notification given when inserting to DB.... just do it here
+        Drawable icon = ContextCompat.getDrawable(getActivity(), R.drawable.ic_bookmark);
+        featureSave.setTag(R.drawable.ic_bookmark);
+        featureSave.setCompoundDrawablesRelativeWithIntrinsicBounds(null, icon, null, null);
 
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(getActivity(), getActivity().getText(R.string.bookmark_addded), Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
-        });
+        Toast.makeText(getActivity(), getActivity().getText(R.string.bookmark_addded), Toast.LENGTH_SHORT).show();
     }
 
-
     private void removeReadingList(final long id) {
-        Executors.newSingleThreadExecutor().execute(new Runnable() {
-            @Override
-            public void run() {
-
-                BookmarkEntry entry = getDatabase().bookmarkDao().findByPageId((id));
-                if (Commons.isNotNull(entry)) {
-                    getDatabase().bookmarkDao().delete(entry);
-                    checkReadingList(entry.getPageId());
-
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(getActivity(), getActivity().getText(R.string.bookmark_removed), Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                }
-            }
-        });
+        mViewModel.delete(id);
+        Toast.makeText(getActivity(), getActivity().getText(R.string.bookmark_removed), Toast.LENGTH_SHORT).show();
     }
 
     @OnClick(R.id.featureSave)
@@ -388,7 +369,7 @@ public class WikiPoiSheetDialog extends BottomSheetDialogFragment {
                     new FeedbackDialog.Builder.FeedbackDialogFormListener() {
                         @Override
                         public void onFormSubmitted(String feedback) {
-                            if (!feedback.equalsIgnoreCase(page.userComment())) {
+                            if (!feedback.equalsIgnoreCase(page.userComment()) || Commons.isEmpty(page.userComment())) {
                                 page.userComment(feedback);
                                 addReadingList(page);
                             }
@@ -403,10 +384,8 @@ public class WikiPoiSheetDialog extends BottomSheetDialogFragment {
                         }
                     });
             builder.build().show();
-
         }
     }
-
 
     @OnClick(R.id.featureShare)
     void share() {

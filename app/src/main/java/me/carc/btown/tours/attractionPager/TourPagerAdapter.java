@@ -43,4 +43,6 @@ class TourPagerAdapter extends FragmentStatePagerAdapter {
         return attractionsData.get(index);
     }
 
+    public List<Attraction> getAttractionsData() { return attractionsData; }
+
 }

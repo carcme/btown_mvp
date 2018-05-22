@@ -2,16 +2,23 @@ package me.carc.btown;
 
 import android.app.Application;
 import android.arch.persistence.room.Room;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
+import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 
+import com.android.vending.billing.IInAppBillingService;
 import com.crashlytics.android.Crashlytics;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.squareup.leakcanary.LeakCanary;
 
 import io.fabric.sdk.android.Fabric;
@@ -32,6 +39,7 @@ public class App extends Application {
 
     public static final String BTOWN_DATABASE_NAME = "btown.db";
     private static Context applicationContext;
+    private static IInAppBillingService mBillingService;
 
     private AppDatabase database;
     private NetworkChangeReceiver networkChangeReceiver;
@@ -51,7 +59,7 @@ public class App extends Application {
 
     private Intent imagesServiceIntent;
 
-    // Dont like this!!
+    // Dont like this!! Used in CacheDir and TinyDB, both of which should be removed/reworked
     public static Context getAC() {
         return applicationContext;
     }
@@ -88,6 +96,17 @@ public class App extends Application {
     }
 
 
+    private static ServiceConnection mServiceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            mBillingService = IInAppBillingService.Stub.asInterface(service);
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            mBillingService = null;
+        }
+    };
 
     /**
      * Init global values
@@ -105,9 +124,21 @@ public class App extends Application {
 
         applicationContext = getApplicationContext();
         registerConnectivityRecver();
-        getFirebaseTours();
+/*
+        if (EasyPermissions.hasPermissions(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE))
+            getFirebaseTours();
+*/
+
+        if (mBillingService == null && GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this) == ConnectionResult.SUCCESS) {
+            Intent serviceIntent = new Intent("com.android.vending.billing.InAppBillingService.BIND");
+            serviceIntent.setPackage(GooglePlayServicesUtil.GOOGLE_PLAY_STORE_PACKAGE);
+            bindService(serviceIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
+        }
     }
 
+    public IInAppBillingService getmBillingService() {
+        return mBillingService;
+    }
 
     public void setUpdatingFirebase(boolean updating){
         isUpdatingFirebase = updating;
@@ -116,14 +147,16 @@ public class App extends Application {
         return isUpdatingFirebase;
     }
 
+    /**
+     * Get the tours and images
+     */
     public void getFirebaseTours() {
         if(isNetworkAvailable() && !isUpdatingFirebase()) {
             imagesServiceIntent = new Intent(getApplicationContext(), FirebaseImageDownloader.class);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
                 startForegroundService(imagesServiceIntent);
-            } else {
+            else
                 startService(imagesServiceIntent);
-            }
         }
     }
 
@@ -154,9 +187,14 @@ public class App extends Application {
     @Override
     public void onTerminate() {
         stopService(imagesServiceIntent);
-        super.onTerminate();
+        try {
+            if (mBillingService != null) unbindService(mServiceConnection);
+        } catch (Exception e) { /* EMPTY CATCH */ }
+
         try {
             unregisterReceiver(networkChangeReceiver);
-        } catch (IllegalArgumentException e) { /*EMPTY*/ }
+        } catch (IllegalArgumentException e) { /* EMPTY CATCH */ }
+
+        super.onTerminate();
     }
 }

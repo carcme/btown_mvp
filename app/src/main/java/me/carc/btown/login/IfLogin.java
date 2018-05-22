@@ -3,7 +3,6 @@ package me.carc.btown.login;
 import android.content.Intent;
 import android.support.annotation.StringRes;
 
-import com.facebook.AccessToken;
 
 import me.carc.btown.BasePresenter;
 import me.carc.btown.BaseView;
@@ -30,10 +29,6 @@ interface IfLogin {
 
     interface Presenter extends BasePresenter {
         void onGoogleLogin();
-        void onFacebookGoogleLogin();
-
         void processGoogleSignin(Intent data);
-        void handleFacebookAccessToken(AccessToken token);
-
     }
 }

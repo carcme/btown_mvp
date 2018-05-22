@@ -22,11 +22,10 @@ import java.util.List;
 
 import me.carc.btown.R;
 import me.carc.btown.Utils.ImageUtils;
-import me.carc.btown.common.C;
 import me.carc.btown.common.Commons;
 import me.carc.btown.data.results.OverpassQueryResult;
-import me.carc.btown.map.IconManager;
 import me.carc.btown.db.tours.model.POIs;
+import me.carc.btown.map.IconManager;
 
 /**
  * Overlay for handling markers
@@ -35,7 +34,7 @@ import me.carc.btown.db.tours.model.POIs;
 
 public class MarkersOverlay extends RadiusMarkerClusterer {
 
-    private static final String TAG = C.DEBUG + Commons.getTag();
+    private static final String TAG = MarkersOverlay.class.getName();
 
     private RadiusMarkerClusterer mMarkers;
     private FolderOverlay mTourDestination;
