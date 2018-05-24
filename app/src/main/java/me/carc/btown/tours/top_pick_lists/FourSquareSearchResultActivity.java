@@ -40,6 +40,8 @@ import me.carc.btown.Utils.MapUtils;
 import me.carc.btown.Utils.ViewUtils;
 import me.carc.btown.common.C;
 import me.carc.btown.common.Commons;
+import me.carc.btown.common.interfaces.RecyclerClickListener;
+import me.carc.btown.common.interfaces.RecyclerTouchListener;
 import me.carc.btown.data.all4squ.FourSquResult;
 import me.carc.btown.data.all4squ.FourSquareApi;
 import me.carc.btown.data.all4squ.FourSquareServiceProvider;
@@ -47,7 +49,6 @@ import me.carc.btown.data.all4squ.entities.ExploreItem;
 import me.carc.btown.data.all4squ.entities.VenueResult;
 import me.carc.btown.tours.top_pick_lists.adapters.FsqSearchResultAdapter;
 import me.carc.btown.ui.custom.MyCustomLayoutManager;
-import me.carc.btown.ui.custom.MyRecyclerItemClickListener;
 import me.toptas.fancyshowcase.FancyShowCaseQueue;
 import me.toptas.fancyshowcase.FancyShowCaseView;
 import me.toptas.fancyshowcase.FocusShape;
@@ -197,10 +198,10 @@ public class FourSquareSearchResultActivity extends BaseActivity {
             final RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
             recyclerView.addItemDecoration(itemDecoration);
 
-            recyclerView.addOnItemTouchListener(new MyRecyclerItemClickListener(this,
-                    recyclerView, new MyRecyclerItemClickListener.OnItemClickListener() {
+            recyclerView.addOnItemTouchListener(new RecyclerTouchListener(this,
+                    recyclerView, new RecyclerClickListener() {
                 @Override
-                public void onItemClick(View view, int position) {
+                public void onClick(View view, int position) {
 
                     progressLayout.setVisibility(View.VISIBLE);
 
@@ -235,7 +236,7 @@ public class FourSquareSearchResultActivity extends BaseActivity {
                 }
 
                 @Override
-                public void onItemLongClick(View view, int position) {
+                public void onLongClick(View view, int position) {
                 }
             }));
         }

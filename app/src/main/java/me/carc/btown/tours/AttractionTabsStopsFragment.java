@@ -21,13 +21,14 @@ import java.util.List;
 import me.carc.btown.R;
 import me.carc.btown.common.C;
 import me.carc.btown.common.Commons;
+import me.carc.btown.common.interfaces.RecyclerClickListener;
+import me.carc.btown.common.interfaces.RecyclerTouchListener;
 import me.carc.btown.common.interfaces.ToursScrollListener;
 import me.carc.btown.db.tours.TourViewModel;
 import me.carc.btown.db.tours.model.TourCatalogueItem;
 import me.carc.btown.tours.adapters.TourDataAdapter;
 import me.carc.btown.tours.attractionPager.AttractionPagerActivity;
 import me.carc.btown.ui.custom.MyCustomLayoutManager;
-import me.carc.btown.ui.custom.MyRecyclerItemClickListener;
 
 public class AttractionTabsStopsFragment extends Fragment {
 
@@ -127,10 +128,10 @@ public class AttractionTabsStopsFragment extends Fragment {
             RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL);
             recyclerView.addItemDecoration(itemDecoration);
 
-            recyclerView.addOnItemTouchListener(new MyRecyclerItemClickListener(getActivity(),
-                    recyclerView, new MyRecyclerItemClickListener.OnItemClickListener() {
+            recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity(),
+                    recyclerView, new RecyclerClickListener() {
                 @Override
-                public void onItemClick(View view, int position) {
+                public void onClick(View view, int position) {
                     // lots of info to process and views to build - show a modal dialog so user doesn't press stuff while loading
 //                    showLoadingDialog();
                     Intent intent = new Intent(getActivity(), AttractionPagerActivity.class);
@@ -140,7 +141,7 @@ public class AttractionTabsStopsFragment extends Fragment {
                 }
 
                 @Override
-                public void onItemLongClick(View view, int position) {
+                public void onLongClick(View view, int position) {
                 }
             }));
         }

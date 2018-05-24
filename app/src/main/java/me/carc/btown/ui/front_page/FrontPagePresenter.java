@@ -44,7 +44,8 @@ public class FrontPagePresenter extends MvpBasePresenter<FrontPageMvpView> {
         items.add(MenuItem.MAP);
         items.add(MenuItem.TOURS);
 //        items.add(MenuItem.SEARCH);
-        items.add(MenuItem.LISTS);
+        items.add(MenuItem.FOURSQUARELISTS);
+        items.add(MenuItem.EXTERNAL_LINKS);
         items.add(MenuItem.GET_AROUND);
 //        items.add(MenuItem.TRENDING);
 //        items.add(MenuItem.FOOD);

@@ -45,7 +45,6 @@ public class ShareDialog {
         return this;
     }
 
-
     public ShareDialog viewContent(String content) {
         share.add(new ShareType(content, VIEW));
         return this;

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/tourCardView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardBackgroundColor="@color/colorPrimary"
+    app:cardCornerRadius="@dimen/card_corner_radius"
+    app:cardElevation="@dimen/card_elevation">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_standard"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/TextAppearance.AppCompat.Headline"
+            android:paddingTop="@dimen/margin_standard"
+            android:paddingBottom="@dimen/margin_standard"
+            android:drawableStart="@drawable/ic_web"
+            android:drawableLeft="@drawable/ic_web"
+            android:layout_gravity="center_vertical"
+            android:drawablePadding="@dimen/margin_small"
+            android:textColor="@color/sheet_icon_color"
+            android:text="@string/external_link_header_title"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/TextAppearance.AppCompat.Body2"
+            android:paddingBottom="@dimen/margin_standard"
+            android:textColor="@color/card_text_color"
+            android:text="@string/external_link_header_text_1"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/TextAppearance.AppCompat.Body2"
+            android:paddingBottom="@dimen/margin_standard"
+            android:textColor="@color/card_text_color"
+            android:text="@string/external_link_header_text_2"/>
+
+        <View xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="1dp"
+              android:layout_marginLeft="16dp"
+              android:layout_marginRight="16dp"
+              android:background="@color/card_text_color" />
+
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>

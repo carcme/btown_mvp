@@ -1,6 +1,8 @@
 package me.carc.btown.map;
 
 import android.app.AlertDialog;
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -10,6 +12,7 @@ import android.graphics.Color;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -44,6 +47,7 @@ import me.carc.btown.data.all4squ.entities.ExploreItem;
 import me.carc.btown.data.all4squ.entities.ListItems;
 import me.carc.btown.data.all4squ.entities.VenueResult;
 import me.carc.btown.db.bookmark.BookmarkEntry;
+import me.carc.btown.db.tours.TourViewModel;
 import me.carc.btown.db.tours.model.TourCatalogueItem;
 import me.carc.btown.map.search.SearchDialogFragment;
 import me.carc.btown.map.search.model.Place;
@@ -415,12 +419,18 @@ public class MapActivity extends BaseActivity implements
 
             case RESULT_SHOW_TOURS_MAP:
                 if (resultCode == RESULT_OK) {
-                    if(data.hasExtra(CatalogueActivity.CATALOGUE)) {
+                    int id = data.getIntExtra(CatalogueActivity.CATALOGUE_INDEX, -1);
+                    if(id != -1) {
                         ViewUtils.changeFabColour(this, fabTours, R.color.fabSearchCancelColor);
                         ViewUtils.changeFabIcon(this, fabTours, R.drawable.ic_times_white);
 
-                        TourCatalogueItem catalogue = data.getParcelableExtra(CatalogueActivity.CATALOGUE);
-                        presenter.showTour(catalogue);
+                        TourViewModel tourViewModel = ViewModelProviders.of(this).get(TourViewModel.class);
+                        tourViewModel.getTour(id).observe(this, new Observer<TourCatalogueItem>() {
+                            @Override
+                            public void onChanged(@Nullable final TourCatalogueItem tour) {
+                                presenter.showTour(tour);
+                            }
+                        });
                     }
                 }
                 break;

@@ -46,7 +46,7 @@ public abstract class OnItemSelectedListener implements RecyclerView.OnItemTouch
                 onItemSelected(rv.findContainingViewHolder(touchedView),
                         rv.getChildAdapterPosition(touchedView));
         }
-        return false;
+            return false;
     }
 
     @Override

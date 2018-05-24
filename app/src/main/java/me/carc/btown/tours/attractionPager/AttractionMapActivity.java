@@ -11,6 +11,8 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
+
 import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
@@ -27,6 +29,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import me.carc.btown.BaseActivity;
+import me.carc.btown.BuildConfig;
 import me.carc.btown.R;
 import me.carc.btown.Utils.ViewUtils;
 import me.carc.btown.common.Commons;
@@ -41,6 +44,7 @@ import me.carc.btown.ui.custom.MySimplePointOverlayOptions;
  */
 
 public class AttractionMapActivity extends BaseActivity {
+    private static final String TAG = AttractionMapActivity.class.getName();
 
     private final int PRE_PAN_DURATION = 1000;
 
@@ -80,6 +84,7 @@ public class AttractionMapActivity extends BaseActivity {
                 }
             });
         }
+        if (BuildConfig.USE_CRASHLYTICS) Crashlytics.log(TAG + " : onCreate()");
 
         Intent intent = getIntent();
         if (intent.hasExtra(AttractionPagerActivity.ATTRACTION)) {

@@ -5,24 +5,80 @@
     <string name="front_menu_map_desc">Finde jeden Ort in Berlin</string>
 
     <string name="front_menu_tours">Touren</string>
-    <string name="front_menu_tours_desc">Entdecke die Stadt</string>
+    <string name="front_menu_tours_desc">Raus und sehen Sie die Stadt. Entdecke versteckte Orte und vergessene Geschichten</string>
 
     <string name="front_menu_lists">Unternehmungen</string>
-    <string name="front_menu_lists_desc">Beliebte Berliner Attraktionen</string>
+    <string name="front_menu_lists_desc">Berlins beliebte Attraktionen, Lieblingsorte und bevorstehende Veranstaltungen</string>
+
+    <string name="front_menu_external">Berliner Blogs</string>
+    <string name="front_menu_external_desc">Berlin im Web</string>
 
     <string name="front_menu_getting_around">Finde dich zurecht</string>
-
-    <string name="front_menu_getting_around_desc">Öffentliche Verkehrsmittel in Berlin</string>
+    <string name="front_menu_getting_around_desc">Lokale Informationen für die Fortbewegung in der Stadt</string>
 
     <string name="front_menu_good_to_know">Gut zu wissen</string>
     <string name="front_menu_good_to_know_desc">Insider-Wissen macht einen großen Unterschied</string>
 
-
     <string name="front_menu_settings">Einstellungen</string>
     <string name="front_menu_settings_desc">Einstellungen anpassen, teilen, bewerten und Feedback senden</string>
 
-    <string name="front_menu_subtitle">Todo</string>
 
+
+    <!--EXTERNAL LINKS INFO-->
+
+    <string name="front_menu_abandoned">Abandoned Berlin</string>
+    <string name="front_menu_abandoned_desc">Verlassenes Berlin. Entdecke versteckte Geschichte und vernachlässigte Herrlichkeiten</string>
+    <string name="front_menu_abandoned_link">https://www.abandonedberlin.com</string>
+    <string name="front_menu_abandoned_icon" formatted="false">https://1.bp.blogspot.com/-J7f-ybdyoJ8/WsJ-egyIdhI/AAAAAAAC8rw/JwwqKVIl2c4rPJNcQUNlsTzFZVHrStNzwCEwYBhgL/s1600/Spreepark%2BAbandoned%2BBerlin-8885.jpg</string>
+    <string name="front_menu_abandoned_owner">Ciarán Fahey</string>
+
+
+    <string name="front_menu_nowthen">Berlin Now &amp; Then</string>
+    <string name="front_menu_nowthen_desc">Historische Fotografien neu erfinden, Berlin so wie es war und ist</string>
+    <string name="front_menu_nowthen_link">http://nicolasbouliane.com/blog/berlin-now-and-then</string>
+    <string name="front_menu_nowthen_icon" formatted="false">http://nicolasbouliane.com/wp-content/uploads/2016/07/DSC02089-945x603.jpg</string>
+    <string name="front_menu_nowthen_owner">Nicolas Bouliane</string>
+
+
+    <string name="front_menu_slowtravel">Slow Travel Berlin</string>
+    <string name="front_menu_slowtravel_desc">Eine Mans-Mission zu Fuß in Berlins 9.950 Straßen</string>
+    <string name="front_menu_slowtravel_link">http://www.slowtravelberlin.com/walking-berlin/</string>
+    <string name="front_menu_slowtravel_icon" formatted="false">http://www.slowtravelberlin.com/wp-content/uploads/2015/01/kohlequelle.jpg</string>
+    <string name="front_menu_slowtravel_owner">Paul Sullivan</string>
+
+
+    <string name="front_menu_year_berlin">A Year in Berlin</string>
+    <string name="front_menu_year_berlin_desc">Ein Blog, der sich mit interessanten Berliner Erlebnissen beschäftigt… mehr als das erwartete 1 Jahr</string>
+    <string name="front_menu_year_berlin_link">https://yearinberlin.com/</string>
+    <string name="front_menu_year_berlin_icon" formatted="false">https://yearinberlin.files.wordpress.com/2012/06/berlinwp.jpg"</string>
+    <string name="front_menu_year_berlin_owner">An Englishman abroad</string>
+
+
+    <string name="front_menu_visit_berlin">visitBerlin</string>
+    <string name="front_menu_visit_berlin_desc">Berlins offizielle Förderorganisation - von der ummauerten Stadt zur Weltstadt</string>
+    <string name="front_menu_visit_berlin_link">https://www.visitberlin.de/en/blog</string>
+    <string name="front_menu_visit_berlin_icon" formatted="false">https://about.visitberlin.de/sites/default/files/styles/header_s_1x/public/2017-03/1-header_0.jpg"</string>
+    <string name="front_menu_visit_berlin_owner">200 Angestellte</string>
+
+
+    <string name="front_menu_berlin_love">Berlin Love</string>
+    <string name="front_menu_berlin_love_desc">Ein Blog über die Sehenswürdigkeiten, Attraktionen, Bars und Restaurants der Stadt sollte ein hilfreicher Leitfaden für alle sein, die nach Aktivitäten in der Stadt suchen</string>
+    <string name="front_menu_berlin_love_link">https://withberlinlove.com/</string>
+    <string name="front_menu_berlin_love_icon" formatted="false">https://withberlinlove.com/wp-content/uploads/2014/08/Self-Portrait-1024x682.jpg"</string>
+    <string name="front_menu_berlin_love_owner">David (Berlin-aholic)</string>
+
+
+
+    <string name="front_menu_cosmo">Digital Cosmonaut</string>
+    <string name="front_menu_cosmo_desc">Eine Leidenschaft für die Geschichte zu teilen und die Geheimnisse Berlins zu entdecken</string>
+    <string name="front_menu_cosmo_link">https://digitalcosmonaut.com/</string>
+    <string name="front_menu_cosmo_icon" formatted="false">https://i0.wp.com/digitalcosmonaut.com/wp-content/uploads/2017/01/berlin-prenzlauer-berg-wasserturm-water-tower-water-reservoir-entrance-park.jpg"</string>
+    <string name="front_menu_cosmo_owner">Cosmo</string>
+
+
+    <string name="external_link_header_title">Berlin im Web</string>
+    <string name="external_link_header_text_1">Berlin ist voll von kreativen Menschen, von denen einige ihre Erfahrungen mit Berlin teilen. Im Folgenden sind einige meiner Favoriten für Sie zu entdecken.</string>
+    <string name="external_link_header_text_2">Wenn Sie eine Website nützlich finden, hinterlassen Sie einen Kommentar, um Ihre Unterstützung anzuzeigen</string>
 
     <!--TRANSPORT -->
     <string name="transport_tab_overview">Züge</string>

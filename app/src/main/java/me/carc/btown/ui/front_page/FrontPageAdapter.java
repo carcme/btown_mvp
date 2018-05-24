@@ -1,7 +1,6 @@
 package me.carc.btown.ui.front_page;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,8 +9,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import com.mikepenz.iconics.IconicsDrawable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +23,7 @@ import me.carc.btown.R;
  * Created by bamptonm on 18/12/2017.
  */
 
-class FrontPageAdapter extends RecyclerView.Adapter<FrontPageAdapter.ViewHolder> {
+public class FrontPageAdapter extends RecyclerView.Adapter<FrontPageAdapter.ViewHolder> {
 
     private List<MenuItem> mMenuItems;
 
@@ -51,14 +48,8 @@ class FrontPageAdapter extends RecyclerView.Adapter<FrontPageAdapter.ViewHolder>
         final MenuItem data = mMenuItems.get(position);
         Context ctx = holder.icon.getContext();
 
-        if (data.getIconDrawable() == 0) {
-            Drawable icon = new IconicsDrawable(ctx, data.getIconResourceId()).color(ContextCompat.getColor(ctx, R.color.white)).sizeDp(48);
-            holder.icon.setImageDrawable(icon);
-
-        } else
-            holder.icon.setImageResource(data.getIconDrawable());
-
-            holder.detailsDescription.setText(data.getSubTitleResourceId());
+        holder.icon.setImageResource(data.getIconDrawable());
+        holder.detailsDescription.setText(data.getSubTitleResourceId());
         holder.detailsTitle.setText(data.getTitleResourceId());
         holder.elementHolder.setBackgroundColor(ContextCompat.getColor(ctx, data.geticonColorId()));
     }
@@ -74,12 +65,9 @@ class FrontPageAdapter extends RecyclerView.Adapter<FrontPageAdapter.ViewHolder>
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
-        @BindView(R.id.icon)
-        ImageView icon;  // change from View to ImageView
-        @BindView(R.id.detailsDescription)
-        TextView detailsDescription;
-        @BindView(R.id.detailsTitle)
-        TextView detailsTitle;
+        @BindView(R.id.icon) ImageView icon;
+        @BindView(R.id.detailsDescription) TextView detailsDescription;
+        @BindView(R.id.detailsTitle) TextView detailsTitle;
 
         @BindView(R.id.elementHolder)
         LinearLayout elementHolder;

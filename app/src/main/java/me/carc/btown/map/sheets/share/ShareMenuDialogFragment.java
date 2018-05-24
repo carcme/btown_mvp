@@ -3,9 +3,7 @@ package me.carc.btown.map.sheets.share;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.design.widget.CoordinatorLayout;
@@ -34,6 +32,8 @@ public class ShareMenuDialogFragment extends BottomSheetDialogFragment implement
     private ArrayAdapter<ShareMenu.ShareItem> listAdapter;
     private ShareMenu menu;
 
+    private static boolean simpleShare = false;
+
     private BottomSheetBehavior.BottomSheetCallback mBottomSheetCB = new BottomSheetBehavior.BottomSheetCallback() {
 
         @Override
@@ -51,23 +51,34 @@ public class ShareMenuDialogFragment extends BottomSheetDialogFragment implement
     };
 
     public static void showInstance(ShareMenu menu) {
-
         ShareMenuDialogFragment fragment = new ShareMenuDialogFragment();
         fragment.menu = menu;
         fragment.show(menu.getActivity().getSupportFragmentManager(), ID_TAG);
     }
 
-    @Override
+    public static void showInstance(ShareMenu menu, boolean simple) {
+        simpleShare = simple;
+        ShareMenuDialogFragment fragment = new ShareMenuDialogFragment();
+        fragment.menu = menu;
+
+        fragment.show(menu.getActivity().getSupportFragmentManager(), ID_TAG);
+    }
+
+
+/*    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setStyle(STYLE_NORMAL, R.style.SimpleShareDialog);
         setRetainInstance(true);
-    }
+    }*/
 
     @Override
     public void setupDialog(final Dialog dialog, int style) {
         View rootView = View.inflate(menu.getActivity(), R.layout.share_menu_fragment, null);
-
         dialog.setContentView(rootView);
+
+        if(simpleShare)
+            ((TextView)rootView.findViewById(R.id.header_caption)).setText(getString(R.string.shared_string_share));
 
         CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) ((View) rootView.getParent()).getLayoutParams();
         CoordinatorLayout.Behavior behavior = params.getBehavior();
@@ -82,7 +93,12 @@ public class ShareMenuDialogFragment extends BottomSheetDialogFragment implement
     }
 
     private ArrayAdapter<ShareMenu.ShareItem> createAdapter() {
-        final List<ShareMenu.ShareItem> items = menu.getItems();
+        final List<ShareMenu.ShareItem> items;
+        if(simpleShare)
+            items = menu.getSimpleItems();
+        else
+            items = menu.getItems();
+
         final Context ctx = getActivity().getBaseContext();
         return new ArrayAdapter<ShareMenu.ShareItem>(menu.getActivity(), R.layout.share_list_item, items) {
 

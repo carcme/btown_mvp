@@ -59,7 +59,7 @@ public class GalleryItem implements Serializable {
             }
         });
     }
-
+    public String getCacheString() { return cacheFile; }
     public File getCachedFile() {
         if (file == null)
             return new File(cacheFile);

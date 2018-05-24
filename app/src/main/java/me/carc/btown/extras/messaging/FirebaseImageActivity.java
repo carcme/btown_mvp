@@ -51,8 +51,9 @@ import me.carc.btown.camera.CameraActivity;
 import me.carc.btown.common.C;
 import me.carc.btown.common.Commons;
 import me.carc.btown.common.TinyDB;
+import me.carc.btown.common.interfaces.RecyclerClickListener;
+import me.carc.btown.common.interfaces.RecyclerTouchListener;
 import me.carc.btown.extras.messaging.viewholders.PhotoViewHolder;
-import me.carc.btown.ui.custom.MyRecyclerItemClickListener;
 
 public class FirebaseImageActivity extends BaseActivity {
 
@@ -232,9 +233,9 @@ public class FirebaseImageActivity extends BaseActivity {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(mFirebaseAdapter);
 
-        recyclerView.addOnItemTouchListener(new MyRecyclerItemClickListener(this, recyclerView, new MyRecyclerItemClickListener.OnItemClickListener() {
+        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(this, recyclerView, new RecyclerClickListener() {
             @Override
-            public void onItemClick(View view, int pos) {
+            public void onClick(View view, int pos) {
 
                 try {
 
@@ -265,7 +266,7 @@ public class FirebaseImageActivity extends BaseActivity {
             }
 
             @Override
-            public void onItemLongClick(View view, int pos) {
+            public void onLongClick(View view, int pos) {
                 // ...
             }
         }));

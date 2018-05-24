@@ -18,10 +18,11 @@ import android.widget.ImageView;
 import me.carc.btown.R;
 import me.carc.btown.common.C;
 import me.carc.btown.common.Commons;
+import me.carc.btown.common.interfaces.RecyclerClickListener;
+import me.carc.btown.common.interfaces.RecyclerTouchListener;
 import me.carc.btown.common.interfaces.ToursScrollListener;
 import me.carc.btown.tours.adapters.AttractionGalleryViewerAdapter;
 import me.carc.btown.ui.custom.MyCustomLayoutManager;
-import me.carc.btown.ui.custom.MyRecyclerItemClickListener;
 
 
 public class AttractionTabsGalleryFragment extends Fragment {
@@ -93,13 +94,10 @@ public class AttractionTabsGalleryFragment extends Fragment {
             AttractionGalleryViewerAdapter adapter = new AttractionGalleryViewerAdapter();
             recyclerView.setAdapter(adapter);
             recyclerView.setHasFixedSize(true);
-
             recyclerView.setVerticalScrollBarEnabled(false);
-
-            recyclerView.addOnItemTouchListener(new MyRecyclerItemClickListener(getActivity(),
-                    recyclerView, new MyRecyclerItemClickListener.OnItemClickListener() {
+            recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), recyclerView, new RecyclerClickListener() {
                 @Override
-                public void onItemClick(View v, int pos) {
+                public void onClick(View v, int pos) {
 
                     Intent showcaseIntent = new Intent(getActivity(), AttractionShowcaseImageActivity.class);
                     showcaseIntent.putExtra("INDEX", pos);
@@ -122,7 +120,7 @@ public class AttractionTabsGalleryFragment extends Fragment {
                 }
 
                 @Override
-                public void onItemLongClick(View view, int position) { /* DO NOTHING */ }
+                public void onLongClick(View view, int position) { /* DO NOTHING */ }
 
             }));
         }

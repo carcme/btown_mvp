@@ -29,7 +29,7 @@
                 android:scaleType="fitStart"
                 android:transitionName="imageCover"
                 tools:ignore="UnusedAttribute"
-                android:src="@drawable/checkered_background"/>
+                android:src="@drawable/background_urban_blur_crop"/>
 
             <TextView
                 android:id="@+id/catalogueTitle"

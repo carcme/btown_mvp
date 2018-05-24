@@ -227,6 +227,7 @@ public class PlaceholderFragment extends Fragment {
         private void loadImage() {
             final long start = System.currentTimeMillis();
             // see if we have a local version
+            if(Commons.isNotNull(AttractionTabsActivity.galleryItems)) {
                 for (int i = 0; i < AttractionTabsActivity.galleryItems.size(); i++) {
                     int key = AttractionTabsActivity.galleryItems.keyAt(i);
                     // get the object by the key.
@@ -255,6 +256,8 @@ public class PlaceholderFragment extends Fragment {
                         return;
                     }
                 }
+            } else
+                loadFromFirebase();
 
             loadFromFirebase();
             cbTourListener.firebaseUpdateRequired();

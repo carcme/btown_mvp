@@ -2,6 +2,7 @@ package me.carc.btown.map.search.fragments;
 
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -161,8 +162,13 @@ public abstract class QuickSearchListFragment extends BaseListFragment {
 
     private void bugFixShowHide(){
         // Bug fix - without this, the last element repeats after deleting items!!
-        getListView().setVisibility(View.GONE);
-        getListView().setVisibility(View.VISIBLE);
+        try {
+            // Crashlytics #166 - IllegalStateException: Content view not yet created
+            getListView().setVisibility(View.GONE);
+            getListView().setVisibility(View.VISIBLE);
+        } catch (IllegalStateException e) {
+            Log.e(QuickSearchListFragment.class.getName(), "bugFixShowHide: ", e);
+        }
     }
 
     @SuppressWarnings("unused")

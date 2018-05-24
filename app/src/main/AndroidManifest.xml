@@ -197,6 +197,9 @@
         </activity>
 
 
+        <activity android:name=".tours.externalLinks.ExternalLinksActivity"
+                  android:theme="@style/AppTheme"/>
+
         <activity
             android:name="me.carc.btown.tours.CatalogueActivity"
             android:label="@string/app_name"
@@ -204,7 +207,7 @@
             android:theme="@style/AppTheme.FullScrnActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".map.MapActivity"/>
+                android:value=".ui.front_page.FrontPageActivity"/>
         </activity>
 
         <activity
@@ -214,7 +217,7 @@
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".map.MapActivity"/>
+                android:value=".tours.CatalogueActivity"/>
         </activity>
 
         <activity
@@ -224,7 +227,7 @@
             android:theme="@style/AppTheme.FullScrnActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".map.MapActivity"/>
+                android:value=".tours.CataloguePreviewActivity"/>
         </activity>
         <activity
             android:name="me.carc.btown.tours.attractionPager.AttractionPagerActivity"
@@ -232,12 +235,15 @@
             android:theme="@style/AppTheme.FullScrnActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".map.MapActivity"/>
+                android:value=".tours.AttractionTabsActivity"/>
         </activity>
         <activity
             android:name="me.carc.btown.tours.AttractionShowcaseImageActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.ShowCaseGallery">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".tours.AttractionTabsActivity"/>
         </activity>
         <!--android:screenOrientation="portrait"-->
 

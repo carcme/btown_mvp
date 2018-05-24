@@ -81,7 +81,7 @@ public class TransportPagerFragment extends Fragment {
                 if (i == PLANS_TAB)
                     headerImage.setImageResource(R.drawable.ic_station);
                 else if (i == AIRPORT_TAB)
-                    headerImage.setImageResource(R.drawable.ic_travel);
+                    headerImage.setImageResource(R.drawable.ic_fp_travel);
                 else if (i == TAXIS_TAB)
                     headerImage.setImageResource(R.drawable.ic_taxi);
                 else if (i == BAHNS_TAB)

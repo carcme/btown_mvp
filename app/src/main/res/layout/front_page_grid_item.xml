@@ -18,7 +18,7 @@
         android:contentDescription="@string/front_menu_map"
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
-        tools:src="@drawable/ic_notepad"/>
+        tools:src="@drawable/ic_fp_notepad"/>
 
     <me.carc.btown.ui.AutoResizeTextView
         android:id="@+id/detailsTitle"

@@ -35,6 +35,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.crashlytics.android.Crashlytics;
 import com.github.lzyzsd.circleprogress.DonutProgress;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
@@ -47,6 +48,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import me.carc.btown.BaseActivity;
+import me.carc.btown.BuildConfig;
 import me.carc.btown.R;
 import me.carc.btown.Utils.AndroidUtils;
 import me.carc.btown.Utils.FileUtils;
@@ -124,10 +126,10 @@ public class AttractionShowcaseImageActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.attraction_showcase_activity);
         ButterKnife.bind(this);
 
+        if (BuildConfig.USE_CRASHLYTICS) Crashlytics.log(TAG + " : onCreate()");
 
         // find the retained fragment on activity restarts
         FragmentManager fm = getSupportFragmentManager();
@@ -146,7 +148,6 @@ public class AttractionShowcaseImageActivity extends BaseActivity {
             mRetainedFragment.setGalleryItem(galleryItem);
         } else
             galleryItem = mRetainedFragment.getGalleryItem();
-
 
 
         //check if we already had the colors during click
@@ -179,13 +180,11 @@ public class AttractionShowcaseImageActivity extends BaseActivity {
         ViewUtils.configuredHideYView(captionsFrame);
 
         //get the imageHeader and set the coverImage
-        int padding = 10;
-
-
         Bitmap imageCoverBitmap = galleryItem.getBitmap();
 
         //safety check to prevent nullPointer in the palette if the activity was in the background for too long
         if (Commons.isNotNull(imageCoverBitmap)) {
+            int padding = 10;
             if (AndroidUtils.isPortrait(this)) {
                 ViewUtils.setViewHeight(showcaseImage, C.SCREEN_HEIGHT - captionsFrame.getLayoutParams().height - padding, false);
             } else
@@ -195,7 +194,6 @@ public class AttractionShowcaseImageActivity extends BaseActivity {
             showcaseImage.setScrollPosition(0.5f, 0.5f);
             showcaseImage.setTransitionName("GALLERY_IMAGE");
         }
-
 
         // start the transition animations
         if (Commons.isNull(savedInstanceState))
@@ -208,7 +206,6 @@ public class AttractionShowcaseImageActivity extends BaseActivity {
             });
         else
             animateActivityStart();
-
 
         // set the colors
         if (swatch_rgb != -1 && swatch_title_text_color != -1) {
@@ -278,7 +275,6 @@ public class AttractionShowcaseImageActivity extends BaseActivity {
     private View.OnClickListener onFabBackButtonListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-
             // reset the zoom level before animating back
             if (showcaseImage.isZoomed())
                 showcaseImage.resetZoom();
@@ -316,8 +312,8 @@ public class AttractionShowcaseImageActivity extends BaseActivity {
             Log.d(TAG, "downloadAndSetOrShareImage ERROR: " + exeption.getMessage());
 
         new AlertDialog.Builder(this)
-                .setTitle("Error - Opps")
-                .setMessage(exeption != null ? exeption.getLocalizedMessage() : "Check your network connection")
+                .setTitle(getString(R.string.shared_string_error))
+                .setMessage(exeption != null ? exeption.getLocalizedMessage() : getString(R.string.check_network))
                 .show();
 
         if (Commons.isNetworkAvailable(AttractionShowcaseImageActivity.this)) {
@@ -328,16 +324,12 @@ public class AttractionShowcaseImageActivity extends BaseActivity {
 
 
     private void downloadAndSetOrShareImage(final boolean set) {
-        final String imageUrl = galleryItem.getUrl();
-
-        if (Commons.isNotNull(imageUrl)) {
-
+        if (Commons.isNotNull(galleryItem.getUrl())) {
             mFabProgress.setVisibility(View.VISIBLE);
 
             OkHttpClient client = new OkHttpClient();
-
             Request request = new Request.Builder()
-                    .url(imageUrl)
+                    .url(galleryItem.getUrl())
                     .build();
 
             client.newCall(request).enqueue(new okhttp3.Callback() {
@@ -440,7 +432,7 @@ public class AttractionShowcaseImageActivity extends BaseActivity {
     /**
      * finish the animations of the ui after the download is complete. reset the button to the start
      *
-     * @param success
+     * @param success was operation successful
      */
     private void animateComplete(boolean success) {
         //hide the progress again :D

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/tourCardView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardBackgroundColor="@color/colorPrimary"
+    app:cardCornerRadius="@dimen/card_corner_radius"
+    app:cardElevation="@dimen/card_elevation">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:id="@+id/siteTextFrame"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="true">
+
+            <ImageView
+                android:id="@+id/siteImage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:contentDescription="@null"
+                android:scaleType="fitStart"
+                android:transitionName="imageCover"
+                tools:ignore="UnusedAttribute"
+                tools:src="@tools:sample/backgrounds/scenic"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:background="@drawable/gradient_description_bar"
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/margin_big"
+                android:paddingEnd="@dimen/margin_standard"
+                android:paddingStart="@dimen/margin_standard"
+                android:paddingTop="@dimen/margin_huge">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/siteTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="serif"
+                        android:textColor="@color/card_title_text_color"
+                        android:textSize="24sp"
+                        android:transitionName="@string/catalogue_title"
+                        tools:ignore="UnusedAttribute"
+                        tools:text="Heading here"/>
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/siteDesc"
+                    style="@style/FourSquareCardInfoText"
+                    android:fontFamily="serif"
+                    android:ellipsize="end"
+                    android:padding="0dp"
+                    tools:text="Tour Short Description and make it a bit longer to check the word wrap"/>
+
+            </LinearLayout>
+
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/langEN"
+                android:layout_width="wrap_content"
+                android:layout_height="16dp"
+                android:contentDescription="@null"
+                android:src="@drawable/en"/>
+
+            <ImageView
+                android:id="@+id/langDE"
+                android:layout_width="wrap_content"
+                android:layout_height="16dp"
+                android:contentDescription="@null"
+                android:src="@drawable/de"/>
+
+            <TextView
+                android:id="@+id/siteOwner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:fontFamily="serif"
+                android:gravity="end"
+                android:textColor="@color/white"
+                android:paddingBottom="@dimen/margin_standard"
+                android:paddingEnd="@dimen/margin_standard"
+                android:paddingStart="@dimen/margin_standard"
+                tools:text="@tools:sample/full_names"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>

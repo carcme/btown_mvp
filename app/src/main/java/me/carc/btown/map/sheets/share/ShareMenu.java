@@ -71,6 +71,15 @@ public class ShareMenu {
         return list;
     }
 
+    public List<ShareItem> getSimpleItems() {
+        List<ShareItem> list = new LinkedList<>();
+        list.add(ShareItem.CLIPBOARD);
+        list.add(ShareItem.QR_CODE);
+        if(address.toLowerCase().startsWith("http"))
+            list.add(ShareItem.WEB);
+        return list;
+    }
+
     public GeoPoint getLatLon() {
         return latLon;
     }
@@ -84,17 +93,21 @@ public class ShareMenu {
         menu.latLon = latLon;
         menu.title = title;
         menu.address = address;
-        ShareMenuDialogFragment.showInstance(menu);
+        ShareMenuDialogFragment.showInstance(menu, latLon == null);
     }
 
     public void share(ShareItem item) {
         final int zoom = 19; // use maximum zoom - very clear what the poi on the shared map
+        String geoUrl = null;
+        String httpUrl = null;
 
-        final String geoUrl = MapUtils.buildGeoUrl(latLon.getLatitude(), latLon.getLongitude(), zoom);
+        if(Commons.isNotNull(latLon)) {
+            geoUrl = MapUtils.buildGeoUrl(latLon.getLatitude(), latLon.getLongitude(), zoom);
 
 //        final String httpUrlGoogle = MapUtils.buildGoogleMapLink(latLon);
 
-        final String httpUrl = MapUtils.buildOsmMapLink(latLon, zoom);
+            httpUrl = MapUtils.buildOsmMapLink(latLon, zoom);
+        }
 
         StringBuilder sb = new StringBuilder();
         if (!Commons.isEmpty(title)) {
@@ -107,7 +120,8 @@ public class ShareMenu {
 
         // Add Location
         sb.append(getActivity().getString(R.string.shared_string_location)).append(": ");
-        sb.append(geoUrl).append("\n").append(httpUrl);
+        if(Commons.isNotNull(latLon))
+            sb.append(geoUrl).append("\n").append(httpUrl);
         String sms = sb.toString();
 
         switch (item) {
@@ -127,9 +141,13 @@ public class ShareMenu {
 
             case QR_CODE:
                 Bundle bundle = new Bundle();
-                bundle.putFloat("LAT", (float) latLon.getLatitude());
-                bundle.putFloat("LONG", (float) latLon.getLongitude());
-                ShareDialog.sendQRCode(getActivity(), "LOCATION_TYPE", bundle, null);
+                if(Commons.isNotNull(latLon)) {
+                    bundle.putFloat("LAT", (float) latLon.getLatitude());
+                    bundle.putFloat("LONG", (float) latLon.getLongitude());
+                    ShareDialog.sendQRCode(getActivity(), "LOCATION_TYPE", bundle, null);
+                } else {
+                    ShareDialog.sendQRCode(getActivity(), "TEXT_TYPE", null, address);
+                }
                 break;
 
             case WEB:

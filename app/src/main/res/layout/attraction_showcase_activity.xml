@@ -141,5 +141,4 @@
         android:scaleY="0"
         tools:ignore="UnusedAttribute" />
 
-
 </RelativeLayout>

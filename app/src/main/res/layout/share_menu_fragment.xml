@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout android:id="@+id/share_fragment_layout"
-             xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             android:background="@android:color/transparent">
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/share_fragment_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/transparent">
 
     <LinearLayout
         android:id="@+id/main_view"
@@ -25,8 +26,8 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="16dp"
                 android:layout_weight="1"
-                android:text="@string/share_menu_location"
                 android:fontFamily="serif"
+                android:text="@string/share_menu_location"
                 android:textColor="?android:textColorSecondary"
                 android:textSize="@dimen/default_list_text_size"/>
 
@@ -40,10 +41,10 @@
 
             <ListView
                 android:id="@+id/list"
-                android:divider="@null"
-                android:dividerHeight="0dp"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:divider="@null"
+                android:dividerHeight="0dp">
 
             </ListView>
 

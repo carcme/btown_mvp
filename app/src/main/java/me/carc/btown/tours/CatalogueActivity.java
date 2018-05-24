@@ -20,6 +20,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.RelativeLayout;
 
+import com.crashlytics.android.Crashlytics;
+
 import java.util.List;
 
 import butterknife.BindView;
@@ -27,6 +29,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import me.carc.btown.App;
 import me.carc.btown.BaseActivity;
+import me.carc.btown.BuildConfig;
 import me.carc.btown.R;
 import me.carc.btown.Utils.Holder;
 import me.carc.btown.Utils.ViewUtils;
@@ -140,10 +143,13 @@ public class CatalogueActivity extends BaseActivity {
 
                 // show tour on map?
                 if (getIntent().hasExtra(EXTRA_SHOW_ON_MAP)) {
-                    getIntent().putExtra(CATALOGUE, catalogue);
+                    if (BuildConfig.USE_CRASHLYTICS) Crashlytics.log(TAG + " : onItemSelected() <show tour on map>");
+
+                    getIntent().putExtra(CATALOGUE_INDEX, catalogue.getTourId());
                     setResult(RESULT_OK, getIntent());
                     onBackPressed();
                 } else {  // show tour in tabs and pager
+                    if (BuildConfig.USE_CRASHLYTICS) Crashlytics.log(TAG + " : onItemSelected() <show tour>");
                     Holder.set(viewHolder.catalogueImage.getDrawable());
                     Intent intent = new Intent(CatalogueActivity.this, CataloguePreviewActivity.class);
                     intent.putExtra(CATALOGUE_INDEX, catalogue.getTourId());

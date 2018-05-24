@@ -27,12 +27,15 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.carc.btown.BaseActivity;
+import me.carc.btown.BuildConfig;
 import me.carc.btown.R;
 import me.carc.btown.Utils.IntentUtils;
 import me.carc.btown.camera.CameraActivity;
@@ -208,6 +211,7 @@ public class AttractionPagerActivity extends BaseActivity implements Placeholder
 
     @Override
     public void onSendPostCard(Bitmap bitmap, String title) {
+        if (BuildConfig.USE_CRASHLYTICS) Crashlytics.log(TAG + " : onSendPostCard()");
         Intent share = new Intent(Intent.ACTION_SEND);
         share.setType("image/*");
 
@@ -225,7 +229,7 @@ public class AttractionPagerActivity extends BaseActivity implements Placeholder
 
     @Override
     public void onAddComment(String stopName) {
-        Log.d(TAG, "onAddComment: ");
+        if (BuildConfig.USE_CRASHLYTICS) Crashlytics.log(TAG + " : onAddComment()");
 
         Intent iComment = new Intent(AttractionPagerActivity.this, CommentsActivity.class);
         iComment.putExtra(CommentsActivity.EXTRA_MESSAGE_BOARD_CAT, CommentsActivity.MSG_BOARD_CAT_COMMENTS);
@@ -274,6 +278,8 @@ public class AttractionPagerActivity extends BaseActivity implements Placeholder
 
     @Override
     public void onShowMap(Attraction attractionData) {
+        if (BuildConfig.USE_CRASHLYTICS) Crashlytics.log(TAG + " : onShowMap()");
+
         Intent mapIntent = new Intent(AttractionPagerActivity.this, AttractionMapActivity.class);
         mapIntent.putExtra(ATTRACTION, (Parcelable) attractionData);
         startActivity(mapIntent);

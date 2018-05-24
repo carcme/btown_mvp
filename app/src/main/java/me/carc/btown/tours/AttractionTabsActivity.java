@@ -10,7 +10,6 @@ import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
@@ -64,24 +63,10 @@ public class AttractionTabsActivity extends BaseActivity implements ToursScrollL
         setContentView(R.layout.tour_tabs_activity);
         ButterKnife.bind(this);
 
-        Log.d(TAG, "onCreate: ");
-
         Intent intent = getIntent();
         if (intent.hasExtra(CatalogueActivity.CATALOGUE_INDEX)) {
             tourTitle = intent.getStringExtra(CataloguePreviewActivity.CATALOGUE_TITLE);
-
-            Fragment fragment = getSupportFragmentManager().findFragmentByTag(AttractionTabsStopsFragment.TAG_ID);
-
-//            if (Commons.isNull(fragment) && Commons.isNull(savedInstanceState)) {
                 adapter = new MyFragmentPagerAdapter(getSupportFragmentManager());
-
-/*
-            if(savedInstanceState != null) {
-                attractions = savedInstanceState.getParcelableArrayList(CataloguePreviewActivity.ATTRACTIONS_LIST);
-                getImageURLs(attractions);
-                setupViewPager(attractions);
-            } else {
-*/
                 int tourID = intent.getIntExtra(CatalogueActivity.CATALOGUE_INDEX, -1);
 
                 TourViewModel mTourViewModel = ViewModelProviders.of(this).get(TourViewModel.class);
@@ -110,32 +95,6 @@ public class AttractionTabsActivity extends BaseActivity implements ToursScrollL
                         }
                     }
                 });
-/*
-            } else {
-                attractions = savedInstanceState.getParcelableArrayList(CataloguePreviewActivity.ATTRACTIONS_LIST);
-                getImageURLs(attractions);
-                viewPager.setAdapter(adapter);
-                tabs.setupWithViewPager(viewPager);
-                viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-
-                    @Override
-                    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                        AndroidUtils.hideSoftKeyboard(AttractionTabsActivity.this, viewPager);
-                    }
-
-                    @Override
-                    public void onPageSelected(int position) {
-
-                    }
-
-                    @Override
-                    public void onPageScrollStateChanged(int state) {
-
-                    }
-                });
-            }
-
-*/
         }
 
         // Add colour selection for this??
@@ -237,8 +196,10 @@ public class AttractionTabsActivity extends BaseActivity implements ToursScrollL
         int duration = getResources().getInteger(R.integer.gallery_alpha_duration);
 
         // Clear up gallery cache
-        galleryItems.clear();
-        galleryItems = null;
+        if(Commons.isNotNull(galleryItems)) {  // Crashlytics #165
+            galleryItems.clear();
+            galleryItems = null;
+        }
 
         ViewUtils.hideView(fab, duration, (int) temp);
         new Handler().postDelayed(new Runnable() {

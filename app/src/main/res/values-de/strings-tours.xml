@@ -50,6 +50,7 @@
     <string name="top10_coming_soon_title">Kommt demnächst</string>
     <string name="top10_coming_soon_msg">Wir arbeiten derzeit hart an einer Top 10 Liste Berliner Bars, Restaurants, Insider Tipps und Sehenswürdigkeiten.</string>
 
+    <string name="external_links">External Links</string>
 
     <!-- FOUR SQUARE-->
     <string name="load_more_photos" formatted="false">Mehr laden ( %d )</string>
