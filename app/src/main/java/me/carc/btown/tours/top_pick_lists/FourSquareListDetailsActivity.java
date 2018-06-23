@@ -44,6 +44,7 @@ import me.carc.btown.data.all4squ.FourSquareServiceProvider;
 import me.carc.btown.data.all4squ.entities.ItemsListItem;
 import me.carc.btown.data.all4squ.entities.ListItems;
 import me.carc.btown.data.all4squ.entities.VenueResult;
+import me.carc.btown.map.MapActivity;
 import me.carc.btown.tours.top_pick_lists.adapters.ListDetailsAdapter;
 import me.carc.btown.ui.custom.MyCustomLayoutManager;
 import pub.devrel.easypermissions.AfterPermissionGranted;
@@ -176,7 +177,8 @@ public class FourSquareListDetailsActivity extends BaseActivity {
                                     Intent intent = new Intent(FourSquareListDetailsActivity.this, VenueTabsActivity.class);
                                     intent.putExtra(VenueTabsActivity.EXTRA_VENUE_URL, item.getVenue().getVenueUrl());
                                     intent.putExtra(VenueTabsActivity.EXTRA_VENUE, (Parcelable) resp);
-                                    startActivityForResult(intent, RESULT_SHOW_ITEM);
+//                                    startActivityForResult(intent, RESULT_SHOW_ITEM);
+                                    startActivity(intent);
                                     progressLayout.setVisibility(View.GONE);
                                 } else
                                     showError();
@@ -242,8 +244,14 @@ public class FourSquareListDetailsActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_show_all:
-                setResult(RESULT_OK, getIntent());
-                finish();
+//                setResult(RESULT_OK, getIntent());
+
+                getIntent().setClass(this, MapActivity.class);
+//                setResult(RESULT_OK, getIntent());
+                startActivity(getIntent());
+
+
+  //              finish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

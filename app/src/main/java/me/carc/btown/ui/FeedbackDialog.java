@@ -45,7 +45,7 @@ public class FeedbackDialog extends AppCompatDialog implements View.OnClickListe
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         assert getWindow() != null;
         getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        setContentView(R.layout.dialog_feedback);
+        setContentView(R.layout.rating_dialog_feedback);
 
         titleTv = (TextView) findViewById(R.id.dlg_feedback_title);
         submitBtn = (TextView) findViewById(R.id.dlg_btn_feedback_submit);

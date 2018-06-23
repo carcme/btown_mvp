@@ -129,6 +129,7 @@ public class AttractionPagerActivity extends BaseActivity implements Placeholder
                     }
                 });
             }
+            setStatusBarColor(false, R.color.colorPrimary);
         }
     }
 

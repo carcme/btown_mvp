@@ -21,11 +21,7 @@ import android.support.annotation.StringRes;
 import android.support.annotation.VisibleForTesting;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.NavigationView;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -35,22 +31,17 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.vending.billing.IInAppBillingService;
-import com.bumptech.glide.Glide;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -79,8 +70,6 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     private static final String TAG = BaseActivity.class.getName();
 
-    private static final String SAVED_HEADER_BACKGROUND = "SAVED_HEADER_BACKGROUND";
-
     private static final int RESULT_SETTINGS = 71;
     private static final int RESULT_LOGIN = 72;
     private static final int RESULT_DONATE = 73;
@@ -95,9 +84,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     private GeoPoint currentLocation;
 
     private AlertDialog calibrateDialog;
-
-    public DrawerLayout mDrawerLayout;
-    private ActionBarDrawerToggle mDrawerToggle;
 
     @VisibleForTesting
     private static volatile ProgressDialog mProgressDialog;
@@ -171,10 +157,6 @@ public abstract class BaseActivity extends AppCompatActivity {
                         restart();
                     }
                 }
-                break;
-
-            case RESULT_LOGIN:
-                configureNavView();
                 break;
 
             case RESULT_DONATE:
@@ -283,7 +265,6 @@ public abstract class BaseActivity extends AppCompatActivity {
      * @param color status bar background color
      */
     protected void setStatusBarColor(boolean palette, int color) {
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         final View decorView = getWindow().getDecorView();
@@ -481,139 +462,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
 
-    /* SIDE BAR */
 
-
-    public
-    @DrawableRes
-    int getBackground() {
-        return TinyDB.getTinyDB().getInt(SAVED_HEADER_BACKGROUND, R.drawable.background_jewish_memorial);
-    }
-
-    public void setBackgroundImage(@DrawableRes int imageRes) {
-        ImageView header = findViewById(R.id.nav_header_background_image);
-        header.setImageResource(imageRes);
-        db.putInt(SAVED_HEADER_BACKGROUND, imageRes);
-    }
-
-    @Deprecated
-    private void setupNavDrawer() {
-        mDrawerLayout = findViewById(R.id.drawer_layout);
-
-        if (mDrawerLayout == null) {
-            return;
-        }
-        mDrawerToggle = new ActionBarDrawerToggle(this,
-                mDrawerLayout,
-                null,
-                R.string.navigation_drawer_open,
-                R.string.navigation_drawer_close);
-        mDrawerLayout.addDrawerListener(mDrawerToggle);
-        mDrawerToggle.syncState();
-
-        configureNavView();
-    }
-
-    @Deprecated
-    private void configureNavView() {
-        NavigationView navigationView = findViewById(R.id.navigation_view);
-        if (Commons.isNotNull(navigationView)) {
-            navigationView.setNavigationItemSelectedListener(navigationViewListener);
-
-            if (!Preferences.showTours(this)) {
-                navigationView.getMenu().clear();
-                navigationView.inflateMenu(R.menu.menu_drawer_no_tours);
-            }
-
-            View headerLayout = navigationView.getHeaderView(0);
-
-            ImageView header = headerLayout.findViewById(R.id.nav_header_background_image);
-            header.setImageResource(getBackground());
-
-            TextView headeUser = headerLayout.findViewById(R.id.nav_header_email);
-
-            ImageView userImage = headerLayout.findViewById(R.id.nav_header_user_image);
-            userImage.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-//                startActivityForResult(new Intent(BaseActivity.this, LoginActivity.class), RESULT_LOGIN);
-                }
-            });
-
-            FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-            if (Commons.isNotNull(firebaseUser)) {
-                headeUser.setText(firebaseUser.getDisplayName());
-                Glide.with(this)
-                        .load(firebaseUser.getPhotoUrl())
-                        .into(userImage);
-            } else {
-                userImage.setImageResource(R.mipmap.ic_launcher_skyline_rnd_blue);
-                headeUser.setText(R.string.app_name);
-            }
-        }
-    }
-
-    private NavigationView.OnNavigationItemSelectedListener navigationViewListener = new NavigationView.OnNavigationItemSelectedListener() {
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.nav_transportr:
-                    transportr();
-                    break;
-
-                case R.id.nav_transport_maps:
-                    transportPlansExtra();
-                    break;
-
-                case R.id.nav_translate:
-                    translate();
-                    break;
-
-                case R.id.nav_settings:
-                    settings();
-                    break;
-
-                case R.id.nav_donate:
-                    showDonateDialog();
-                    break;
-
-                case R.id.nav_rate:
-                    new SendFeedback(BaseActivity.this, SendFeedback.TYPE_RATE);
-                    break;
-
-                case R.id.nav_share:
-                    Intent intent = new Intent(Intent.ACTION_SEND);
-                    intent.setAction(Intent.ACTION_SEND);
-                    intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name));
-                    intent.putExtra(Intent.EXTRA_TEXT, "https://play.google.com/store/apps/details?id=" + getPackageName());
-                    intent.setType("text/plain");
-                    startActivity(Intent.createChooser(intent, getString(R.string.shared_string_share)));
-                    break;
-
-                case R.id.nav_feedback:
-                    new SendFeedback(BaseActivity.this, SendFeedback.TYPE_FEEDBACK);
-                    break;
-
-                default:
-            }
-
-            mDrawerLayout.closeDrawer(GravityCompat.START);
-            return true;
-        }
-    };
-
-
-    public void transportr() {
-        Intent intent = getPackageManager().getLaunchIntentForPackage(TRANSPORTR_INTENT);
-        if (intent != null) {
-            startActivity(intent);
-        } else {
-            if (Commons.isNetworkAvailable(this))
-                installExtApp(getString(R.string.install_transportr), getString(R.string.no_transportr), R.mipmap.ic_transportr, TRANSPORTR_INTENT);
-            else
-                showAlertDialog(R.string.shared_string_error, R.string.network_not_available_error, -1);
-        }
-    }
 
     public void translate() {
         Intent intent = getPackageManager().getLaunchIntentForPackage(TRANSLATE_INTENT);
@@ -637,24 +486,8 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (isNavDrawerOpen()) {
-            closeNavDraw();
-        } else {
-            super.onBackPressed();
-        }
+        super.onBackPressed();
     }
-
-    protected boolean isNavDrawerOpen() {
-        return mDrawerLayout != null && mDrawerLayout.isDrawerOpen(GravityCompat.START);
-    }
-
-    protected void closeNavDraw() {
-        if (mDrawerLayout != null) {
-            mDrawerLayout.closeDrawer(GravityCompat.START);
-        }
-    }
-
-
 
     /* PURCHASE STUFF */
 

@@ -72,7 +72,7 @@ public class RatingDialog extends AppCompatDialog implements RatingBar.OnRatingB
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         if(getWindow() != null)
             getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        setContentView(R.layout.rating_dialog);
+        setContentView(R.layout.rating_dialog_rate);
 
         tvTitle = findViewById(R.id.dialog_rating_title);
         tvNegative = findViewById(R.id.dialog_rating_button_negative);

@@ -42,6 +42,7 @@ import me.carc.btown.common.C;
 import me.carc.btown.common.Commons;
 import me.carc.btown.common.interfaces.ToursScrollListener;
 import me.carc.btown.data.all4squ.entities.VenueResult;
+import me.carc.btown.map.MapActivity;
 import me.carc.btown.tours.top_pick_lists.fragments.VenueInfoFragment;
 import me.carc.btown.tours.top_pick_lists.fragments.VenuePhotosFragment;
 import me.carc.btown.tours.top_pick_lists.fragments.VenueTipsFragment;
@@ -220,6 +221,7 @@ public class VenueTabsActivity extends BaseActivity implements ToursScrollListen
                     viewPager.setBackgroundTintList(stateList);
                     tabs.setBackgroundColor((int) animator.getAnimatedValue());
                     tabs.setTabTextColors(titleTextColor, ContextCompat.getColor(VenueTabsActivity.this, R.color.white));
+                    venueCollapsingToolbar.setContentScrimColor(rgb);
                 }
             });
 
@@ -231,6 +233,7 @@ public class VenueTabsActivity extends BaseActivity implements ToursScrollListen
         } else {
             venueCollapsingToolbar.setExpandedTitleColor(titleTextColor);
             venueCollapsingToolbar.setCollapsedTitleTextColor(ContextCompat.getColor(VenueTabsActivity.this, R.color.white));
+            venueCollapsingToolbar.setStatusBarScrimColor(rgb);
             fab.getBackground().setColorFilter(rgb, PorterDuff.Mode.MULTIPLY);
             fab.getDrawable().setTint(ContextCompat.getColor(this, android.R.color.white));
             viewPager.getBackground().setColorFilter(rgb, PorterDuff.Mode.MULTIPLY);
@@ -339,8 +342,13 @@ public class VenueTabsActivity extends BaseActivity implements ToursScrollListen
                 break;
 
             case R.id.menu_show_on_map:
+//                setResult(RESULT_OK, getIntent());
+
+                getIntent().setClass(this, MapActivity.class);
                 setResult(RESULT_OK, getIntent());
-                finish();
+                startActivity(getIntent());
+
+//                finish();
                 break;
 
             default:

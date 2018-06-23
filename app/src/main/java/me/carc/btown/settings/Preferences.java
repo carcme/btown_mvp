@@ -56,10 +56,4 @@ public class Preferences {
         editor.apply();
     }
 
-
-
-
-
-
-
 }

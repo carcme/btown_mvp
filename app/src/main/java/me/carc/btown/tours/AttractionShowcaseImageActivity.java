@@ -626,7 +626,7 @@ public class AttractionShowcaseImageActivity extends BaseActivity {
             captionSubTitle.setText(galleryItem.getDesc());
         }
 
-        if (C.HAS_L) {
+//        if (C.HAS_M) {
             captionSubTitle.setTextColor(titleTextColor);
 
             int colorFromText = ContextCompat.getColor(this, R.color.almostWhite);
@@ -679,6 +679,7 @@ public class AttractionShowcaseImageActivity extends BaseActivity {
             textAnimation.start();
             rgbAnimation.start();
 
+/*
         } else {
             fabBackButton.getBackground().setColorFilter(rgb, PorterDuff.Mode.MULTIPLY);
             fabBackButton.getDrawable().setTint(ContextCompat.getColor(this, android.R.color.white));
@@ -686,7 +687,9 @@ public class AttractionShowcaseImageActivity extends BaseActivity {
             mFabShareButton.getDrawable().setTint(ContextCompat.getColor(this, android.R.color.white));
             mFabWallpaperButton.getBackground().setColorFilter(rgb, PorterDuff.Mode.MULTIPLY);
             mFabWallpaperButton.getDrawable().setTint(ContextCompat.getColor(this, android.R.color.white));
+
         }
+*/
     }
 
     @Override

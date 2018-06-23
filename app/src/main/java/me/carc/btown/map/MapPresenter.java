@@ -174,9 +174,11 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
     @Override
     public void onUpdateLocation() {
         if (Commons.isNull(btLocation)) {
-            btLocation = new BTownFusedLocation(mContext);
+            btLocation = new BTownFusedLocation(mContext.getApplicationContext());
             btLocation.setCallback(locationCallbackListener);
         } else btLocation.setCallback(locationCallbackListener);
+
+        // TODO: 12/06/2018 CHECK THIS - SHOULD PROBABL
 
         if (Commons.isNotNull(compassSensor))
             compassSensor = new CompassSensor(mContext, onCompassCallback);
@@ -272,7 +274,7 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
                 deg += 90;
 
             if (myLocationOverlay.isEnabled()) {
-                btLocation.calcGeoMagneticCorrection(deg);
+                if(Commons.isNotNull(btLocation)) btLocation.calcGeoMagneticCorrection(deg);
 
                 SinglePoiOptionsDialog poiDlg = getPoiDialog();
                 if (Commons.isNotNull(poiDlg)) {
@@ -347,7 +349,7 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
 
     private void initLocationProvider() {
         if (Commons.isNull(btLocation)) {
-            btLocation = new BTownFusedLocation(mContext);
+            btLocation = new BTownFusedLocation(mContext.getApplicationContext());
             btLocation.setCallback(locationCallbackListener);
         }
 
@@ -1216,9 +1218,9 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
     @Override
     public void onShowCameraOrPoiMarkerListDialog() {
         if (mSearchOverlay.getSize() > 0 || mFsqOverlay.getSize() > 0) {
-            MarkerListDialogFragment markerList = getMarkerListDialogFragment();
-            if (Commons.isNotNull(markerList)) {
-                markerList.show();
+            MarkerListDialogFragment fragment = getMarkerListDialogFragment();
+            if (Commons.isNotNull(fragment)) {
+                fragment.show();
             } else {
                 ArrayList<Object> objects = new ArrayList<>();
 
@@ -1359,7 +1361,7 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
                     mMap.getController().animateTo(myLocation);
                     myLocationOverlay.setEnabled(false);
 
-                    animateToHandler.postDelayed(animateTo, ZOOM_IN_TIME_DELAY);
+                    animateToHandler.postDelayed(animateTo, 100);
                 } else {
                     // already at a decent zoom level - just animate
                     mMap.getController().animateTo(myLocation);

@@ -1,6 +1,8 @@
 package me.carc.btown.tours;
 
 import android.annotation.TargetApi;
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -10,17 +12,23 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import java.util.List;
+
 import me.carc.btown.R;
-import me.carc.btown.common.C;
+import me.carc.btown.common.CacheDir;
 import me.carc.btown.common.Commons;
 import me.carc.btown.common.interfaces.RecyclerClickListener;
 import me.carc.btown.common.interfaces.RecyclerTouchListener;
 import me.carc.btown.common.interfaces.ToursScrollListener;
+import me.carc.btown.db.tours.TourViewModel;
+import me.carc.btown.db.tours.model.Attraction;
+import me.carc.btown.db.tours.model.TourCatalogueItem;
 import me.carc.btown.tours.adapters.AttractionGalleryViewerAdapter;
 import me.carc.btown.ui.custom.MyCustomLayoutManager;
 
@@ -47,30 +55,41 @@ public class AttractionTabsGalleryFragment extends Fragment {
         }
     }
 
-    @TargetApi(Build.VERSION_CODES.M)
+    private void getImageURLs(List<Attraction> attractions) {
+        if (AttractionTabsActivity.galleryItems == null) {
+            int index = 0;
+            AttractionTabsActivity.galleryItems = new SparseArray<>(1);
+
+            for (Attraction attraction : attractions) {
+                GalleryItem gallery = new GalleryItem();
+                gallery.setFilename(attraction.getImage());
+                gallery.setCachedFilePath(CacheDir.getInstance().getCachePath() + attraction.getImage());
+                gallery.setTitle(attraction.getStopName());
+                gallery.setDesc(attraction.getAttractionStopInfo(false).getTeaser()[0]);
+
+                AttractionTabsActivity.galleryItems.put(index++, gallery);
+            }
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        RecyclerView rv = (RecyclerView) inflater.inflate(R.layout.tour_list_recycler, container, false);
-        setupRecyclerView(rv);
+        final RecyclerView rv = (RecyclerView) inflater.inflate(R.layout.tour_list_recycler, container, false);
+
+        TourViewModel mTourViewModel = ViewModelProviders.of(this).get(TourViewModel.class);
+        mTourViewModel.getTour(getArguments().getInt(CatalogueActivity.CATALOGUE_INDEX)).observe(this, new Observer<TourCatalogueItem>() {
+            @Override
+            public void onChanged(@Nullable final TourCatalogueItem tour) {
+                if (tour != null) {
+                    getImageURLs(tour.getAttractions());
+                    setupRecyclerView(rv);
+                }
+            }
+        });
+
         rv.setNestedScrollingEnabled(true);
-        if(C.HAS_M)
-            rv.addOnScrollListener(onScrollListener);
-        else
-            rv.setOnScrollListener(new RecyclerView.OnScrollListener() {
-                @Override
-                public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                    super.onScrollStateChanged(recyclerView, newState);
-                }
 
-                @Override
-                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                    super.onScrolled(recyclerView, dx, dy);
-                    if(dy > 0)
-                        scrollListener.onScrollView(true);
-                    else
-                        scrollListener.onScrollView(false);
-
-                }
-            });
+        rv.addOnScrollListener(onScrollListener);
         return rv;
     }
 

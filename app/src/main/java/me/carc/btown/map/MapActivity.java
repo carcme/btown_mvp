@@ -248,11 +248,12 @@ public class MapActivity extends BaseActivity implements
     private void helpShowcase() {
 
         int borderColor = ContextCompat.getColor(this, R.color.colorAccent);
+        boolean fitSystemWindows = false;
         Animation enterAnimation = AnimationUtils.loadAnimation(this, R.anim.fade_in);
 
         final FancyShowCaseView tours = new FancyShowCaseView.Builder(this)
                 .title(getString(R.string.help_tours))
-                .fitSystemWindows(true)
+                .fitSystemWindows(fitSystemWindows)
                 .focusBorderColor(borderColor)
                 .focusBorderSize(5)
                 .enterAnimation(enterAnimation)
@@ -261,7 +262,7 @@ public class MapActivity extends BaseActivity implements
 
         final FancyShowCaseView search = new FancyShowCaseView.Builder(this)
                 .title(getString(R.string.help_search))
-                .fitSystemWindows(true)
+                .fitSystemWindows(fitSystemWindows)
                 .focusBorderColor(borderColor)
                 .focusBorderSize(5)
                 .enterAnimation(enterAnimation)
@@ -270,7 +271,7 @@ public class MapActivity extends BaseActivity implements
 
         final FancyShowCaseView tracking = new FancyShowCaseView.Builder(this)
                 .title(getString(R.string.help_tracking))
-                .fitSystemWindows(true)
+                .fitSystemWindows(fitSystemWindows)
                 .focusBorderColor(borderColor)
                 .focusBorderSize(5)
                 .enterAnimation(enterAnimation)
@@ -279,28 +280,30 @@ public class MapActivity extends BaseActivity implements
 
         final FancyShowCaseView camera = new FancyShowCaseView.Builder(this)
                 .title(getString(R.string.help_camera))
-                .fitSystemWindows(true)
+                .fitSystemWindows(fitSystemWindows)
                 .focusBorderColor(borderColor)
                 .focusBorderSize(5)
                 .enterAnimation(enterAnimation)
                 .focusOn(fabCameraAndPoiList)
                 .build();
 
+/*
         final FancyShowCaseView menu = new FancyShowCaseView.Builder(this)
                 .title(getString(R.string.help_menu))
-                .fitSystemWindows(true)
+                .fitSystemWindows(fitSystemWindows)
                 .focusBorderColor(borderColor)
                 .focusBorderSize(5)
                 .enterAnimation(enterAnimation)
                 .focusOn(fabMenu)
                 .build();
+*/
 
         new FancyShowCaseQueue()
                 .add(tours)
                 .add(search)
                 .add(tracking)
                 .add(camera)
-                .add(menu)
+//                .add(menu)
                 .show();
     }
 

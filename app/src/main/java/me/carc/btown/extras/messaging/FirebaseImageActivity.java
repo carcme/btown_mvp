@@ -195,7 +195,6 @@ public class FirebaseImageActivity extends BaseActivity {
                         .using(new FirebaseImageLoader())
                         .load(ref)
 //                        .placeholder(getBackground())
-                        .error(getBackground())
                         .into(new SimpleTarget<GlideDrawable>() {
                             @Override
                             public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {

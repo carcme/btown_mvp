@@ -148,10 +148,12 @@ public class PublicTransportPlan extends BaseActivity implements SubsamplingScal
     }
 
     private void showError(String source, Exception e) {
-        new AlertDialog.Builder(this)
-                .setTitle("Error in " + source)
-                .setMessage(e != null ? e.getLocalizedMessage() : getString(R.string.network_not_available_error))
-                .show();
+        if(!isFinishing()) {
+            new AlertDialog.Builder(this)
+                    .setTitle("Error in " + source)
+                    .setMessage(e != null ? e.getLocalizedMessage() : getString(R.string.network_not_available_error))
+                    .show();
+        }
     }
 
     @Override

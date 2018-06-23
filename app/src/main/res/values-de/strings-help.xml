@@ -13,7 +13,9 @@
     <string name="privacy_policy_link">https://carcmedev.github.io/btown/privacy_de.html</string>
 
 
-    <string name="help_intro">Willkommen bei B-Town\n\nIch hoffe, die App bringt Euch viel Freude. Wenn Ihr Verbesserungs-Vorschläge habt, lasst sie uns einfach in der Feedback-Sektion zukommen.\n\nHalte die Taste einfach gedrückt, um weitere Optionen anzuzeigen.</string>
+
+    <string name="help_intro">Willkommen bei B-Town Karte\n\nHalten Sie die Karte gedrückt, um auf das Benutzerhandbuch zuzugreifen</string>
+    <!--<string name="help_intro">Willkommen bei B-Town\n\nIch hoffe, die App bringt Euch viel Freude. Wenn Ihr Verbesserungs-Vorschläge habt, lasst sie uns einfach in der Feedback-Sektion zukommen.\n\nHalte die Taste einfach gedrückt, um weitere Optionen anzuzeigen.</string>-->
     <string name="help_search">Finde einfach alles\nEssen, Trinken, historische Sehenswürdigkeiten, Wikipedia-Einträge und neueste Trends auf der Karte\n\nHier kannst du auch Deine Favoriten, Chronik und gespeicherten Wikipedia-Einträge finden</string>
     <string name="help_tracking">Finde Dich auf der Karte zurecht und aktiviere Deine Standort-Funktion\n\nDrücke die Rückwärts-Funktion, um wieder zu Deinem Ausgangspunkt zu kommen oder berühre die Karte, um die Standort-Funktion zu deaktivieren</string>
     <string name="help_camera">Schnellzugang zur Kamera\n\nWenn bei Deiner Suche zahlreiche Ergebnisse gefunden wurden, klicke hier, um die gesamte Liste anzuzeigen</string>

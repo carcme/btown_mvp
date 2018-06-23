@@ -32,8 +32,6 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.github.lzyzsd.circleprogress.DonutProgress;
 
-import org.osmdroid.util.GeoPoint;
-
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -62,8 +60,8 @@ import me.carc.btown.data.all4squ.entities.Reason;
 import me.carc.btown.data.all4squ.entities.Timeframe;
 import me.carc.btown.data.all4squ.entities.VenueResult;
 import me.carc.btown.extras.WikiWebViewActivity;
+import me.carc.btown.map.MapActivity;
 import me.carc.btown.map.sheets.share.ShareMenu;
-import me.carc.btown.tours.attractionPager.AttractionMapActivity;
 import me.carc.btown.tours.top_pick_lists.VenueTabsActivity;
 import me.carc.btown.tours.top_pick_lists.adapters.VenueFeaturesAdapter;
 import pub.devrel.easypermissions.EasyPermissions;
@@ -409,13 +407,11 @@ public class VenueInfoFragment extends Fragment {
             venueFeaturesContainer.setVisibility(View.GONE);
     }
 
-    @OnClick(R.id.venueAddressMap)
+    @OnClick({R.id.venueAddressMap, R.id.venueMapOverlay, R.id.venueAddress, R.id.venueDescription, R.id.addressContainer})
     void showMap() {
         VenueResult venue = getParcel();
-
-        Intent mapIntent = new Intent(getActivity(), AttractionMapActivity.class);
-        mapIntent.putExtra(AttractionMapActivity.TITLE,  venue.getName());
-        mapIntent.putExtra(AttractionMapActivity.GEOPOINT, (Parcelable) new GeoPoint(venue.getLocation().getLat(), venue.getLocation().getLng()));
+        Intent mapIntent = new Intent(getActivity(), MapActivity.class);
+        mapIntent.putExtra(VenueTabsActivity.EXTRA_VENUE, (Parcelable) venue);
         startActivity(mapIntent);
     }
 
@@ -423,7 +419,6 @@ public class VenueInfoFragment extends Fragment {
     void menu() {
         venueInfoProgressBar.setVisibility(View.VISIBLE);
         VenueResult venue = getParcel();
-//        final String venueName = venue.getName();
 
         FourSquareApi service = FourSquareServiceProvider.get();
         Call<FourSquResult> listsCall = service.getVenueMenu(venue.getId());
@@ -432,7 +427,6 @@ public class VenueInfoFragment extends Fragment {
             @SuppressWarnings({"ConstantConditions"})
             @Override
             public void onResponse(@NonNull Call<FourSquResult> call, @NonNull Response<FourSquResult> response) {
-
                 FourSquResult body = response.body();
 
                 if (Commons.isNotNull(body) && Commons.isNotNull(body.getResponse())) {
@@ -440,7 +434,7 @@ public class VenueInfoFragment extends Fragment {
 
                     Intent intent = IntentUtils.launchWeb(menu.getProvider().getAttributionLink());
 /*
-Use tne internal browser when I work out how to make it work wtih JS selection pop up inside the webview
+todo Use tne internal browser when I work out how to make it work wtih JS selection pop up inside the webview
 Mite be nice to have the menu in a separate browser anyway so user can reference it easily
 
                     Intent intent = new Intent(getActivity(), WikiWebViewActivity.class);
@@ -471,13 +465,13 @@ Mite be nice to have the menu in a separate browser anyway so user can reference
         final VenueResult venue = getParcel();
         if (Commons.isNotNull(venue)) {
             new AlertDialog.Builder(getActivity())
-                    .setMessage("This is an expeimental feature and may not ")
+                    .setMessage("This is an expeimental feature and may not work. I'm still playing with the idea of having it here")
                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             Location loc = venue.getLocation();
 
-                            String base = "https://m.opentable.de/search?";
+                            String base = "https://m.opentable.de/search?lang=" + C.USER_LANGUAGE + "&";
                             String paramLoc = "latitude=" + loc.getLat() + "&longitude=" + loc.getLng();
                             String paramAdd = "&address=" + loc.getAddress() + ", " + loc.getPostalCode() + ", " + loc.getCity() + ", " + loc.getCountry();
                             String url = base + paramLoc + paramAdd;

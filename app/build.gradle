@@ -8,7 +8,6 @@ buildscript {
     }
 }
 
-
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 
@@ -16,15 +15,14 @@ repositories {
     maven { url 'https://maven.fabric.io/public' }
 }
 
-
 android {
     compileSdkVersion 26
     defaultConfig {
         applicationId 'me.carc.btown'
         minSdkVersion 21
         targetSdkVersion 26
-        versionCode 61
-        versionName "2.1.21"
+        versionCode 64
+        versionName "2.1.24"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         android.defaultConfig.vectorDrawables.useSupportLibrary = true
         javaCompileOptions {
@@ -34,13 +32,17 @@ android {
         }
         resConfigs "en", "de"
         multiDexEnabled true
+
+        buildConfigField "String", "API_KEY", getPrivateKey("API_KEY")
     }
+
     buildTypes {
         debug {
             minifyEnabled false
             shrinkResources false
             zipAlignEnabled false
             useProguard false
+
             buildConfigField "boolean", "USE_CRASHLYTICS", "false"
             buildConfigField "String", "FABRIC_apiSecret", getPrivateKey("FABRIC_apiSecret")
 
@@ -82,37 +84,8 @@ android {
     dexOptions {
         jumboMode true
     }
-/*
-    productFlavors {
-        maptour {
-            applicationId "me.carc.btown"
-            minSdkVersion 21
-            targetSdkVersion 26
-            versionCode 34
-            versionName "2.0.4"
-            testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-            android.defaultConfig.vectorDrawables.useSupportLibrary = true
-            javaCompileOptions {
-                annotationProcessorOptions {
-                    arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
-                }
-            }
-            resValue "string", "app_name", "B-Town"
-            resConfigs "en", "de"
-        }
-        map {
-            applicationId 'me.carc.btown.map'
-            minSdkVersion 21
-            targetSdkVersion 26
-            versionCode 1
-            versionName '0.0.1'
-            resValue "string", "app_name", "B-Town Map"
-        }
-    }
-*/
 }
 
-// Get your own key at https://graphhopper.com/#directions-api and copy it to 'local.properties'
 def static getPrivateKey(String property){
     Properties props = new Properties()
     props.load(new FileInputStream(new File('D:/carc.apps/btown_map/local.properties')))
@@ -129,7 +102,7 @@ ext {
     firebaseUI = '2.3.0'
     facebook ='4.23.+'
     glide = '3.7.0'
-    retrofit = '2.3.0'
+    retrofit = '2.4.0'
     okhttp = '3.8.0'
 //    roomVersion = '1.1.0'
     roomVersion = '1.0.0-alpha7'
@@ -252,5 +225,7 @@ dependencies {
     compileOnly 'com.google.code.findbugs:annotations:3.0.1'
     compileOnly 'com.google.code.findbugs:jsr305:3.0.1'
 
+
+//    implementation 'com.klinkerapps:article_viewer:0.24.9'
 }
 apply plugin: 'com.google.gms.google-services'

@@ -15,7 +15,8 @@
 
 
 
-    <string name="help_intro">Welcome to B-Town\n\nI hope you enjoy using B-Town. If you have a suggestion, let me know via the feedback option\n\nPress and hold the map to show additional options</string>
+    <string name="help_intro">Welcome to B-Town Map\n\nPress and hold the map to access the user guide</string>
+    <!--<string name="help_intro">Welcome to B-Town\n\nI hope you enjoy using B-Town. If you have a suggestion, let me know via the feedback option\n\nPress and hold the map to show additional options</string>-->
     <string name="help_tours">Show B-Town Tours\nHave visiting friends coming to town… take them out on a tour of the city\n\nWe\'ll be adding more tours when we find the time</string>
     <string name="help_search">Search for anything\nFood, drink, historic sites, Wikipedia and trending places at the map position\n\nAccess your favorites, history and saved Wikipedia reading lists from here too</string>
     <string name="help_tracking">Locate your position and enable tracking\n\n Touch the button to return to the previous position or touch the map to disable tracking</string>

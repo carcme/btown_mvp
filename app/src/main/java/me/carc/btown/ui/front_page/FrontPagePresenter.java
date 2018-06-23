@@ -1,7 +1,5 @@
 package me.carc.btown.ui.front_page;
 
-import android.content.Intent;
-
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
@@ -55,14 +53,4 @@ public class FrontPagePresenter extends MvpBasePresenter<FrontPageMvpView> {
 
         getMvpView().loadFrontPageMenu(items);
     }
-
-    public Intent sendEmail(String[] to, String subject, String text) {
-        Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setType("message/rfc822");
-        intent.putExtra(Intent.EXTRA_EMAIL, to);
-        intent.putExtra(Intent.EXTRA_SUBJECT, subject);
-        intent.putExtra(Intent.EXTRA_TEXT, text);
-        return intent;
-    }
-
 }

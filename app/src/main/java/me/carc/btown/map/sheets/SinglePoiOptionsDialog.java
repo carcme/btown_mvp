@@ -47,6 +47,7 @@ import me.carc.btown.Utils.AndroidUtils;
 import me.carc.btown.Utils.IntentUtils;
 import me.carc.btown.Utils.MapUtils;
 import me.carc.btown.Utils.OpeningHoursParser;
+import me.carc.btown.Utils.SocialMediaUtils;
 import me.carc.btown.Utils.WikiUtils;
 import me.carc.btown.common.Commons;
 import me.carc.btown.data.results.OverpassQueryResult;
@@ -365,13 +366,16 @@ public class SinglePoiOptionsDialog extends BottomSheetDialogFragment {
                 items.add(new InfoCard(node.tags.contactEmail, InfoCard.ItemType.EMAIL, CommunityMaterial.Icon.cmd_email));
 
             if (Commons.isNotNull(node.tags.facebook))
-                items.add(new InfoCard(getString(R.string.facebook), "https://www.facebook.com/".concat(node.tags.facebook), InfoCard.ItemType.FACEBOOK, CommunityMaterial.Icon.cmd_facebook));
+                items.add(new InfoCard(getString(R.string.facebook), node.tags.facebook, InfoCard.ItemType.FACEBOOK, CommunityMaterial.Icon.cmd_facebook));
+//            items.add(new InfoCard(getString(R.string.facebook), "https://www.facebook.com/".concat(node.tags.facebook), InfoCard.ItemType.FACEBOOK, CommunityMaterial.Icon.cmd_facebook));
 
             if (Commons.isNotNull(node.tags.instagram))
-                items.add(new InfoCard(getString(R.string.instagram), "https://www.instagram.com/".concat(node.tags.instagram), InfoCard.ItemType.INSTAGRAM, CommunityMaterial.Icon.cmd_instagram));
+                items.add(new InfoCard(getString(R.string.instagram), node.tags.instagram, InfoCard.ItemType.INSTAGRAM, CommunityMaterial.Icon.cmd_instagram));
+//            items.add(new InfoCard(getString(R.string.instagram), "https://www.instagram.com/".concat(node.tags.instagram), InfoCard.ItemType.INSTAGRAM, CommunityMaterial.Icon.cmd_instagram));
 
             if (Commons.isNotNull(node.tags.twitter))
-                items.add(new InfoCard(getString(R.string.twitter), "https://twitter.com/".concat(node.tags.twitter), InfoCard.ItemType.TWITTER, CommunityMaterial.Icon.cmd_twitter));
+                items.add(new InfoCard(getString(R.string.twitter), node.tags.twitter, InfoCard.ItemType.TWITTER, CommunityMaterial.Icon.cmd_twitter));
+//            items.add(new InfoCard(getString(R.string.twitter), "https://twitter.com/".concat(node.tags.twitter), InfoCard.ItemType.TWITTER, CommunityMaterial.Icon.cmd_twitter));
 
             if (Commons.isNotNull(node.tags.smoking))
                 items.add(new InfoCard(getString(R.string.poi_res_smoking) + node.tags.smoking, InfoCard.ItemType.INFO, CommunityMaterial.Icon.cmd_smoking));
@@ -439,7 +443,7 @@ public class SinglePoiOptionsDialog extends BottomSheetDialogFragment {
                                     startActivity(IntentUtils.callPhone(item.getData()));
                                 }
                                 break;
-/*
+
                             case FACEBOOK:
                                 Intent facebookIntent = SocialMediaUtils.getFacebookPageIntent(getActivity(), item.getData());
                                 if(Commons.isNotNull(facebookIntent))
@@ -447,23 +451,36 @@ public class SinglePoiOptionsDialog extends BottomSheetDialogFragment {
                                 else {
                                     intent = new Intent(getActivity(), WikiWebViewActivity.class);
                                     intent.putExtra(WikiWebViewActivity.WIKI_EXTRA_PAGE_TITLE, getActivity().getString(R.string.facebook));
-                                    intent.putExtra(WikiWebViewActivity.WIKI_EXTRA_PAGE_URL, item.getData());
+                                    intent.putExtra(WikiWebViewActivity.WIKI_EXTRA_PAGE_URL, "https://www.facebook.com/".concat(item.getData()));
                                     startActivity(intent);
                                 }
                                 break;
                             case INSTAGRAM:
-                                intent = new Intent(getActivity(), WikiWebViewActivity.class);
-                                intent.putExtra(WikiWebViewActivity.WIKI_EXTRA_PAGE_TITLE, getActivity().getString(R.string.instagram));
-                                intent.putExtra(WikiWebViewActivity.WIKI_EXTRA_PAGE_URL, "https://www.instagram.com/".concat(item.getData()));
-                                startActivity(intent);
+                                Intent instagramIntent = SocialMediaUtils.getInstagramIntent(getActivity(), item.getData());
+                                if(Commons.isNotNull(instagramIntent))
+                                    startActivity(instagramIntent);
+                                else {
+                                    instagramIntent = new Intent(getActivity(), WikiWebViewActivity.class);
+                                    instagramIntent.putExtra(WikiWebViewActivity.WIKI_EXTRA_PAGE_TITLE, getActivity().getString(R.string.instagram));
+                                    instagramIntent.putExtra(WikiWebViewActivity.WIKI_EXTRA_PAGE_URL, "https://www.instagram.com/".concat(item.getData()));
+                                    startActivity(instagramIntent);
+                                }
                                 break;
                             case TWITTER:
-                                intent = new Intent(getActivity(), WikiWebViewActivity.class);
-                                intent.putExtra(WikiWebViewActivity.WIKI_EXTRA_PAGE_TITLE, getActivity().getString(R.string.twitter));
-                                intent.putExtra(WikiWebViewActivity.WIKI_EXTRA_PAGE_URL, "https://twitter.com/".concat(item.getData().replace("@", "")));
-                                startActivity(intent);
+                                Intent twitterIntent = SocialMediaUtils.getTwitterIntent(getActivity(), item.getData());
+                                if(Commons.isNotNull(twitterIntent))
+                                    startActivity(twitterIntent);
+                                else {
+                                    twitterIntent = new Intent(getActivity(), WikiWebViewActivity.class);
+                                    twitterIntent.putExtra(WikiWebViewActivity.WIKI_EXTRA_PAGE_TITLE, getActivity().getString(R.string.twitter));
+                                    if (item.getData().startsWith("https://twitter.com/"))
+                                        twitterIntent.putExtra(WikiWebViewActivity.WIKI_EXTRA_PAGE_URL, item.getData());
+                                    else
+                                        twitterIntent.putExtra(WikiWebViewActivity.WIKI_EXTRA_PAGE_URL, "https://twitter.com/".concat(item.getData().replace("@", "")));
+                                    startActivity(twitterIntent);
+                                }
                                 break;
-*/
+
                             case CLIPBOARD:
                                 AndroidUtils.copyToClipboard(getActivity(), item.getData());
                                 Toast.makeText(getActivity(), "Copied to clipboard:\n" + item.getData(), Toast.LENGTH_SHORT).show();

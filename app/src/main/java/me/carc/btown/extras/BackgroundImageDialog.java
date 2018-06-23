@@ -1,8 +1,6 @@
 package me.carc.btown.extras;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.ContextWrapper;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.DrawableRes;
@@ -27,7 +25,6 @@ import me.carc.btown.R;
 import me.carc.btown.Utils.ViewUtils;
 import me.carc.btown.common.Commons;
 import me.carc.btown.common.TinyDB;
-import me.carc.btown.map.MapActivity;
 
 /**
  * Show a rotating compass dialog page
@@ -35,6 +32,7 @@ import me.carc.btown.map.MapActivity;
  */
 
 public class BackgroundImageDialog extends DialogFragment {
+
 
     public interface BgImageDialogListener {
         void onImageChanged();
@@ -48,10 +46,8 @@ public class BackgroundImageDialog extends DialogFragment {
 
     @BindView(R.id.backgrounds)
     RecyclerView mBackgrounds;
-
     @BindView(R.id.headerPickerFab)
     FloatingActionButton fab;
-
 
     @SuppressFBWarnings("MS_MUTABLE_ARRAY")
     public static final int[] BACKGROUNGS = new int[]{
@@ -68,10 +64,6 @@ public class BackgroundImageDialog extends DialogFragment {
             R.drawable.background_museum_insel
     };
 
-    public int getBACKGROUNG(int index) {
-        return BACKGROUNGS[index];
-    }
-
 
     protected void scrollHider(RecyclerView rv, final FloatingActionButton fab) {
         rv.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -87,20 +79,16 @@ public class BackgroundImageDialog extends DialogFragment {
     }
 
     public static boolean showInstance(final Context appContext) {
-
         AppCompatActivity activity = ((App) appContext).getCurrentActivity();
 
         try {
             BackgroundImageDialog fragment = new BackgroundImageDialog();
             fragment.show(activity.getSupportFragmentManager(), ID_TAG);
-
             return true;
-
         } catch (RuntimeException e) {
             return false;
         }
     }
-
 
     @Override
     public void onAttach(Context ctx) {
@@ -110,16 +98,6 @@ public class BackgroundImageDialog extends DialogFragment {
             dlgFinishedListener = (BgImageDialogListener) ctx;
         } catch (ClassCastException e) {
             throw new ClassCastException(ctx.toString() + " must implement TourListener callbacks");
-        }
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-            dlgFinishedListener = (BgImageDialogListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString() + " must implement TourListener callbacks");
         }
     }
 
@@ -135,9 +113,9 @@ public class BackgroundImageDialog extends DialogFragment {
         ButterKnife.bind(this, view);
 
         if (BACKGROUNGS.length != BackgroundChooserAdapter.DESCRIPTION_IDS.length)
-            throw new RuntimeException("Check array lenghts");
+            throw new RuntimeException("Check array length");
         if (BACKGROUNGS.length != BackgroundChooserAdapter.DESCRIPTION_NAMES.length)
-            throw new RuntimeException("Check array lenghts");
+            throw new RuntimeException("Check array length");
 
         mBackgrounds.setLayoutManager(new LinearLayoutManager(getActivity()));
         mBackgrounds.setAdapter(new BackgroundChooserAdapter());
@@ -151,7 +129,7 @@ public class BackgroundImageDialog extends DialogFragment {
         super.onStart();
 
         int oldImageRes = TinyDB.getTinyDB().getInt(FRONT_PAGE_IMAGE, 0);
-        for(int i = 0; i < BACKGROUNGS.length; i++){
+        for (int i = 0; i < BACKGROUNGS.length; i++) {
             if (oldImageRes == BACKGROUNGS[i]) {
                 final int index = i;
                 new Handler().postDelayed(new Runnable() {
@@ -163,7 +141,6 @@ public class BackgroundImageDialog extends DialogFragment {
                 break;
             }
         }
-
         scrollHider(mBackgrounds, fab);
     }
 
@@ -188,8 +165,10 @@ public class BackgroundImageDialog extends DialogFragment {
 
     @Override
     public void dismiss() {
-        dlgFinishedListener.onImageChanged();
-        super.dismiss();
+        if (Commons.isNotNull(getActivity())) {
+            dlgFinishedListener.onImageChanged();
+            super.dismiss();
+        }
     }
 
     private static class BackgroundChooserAdapter extends RecyclerView.Adapter<BackgroundImageHolder> {
@@ -223,8 +202,7 @@ public class BackgroundImageDialog extends DialogFragment {
 
         @Override
         public BackgroundImageHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            return new BackgroundImageHolder(
-                    LayoutInflater.from(parent.getContext())
+            return new BackgroundImageHolder(LayoutInflater.from(parent.getContext())
                             .inflate(R.layout.nav_header_item_container, parent, false));
         }
 
@@ -272,31 +250,15 @@ public class BackgroundImageDialog extends DialogFragment {
 
         @Override
         public void onClick(View v) {
-
             AppCompatActivity currActivity = ((App) itemView.getContext().getApplicationContext()).getCurrentActivity();
 
             if (Commons.isNotNull(currActivity)) {
-                if (currActivity instanceof MapActivity) {
-                    ((MapActivity) currActivity)
-                            .setBackgroundImage(BACKGROUNGS[index]);
-                } else {
-                    TinyDB.getTinyDB().putInt(BackgroundImageDialog.FRONT_PAGE_IMAGE, BACKGROUNGS[index]);
-                }
+                TinyDB.getTinyDB().putInt(BackgroundImageDialog.FRONT_PAGE_IMAGE, BACKGROUNGS[index]);
+
                 BackgroundImageDialog fragment = (BackgroundImageDialog) currActivity.getSupportFragmentManager()
                         .findFragmentByTag(BackgroundImageDialog.ID_TAG);
                 fragment.exit();
             }
         }
-    }
-
-    private static MapActivity scanForActivity(Context cont) {
-        if (cont == null)
-            return null;
-        else if (cont instanceof MapActivity)
-            return (MapActivity) cont;
-        else if (cont instanceof ContextWrapper)
-            return scanForActivity(((ContextWrapper) cont).getBaseContext());
-
-        return null;
     }
 }

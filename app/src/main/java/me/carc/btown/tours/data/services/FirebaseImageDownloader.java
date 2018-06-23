@@ -146,13 +146,15 @@ public class FirebaseImageDownloader extends IntentService {
                                         attrDao.insert(attr);
                                     }
                                 }
-                                // check we have the images - download any that are missing
-                                getImages(response.body());
 
                                 db.putLong(CatalogueActivity.LAST_JSON_UPDATE, System.currentTimeMillis());
                                 db.putInt(CatalogueActivity.JSON_VERSION, response.body().version);
                                 db.remove(CatalogueActivity.SERVER_FILE);
                             }
+
+                            // check we have the images - download any that are missing
+                            getImages(response.body());
+
                             setUpdateInProgress(false);
                         }
                     });
@@ -169,7 +171,6 @@ public class FirebaseImageDownloader extends IntentService {
 
     private void getImages(ToursResponse holder) {
         ArrayList<TourCatalogueItem> catalogues = holder.tours;
-        initValues();
         for (TourCatalogueItem catalogue : catalogues) {
             getImage("coverImages", catalogue.getCatalogueImage());
             for (Attraction attraction : catalogue.getAttractions()) {
@@ -181,18 +182,16 @@ public class FirebaseImageDownloader extends IntentService {
     /**
      * Get the image
      */
-    private boolean getImage(String directory, String filename) {
+    private void getImage(String directory, String filename) {
         try {
             // Is the bitmap in our cache?
             if (!FileUtils.checkValidFilePath(dir + File.separator + filename)) {
                 Log.d(TAG, "getImage: FIREBASE:: " + filename);
                 getFirebaseImage(directory, filename);
             }
-            return true;
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        return false;
     }
 
     /**

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.DrawableRes;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -24,7 +25,8 @@ import me.carc.btown.Utils.ViewUtils;
 import me.carc.btown.common.C;
 import me.carc.btown.common.interfaces.OnItemSelectedListener;
 import me.carc.btown.extras.BackgroundImageDialog;
-import me.carc.btown.map.MapActivity;
+import me.carc.btown.settings.SendFeedback;
+import me.carc.btown.ui.RatingDialog;
 import me.carc.btown.ui.base.MvpBaseActivity;
 
 import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
@@ -45,24 +47,16 @@ public class FrontPageActivity extends MvpBaseActivity implements FrontPageMvpVi
     private static final String TAG = FrontPageActivity.class.getName();
     public static final int RESULT_NONE = 0;
     public static final int RESULT_SETTINGS = 41;
-    public static final int RESULT_FSQ = 42;
     public static final int RESULT_GETTING_ROUND = 43;
 
-    @Inject
-    FrontPagePresenter mPresenter;
-    @Inject
-    FrontPageAdapter mAdapter;
+    @Inject FrontPagePresenter mPresenter;
+    @Inject FrontPageAdapter mAdapter;
 
-    @BindView(R.id.detailsAppBar)
-    AppBarLayout detailsAppBar;
-    @BindView(R.id.collapsing_toolbar)
-    CollapsingToolbarLayout collapsingToolbar;
-    @BindView(R.id.profileImage)
-    ImageView profileImage;
-    @BindView(R.id.detailsToolbar)
-    Toolbar detailsToolbar;
-    @BindView(R.id.detailsRecycleView)
-    RecyclerView mRecyclerView;
+    @BindView(R.id.detailsAppBar) AppBarLayout detailsAppBar;
+    @BindView(R.id.collapsing_toolbar) CollapsingToolbarLayout collapsingToolbar;
+    @BindView(R.id.profileImage) ImageView profileImage;
+    @BindView(R.id.detailsToolbar) Toolbar detailsToolbar;
+    @BindView(R.id.detailsRecycleView) RecyclerView mRecyclerView;
 
 //    @BindView(R.id.profileFab)
 //    FloatingActionButton profileFab;
@@ -99,6 +93,13 @@ public class FrontPageActivity extends MvpBaseActivity implements FrontPageMvpVi
         mPresenter.attachView(this);
         mPresenter.setupHeader();
         mPresenter.buildMenuItems();
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        showRatingDialog();
     }
 
     @Override
@@ -114,14 +115,6 @@ public class FrontPageActivity extends MvpBaseActivity implements FrontPageMvpVi
                 }
                 break;
 
-            case RESULT_FSQ:
-                // TODO: 19/12/2017  dont use this - go straight to displaying fsq places on the map
-                if (resultCode == RESULT_OK) {
-                    data.setClass(FrontPageActivity.this, MapActivity.class);
-                    setResult(RESULT_OK, data);
-                    startActivity(data);
-                }
-                break;
             default:
         }
     }
@@ -130,6 +123,46 @@ public class FrontPageActivity extends MvpBaseActivity implements FrontPageMvpVi
     private void restart() {
         finish();
         startActivity(new Intent(this, SplashActivity.class));
+    }
+
+
+    private void showRatingDialog() {
+        final RatingDialog ratingDialog = new RatingDialog.Builder(this)
+                .icon(ContextCompat.getDrawable(this, R.mipmap.ic_launcher_rnd))
+                .session(7)
+                .threshold(3)
+                .title(getString(R.string.rating_dialog_experience))
+                .titleTextColor(R.color.black)
+                .positiveButtonText("Not Now")
+                .negativeButtonText("Never")
+                .positiveButtonTextColor(R.color.negativeBtnTextColor)
+                .negativeButtonTextColor(R.color.grey_500)
+                .formTitle("Submit Feedback")
+                .formHint(getString(R.string.rating_dialog_suggestions))
+                .formSubmitText("Submit")
+                .formCancelText("Cancel")
+                .ratingBarColor(R.color.rating_star)
+                .onThresholdFailed(new RatingDialog.Builder.RatingThresholdFailedListener() {
+                    @Override
+                    public void onThresholdFailed(RatingDialog ratingDialog, float rating, boolean thresholdCleared) {
+                        new SendFeedback(FrontPageActivity.this, SendFeedback.TYPE_FEEDBACK);
+                        ratingDialog.dismiss();
+                    }
+                })
+                .onRatingChanged(new RatingDialog.Builder.RatingDialogListener() {
+                    @Override
+                    public void onRatingSelected(float rating, boolean thresholdCleared) {
+
+                    }
+                })
+                .onRatingBarFormSumbit(new RatingDialog.Builder.RatingDialogFormListener() {
+                    @Override
+                    public void onFormSubmitted(String feedback) {
+
+                    }
+                }).build();
+
+        ratingDialog.show();
     }
 
 

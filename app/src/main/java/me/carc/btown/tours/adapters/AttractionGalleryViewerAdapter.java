@@ -108,7 +108,7 @@ public class AttractionGalleryViewerAdapter extends RecyclerView.Adapter<Attract
                                             holder.gallleryTitle.setTextColor(s.getTitleTextColor());
                                             holder.imageDesc.setTextColor(s.getTitleTextColor());
                                             ViewUtils.animateViewColor(holder.imageTextContainer, mDefaultBackgroundColor, s.getRgb());
-                                            gallery.setBitmap(bitmap);
+                                            gallery.setBitmap(Bitmap.createBitmap(bitmap));
                                             gallery.setSwatch(s);
                                             AttractionTabsActivity.galleryItems.put(position, gallery);
                                         }

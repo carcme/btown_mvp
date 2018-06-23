@@ -39,7 +39,7 @@ public class SimpleDialog extends AppCompatDialog implements View.OnClickListene
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        setContentView(R.layout.simple_dialog);
+        setContentView(R.layout.rating_dialog_simple);
 
         tvTitle = (TextView) findViewById(R.id.dlg_title);
         tvMsg = (TextView) findViewById(R.id.dlg_message);
