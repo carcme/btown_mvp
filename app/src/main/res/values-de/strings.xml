@@ -96,6 +96,8 @@
     <string name="shared_string_download">Herunterladen</string>
     <string name="shared_string_offline">Offline</string>
     <string name="shared_string_trends">Trends</string>
+    <string name="shared_string_update">Update</string>
+    <string name="shared_string_new_features">Neue Funktionen im Update:\n</string>
 
 
 
@@ -237,5 +239,9 @@
     <string name="building">Gebäude</string>
     <string name="shared_string_initialising">Initialisierung…</string>
 
+
+
+    <!-- APP UPDATE NOTIFICATIONS -->
+    <string name="update_title">Neue Version verfügbar</string>
 
 </resources>

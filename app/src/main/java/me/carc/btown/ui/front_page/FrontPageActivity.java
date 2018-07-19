@@ -1,12 +1,15 @@
 package me.carc.btown.ui.front_page;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.DrawableRes;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -25,8 +28,10 @@ import butterknife.ButterKnife;
 import me.carc.btown.BuildConfig;
 import me.carc.btown.R;
 import me.carc.btown.SplashActivity;
+import me.carc.btown.Utils.ForceUpdateChecker;
 import me.carc.btown.Utils.ViewUtils;
 import me.carc.btown.common.C;
+import me.carc.btown.common.TinyDB;
 import me.carc.btown.common.interfaces.OnItemSelectedListener;
 import me.carc.btown.extras.BackgroundImageDialog;
 import me.carc.btown.settings.SendFeedback;
@@ -41,7 +46,10 @@ import static android.content.res.Configuration.ORIENTATION_PORTRAIT;
  * <p/>
  * Display a menu screen at start up
  */
-public class FrontPageActivity extends MvpBaseActivity implements FrontPageMvpView, BackgroundImageDialog.BgImageDialogListener {
+public class FrontPageActivity extends MvpBaseActivity implements
+        FrontPageMvpView,
+        BackgroundImageDialog.BgImageDialogListener,
+        ForceUpdateChecker.OnUpdateNeededListener{
 
     @Override
     public void onImageChanged() {
@@ -52,6 +60,9 @@ public class FrontPageActivity extends MvpBaseActivity implements FrontPageMvpVi
     public static final int RESULT_NONE = 0;
     public static final int RESULT_SETTINGS = 41;
     public static final int RESULT_GETTING_ROUND = 43;
+
+    private static final String LAST_UPDATE_TIME = "UPDATE_ASK_TIME";
+    private static final String NEVER_UPDATE = "NEVER_UPDATE";
 
     @Inject FrontPagePresenter mPresenter;
     @Inject FrontPageAdapter mAdapter;
@@ -97,13 +108,20 @@ public class FrontPageActivity extends MvpBaseActivity implements FrontPageMvpVi
         mPresenter.attachView(this);
         mPresenter.setupHeader();
         mPresenter.buildMenuItems();
-
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        showRatingDialog();
+
+        boolean neverUpdate = TinyDB.getTinyDB().getBoolean(NEVER_UPDATE);
+        long updateTime = TinyDB.getTinyDB().getLong(LAST_UPDATE_TIME, 0);
+
+        if(!neverUpdate && System.currentTimeMillis() > updateTime) {
+            TinyDB.getTinyDB().putLong(LAST_UPDATE_TIME, System.currentTimeMillis() + C.TIME_ONE_DAY);
+            ForceUpdateChecker.with(this).onUpdateNeeded(this).check();
+        } else
+            showRatingDialog();
     }
 
     @Override
@@ -216,5 +234,52 @@ public class FrontPageActivity extends MvpBaseActivity implements FrontPageMvpVi
 
     @Override
     public void showError() {
+    }
+
+    /**
+     * Split string on reg exp ( ¬ ) and show the dialog notification
+     * @param updateDesc string to split
+     */
+    @Override
+    public void onUpdateNeeded(String updateDesc) {
+
+        StringBuilder desc = new StringBuilder(getString(R.string.shared_string_new_features));
+        String[] split = updateDesc.split("¬");
+        for(String str : split)
+            desc.append(str).append("\n");
+
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setTitle(R.string.update_title)
+                .setMessage(desc)
+                .setIcon(R.drawable.ic_system_update)
+                .setPositiveButton(R.string.shared_string_update, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                                redirectStore();
+                            }
+                        })
+                .setNegativeButton(R.string.rating_dialog_maybe_later, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                .setNeutralButton(R.string.shared_string_never_ask, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        TinyDB.getTinyDB().putBoolean(NEVER_UPDATE, true);
+                        dialog.dismiss();
+                    }
+                })
+                .create();
+
+        dialog.show();
+    }
+
+    private void redirectStore() {
+        final Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.playStoreLink)));
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 }

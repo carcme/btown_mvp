@@ -43,7 +43,7 @@ android {
             zipAlignEnabled false
             useProguard false
 
-            buildConfigField "boolean", "USE_CRASHLYTICS", "true"
+            buildConfigField "boolean", "USE_CRASHLYTICS", "false"
             buildConfigField "String", "FABRIC_apiSecret", getPrivateKey("FABRIC_apiSecret")
 
             buildConfigField "String", "FIREBASE_ENDPOINT", getPrivateKey("FIREBASE_ENDPOINT")
@@ -154,6 +154,7 @@ dependencies {
     annotationProcessor "com.jakewharton:butterknife-compiler:$butterknife"
     implementation "com.google.firebase:firebase-core:$firebase"
     implementation "com.google.firebase:firebase-auth:$firebase"
+    implementation "com.google.firebase:firebase-config:$firebase"
     implementation "com.google.firebase:firebase-database:$firebase"
     implementation "com.firebaseui:firebase-ui-database:$firebaseUI"
     implementation "com.google.firebase:firebase-storage:$firebase"

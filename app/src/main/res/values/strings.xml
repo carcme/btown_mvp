@@ -110,6 +110,8 @@
     <string name="shared_string_download">Download</string>
     <string name="shared_string_offline">Offline</string>
     <string name="shared_string_trends">Trends</string>
+    <string name="shared_string_update">Update</string>
+    <string name="shared_string_new_features">New featres in update:\n</string>
 
     <string name="home_screen_updated">Home Screen Updated</string>
 
@@ -261,5 +263,10 @@
 
     <string name="building">Building</string>
     <string name="shared_string_initialising">Initialising…</string>
+
+
+    <!-- APP UPDATE NOTIFICATIONS -->
+    <string name="update_title">New version available</string>
+
 
 </resources>

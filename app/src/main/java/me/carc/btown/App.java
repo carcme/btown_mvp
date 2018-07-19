@@ -40,6 +40,7 @@ import pub.devrel.easypermissions.EasyPermissions;
  */
 
 public class App extends Application {
+    private static final String TAG = App.class.getName();
 
     public static final String BTOWN_DATABASE_NAME = "btown.db";
     private static Context applicationContext;
@@ -142,10 +143,6 @@ public class App extends Application {
 
         applicationContext = getApplicationContext();
         registerConnectivityRecver();
-/*
-        if (EasyPermissions.hasPermissions(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE))
-            getFirebaseTours();
-*/
 
         if (mBillingService == null && GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this) == ConnectionResult.SUCCESS) {
             Intent serviceIntent = new Intent("com.android.vending.billing.InAppBillingService.BIND");

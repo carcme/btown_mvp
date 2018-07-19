@@ -64,9 +64,9 @@ public class C {
 
 
     public static final int TIME_ONE_SECOND = 1000;
-    private static final int TIME_ONE_MINUTE = 60 * TIME_ONE_SECOND;
+    public static final int TIME_ONE_MINUTE = 60 * TIME_ONE_SECOND;
     private static final int TIME_ONE_HOUR = TIME_ONE_MINUTE * 60;
-    private static final int TIME_ONE_DAY = TIME_ONE_HOUR * 24;
+    public static final int TIME_ONE_DAY = TIME_ONE_HOUR * 24;
     public static final int TIME_ONE_WEEK = TIME_ONE_DAY * 7;
 
 
