@@ -266,8 +266,7 @@ public class VenueInfoFragment extends Fragment {
                     int viewHeight = (int) ViewUtils.dpFromPx(ctx, venueAddressLayout.getHeight());
 
                     String size = viewWidth + "x" + viewHeight;
-
-                    String url = MapUtils.buildStaticOsmMapImageMarkerRight(dLat, dLon, size, 16);
+                    String url = MapUtils.buildStaticOsmMapImageMarkerRight(dLat, dLon, size, 14);
 
                     // EG: http://staticmap.openstreetmap.de/staticmap.php?center=52.523121068264295,13.297143505009352&zoom=16&size=360x230&maptype=mapnik&markers=52.523121068264295,13.299143505009352,red-pushpin
                     Glide.with(getActivity())

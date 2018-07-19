@@ -26,7 +26,6 @@ import pub.devrel.easypermissions.EasyPermissions;
  */
 
 public class BTownFusedLocation {
-
     private final String TAG = BTownFusedLocation.class.getName();
 
     private Context mContext;

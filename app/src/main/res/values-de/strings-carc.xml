@@ -3,6 +3,9 @@
 
     <string name="carc_app_base_url" formatted="false">https://play.google.com/store/apps/details?id=me.carc.%s</string>
 
+    <string name="appTitleStone">Stolpersteine Berlin</string>
+    <string name="appDescStone">Hier wohnte | Gedenken an die Opfer der Nazis Stein für Stein</string>
+
     <string name="appTitleITimer">Interval Timer | Einfach, Einfach, intuitiv</string>
     <string name="appDescITimer">Intervall-Timer geeignet für: Laufen, Boxen, Calisthenics, Zirkeltraining, HIIT, Tabata und mehr!</string>
 

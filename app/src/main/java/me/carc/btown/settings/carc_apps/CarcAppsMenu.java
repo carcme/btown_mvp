@@ -11,6 +11,7 @@ import me.carc.btown.R;
 
 public enum CarcAppsMenu {
 
+    STONES(R.drawable.app_image_stolperstein, R.string.appTitleStone, R.string.appDescStone, "stolpersteine"),
     ITIMER(R.drawable.app_image_interval_timer, R.string.appTitleITimer, R.string.appDescITimer, "carcintervaltimer"),
     FAKER(R.drawable.app_image_fakecall, R.string.appTitleFakeCall, R.string.appDescFakeCall, "fakecallandsms_mvp"),
     AGD(R.drawable.app_image_agd, R.string.appTitleAGD, R.string.appDescAGB, "anygivendate"),

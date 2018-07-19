@@ -3,6 +3,8 @@
     tools:shrinkMode="strict" >
 
     <string name="search_all_hint">Type to search all</string>
+    <string name="search_keyword_hint">Keyword Search</string>
+
     <string name="initial_search_text">Type to search</string>
     <string name="dist_away_from_my_location">Search %1$s away</string>
 
@@ -43,6 +45,20 @@
     <string name="sort_by_time">Sort by Time</string>
     <string name="sort_by_distance">Sort by Distance</string>
     <string name="show_all_on_map">Show all on Map</string>
+
+    <string name="openNow">Currently\nOpen</string>
+    <string name="sortDistance">Sort by\nDistance</string>
+
+
+    <!--TRENDING SEARCH -->
+    <string name="trending_topPicks">Top Picks</string>
+    <string name="trending_food">Food</string>
+    <string name="trending_drinks">Drink</string>
+    <string name="trending_coffee">Coffee</string>
+    <string name="trending_shops">Shops</string>
+    <string name="trending_arts">Fun</string>
+    <string name="trending_outdoors">Outdoor</string>
+    <string name="trending_sights">Sights</string>
 
 
 </resources>

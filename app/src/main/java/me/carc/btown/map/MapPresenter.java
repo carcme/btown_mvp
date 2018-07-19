@@ -10,10 +10,12 @@ import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -111,7 +113,7 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
 
     private static final String TAG = MapPresenter.class.getName();
 
-    private static int MIN_POI_LOOKUP_ZOOM_LVL = 16;
+    private static double MIN_POI_LOOKUP_ZOOM_LVL = 16f;
     private static final int ZOOM_IN_TIME_DELAY = 500;
 
     private final static String LAST_ZOOM_LEVEL = "LAST_ZOOM_LEVEL";
@@ -334,8 +336,9 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
 
     @Override
     public void destroy() {
-
+        if(Commons.isNotNull(compassSensor)) compassSensor.disableSensors();
         btLocation = null;
+        compassSensor = null;
 
         // Clean up overlays
         mMap.getOverlays().remove(mTourOverlay);
@@ -523,7 +526,7 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
         clearLayers(false);
 
         // no look up from certain level... can't see the poi icons from this zoom lvl
-        if (mMap.getZoomLevel() < MIN_POI_LOOKUP_ZOOM_LVL) {
+        if (mMap.getZoomLevelDouble() < MIN_POI_LOOKUP_ZOOM_LVL) {
             view.onLoadFinish();
             return false;
         }
@@ -586,9 +589,11 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
         String[] array = poi.getTags();
         for (int i = 2; i < array.length; i++) {
             if (BuildConfig.USE_CRASHLYTICS)
-                Crashlytics.log(array[i]);     // Try catch where the ArrayIndexOutOfBoundsException occurs (Crashlytics #162)
-            String[] tag = array[i].split("=");
-            tags.put(tag[1], tag[0]);
+                Crashlytics.log(array[i]);                              // ArrayIndexOutOfBoundsException occurs (Crashlytics #162)
+            if(Commons.isNotNull(array[i]) && array[i].contains("=")) { // Crashlytics #174 - ArrayIndexOutOfBoundsException
+                String[] tag = array[i].split("=");
+                tags.put(tag[1], tag[0]);
+            }
         }
 
         String query = new QueryGenerator().generator(tags, mMap.getBoundingBox()).build();
@@ -684,7 +689,7 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
                 view.showSearching(false);
                 if (!call.isCanceled()) {
                     showQuickSearch();
-                    view.onLoadFailed();
+                    view.onLoadFailed(null);
 //                } else {
 //                    view.onLoadFinish();
 
@@ -867,7 +872,7 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
             public void onFailure(@NonNull Call call, @NonNull Throwable t) {
                 view.showSearching(false);
                 if (!call.isCanceled()) {
-                    view.onLoadFailed();
+                    view.onLoadFailed(null);
                     view.setListMode(false);
                 }
             }
@@ -876,7 +881,7 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
 
 
     @Override
-    public void onDropPin(GeoPoint p) {
+    public void onDropPin(final GeoPoint p) {
         view.showSearching(true);
         ReverseApi service = ReverseServiceProvider.get();
         Call<ReverseResult> reverseCall = service.reverseDetails(p.getLatitude(), p.getLongitude());
@@ -935,27 +940,14 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
                                 element.tags.thumbnail = WikiUtils.buildWikiCommonsLink(result.extratags.image, C.THUMBNAIL_SIZE);
                             }
 
-                            Marker poiMarker = new Marker(mMap);
-                            poiMarker.setTitle("DROP_PIN");
-                            poiMarker.setPosition(new GeoPoint(element.lat, element.lon));
-                            poiMarker.setIcon(ImageUtils.drawableFromVectorDrawable(mContext, R.drawable.ic_pin));
-                            poiMarker.setAnchor(0.5f, 0.7f);
-                            poiMarker.setRelatedObject(element);
-                            poiMarker.setDraggable(true);
-                            poiMarker.setOnMarkerDragListener(mPinDragListener);
-                            poiMarker.setOnMarkerClickListener(MapPresenter.this);
-
-                            mPinOverlay.add(poiMarker);
-                            mPinOverlay.invalidate();
-
-                            onMarkerClick(poiMarker, mMap);
+                            dropPin(p, element);
 
                             view.addClearDropMenuItem(true);
                         } else
-                            view.onLoadFailed();
+                            view.onLoadFailed(null);
                     } else {
                         view.showSearching(false);
-                        view.onLoadFailed();
+                        view.onLoadFailed(null);
                         view.setListMode(false);
                     }
 
@@ -968,13 +960,30 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
             public void onFailure(@NonNull Call call, @NonNull Throwable t) {
                 view.showSearching(false);
                 if (!call.isCanceled()) {
-                    view.onLoadFailed();
+                    view.showOfflineMessage();
                     view.setListMode(false);
+                    dropPin(p, null);
                 }
             }
         });
     }
 
+    private void dropPin(GeoPoint point, @Nullable OverpassQueryResult.Element element) {
+        Marker poiMarker = new Marker(mMap);
+        poiMarker.setTitle("DROP_PIN");
+        poiMarker.setPosition(new GeoPoint(point.getLatitude(), point.getLongitude()));
+        poiMarker.setIcon(ImageUtils.drawableFromVectorDrawable(mContext, R.drawable.ic_pin));
+        poiMarker.setAnchor(0.5f, 0.7f);
+        poiMarker.setRelatedObject(element);
+        poiMarker.setDraggable(true);
+        poiMarker.setOnMarkerDragListener(mPinDragListener);
+        poiMarker.setOnMarkerClickListener(MapPresenter.this);
+
+        mPinOverlay.add(poiMarker);
+        mPinOverlay.invalidate();
+
+        onMarkerClick(poiMarker, mMap);
+    }
 
     @Override
     public void onClearPins() {
@@ -1035,15 +1044,65 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
 
             @Override
             public void onFailure(@NonNull Call call, @NonNull Throwable t) {
-                view.onLoadFailed();
+                view.onLoadFailed(null);
             }
         });
 
     }
 
     @Override
-    public void onFsqExplore() {
+    public void onFsqExplore(final String query, final String section, boolean nowOpen, boolean sortDistance, int radius) {
+        String latLon = mMap.getMapCenter().getLatitude() + "," + mMap.getMapCenter().getLongitude();
+        final String label;
+        FourSquareApi service = FourSquareServiceProvider.get();
+        if(TextUtils.isEmpty(query) && TextUtils.isEmpty(section)) {
+            listsCall = service.explore(latLon, 50, 500);
+            label = mContext.getString(R.string.shared_string_trends);
+        } else if(TextUtils.isEmpty(query)) {
+            listsCall = service.exploreSection(latLon, 50, radius, section, nowOpen, sortDistance);
+            label = Commons.capitalizeFirstLetter(section);
+        } else {
+            listsCall = service.exploreQuery(latLon, 50, radius, query, nowOpen, sortDistance);
+            label = Commons.capitalizeFirstLetter(query);
+        }
 
+        if (listsCall.isExecuted()) {
+            listsCall.cancel();
+            view.showSearching(false);
+            return;
+        }
+
+        listsCall.enqueue(new Callback<FourSquResult>() {
+            @SuppressWarnings({"ConstantConditions"})
+            @Override
+            public void onResponse(@NonNull Call<FourSquResult> call, @NonNull Response<FourSquResult> response) {
+
+                FourSquResult body = response.body();
+                if (body != null && body.getResponse() != null) {
+                    ArrayList<GroupExplore> resp = body.getResponse().getExplore();
+
+                    if (Commons.isNotNull(resp) && (resp.size() > 0)) {
+                        ArrayList<ExploreItem> items = resp.get(0).getItems();
+                        if (items.size() > 0)
+                            view.showFsqSExploreResults(label.concat(" | ").concat(body.getResponse().headerFullLocation), items);
+                        else
+                            view.onLoadFailed(body.getResponse().warning.text);
+                    } else
+                        view.onLoadFailed(null);
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull Throwable t) {
+                view.onLoadFailed(null);
+            }
+        });
+    }
+
+    @Override
+    public void onFsqExplore() {
+        onFsqExplore(null, null, false, false, 0);
+/*
         String latLon = mMap.getMapCenter().getLatitude() + "," + mMap.getMapCenter().getLongitude();
 
         FourSquareApi service = FourSquareServiceProvider.get();
@@ -1073,9 +1132,10 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
 
             @Override
             public void onFailure(@NonNull Call call, @NonNull Throwable t) {
-                view.onLoadFailed();
+                view.onLoadFailed(null);
             }
         });
+*/
     }
 
     @Override

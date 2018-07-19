@@ -23,13 +23,17 @@
 
 -dontnote com.mikepenz.fastadapter.items.**
 
+
+-dontwarn okhttp3.**
 -dontwarn okio.**
+-dontwarn javax.annotation.**
+-dontwarn org.conscrypt.**
+-keepnames class okhttp3.internal.publicsuffix.PublicSuffixDatabase
 
 # Platform used when running on Java 8 VMs. Will not be used at runtime.
 -dontwarn retrofit2.Platform$Java8
 
 -dontwarn com.squareup.okhttp.**
--dontwarn javax.annotation.**
 
 -keepattributes Signature
 

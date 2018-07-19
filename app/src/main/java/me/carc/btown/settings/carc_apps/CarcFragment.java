@@ -16,11 +16,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.CustomEvent;
+
 import java.util.LinkedList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import me.carc.btown.BuildConfig;
 import me.carc.btown.R;
 
 
@@ -57,6 +61,8 @@ public class CarcFragment extends Fragment {
         CarcAppsAdapter adapter = new CarcAppsAdapter(buildMenuItems(), new ClickListener() {
             @Override
             public void onClick(CarcAppsMenu item) {
+                if (BuildConfig.USE_CRASHLYTICS)
+                    Answers.getInstance().logCustom(new CustomEvent("Launch Extra " + item.name()));
                 startActivity(openPlayStore(true, item.getUrlExtension()));
             }
         });
@@ -69,10 +75,11 @@ public class CarcFragment extends Fragment {
 
     private List<CarcAppsMenu> buildMenuItems() {
         List<CarcAppsMenu> items = new LinkedList<>();
-        items.add(CarcAppsMenu.ITIMER);
-        items.add(CarcAppsMenu.FAKER);
-        items.add(CarcAppsMenu.AGD);
+        items.add(CarcAppsMenu.STONES);
         items.add(CarcAppsMenu.BBOOKS);
+        items.add(CarcAppsMenu.FAKER);
+        items.add(CarcAppsMenu.ITIMER);
+        items.add(CarcAppsMenu.AGD);
 
         return items;
     }

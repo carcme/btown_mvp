@@ -19,6 +19,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.OnApplyWindowInsetsListener;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
@@ -28,8 +29,9 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.CustomEvent;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -47,7 +49,7 @@ import me.carc.btown.db.tours.model.TourCatalogueItem;
 import me.carc.btown.extras.messaging.CommentsActivity;
 import me.carc.btown.map.sheets.ImageDialog;
 import me.carc.btown.tours.CatalogueActivity;
-import me.carc.btown.tours.CataloguePreviewActivity;
+import me.carc.btown.tours.RetainedFragment;
 import me.carc.btown.tours.data.services.FirebaseImageDownloader;
 import me.carc.btown.ui.custom.LockableViewPager;
 
@@ -98,7 +100,6 @@ public class AttractionPagerActivity extends BaseActivity implements Placeholder
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(ATTRACTION_INDEX, selectedAttraction);
-        outState.putParcelableArrayList(CataloguePreviewActivity.ATTRACTIONS_LIST, new ArrayList<Parcelable>(tourAdapter.getAttractionsData()));
     }
 
     @Override
@@ -111,11 +112,14 @@ public class AttractionPagerActivity extends BaseActivity implements Placeholder
 
         Intent intent = getIntent();
         if (intent.hasExtra(CatalogueActivity.CATALOGUE_INDEX)) {
+            final FragmentManager fm = getSupportFragmentManager();
 
             if (savedInstanceState != null) {
                 selectedAttraction = savedInstanceState.getInt(ATTRACTION_INDEX);
-                List<Attraction> attractions = savedInstanceState.getParcelableArrayList(CataloguePreviewActivity.ATTRACTIONS_LIST);
-                setupPager(attractions);
+                // find the retained fragment on activity restarts
+                RetainedFragment retainedFragment = (RetainedFragment) fm.findFragmentByTag(RetainedFragment.ID_TAG);
+                if(Commons.isNotNull(retainedFragment))
+                    setupPager(retainedFragment.getAttractionList());
 
             } else {
                 int CATALOGUE_INDEX = intent.getIntExtra(CatalogueActivity.CATALOGUE_INDEX, -1);
@@ -125,7 +129,14 @@ public class AttractionPagerActivity extends BaseActivity implements Placeholder
                 mTourViewModel.getTour(CATALOGUE_INDEX).observe(this, new Observer<TourCatalogueItem>() {
                     @Override
                     public void onChanged(@Nullable final TourCatalogueItem tour) {
-                        setupPager(tour.getAttractions());
+                        if(Commons.isNotNull(tour)) {
+                            // Create the retained fragment to store the tour data
+                            RetainedFragment retainedFragment = new RetainedFragment();
+                            retainedFragment.setAttractionList(tour.getAttractions());
+                            fm.beginTransaction().add(retainedFragment, RetainedFragment.ID_TAG).commit();
+
+                            setupPager(tour.getAttractions());
+                        }
                     }
                 });
             }
@@ -212,7 +223,10 @@ public class AttractionPagerActivity extends BaseActivity implements Placeholder
 
     @Override
     public void onSendPostCard(Bitmap bitmap, String title) {
-        if (BuildConfig.USE_CRASHLYTICS) Crashlytics.log(TAG + " : onSendPostCard()");
+        if (BuildConfig.USE_CRASHLYTICS) {
+            Answers.getInstance().logCustom(new CustomEvent("Attr:SendPostCard"));
+            Crashlytics.log(TAG + " : onSendPostCard()");
+        }
         Intent share = new Intent(Intent.ACTION_SEND);
         share.setType("image/*");
 
@@ -230,7 +244,10 @@ public class AttractionPagerActivity extends BaseActivity implements Placeholder
 
     @Override
     public void onAddComment(String stopName) {
-        if (BuildConfig.USE_CRASHLYTICS) Crashlytics.log(TAG + " : onAddComment()");
+        if (BuildConfig.USE_CRASHLYTICS) {
+            Answers.getInstance().logCustom(new CustomEvent("Attr:AddComment"));
+            Crashlytics.log(TAG + " : onAddComment()");
+        }
 
         Intent iComment = new Intent(AttractionPagerActivity.this, CommentsActivity.class);
         iComment.putExtra(CommentsActivity.EXTRA_MESSAGE_BOARD_CAT, CommentsActivity.MSG_BOARD_CAT_COMMENTS);
@@ -279,7 +296,10 @@ public class AttractionPagerActivity extends BaseActivity implements Placeholder
 
     @Override
     public void onShowMap(Attraction attractionData) {
-        if (BuildConfig.USE_CRASHLYTICS) Crashlytics.log(TAG + " : onShowMap()");
+        if (BuildConfig.USE_CRASHLYTICS) {
+            Answers.getInstance().logCustom(new CustomEvent("Attr:ShowMap"));
+            Crashlytics.log(TAG + " : onShowMap()");
+        }
 
         Intent mapIntent = new Intent(AttractionPagerActivity.this, AttractionMapActivity.class);
         mapIntent.putExtra(ATTRACTION, (Parcelable) attractionData);

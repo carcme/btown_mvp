@@ -11,6 +11,9 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.CustomEvent;
+
 import java.util.List;
 
 import javax.inject.Inject;
@@ -18,6 +21,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import me.carc.btown.BuildConfig;
 import me.carc.btown.R;
 import me.carc.btown.Utils.ViewUtils;
 import me.carc.btown.common.interfaces.RecyclerClickListener;
@@ -120,6 +124,9 @@ public class ExternalLinksActivity extends MvpBaseActivity implements ExternalLi
             @Override
             public void onClick(View view, final int pos) {
                 ExternalLinkItem item = mAdapter.getItem(pos);
+                if (BuildConfig.USE_CRASHLYTICS)
+                    Answers.getInstance().logCustom(new CustomEvent("ExternalLink: " + item.name()));
+
                 Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(item.getLinkResourceId())));
                 startActivity(i);
             }

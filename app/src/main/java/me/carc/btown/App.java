@@ -1,5 +1,6 @@
 package me.carc.btown;
 
+import android.annotation.SuppressLint;
 import android.app.Application;
 import android.arch.persistence.room.Room;
 import android.content.ComponentName;
@@ -8,6 +9,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.location.Location;
+import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
@@ -22,6 +24,7 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.squareup.leakcanary.LeakCanary;
 
 import io.fabric.sdk.android.Fabric;
+import me.carc.btown.common.C;
 import me.carc.btown.common.Commons;
 import me.carc.btown.common.NetworkChangeReceiver;
 import me.carc.btown.common.injection.component.ApplicationComponent;
@@ -29,6 +32,7 @@ import me.carc.btown.common.injection.component.DaggerApplicationComponent;
 import me.carc.btown.common.injection.module.ApplicationModule;
 import me.carc.btown.db.AppDatabase;
 import me.carc.btown.tours.data.services.FirebaseImageDownloader;
+import pub.devrel.easypermissions.EasyPermissions;
 
 /**
  * Application class for BTown
@@ -47,17 +51,27 @@ public class App extends Application {
     private Location mLatestLocation;
     private boolean isUpdatingFirebase;
 
+    private ApplicationComponent mApplicationComponent;
 
+    private Intent imagesServiceIntent;
+
+
+    @SuppressLint("MissingPermission")
     public Location getLatestLocation() {
+        if (Commons.isNull(mLatestLocation) && EasyPermissions.hasPermissions(this, android.Manifest.permission.ACCESS_FINE_LOCATION)) {
+            LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+            if (locationManager != null) {
+                mLatestLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                if (mLatestLocation == null) {
+                    mLatestLocation = locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
+                }
+            }
+        }
         return mLatestLocation;
     }
     public void setLatestLocation(Location location) {
         mLatestLocation = location;
     }
-
-    ApplicationComponent mApplicationComponent;
-
-    private Intent imagesServiceIntent;
 
     // Dont like this!! Used in CacheDir and TinyDB, both of which should be removed/reworked
     public static Context getAC() {
@@ -113,9 +127,13 @@ public class App extends Application {
      */
     public void onCreate() {
         super.onCreate();
-        if (BuildConfig.USE_CRASHLYTICS)
-            Fabric.with(this, new Crashlytics());
-
+        if (BuildConfig.USE_CRASHLYTICS) {
+            final Fabric fabric = new Fabric.Builder(this)
+                    .kits(new Crashlytics())
+                    .debuggable(C.DEBUG_ENABLED)
+                    .build();
+            Fabric.with(fabric);
+        }
         try {
             LeakCanary.install(this);
         } catch (Throwable ex) { // catch on androidx86 getExternalStorageDir is not writable

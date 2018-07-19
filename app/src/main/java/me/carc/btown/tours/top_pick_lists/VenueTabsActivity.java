@@ -35,17 +35,18 @@ import com.flaviofaria.kenburnsview.KenBurnsView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import me.carc.btown.BaseActivity;
 import me.carc.btown.R;
 import me.carc.btown.Utils.ViewUtils;
 import me.carc.btown.common.C;
 import me.carc.btown.common.Commons;
 import me.carc.btown.common.interfaces.ToursScrollListener;
+import me.carc.btown.data.all4squ.entities.Photo;
 import me.carc.btown.data.all4squ.entities.VenueResult;
 import me.carc.btown.map.MapActivity;
+import me.carc.btown.map.sheets.ImageDialog;
 import me.carc.btown.tours.top_pick_lists.fragments.VenueInfoFragment;
-import me.carc.btown.tours.top_pick_lists.fragments.VenuePhotosFragment;
-import me.carc.btown.tours.top_pick_lists.fragments.VenueTipsFragment;
 import me.carc.btown.ui.custom.MyFragmentPagerAdapter;
 
 /**
@@ -61,9 +62,6 @@ public class VenueTabsActivity extends BaseActivity implements ToursScrollListen
     public static final String EXTRA_PHOTOS     = "EXTRA_PHOTOS";
 
     private MyFragmentPagerAdapter adapter;
-    private String tourTitle;
-//    private ItemsListItem mVenueItem;
-
     private VenueResult mVenueResult;
 
     @BindView(R.id.venueAppbar) AppBarLayout venueAppbar;
@@ -73,6 +71,19 @@ public class VenueTabsActivity extends BaseActivity implements ToursScrollListen
     @BindView(R.id.venueTabs) TabLayout tabs;
     @BindView(R.id.venueHeaderImage) KenBurnsView venueHeaderImage;
     @BindView(R.id.venueFab) FloatingActionButton fab;
+
+
+    @OnClick(R.id.venueHeaderImage)
+    public void imageClick() {
+        Photo photo = mVenueResult.getBestPhoto();
+        String image = photo.getPrefix() + "original" + photo.getSuffix();
+
+        ImageDialog.showInstance(getApplicationContext(),
+                image,
+                getString(R.string.playStoreLink),
+                mVenueResult.getName(),
+                Commons.readableDate(photo.getCreatedAt() * 1000L));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,7 +118,6 @@ public class VenueTabsActivity extends BaseActivity implements ToursScrollListen
             }
         }
     }
-
 
     private void setupUI() {
         setSupportActionBar(tabsToolbar);
@@ -257,8 +267,9 @@ public class VenueTabsActivity extends BaseActivity implements ToursScrollListen
             bundle.putParcelable(EXTRA_VENUE, mVenueResult);
             bundle.putString(EXTRA_VENUE_URL, getIntent().getStringExtra(EXTRA_VENUE_URL));
         }
-        adapter.addFragment(new VenueInfoFragment(), "Info", bundle);
+        adapter.addFragment(new VenueInfoFragment(), getString(R.string.shared_string_info), bundle);
 
+/*
         bundle = new Bundle();
         bundle.putString(EXTRA_VENUE_ID, mVenueResult.getId());
         bundle.putParcelableArrayList(EXTRA_PHOTOS, mVenueResult.getPhotosVenuePhotos().getGroupsPhotos());
@@ -268,28 +279,22 @@ public class VenueTabsActivity extends BaseActivity implements ToursScrollListen
         bundle = new Bundle();
         bundle.putString(EXTRA_VENUE_ID, mVenueResult.getId());
         bundle.putParcelableArrayList(EXTRA_TIPS, mVenueResult.getTips().getGroupsTips());
-
         adapter.addFragment(new VenueTipsFragment(), "Tips", bundle);
+*/
 
         viewPager.setAdapter(adapter);
 
-        tabs.setupWithViewPager(viewPager);
+//        tabs.setupWithViewPager(viewPager);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
             @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) { /* EMPTY */ }
 
             @Override
-            public void onPageSelected(int position) {
-                onScrollView(false);
-            }
+            public void onPageSelected(int position) { onScrollView(false); }
 
             @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
+            public void onPageScrollStateChanged(int state) { /* EMPTY */ }
         });
     }
 

@@ -72,7 +72,16 @@ public class MapUtils {
     }
 
     public static String buildStaticOsmMapImageMarkerRight(double lat, double lon, String size, int zoom) {
-        return "http://staticmap.openstreetmap.de/staticmap.php?center=" + lat + "," + (lon - 0.002)
+        double offset = 0;
+        switch (zoom) {
+            case 16:
+                offset = 0.002;
+                break;
+            case 14:
+                offset = 0.010;
+                break;
+        }
+        return "http://staticmap.openstreetmap.de/staticmap.php?center=" + lat + "," + (lon - offset)
                 + "&zoom=" + zoom +"&size="+ size + "&maptype=mapnik&markers=" + lat + "," + lon + ",red-pushpin";
     }
 

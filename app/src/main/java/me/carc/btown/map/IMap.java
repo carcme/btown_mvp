@@ -1,6 +1,7 @@
 package me.carc.btown.map;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 
 import org.osmdroid.util.GeoPoint;
 
@@ -24,7 +25,8 @@ public interface IMap {
     interface View extends BaseView<Presenter> {
         void onLoadStart();
         void onLoadFinish();
-        void onLoadFailed();
+        void onLoadFailed(@Nullable String msg);
+        void showOfflineMessage();
         void showUserMsg(int msg);
         void showSearching(boolean show);
         void setTrackingMode(boolean trackingMode);
@@ -65,6 +67,7 @@ public interface IMap {
         void onWikiLookup();
         void onFsqSearch();
         void onFsqExplore();
+        void onFsqExplore(String query, String section, boolean nowOpen, boolean sortDistance, int radius);
         void onShowWikiOnMap(BookmarkEntry entry);
         void showPoiDialog(Object obj);
         void onShowCameraOrPoiMarkerListDialog();

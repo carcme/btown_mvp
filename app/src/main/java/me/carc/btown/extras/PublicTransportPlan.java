@@ -15,7 +15,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
 import com.crashlytics.android.answers.Answers;
-import com.crashlytics.android.answers.RatingEvent;
+import com.crashlytics.android.answers.CustomEvent;
 import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -31,6 +31,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import me.carc.btown.BaseActivity;
+import me.carc.btown.BuildConfig;
 import me.carc.btown.R;
 import me.carc.btown.Utils.FileUtils;
 import me.carc.btown.Utils.ViewUtils;
@@ -115,17 +116,17 @@ public class PublicTransportPlan extends BaseActivity implements SubsamplingScal
                         imageView.setOnImageEventListener(PublicTransportPlan.this);
                         setResult(RESULT_OK, getIntent());
 
-                        if (me.carc.btown.BuildConfig.USE_CRASHLYTICS)
-                            Answers.getInstance().logRating(new RatingEvent().putCustomAttribute(ANSWERS_PLAN_DOWNLOADED, ANSWERS_PLAN_DOWNLOADED));
+                        if (BuildConfig.USE_CRASHLYTICS)
+                            Answers.getInstance().logCustom(new CustomEvent("PLAN: " + image));
 
                     }
                 }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                showError("download from Firebase", exception);
-                Log.d(TAG, "onFailure: " + image + "::" + exception.getMessage());
-                if (me.carc.btown.BuildConfig.USE_CRASHLYTICS)
-                    Answers.getInstance().logRating(new RatingEvent().putCustomAttribute(ANSWERS_PLAN_DOWNLOAD_FAIL, ANSWERS_PLAN_DOWNLOAD_FAIL));
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        showError("download from Firebase", exception);
+                        Log.d(TAG, "onFailure: " + image + "::" + exception.getMessage());
+                        if (BuildConfig.USE_CRASHLYTICS)
+                            Answers.getInstance().logCustom(new CustomEvent("PLAN FAIL: " + image));
             }
         });
     }
@@ -142,9 +143,6 @@ public class PublicTransportPlan extends BaseActivity implements SubsamplingScal
         imageView.setMinimumScaleType(SubsamplingScaleImageView.SCALE_TYPE_CENTER_CROP);
         imageView.setMinScale(0.6f);
         imageView.setDoubleTapZoomStyle(SubsamplingScaleImageView.ZOOM_FOCUS_CENTER);
-
-        if (me.carc.btown.BuildConfig.USE_CRASHLYTICS)
-            Answers.getInstance().logRating(new RatingEvent().putCustomAttribute(ANSWERS_PLAN_OPEN, ANSWERS_PLAN_OPEN));
     }
 
     private void showError(String source, Exception e) {

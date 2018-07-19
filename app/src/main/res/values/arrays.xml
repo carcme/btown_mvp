@@ -119,4 +119,25 @@
     </string-array>
 
 
+    <string-array name="trendingRadiusOptionsArray" translatable="false">
+        <item>200m radius</item>
+        <item>500m radius</item>
+        <item>1km radius</item>
+        <item>2km radius</item>
+        <item>3km radius</item>
+        <item>5km radius</item>
+        <item>10km radius</item>
+    </string-array>
+
+    <integer-array name="trendingRadiusValuesArray" translatable="false">
+        <item>200</item>
+        <item>500</item>
+        <item>1000</item>
+        <item>2000</item>
+        <item>3000</item>
+        <item>5000</item>
+        <item>10000</item>
+    </integer-array>
+
+
 </resources>

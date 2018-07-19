@@ -39,10 +39,8 @@ import me.carc.btown.ui.custom.GalleryBottomView;
  * TODO: Add a class header comment!
  */
 public class CataloguePreviewActivity extends BaseActivity {
-
     private static final String TAG = CataloguePreviewActivity.class.getName();
     public static final String CATALOGUE_TITLE = "CATALOGUE_TITLE";
-    public static final String ATTRACTIONS_LIST = "ATTRACTIONS_LIST";
 
     private static final int MIN_DISTANCE = 50;
     private final Runnable startRunnable = new Runnable() {

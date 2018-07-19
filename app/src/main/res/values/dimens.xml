@@ -16,7 +16,7 @@
 
 
     <dimen name="fab_space">72dp</dimen>
-    <dimen name="toolbar_height">56dp</dimen>
+
 
     <dimen name="wikiSheetPeekHeight">220dp</dimen>
 

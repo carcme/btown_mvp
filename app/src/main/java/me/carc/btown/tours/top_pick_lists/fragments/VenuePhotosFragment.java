@@ -41,32 +41,19 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-
 public class VenuePhotosFragment extends Fragment {
     private static final String TAG = VenuePhotosFragment.class.getName();
 
     public static final int PHOTO_LIMIT = 30;
-
     private int PHOTO_OFFSET = 0;
 
     private VenuePhotoAdapter mAdapter;
 
-
-    @BindView(R.id.venuePhotosNestedScrollView)
-    NestedScrollView venuePhotosNestedScrollView;
-
-    @BindView(R.id.photoLoadMore)
-    Button photoLoadMoreBtn;
-
-    @BindView(R.id.venuePhotoGrid)
-    RecyclerView venuePhotoGrid;
-
-    @BindView(R.id.emptyPhotos)
-    TextView emptyPhotos;
-
-    @BindView(R.id.progressBar)
-    ProgressBar progressBar;
-
+    @BindView(R.id.venuePhotosNestedScrollView) NestedScrollView venuePhotosNestedScrollView;
+    @BindView(R.id.photoLoadMore) Button photoLoadMoreBtn;
+    @BindView(R.id.venuePhotoGrid) RecyclerView venuePhotoGrid;
+    @BindView(R.id.emptyPhotos) TextView emptyPhotos;
+    @BindView(R.id.progressBar) ProgressBar progressBar;
 
     ToursScrollListener scrollListener;
 

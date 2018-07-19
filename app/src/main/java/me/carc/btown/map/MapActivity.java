@@ -17,6 +17,7 @@ import android.support.annotation.StringRes;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -29,8 +30,12 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.CustomEvent;
+
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
+import org.osmdroid.views.overlay.Marker;
 
 import java.util.ArrayList;
 
@@ -39,6 +44,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 import me.carc.btown.BaseActivity;
+import me.carc.btown.BuildConfig;
 import me.carc.btown.R;
 import me.carc.btown.Utils.ViewUtils;
 import me.carc.btown.camera.CameraActivity;
@@ -56,6 +62,7 @@ import me.carc.btown.map.sheets.wiki.WikiReadingListDialogFragment;
 import me.carc.btown.tours.CatalogueActivity;
 import me.carc.btown.tours.top_pick_lists.FourSquareListsActivity;
 import me.carc.btown.tours.top_pick_lists.FourSquareSearchResultActivity;
+import me.carc.btown.tours.top_pick_lists.TrendingSettingsActivity;
 import me.carc.btown.tours.top_pick_lists.VenueTabsActivity;
 import me.toptas.fancyshowcase.DismissListener;
 import me.toptas.fancyshowcase.FancyShowCaseQueue;
@@ -81,6 +88,7 @@ public class MapActivity extends BaseActivity implements
     public static final int RESULT_TOURS = 4011;
     public static final int RESULT_EXPLORE = 4012;
     public static final int RESULT_SHOW_TOURS_MAP = 4013;
+    public static final int RESULT_TRENDING_SETTINGS = 4014;
 
 
     private IMap.Presenter presenter;
@@ -115,7 +123,7 @@ public class MapActivity extends BaseActivity implements
             VenueResult mVenueResult = getIntent().getParcelableExtra(VenueTabsActivity.EXTRA_VENUE);
             presenter.showFsqVenue(mVenueResult);
 
-        } else if (getIntent().hasExtra(FourSquareListsActivity.EXTRA_LISTS)) {
+        } else if (getIntent().hasExtra(FourSquareListsActivity.EXTRA_LISTS)) {  // Show all FSQ venues
             // show list items from FSQ
             ListItems items = getIntent().getParcelableExtra(FourSquareListsActivity.EXTRA_LISTS);
             presenter.showFsqList(items);
@@ -135,6 +143,9 @@ public class MapActivity extends BaseActivity implements
         view.findViewById(R.id.itemWiki).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (BuildConfig.USE_CRASHLYTICS)
+                    Answers.getInstance().logCustom(new CustomEvent("QWIK WIKI"));
+
                 presenter.onWikiLookup();
                 showSearching(true);
                 dlg.dismiss();
@@ -152,6 +163,8 @@ public class MapActivity extends BaseActivity implements
         view.findViewById(R.id.itemFsqExplore).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (BuildConfig.USE_CRASHLYTICS)
+                    Answers.getInstance().logCustom(new CustomEvent("TRENDING"));
                 presenter.onFsqExplore();
                 showSearching(true);
                 dlg.dismiss();
@@ -161,13 +174,19 @@ public class MapActivity extends BaseActivity implements
         view.findViewById(R.id.itemFsqExploreMore).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: 15/11/2017
+                if (BuildConfig.USE_CRASHLYTICS)
+                    Answers.getInstance().logCustom(new CustomEvent("TRENDING ADV"));
+                Intent intent = new Intent(MapActivity.this, TrendingSettingsActivity.class);
+                startActivityForResult(intent, RESULT_TRENDING_SETTINGS);
+                dlg.dismiss();
             }
         });
 
         view.findViewById(R.id.itemFood).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (BuildConfig.USE_CRASHLYTICS)
+                    Answers.getInstance().logCustom(new CustomEvent("QWIK FOOD"));
                 presenter.onFoodLookupFromLongPress(point);
                 showSearching(true);
                 dlg.dismiss();
@@ -177,6 +196,8 @@ public class MapActivity extends BaseActivity implements
         view.findViewById(R.id.itemTourist).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (BuildConfig.USE_CRASHLYTICS)
+                    Answers.getInstance().logCustom(new CustomEvent("QWIK TOURISM"));
                 presenter.onTouristLookupFromLongPress(point);
                 showSearching(true);
                 dlg.dismiss();
@@ -186,6 +207,8 @@ public class MapActivity extends BaseActivity implements
         view.findViewById(R.id.itemPoint).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (BuildConfig.USE_CRASHLYTICS)
+                    Answers.getInstance().logCustom(new CustomEvent("DROP PIN"));
                 presenter.onDropPin(point);
                 dlg.dismiss();
             }
@@ -206,6 +229,8 @@ public class MapActivity extends BaseActivity implements
         view.findViewById(R.id.itemHelp).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (BuildConfig.USE_CRASHLYTICS)
+                    Answers.getInstance().logCustom(new CustomEvent("SHOW HELP"));
                 dlg.dismiss();
                 helpShowcase();
             }
@@ -345,6 +370,10 @@ public class MapActivity extends BaseActivity implements
     protected void onDestroy() {
         unbinder.unbind();
         presenter.destroy();
+
+        // work around for Marker memory leaks
+        new Marker(new MapView(getApplicationContext()), getApplicationContext());
+
         super.onDestroy();
     }
 
@@ -364,6 +393,25 @@ public class MapActivity extends BaseActivity implements
         super.onActivityResult(requestCode, resultCode, data);
 
         switch (requestCode) {
+            case RESULT_TRENDING_SETTINGS:
+                Log.d(TAG, "onActivityResult: ");
+                if(resultCode == RESULT_OK) {
+
+                    boolean openNow = data.getBooleanExtra(TrendingSettingsActivity.TRENDING_OPEN_NOW, false);
+                    boolean sortDist = data.getBooleanExtra(TrendingSettingsActivity.TRENDING_SORT_DIST, false);
+                    int radius = data.getIntExtra(TrendingSettingsActivity.TRENDING_RADIUS, 500);
+
+                    if(data.hasExtra(TrendingSettingsActivity.TRENDING_QUERY))
+                        presenter.onFsqExplore(data.getStringExtra(TrendingSettingsActivity.TRENDING_QUERY), null,
+                                openNow, sortDist, radius);
+                    else
+                        presenter.onFsqExplore(null, data.getStringExtra(TrendingSettingsActivity.TRENDING_SECTION),
+                                openNow, sortDist, radius);
+
+                    showSearching(true);
+                }
+                break;
+
             case REQUEST_CHECK_SETTINGS:
                 //Reference: https://developers.google.com/android/reference/com/google/android/gms/location/SettingsApi
                 switch (resultCode) {
@@ -517,11 +565,19 @@ public class MapActivity extends BaseActivity implements
     }
 
     @Override
-    public void onLoadFailed() {
+    public void onLoadFailed(@Nullable String msg) {
         showSearching(false);
-        Commons.Toast(this, R.string.operation_error, Color.RED, Toast.LENGTH_SHORT);
+        if(TextUtils.isEmpty(msg))
+            Commons.Toast(this, R.string.operation_error, Color.RED, Toast.LENGTH_SHORT);
+        else
+            Commons.Toast(this, msg, Color.RED, Toast.LENGTH_SHORT);
     }
 
+    @Override
+    public void showOfflineMessage() {
+        showSearching(false);
+        Commons.Toast(this, R.string.lookup_failed, Color.RED, Toast.LENGTH_SHORT);
+    }
 
     @Override
     public void enableLocationDependantFab(boolean enable) {

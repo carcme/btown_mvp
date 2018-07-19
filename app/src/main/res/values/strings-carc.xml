@@ -2,6 +2,9 @@
 <resources>
     <string name="carc_app_base_url" formatted="false">https://play.google.com/store/apps/details?id=me.carc.%s</string>
 
+    <string name="appTitleStone">Stolpersteine Berlin</string>
+    <string name="appDescStone">Here Lived | Commemorating Victims of Nazi Germany One Block At a Time</string>
+
     <string name="appTitleITimer">Interval Timer | Simple, Easy, Intuitive</string>
     <string name="appDescITimer">Interval Timer suitable for: Running, Boxing, Calisthenics, Circuit Training, HIIT, Tabata and more!</string>
 

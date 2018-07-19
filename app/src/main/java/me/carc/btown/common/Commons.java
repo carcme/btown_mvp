@@ -47,13 +47,12 @@ public class Commons {
 */
 
     @SuppressFBWarnings("NM_METHOD_NAMING_CONVENTION")
-    public static void Toast(Context context, @StringRes int resId, @ColorInt int bgColor, int duration) {
-
+    public static void Toast(Context context, String msg, @ColorInt int bgColor, int duration) {
         final View v = ((LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE))
                 .inflate(R.layout.custom_toast, null);
 
         TextView tv = v.findViewById(R.id.toastMsg);
-        tv.setText(resId);
+        tv.setText(msg);
         tv.setTextColor(Color.WHITE);
 
         Drawable background = context.getDrawable(R.drawable.toast_background);
@@ -64,6 +63,11 @@ public class Commons {
         toast.setDuration(duration);
         toast.setView(v);
         toast.show();
+    }
+
+    @SuppressFBWarnings("NM_METHOD_NAMING_CONVENTION")
+    public static void Toast(Context context, @StringRes int resId, @ColorInt int bgColor, int duration) {
+        Toast(context, context.getString(resId), bgColor, duration);
     }
 
     public static boolean isNetworkAvailable(Context context) {

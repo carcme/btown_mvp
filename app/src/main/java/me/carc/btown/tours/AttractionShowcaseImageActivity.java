@@ -36,6 +36,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.crashlytics.android.Crashlytics;
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.CustomEvent;
 import com.github.lzyzsd.circleprogress.DonutProgress;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
@@ -90,36 +92,17 @@ public class AttractionShowcaseImageActivity extends BaseActivity {
     private Drawable mDrawableSuccess;
     private Drawable mDrawableError;
 
-    @BindView(R.id.showcaseRoot)
-    RelativeLayout showcaseRoot;
+    @BindView(R.id.showcaseRoot) RelativeLayout showcaseRoot;
+    @BindView(R.id.showcaseImage) TouchImageView showcaseImage;
+    @BindView(R.id.fabBackButton) ImageView fabBackButton;
+    @BindView(R.id.mFabShareButton) ImageButton mFabShareButton;
+    @BindView(R.id.mFabWallpaperButton) ImageButton mFabWallpaperButton;
 
-    @BindView(R.id.showcaseImage)
-    TouchImageView showcaseImage;
-
-    @BindView(R.id.fabBackButton)
-    ImageView fabBackButton;
-
-    @BindView(R.id.mFabShareButton)
-    ImageButton mFabShareButton;
-
-    @BindView(R.id.mFabWallpaperButton)
-    ImageButton mFabWallpaperButton;
-
-
-    @BindView(R.id.captionsFrame)
-    View captionsFrame;
-
-    @BindView(R.id.showcaseCaptions)
-    View showcaseCaptions;
-
-    @BindView(R.id.captionTitle)
-    TextView captionTitle;
-
-    @BindView(R.id.captionSubTitle)
-    TextView captionSubTitle;
-
-    @BindView(R.id.mFabProgress)
-    DonutProgress mFabProgress;
+    @BindView(R.id.captionsFrame) View captionsFrame;
+    @BindView(R.id.showcaseCaptions) View showcaseCaptions;
+    @BindView(R.id.captionTitle) TextView captionTitle;
+    @BindView(R.id.captionSubTitle) TextView captionSubTitle;
+    @BindView(R.id.mFabProgress) DonutProgress mFabProgress;
 
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -129,7 +112,10 @@ public class AttractionShowcaseImageActivity extends BaseActivity {
         setContentView(R.layout.attraction_showcase_activity);
         ButterKnife.bind(this);
 
-        if (BuildConfig.USE_CRASHLYTICS) Crashlytics.log(TAG + " : onCreate()");
+        if (BuildConfig.USE_CRASHLYTICS) {
+            Answers.getInstance().logCustom(new CustomEvent("Showcae Image"));
+            Crashlytics.log(TAG + " : Showcae Image");
+        }
 
         // find the retained fragment on activity restarts
         FragmentManager fm = getSupportFragmentManager();

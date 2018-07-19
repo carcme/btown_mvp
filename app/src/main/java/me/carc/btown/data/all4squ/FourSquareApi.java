@@ -40,18 +40,32 @@ public interface FourSquareApi {
                                      @Query("limit") int limit,
                                      @Query("offset") int offset);
 
-
     @GET("venues/search")
     Call<FourSquResult> searchArea(@Query("ll") String latLon,
                                    @Query("intent") String intent,
                                    @Query("limit") int limit,
                                    @Query("radius") int radius);
 
-
     @GET("venues/explore")
     Call<FourSquResult> explore(@Query("ll") String latLon,
                                 @Query("limit") int limit,
                                 @Query("radius") int radius);
+
+    @GET("venues/explore")
+    Call<FourSquResult> exploreQuery(@Query("ll") String latLon,
+                                     @Query("limit") int limit,
+                                     @Query("radius") int radius,
+                                     @Query("query") String query,
+                                     @Query("openNow") boolean open,
+                                     @Query("sortByDistance") boolean sort);
+
+    @GET("venues/explore")
+    Call<FourSquResult> exploreSection(@Query("ll") String latLon,
+                                       @Query("limit") int limit,
+                                       @Query("radius") int radius,
+                                       @Query("section") String section,
+                                       @Query("openNow") boolean open,
+                                       @Query("sortByDistance") boolean sort);
 
 
 }

@@ -63,26 +63,16 @@ public class FourSquareSearchResultActivity extends BaseActivity {
     private static final String TAG = FourSquareSearchResultActivity.class.getName();
     public static final String EXTRA_EXPLORE = "EXTRA_EXPLORE";
 
-
     public static final int RESULT_SHOW_ITEM = 148;
     private static final String SHOWN_FIRST_LAUNCH = "SHOWN_FIRST_LAUNCH" + TAG;  // show reason for sign in
 
     ArrayList<VenueResult> mVenues; // todo make this local??
 
-    @BindView(R.id.catalogue_recycler)
-    RecyclerView recyclerView;
-
-    @BindView(R.id.toursToolbar)
-    Toolbar toolbar;
-
-    @BindView(R.id.inventoryProgressBar)
-    ProgressBar progressLayout;
-
-    @BindView(R.id.fab)
-    FloatingActionButton fab;
-
-    @BindView(R.id.fabMapAll)
-    FloatingActionButton fabMapAll;
+    @BindView(R.id.catalogue_recycler) RecyclerView recyclerView;
+    @BindView(R.id.toursToolbar) Toolbar toolbar;
+    @BindView(R.id.inventoryProgressBar) ProgressBar progressLayout;
+    @BindView(R.id.fab) FloatingActionButton fab;
+    @BindView(R.id.fabMapAll) FloatingActionButton fabMapAll;
 
     @OnClick(R.id.fab)
     void done() {
@@ -168,9 +158,7 @@ public class FourSquareSearchResultActivity extends BaseActivity {
         setupRecyclerView(venues);
     }
 
-
     public static class DistanceComparator implements Comparator<VenueResult>, Serializable {
-
         @Override
         public int compare(VenueResult lhs, VenueResult rhs) {
             Double d1 = lhs.getLocation().getDistance();
@@ -217,13 +205,16 @@ public class FourSquareSearchResultActivity extends BaseActivity {
                         public void onResponse(@NonNull Call<FourSquResult> call, @NonNull Response<FourSquResult> response) {
 
                             FourSquResult body = response.body();
-                            VenueResult resp = body.getResponse().getVenueResult();
+                            if (Commons.isNotNull(body) && Commons.isNotNull(body.getResponse())) {  // Crashlytics #172
+                                VenueResult resp = body.getResponse().getVenueResult();
 
-                            if (Commons.isNotNull(resp)) {
-                                Intent intent = new Intent(FourSquareSearchResultActivity.this, VenueTabsActivity.class);
-                                intent.putExtra(VenueTabsActivity.EXTRA_VENUE, (Parcelable) resp);
-                                startActivityForResult(intent, RESULT_SHOW_ITEM);
-                                progressLayout.setVisibility(View.GONE);
+                                if (Commons.isNotNull(resp)) {
+                                    Intent intent = new Intent(FourSquareSearchResultActivity.this, VenueTabsActivity.class);
+                                    intent.putExtra(VenueTabsActivity.EXTRA_VENUE, (Parcelable) resp);
+                                    startActivityForResult(intent, RESULT_SHOW_ITEM);
+                                    progressLayout.setVisibility(View.GONE);
+                                } else
+                                    showError();
                             } else
                                 showError();
                         }

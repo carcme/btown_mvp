@@ -130,7 +130,6 @@
             android:textColor="@color/primary_text_color"
             android:textSize="16sp" />
 
-
         <ImageView
             android:id="@+id/itemFsqExploreMore"
             android:layout_width="wrap_content"
@@ -138,9 +137,7 @@
             android:background="@drawable/backgroud_round_image_button"
             android:contentDescription="@null"
             android:padding="@dimen/margin_standard"
-            android:src="@drawable/ic_more"
-            android:visibility="gone"
-            tools:visibility="visible"/>
+            android:src="@drawable/ic_edit"/>
 
     </LinearLayout>
 
@@ -170,6 +167,7 @@
             android:text="@string/nearby_food_and_drink"
             android:textColor="@color/primary_text_color"
             android:textSize="16sp" />
+
     </LinearLayout>
 
     <LinearLayout

@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools"
-    tools:shrinkMode="strict" >
+           tools:shrinkMode="strict">
 
     <string name="app_name">B-Town</string>
     <string name="feedback_email" translatable="false">carcmedev@gmail.com</string>
     <string name="website" translatable="false">https://carcmedev.github.io/btown/index.html</string>
     <string name="bugtracker" translatable="false">https://github.com/carcme/btown_mvp/issues</string>
+    <string name="playStoreLink" translatable="false">https://play.google.com/store/apps/details?id=me.carc.btown</string>
 
+    <string name="todo" translatable="false">todo</string>
 
     <!-- Navigation drawer -->
     <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
@@ -107,6 +109,7 @@
     <string name="shared_string_search">Search</string>
     <string name="shared_string_download">Download</string>
     <string name="shared_string_offline">Offline</string>
+    <string name="shared_string_trends">Trends</string>
 
     <string name="home_screen_updated">Home Screen Updated</string>
 
@@ -117,7 +120,6 @@
     <string name="shared_string_missing_data" translatable="false">---</string>
 
 
-
     <!--DONATE-->
     <string name="text_donate_title">Donate</string>
     <string name="text_donate_subtitle">Show some love</string>
@@ -125,7 +127,6 @@
     <string name="text_donate_progress_message">This can take some time. Thanks for your patience</string>
     <string name="text_donate_cancel">Thanks you, really means a lot and allows me to keep making B-Town better.\n\nIf you could rate us on the Play Store, that would be great.</string>
     <string name="text_donate_thanks">Thanks you for your support&#8230; come back for new tours on your next visit</string>
-
 
 
     <!--FEEDBACK DIALOG-->
@@ -162,7 +163,6 @@
     <string name="no_transportr">TransportR not detected on device (required). Would you like to install it now?</string>
 
 
-
     <string name="strShareBody">"B-Town | Maps and Tours for Tourist and Locals"</string>
 
 
@@ -180,7 +180,6 @@
     <string name="enable_gps_request">Please enable the device GPS</string>
     <string name="no_gps">No GPS</string>
     <string name="rationale_camera">You need to grant accto your camera so you can take pictures.</string>
-
 
 
     <!--SETTINGS-->
@@ -208,7 +207,7 @@
     <string name="tab_libraries">Libraries</string>
     <string name="tab_devs">Developers</string>
 
-    <string name="about_top">© 2017 Marc Bampton\nFree Software License: GPLv3</string>
+    <string name="about_top">© 2018 Marc Bampton\nFree Software License: GPLv3</string>
 
     <string name="about"><![CDATA[
 <p>The idea of B-Town came while travelling and wanting something that would give insider tips for various cities. As Berlin has so much to offer, this seemed like a good place to start</p>
@@ -230,7 +229,6 @@
     <string name="translators">Translators</string>
 
 
-
     <string name="poi_res_smoking">Smoking: </string>
     <string name="poi_res_wheelchair">Wheelchair: </string>
     <string name="poi_res_wheelchair_toilet">Wheelchair Toilet Access: </string>
@@ -244,9 +242,6 @@
     <!-- PUBLIC TRANSPORT ROUTE PLAN-->
     <string name="alert_title_pt_route_map">Map download</string>
     <string name="alert_msg_pt_route_map">\"%s\" is downloading. Please be patient.\n\nIf you want a new map, let me know using the feedback above.</string>
-
-
-
 
 
     <string name="lib_thanks">TODO - remove this and have a proper tab screen with libs used</string>
@@ -266,6 +261,5 @@
 
     <string name="building">Building</string>
     <string name="shared_string_initialising">Initialising…</string>
-
 
 </resources>

@@ -5,20 +5,16 @@
 
     <!-- BILLING - Donations -->
     <uses-permission android:name="com.android.vending.BILLING"/>
-
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS"/>
-
-
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
-
     <!-- WALLPAPER PERM FOR ANDROID 6 -->
-    <uses-permission android:name="android.permission.SET_WALLPAPER"></uses-permission>
-    <uses-permission android:name="android.permission.SET_WALLPAPER_HINTS"></uses-permission>
+    <uses-permission android:name="android.permission.SET_WALLPAPER"/>
+    <uses-permission android:name="android.permission.SET_WALLPAPER_HINTS"/>
 
     <!-- ENABLE CAMERA FROM B-TOWN -->
     <uses-permission android:name="android.permission.CAMERA"/>
@@ -27,26 +23,23 @@
     <!-- SOME FEATURES REQUIRED FOR WIKI BROWSER -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
 
-
     <application
-        android:name="me.carc.btown.App"
+        android:name=".App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher_skyline_squ"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_skyline_rnd_blue"
         android:supportsRtl="true"
         android:theme="@style/SplashTheme">
-        <activity android:name="me.carc.btown.SplashActivity">
+        <activity android:name=".SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-
-
         <activity
-            android:name="me.carc.btown.map.MapActivity"
+            android:name=".map.MapActivity"
             android:hardwareAccelerated="false"
             android:theme="@style/AppTheme">
             <meta-data
@@ -90,75 +83,62 @@
                     android:pathPattern=".*\\.json"
                     android:scheme="file"/>
             </intent-filter>
-
         </activity>
-
         <activity
             android:name=".settings.SettingsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/SettingsThemeCompat"/>
 
         <activity
+            android:name=".tours.top_pick_lists.TrendingSettingsActivity"
+              android:theme="@style/AppTheme"/>
+
+        <activity
             android:name=".ui.front_page.FrontPageActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme"/>
-
         <activity
             android:name=".ui.front_page.getting_about.TransportActivity"
             android:theme="@style/SettingsTheme"/>
-
         <activity
             android:name=".ui.front_page.good_to_know.GoodToKnowActivity"
             android:theme="@style/SettingsTheme"/>
-
-
         <activity
-            android:name="me.carc.btown.extras.messaging.CommentsActivity"
+            android:name=".extras.messaging.CommentsActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme"/>
-
         <activity
-            android:name="me.carc.btown.extras.messaging.FirebaseImageActivity"
+            android:name=".extras.messaging.FirebaseImageActivity"
             android:label="User Images Viewer"
             android:theme="@style/AppTheme.FullScrnActivity"/>
-
         <activity
-            android:name="me.carc.btown.camera.CameraActivity"
+            android:name=".camera.CameraActivity"
             android:theme="@style/AppTheme"/>
-
-
         <activity
             android:name=".extras.PublicTransportPlanExtra"
             android:theme="@style/AppTheme"/>
-
         <activity
             android:name=".extras.PublicTransportPlan"
             android:theme="@style/AppTheme"/>
-
-
         <activity
-            android:name="me.carc.btown.extras.WikiWebViewActivity"
+            android:name=".extras.WikiWebViewActivity"
             android:theme="@style/AppTheme"/>
-
 
         <!-- TOURS -->
         <activity
-            android:name="me.carc.btown.tours.ToursLaunchActivity"
+            android:name=".tours.ToursLaunchActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.FullScrnActivity"/>
-
         <activity
-            android:name="me.carc.btown.login.LoginActivity"
+            android:name=".login.LoginActivity"
             android:screenOrientation="portrait"
             android:theme="@style/SplashTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".map.MapActivity"/>
         </activity>
-
-
         <activity
-            android:name="me.carc.btown.tours.top_pick_lists.FourSquareSearchResultActivity"
+            android:name=".tours.top_pick_lists.FourSquareSearchResultActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme">
@@ -166,9 +146,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".map.MapActivity"/>
         </activity>
-
         <activity
-            android:name="me.carc.btown.tours.top_pick_lists.FourSquareListsActivity"
+            android:name=".tours.top_pick_lists.FourSquareListsActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.FullScrnActivity">
@@ -176,9 +155,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.front_page.FrontPageActivity"/>
         </activity>
-
         <activity
-            android:name="me.carc.btown.tours.top_pick_lists.FourSquareListDetailsActivity"
+            android:name=".tours.top_pick_lists.FourSquareListDetailsActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme">
@@ -186,22 +164,19 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".tours.top_pick_lists.FourSquareListsActivity"/>
         </activity>
-
         <activity
-            android:name="me.carc.btown.tours.top_pick_lists.VenueTabsActivity"
+            android:name=".tours.top_pick_lists.VenueTabsActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.FullScrnActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".tours.top_pick_lists.FourSquareListDetailsActivity"/>
         </activity>
-
-
-        <activity android:name=".ui.front_page.externalLinks.ExternalLinksActivity"
-                  android:theme="@style/AppTheme"/>
-
         <activity
-            android:name="me.carc.btown.tours.CatalogueActivity"
+            android:name=".ui.front_page.externalLinks.ExternalLinksActivity"
+            android:theme="@style/AppTheme"/>
+        <activity
+            android:name=".tours.CatalogueActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.FullScrnActivity">
@@ -209,9 +184,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.front_page.FrontPageActivity"/>
         </activity>
-
         <activity
-            android:name="me.carc.btown.tours.CataloguePreviewActivity"
+            android:name=".tours.CataloguePreviewActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
@@ -219,18 +193,17 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".tours.CatalogueActivity"/>
         </activity>
-
         <activity
-            android:name="me.carc.btown.tours.AttractionTabsActivity"
-            android:label="@string/app_name"
+            android:name=".tours.AttractionTabsActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
+            android:label="@string/app_name"
             android:theme="@style/AppTheme.FullScrnActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".tours.CataloguePreviewActivity"/>
         </activity>
         <activity
-            android:name="me.carc.btown.tours.attractionPager.AttractionPagerActivity"
+            android:name=".tours.attractionPager.AttractionPagerActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.FullScrnActivity">
             <meta-data
@@ -238,17 +211,17 @@
                 android:value=".tours.AttractionTabsActivity"/>
         </activity>
         <activity
-            android:name="me.carc.btown.tours.AttractionShowcaseImageActivity"
+            android:name=".tours.AttractionShowcaseImageActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.ShowCaseGallery">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".tours.AttractionTabsActivity"/>
         </activity>
-        <!--android:screenOrientation="portrait"-->
+        <!-- android:screenOrientation="portrait" -->
 
         <activity
-            android:name="me.carc.btown.tours.attractionPager.AttractionMapActivity"
+            android:name=".tours.attractionPager.AttractionMapActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme">
             <meta-data
@@ -256,12 +229,10 @@
                 android:value=".tours.attractionPager.AttractionPagerActivity"/>
         </activity>
 
-
         <service
             android:name=".tours.data.services.FirebaseImageDownloader"
-            android:stopWithTask="true"
-            android:exported="false"/>
-
+            android:exported="false"
+            android:stopWithTask="true"/>
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -277,8 +248,7 @@
             android:name="io.fabric.ApiKey"
             android:value="fbef5068aff924f588f1045c445fae0a1e2eaa4a"/>
 
-
-<!--
+        <!--
         <provider
             android:name="com.facebook.FacebookContentProvider"
             android:authorities="com.facebook.app.FacebookContentProvider603938643122200"
@@ -306,7 +276,7 @@
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id"/>
--->
+        -->
 
     </application>
 

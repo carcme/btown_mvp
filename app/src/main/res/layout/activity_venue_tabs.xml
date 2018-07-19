@@ -53,11 +53,10 @@
 
     </android.support.design.widget.AppBarLayout>
 
-
     <android.support.design.widget.TabLayout
         android:id="@+id/venueTabs"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
+        android:layout_height="0dp"
         android:layout_gravity="bottom"
         android:background="?attr/colorPrimary"
         app:layout_anchor="@+id/venueAppbar"
@@ -67,12 +66,11 @@
         app:tabGravity="fill"
         app:tabMode="fixed" />
 
-
     <android.support.v4.view.ViewPager
         android:id="@+id/venueViewpager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="?attr/actionBarSize"
+        android:layout_marginTop="0dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         />
 

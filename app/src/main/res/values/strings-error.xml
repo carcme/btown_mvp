@@ -25,6 +25,8 @@
     <string name="retry">Retry</string>
 
     <string name="network_offline_title">Network Offline</string>
+    <string name="lookup_failed">Lookup failed. Check the network connection</string>
+
     <string name="tours_network_message">You need to be online to download the tours</string>
 
 

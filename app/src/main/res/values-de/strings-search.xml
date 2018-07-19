@@ -4,6 +4,7 @@
 
 
     <string name="search_all_hint">Überall suchen</string>
+    <string name="search_keyword_hint">Keyword Search</string>
     <string name="initial_search_text">Suchbegriff eingeben</string>
     <string name="dist_away_from_my_location">Suche %1$s woanders</string>
 
@@ -42,5 +43,19 @@
     <string name="sort_by_distance">Nach Entfernung sortieren</string>
     <string name="show_all_on_map">Alle auf der Karte zeigen</string>
 
+
+    <string name="openNow">Derzeit\ngeöffnet</string>
+    <string name="sortDistance">Nach Entfernung\nsortieren</string>
+
+
+    <!--TRENDING SEARCH -->
+    <string name="trending_topPicks">Beste Tipps</string>
+    <string name="trending_food">Essen</string>
+    <string name="trending_drinks">Getränk</string>
+    <string name="trending_coffee">Kaffee</string>
+    <string name="trending_shops">Geschäfte</string>
+    <string name="trending_arts">Spaß</string>
+    <string name="trending_outdoors">Draußen</string>
+    <string name="trending_sights">Sights</string>
 
 </resources>

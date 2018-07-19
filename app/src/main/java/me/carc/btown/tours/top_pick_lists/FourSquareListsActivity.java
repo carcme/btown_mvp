@@ -19,6 +19,9 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.CustomEvent;
+
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -189,6 +192,9 @@ public class FourSquareListsActivity extends BaseActivity {
                                 ListResult resp = body.getResponse().getListResult();
 
                                 if (Commons.isNotNull(resp) && resp.getListItems().getCount() > 0) {
+                                    if (BuildConfig.USE_CRASHLYTICS)
+                                        Answers.getInstance().logCustom(new CustomEvent("TopPicks " + item.getName()));
+
                                     setProgressItems(View.GONE);
                                     Intent intent = new Intent(FourSquareListsActivity.this, FourSquareListDetailsActivity.class);
                                     intent.putExtra(EXTRA_TITLE, item.getName());
@@ -237,20 +243,6 @@ public class FourSquareListsActivity extends BaseActivity {
                 break;
             default:
         }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-    }
-
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
     }
 
     @Override

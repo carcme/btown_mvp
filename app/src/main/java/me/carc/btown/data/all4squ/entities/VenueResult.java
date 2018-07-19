@@ -15,102 +15,135 @@ public class VenueResult implements Serializable, Parcelable {
     @SerializedName("id")
     @Expose
     private String id;
+
     @SerializedName("name")
     @Expose
     private String name;
+
     @SerializedName("contact")
     @Expose
     private Contact contact;
+
     @SerializedName("location")
     @Expose
     private Location location;
+
     @SerializedName("canonicalUrl")
     @Expose
     private String canonicalUrl;
+
     @SerializedName("categories")
     @Expose
     private ArrayList<Category> categories = new ArrayList<>();
+
     @SerializedName("verified")
     @Expose
     private boolean verified;
+
     @SerializedName("stats")
     @Expose
     private Stats stats;
+
     @SerializedName("price")
     @Expose
     private Price price;
+
     @SerializedName("likes")
     @Expose
     private Likes likes;
+
     @SerializedName("dislike")
     @Expose
     private boolean dislike;
+
     @SerializedName("ok")
     @Expose
     private boolean ok;
+
     @SerializedName("rating")
     @Expose
     private double rating;
+
     @SerializedName("ratingColor")
     @Expose
     private String ratingColor;
+
     @SerializedName("ratingSignals")
     @Expose
     private int ratingSignals;
+
     @SerializedName("allowMenuUrlEdit")
     @Expose
     private boolean allowMenuUrlEdit;
+
     @SerializedName("beenHere")
     @Expose
     private BeenHere beenHere;
+
     @SerializedName("specials")
     @Expose
     private Specials specials;
+
     @SerializedName("photos")
     @Expose
     private Photos photosVenuePhotos;
+
     @SerializedName("reasons")
     @Expose
     private Reasons reasons;
+
     @SerializedName("hereNow")
     @Expose
     private HereNow hereNow;
+
     @SerializedName("createdAt")
     @Expose
     private int createdAt;
+
     @SerializedName("tips")
     @Expose
     private Tips tips;
+
     @SerializedName("tags")
     @Expose
     private ArrayList<Object> tags = new ArrayList<>();
+
     @SerializedName("shortUrl")
     @Expose
     private String shortUrl;
+
     @SerializedName("timeZone")
     @Expose
     private String timeZone;
+
     @SerializedName("listed")
     @Expose
     private Listed listed;
+
     @SerializedName("popular")
     @Expose
     private Popular popular;
+
     @SerializedName("pageUpdates")
     @Expose
     private PageUpdates pageUpdates;
+
     @SerializedName("inbox")
     @Expose
     private Inbox inbox;
+
     @SerializedName("venueChains")
     @Expose
     private ArrayList<Object> venueChains = new ArrayList<>();
+
     @SerializedName("attributes")
     @Expose
     private Attributes attributes;
+
     @SerializedName("bestPhoto")
     @Expose
     private Photo bestPhoto;
+
     @SerializedName("colors")
     @Expose
     private Colors colors;

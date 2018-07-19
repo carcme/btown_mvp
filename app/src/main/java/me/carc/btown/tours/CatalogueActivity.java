@@ -21,6 +21,8 @@ import android.view.View;
 import android.widget.RelativeLayout;
 
 import com.crashlytics.android.Crashlytics;
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.CustomEvent;
 
 import java.util.List;
 
@@ -143,13 +145,19 @@ public class CatalogueActivity extends BaseActivity {
 
                 // show tour on map?
                 if (getIntent().hasExtra(EXTRA_SHOW_ON_MAP)) {
-                    if (BuildConfig.USE_CRASHLYTICS) Crashlytics.log(TAG + " : onItemSelected() <show tour on map>");
+                    if (BuildConfig.USE_CRASHLYTICS) {
+                        Answers.getInstance().logCustom(new CustomEvent("Show Tours on Map"));
+                        Crashlytics.log(TAG + " : onItemSelected() <show tour on map>");
+                    }
 
                     getIntent().putExtra(CATALOGUE_INDEX, catalogue.getTourId());
                     setResult(RESULT_OK, getIntent());
                     onBackPressed();
                 } else {  // show tour in tabs and pager
-                    if (BuildConfig.USE_CRASHLYTICS) Crashlytics.log(TAG + " : onItemSelected() <show tour>");
+                    if (BuildConfig.USE_CRASHLYTICS) {
+                        Answers.getInstance().logCustom(new CustomEvent("Show Tours on Map"));
+                        Crashlytics.log(TAG + " : onItemSelected() <show tour>");
+                    }
                     Holder.set(viewHolder.catalogueImage.getDrawable());
                     Intent intent = new Intent(CatalogueActivity.this, CataloguePreviewActivity.class);
                     intent.putExtra(CATALOGUE_INDEX, catalogue.getTourId());
@@ -172,6 +180,9 @@ public class CatalogueActivity extends BaseActivity {
         int title = R.string.shared_string_offline;
         int msg = R.string.check_network;
 
+        if (BuildConfig.USE_CRASHLYTICS)
+            Answers.getInstance().logCustom(new CustomEvent("Dowloading Tours"));
+
         if(((App)getApplication()).isNetworkAvailable()) {
            title = R.string.getting_tours;
            msg = R.string.getting_tours_desc;
@@ -187,20 +198,6 @@ public class CatalogueActivity extends BaseActivity {
                     }
                 });
         dlg.show();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-    }
-
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
     }
 
     @Override

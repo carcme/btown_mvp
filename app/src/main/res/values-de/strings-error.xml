@@ -17,6 +17,7 @@
     <string name="retry">Wiederholen</string>
 
     <string name="network_offline_title">Netzwerk Offline</string>
+    <string name="lookup_failed">Nachschlagen fehlgeschlagen. Überprüfen Sie die Netzwerkverbindung</string>
     <string name="tours_network_message">Sie müssen online sein, um die Touren herunterzuladen</string>
 
 

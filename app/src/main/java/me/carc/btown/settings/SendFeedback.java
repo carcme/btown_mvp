@@ -7,7 +7,7 @@ import android.support.v7.app.AlertDialog;
 import android.widget.Toast;
 
 import com.crashlytics.android.answers.Answers;
-import com.crashlytics.android.answers.RatingEvent;
+import com.crashlytics.android.answers.CustomEvent;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -15,6 +15,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import me.carc.btown.BuildConfig;
 import me.carc.btown.R;
 import me.carc.btown.Utils.IntentUtils;
 import me.carc.btown.ui.FeedbackDialog;
@@ -121,7 +122,7 @@ public class SendFeedback {
         String date = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.ENGLISH).format(new Date());
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference(FIREBASE_MSG_BOARD_FEEDBACK);
         mDatabase.child(date).setValue(text);
-        if (me.carc.btown.BuildConfig.USE_CRASHLYTICS)
-            Answers.getInstance().logRating(new RatingEvent().putCustomAttribute(FIREBASE_MSG_BOARD_FEEDBACK, text));
+        if (BuildConfig.USE_CRASHLYTICS)
+            Answers.getInstance().logCustom(new CustomEvent(FIREBASE_MSG_BOARD_FEEDBACK));
     }
 }

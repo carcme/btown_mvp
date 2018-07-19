@@ -13,12 +13,16 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.CustomEvent;
+
 import java.util.List;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import me.carc.btown.BuildConfig;
 import me.carc.btown.R;
 import me.carc.btown.SplashActivity;
 import me.carc.btown.Utils.ViewUtils;
@@ -198,6 +202,9 @@ public class FrontPageActivity extends MvpBaseActivity implements FrontPageMvpVi
             @Override
             public void onItemSelected(RecyclerView.ViewHolder holder, int pos) {
                 MenuItem item = mAdapter.getItem(pos);
+                if (BuildConfig.USE_CRASHLYTICS)
+                    Answers.getInstance().logCustom(new CustomEvent("Front Page -> " + item.name()));
+
                 Intent intent = new Intent(FrontPageActivity.this, item.getStartActivityClass());
                 if (item.getResultKey() == RESULT_NONE)
                     startActivity(intent);

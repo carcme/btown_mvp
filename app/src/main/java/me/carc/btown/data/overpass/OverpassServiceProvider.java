@@ -21,7 +21,7 @@ public class OverpassServiceProvider {
 
     private static OverpassApi service;
 
-    public static OverpassApi get() {
+    public static OverpassApi getService() {
         if (service == null) {
             service = createService();
         }
@@ -39,7 +39,7 @@ public class OverpassServiceProvider {
 
     public Call<OverpassQueryResult> createAndRunService(String query, final OverpassCallback callback) {
 
-        get();
+        getService();
 
         Call<OverpassQueryResult> call = service.interpreter(query);
         call.enqueue(new Callback<OverpassQueryResult>() {

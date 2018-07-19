@@ -34,6 +34,7 @@ public class QueryGenerator {
 //            filter.boundingBox(box.getLatSouth(), box.getLonWest(), box.getLatNorth(), box.getLonEast());
             filter.prepareNext();
         }
+
         filter.end().output(100);
 
         return query;

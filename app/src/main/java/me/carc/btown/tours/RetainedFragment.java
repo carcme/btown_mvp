@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
 import java.io.File;
+import java.util.List;
 
 import me.carc.btown.db.tours.model.Attraction;
 
@@ -21,6 +22,8 @@ public class RetainedFragment extends Fragment {
 
     private Attraction attractionData;
     private File attractionImage;
+
+    private List<Attraction> attractionList;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -50,4 +53,7 @@ public class RetainedFragment extends Fragment {
     public void setAttractionImage(File attractionImage) {
         this.attractionImage = attractionImage;
     }
+
+    public List<Attraction> getAttractionList() { return attractionList; }
+    public void setAttractionList(List<Attraction> list) { attractionList = list; }
 }

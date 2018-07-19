@@ -40,6 +40,8 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.android.vending.billing.IInAppBillingService;
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.CustomEvent;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
@@ -493,6 +495,9 @@ public abstract class BaseActivity extends AppCompatActivity {
 
 
     protected void showDonateDialog() {
+
+        if (BuildConfig.USE_CRASHLYTICS)
+            Answers.getInstance().logCustom(new CustomEvent("Show Donate"));
 
         if (mPurchaseItems == null)
             showProgressDialog(getString(R.string.text_donate_progress_title), getString(R.string.text_donate_progress_message));

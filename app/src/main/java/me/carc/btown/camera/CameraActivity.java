@@ -15,7 +15,11 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.CustomEvent;
+
 import me.carc.btown.BaseActivity;
+import me.carc.btown.BuildConfig;
 import me.carc.btown.R;
 import me.carc.btown.common.C;
 import me.carc.btown.common.Commons;
@@ -49,7 +53,8 @@ public class CameraActivity extends BaseActivity {
             }
 
         } else {
-
+            if (BuildConfig.USE_CRASHLYTICS)
+                Answers.getInstance().logCustom(new CustomEvent("Use Camera"));
             launchCamera();
         }
     }
