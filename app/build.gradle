@@ -16,13 +16,13 @@ repositories {
 }
 
 android {
-    compileSdkVersion 26
+    compileSdkVersion 27
     defaultConfig {
         applicationId 'me.carc.btown'
         minSdkVersion 21
-        targetSdkVersion 26
-        versionCode 66
-        versionName "2.1.26"
+        targetSdkVersion 27
+        versionCode 69
+        versionName "2.1.29"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         android.defaultConfig.vectorDrawables.useSupportLibrary = true
         javaCompileOptions {
@@ -32,7 +32,6 @@ android {
         }
         resConfigs "en", "de"
         multiDexEnabled true
-
         buildConfigField "String", "API_KEY", getPrivateKey("API_KEY")
     }
 
@@ -93,20 +92,21 @@ def static getPrivateKey(String property) {
 }
 
 ext {
-    supportLibVersion = '26.1.0'
+    supportLibVersion = '27.1.1'
     constraintLayoutVersion = '1.1.0'
-    googlePlayServices = '11.0.4'
+    googlePlayServices = '15.0.1'
     butterknife = '8.4.0'
-    osmdroid = '6.0.1'
-    firebase = '11.0.4'
-    firebaseUI = '2.3.0'
+    osmdroid = '6.0.2'
+    firebase = '16.0.1'
+    firebaseUI = '4.0.0'
     facebook = '4.23.+'
-    glide = '3.7.0'
+    glide = '4.7.1'    //''3.7.0'
     retrofit = '2.4.0'
     okhttp = '3.8.0'
 //    roomVersion = '1.1.0'
-    roomVersion = '1.0.0-alpha7'
+    roomVersion = '1.1.1' //''1.0.0-alpha7'
     gsonVersion = '2.8.2'
+    lifecycleVersion = '1.1.1'
 //    evernotejob = '1.2.0'
     DAGGER_VERSION = '2.5'
 
@@ -115,7 +115,7 @@ ext {
     RXLIFECYCLE = '2.2.1'
     RXPERMISSIONS = '0.9.5@aar'
 
-    leakcanary = '1.5.4'
+    leakcanary = '1.6.1'
     robolectric = '3.5.1'
     mockito = '2.12.0'
 }
@@ -125,102 +125,106 @@ dependencies {
 
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
-
-    implementation 'com.android.support:support-v4:26.1.0'
     implementation 'com.android.support.constraint:constraint-layout:1.1.2'
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     implementation 'com.android.support:multidex:1.0.3'
 
     implementation "com.android.support:appcompat-v7:${supportLibVersion}"
     implementation "com.android.support:design:${supportLibVersion}"
-    implementation "com.android.support:support-v4:${supportLibVersion}"
+//    implementation "com.android.support:support-v4:${supportLibVersion}"
     implementation "com.android.support:support-v13:${supportLibVersion}"
     implementation "com.android.support:customtabs:${supportLibVersion}"
     implementation "com.android.support:recyclerview-v7:${supportLibVersion}"
     implementation "com.android.support:cardview-v7:${supportLibVersion}"
     implementation "com.android.support:palette-v7:${supportLibVersion}"
     implementation "com.android.support:preference-v14:${supportLibVersion}"
-//    implementation "com.android.support:animated-vector-drawable:${supportLibVersion}"
-//    implementation "com.android.support:exifinterface:${supportLibVersion}"
+    implementation "com.android.support:animated-vector-drawable:${supportLibVersion}"
+    implementation "com.android.support:exifinterface:${supportLibVersion}"
 
     implementation "com.android.support.constraint:constraint-layout:${constraintLayoutVersion}"
 
     implementation "com.google.android.gms:play-services-auth:${googlePlayServices}"
     implementation "com.google.android.gms:play-services-location:${googlePlayServices}"
 
+    // BUTTERKNIFE
     implementation "com.jakewharton:butterknife:$butterknife"
     annotationProcessor "com.jakewharton:butterknife-compiler:$butterknife"
+
+    // FIREBASE
     implementation "com.google.firebase:firebase-core:$firebase"
-    implementation "com.google.firebase:firebase-auth:$firebase"
-    implementation "com.google.firebase:firebase-config:$firebase"
     implementation "com.google.firebase:firebase-database:$firebase"
     implementation "com.firebaseui:firebase-ui-database:$firebaseUI"
     implementation "com.google.firebase:firebase-storage:$firebase"
     implementation "com.firebaseui:firebase-ui-storage:$firebaseUI"
 
-//    compile "com.facebook.android:facebook-android-sdk:$facebook"
+    // FIREBASE - specific versions
+    implementation 'com.google.firebase:firebase-auth:16.0.2'
+    implementation 'com.google.firebase:firebase-config:16.0.0'
 
-    implementation(name: 'osmdroid-android-6.0.2-SNAPSHOT', ext: 'aar')
-//    implementation "org.osmdroid:osmdroid-android:$osmdroid"
+    // OSMDROID
+//    implementation(name: 'osmdroid-android-6.0.2-SNAPSHOT', ext: 'aar')
+    implementation "org.osmdroid:osmdroid-android:$osmdroid"
 
+    // GLIDE
     implementation "com.github.bumptech.glide:glide:$glide"
+    annotationProcessor "com.github.bumptech.glide:compiler:$glide"
+    
+    // RETROFIT
     implementation "com.squareup.retrofit2:retrofit:$retrofit"
     implementation "com.squareup.retrofit2:converter-gson:$retrofit"
     implementation "com.squareup.okhttp3:logging-interceptor:$okhttp"
     implementation "com.google.code.gson:gson:$gsonVersion"
 
+    // ROOM
     implementation "android.arch.persistence.room:runtime:$roomVersion"
     annotationProcessor "android.arch.persistence.room:compiler:$roomVersion"
     //    androidTestImplementation "android.arch.persistence.room:testing:$roomVersion"
 
     // Lifecyles, LiveData and ViewModel - CONFLICT WITH ROOM
-//    compile "android.arch.lifecycle:runtime:1.1.0"
-//    compile "android.arch.lifecycle:extensions:1.1.0"
-//    annotationProcessor "android.arch.lifecycle:compiler:1.1.0"
+    implementation "android.arch.lifecycle:runtime:$lifecycleVersion"
+    implementation "android.arch.lifecycle:extensions:$lifecycleVersion"
+    annotationProcessor "android.arch.lifecycle:compiler:$lifecycleVersion"
 
-    //    compile "com.evernote:android-job:$evernotejob"
-
-    //    compile 'com.mikepenz:fontawesome-typeface:4.7.0.1@aar'
-
-    implementation 'com.github.faruktoptas:FancyShowCaseView:1.0.0'
-
-
+    // DAGGER
     implementation "com.google.dagger:dagger:$DAGGER_VERSION"
-    provided 'org.glassfish:javax.annotation:10.0-b28' //Required by Dagger2
+    compileOnly 'org.glassfish:javax.annotation:10.0-b28' //Required by Dagger2
     annotationProcessor daggerCompiler
     testAnnotationProcessor daggerCompiler
     androidTestAnnotationProcessor daggerCompiler
 
-    //    compile 'com.mikepenz:materialdrawer:5.8.1'
-    implementation 'com.mikepenz:iconics-core:2.9.3@aar'
-    implementation 'com.mikepenz:iconics-views:2.9.3@aar'
-    implementation 'com.mikepenz:fontawesome-typeface:4.4.0.1@aar'
-    implementation 'com.mikepenz:community-material-typeface:1.9.32.2@aar'
-    implementation('com.mikepenz:aboutlibraries:5.9.8@aar') {
-        transitive = true
-    }
-    implementation 'com.mikepenz:fastadapter:2.6.3@aar'
+    // ABOUT LIBS AND EXTRA ICONS
+    implementation "com.mikepenz:iconics-core:3.0.4@aar"
+    implementation "com.mikepenz:iconics-views:3.0.4@aar"
+    implementation 'com.mikepenz:fontawesome-typeface:5.0.13.0@aar'
+    implementation 'com.mikepenz:community-material-typeface:2.0.46.1@aar'
+    implementation "com.mikepenz:aboutlibraries:6.1.1"
+//    implementation 'com.mikepenz:fastadapter:2.6.3@aar'
+
+    // MISC
     implementation 'carcme:login-buttons:0.3.0'
     implementation 'com.github.lzyzsd:circleprogress:1.2.1'
     implementation 'com.flaviofaria:kenburnsview:1.0.7'
-    implementation 'com.davemorrissey.labs:subsampling-scale-image-view:3.9.0'
+    implementation 'com.davemorrissey.labs:subsampling-scale-image-view:3.10.0'
     implementation 'de.hdodenhof:circleimageview:2.2.0'
-    debugCompile "com.squareup.leakcanary:leakcanary-android:$leakcanary"
-    releaseCompile "com.squareup.leakcanary:leakcanary-android-no-op:$leakcanary"
-    compile 'pub.devrel:easypermissions:1.0.0'
-    testCompile "org.robolectric:robolectric:$robolectric"
-    testCompile "org.mockito:mockito-core:$mockito"
-    testCompile 'junit:junit:4.12'
-    compile('com.crashlytics.sdk.android:crashlytics:2.7.0@aar') {
+    implementation 'com.github.faruktoptas:FancyShowCaseView:1.0.1'
+    implementation 'pub.devrel:easypermissions:1.2.0'
+
+    // LEAK CANARY
+    debugImplementation "com.squareup.leakcanary:leakcanary-android:$leakcanary"
+    releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$leakcanary"
+    testImplementation "org.robolectric:robolectric:$robolectric"
+    testImplementation "org.mockito:mockito-core:$mockito"
+    testImplementation 'junit:junit:4.12'
+    implementation('com.crashlytics.sdk.android:crashlytics:2.7.0@aar') {
         transitive = true;
     }
 /*
-    compile 'pl.charmas.android:android-reactive-location2:2.1@aar'
-    compile "io.reactivex.rxjava2:rxjava:$RXJAVA"
-    compile "io.reactivex.rxjava2:rxandroid:$RXANDROID"
-    compile "com.tbruyelle.rxpermissions2:rxpermissions:$RXPERMISSIONS"
+    implementation 'pl.charmas.android:android-reactive-location2:2.1@aar'
+    implementation "io.reactivex.rxjava2:rxjava:$RXJAVA"
+    implementation "io.reactivex.rxjava2:rxandroid:$RXANDROID"
+    implementation "com.tbruyelle.rxpermissions2:rxpermissions:$RXPERMISSIONS"
 */
 
     compileOnly 'com.google.code.findbugs:annotations:3.0.1'

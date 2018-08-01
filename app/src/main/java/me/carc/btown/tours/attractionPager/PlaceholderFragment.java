@@ -16,6 +16,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -48,10 +49,8 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
-import com.firebase.ui.storage.images.FirebaseImageLoader;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.DrawableImageViewTarget;
 import com.flaviofaria.kenburnsview.KenBurnsView;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -61,6 +60,7 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import me.carc.btown.GlideApp;
 import me.carc.btown.R;
 import me.carc.btown.Utils.AndroidUtils;
 import me.carc.btown.Utils.ImageUtils;
@@ -76,6 +76,8 @@ import me.carc.btown.extras.WikiWebViewActivity;
 import me.carc.btown.tours.AttractionTabsActivity;
 import me.carc.btown.tours.GalleryItem;
 import me.carc.btown.tours.adapters.PoiInfoListAdapter;
+
+import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
 
 /**
  * Inflate card items depending on what is available in the JSON tour
@@ -163,7 +165,7 @@ public class PlaceholderFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.attraction_display_activity, container, false);
         unbinder = ButterKnife.bind(this, rootView);
 
@@ -237,20 +239,20 @@ public class PlaceholderFragment extends Fragment {
 
                         Glide.with(PlaceholderFragment.this)
                                 .load(item.getCachedFile())
-                                .diskCacheStrategy(DiskCacheStrategy.RESULT)
-                                .crossFade(500)
-                                .placeholder(R.drawable.checkered_background)
-                                .into(new GlideDrawableImageViewTarget(imageBackDrop) {
+                                .transition(withCrossFade(500))
+                                .apply(new RequestOptions()
+                                        .placeholder(R.drawable.checkered_background)
+                                        .diskCacheStrategy(DiskCacheStrategy.RESOURCE))
+                                .into(new DrawableImageViewTarget(imageBackDrop) {
                                     @Override
-                                    public void onLoadFailed(Exception e, Drawable errorDrawable) {
-                                        super.onLoadFailed(e, errorDrawable);
-                                        loadFromFirebase();
+                                    protected void setResource(@Nullable Drawable resource) {
+                                        super.setResource(resource);
                                     }
 
                                     @Override
-                                    public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
-                                        super.onResourceReady(resource, glideAnimation);
-                                        Log.d(TAG, "TIMING: Image load time = " + (System.currentTimeMillis() - start));
+                                    public void onLoadFailed(@Nullable Drawable errorDrawable) {
+                                        super.onLoadFailed(errorDrawable);
+                                        loadFromFirebase();
                                     }
                                 });
                         return;
@@ -267,10 +269,9 @@ public class PlaceholderFragment extends Fragment {
     private void loadFromFirebase() {
         // NO LOCAL VERSION FOUND - Load the image from Firebase
         StorageReference mCoverImageStorageRef = FirebaseStorage.getInstance().getReference().child("coverImages/");
-        Glide.with(getActivity())
-                .using(new FirebaseImageLoader())
+        GlideApp.with(getActivity())
                 .load(mCoverImageStorageRef.child(attractionData.getImage()))
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL))
                 .into(imageBackDrop);
     }
 
@@ -383,9 +384,10 @@ public class PlaceholderFragment extends Fragment {
 
                 Glide.with(this)
                         .load(uri)
-                        .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                        .centerCrop()
-                        .override(imgOverrideSizeX, imgOverrideSizeY)
+                        .apply(RequestOptions
+                                .centerCropTransform()
+                                .diskCacheStrategy(DiskCacheStrategy.DATA)
+                                .override(imgOverrideSizeX, imgOverrideSizeY))
                         .into(imageView);
 
                 String imageTitle = line.substring(0, line.indexOf("<"));

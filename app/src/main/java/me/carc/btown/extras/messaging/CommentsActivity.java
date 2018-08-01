@@ -1,10 +1,7 @@
 package me.carc.btown.extras.messaging;
 
 import android.content.Intent;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -22,12 +19,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.BuildConfig;
 import com.crashlytics.android.answers.CustomEvent;
 import com.crashlytics.android.answers.ShareEvent;
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -43,8 +38,7 @@ import me.carc.btown.R;
 import me.carc.btown.Utils.AndroidUtils;
 import me.carc.btown.common.C;
 import me.carc.btown.common.Commons;
-import me.carc.btown.extras.messaging.viewholders.MessageViewHolder;
-import me.carc.btown.ui.custom.MyCustomLayoutManager;
+import me.carc.btown.ui.custom.PreDrawLayoutManager;
 
 public class CommentsActivity extends BaseActivity {
 
@@ -67,7 +61,7 @@ public class CommentsActivity extends BaseActivity {
 
     private String mUsername;
     private String mPhotoUrl;
-    public FirebaseRecyclerAdapter<CommentMessage, MessageViewHolder> mFirebaseAdapter;
+//    public FirebaseRecyclerAdapter<CommentMessage, MessageViewHolder> mFirebaseAdapter;
 
     private DatabaseReference database;
     private static String msgCategory;
@@ -240,7 +234,7 @@ public class CommentsActivity extends BaseActivity {
      * Setup the recyclerview to display the comments
      */
     private void setupRecyclerView() {
-        final MyCustomLayoutManager layoutManager = new MyCustomLayoutManager(this);
+        final PreDrawLayoutManager layoutManager = new PreDrawLayoutManager(this);
         layoutManager.setStackFromEnd(true);
         layoutManager.setReverseLayout(true);
 
@@ -259,6 +253,7 @@ public class CommentsActivity extends BaseActivity {
             progressBar.setVisibility(ProgressBar.INVISIBLE);
         }
 
+/*
         mFirebaseAdapter = new FirebaseRecyclerAdapter<CommentMessage, MessageViewHolder>(
                 CommentMessage.class,
                 R.layout.comments_firebase_item,
@@ -298,6 +293,7 @@ public class CommentsActivity extends BaseActivity {
         });
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(mFirebaseAdapter);
+*/
 
         // show usage hint if 1st time using comments (or debugging)
         if (!db.getBoolean("COMMENTS_SHOW_HINT") || C.DEBUG_ENABLED) {

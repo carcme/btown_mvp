@@ -300,13 +300,10 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
 
         TinyDB db = TinyDB.getTinyDB();
         mMap.setMinZoomLevel(2.0);
-        mMap.getController().setZoom(db.getInt(LAST_ZOOM_LEVEL, 9));
+        mMap.getController().setZoom((double)db.getInt(LAST_ZOOM_LEVEL, 12));
 
-        // Don't zoom to location when showing tours on the map
-        if(Commons.isNull(mTourOverlay)) {
-            GeoPoint savedCenter = new GeoPoint(db.getDouble(LAST_CENTER_LAT, BERLIN_LAT), db.getDouble(LAST_CENTER_LNG, BERLIN_LNG));
-            mMap.getController().animateTo(savedCenter);
-        }
+        GeoPoint savedCenter = new GeoPoint(db.getDouble(LAST_CENTER_LAT, BERLIN_LAT), db.getDouble(LAST_CENTER_LNG, BERLIN_LNG));
+        mMap.getController().animateTo(savedCenter);
         compassSensor = new CompassSensor(mContext, onCompassCallback);
 
         initLocationProvider();
@@ -560,11 +557,7 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
     }
 
     private void clearLayers(boolean clearSearchLayer) {
-        Log.d(TAG, "clearLayers: " + mMarkersOverlay.getSize());
-        if (mMarkersOverlay.getSize() == 1)  // dont show msg when already poi on screen
-            showNoResultsMsg = false;
-        else
-            showNoResultsMsg = true;
+        showNoResultsMsg = mMarkersOverlay.getSize() != 1;
 
         mMarkersOverlay.clear();
         if (clearSearchLayer) mSearchOverlay.clear();
@@ -1528,6 +1521,10 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
         mMap.getOverlayManager().add(tourLine);
         mMap.getOverlays().add(mTourOverlay);
 
+        if(mMap.isAnimating()) {
+            mMap.clearAnimation();
+            mMap.getController().stopPanning();
+        }
         mMap.zoomToBoundingBox(mTourOverlay.getBoundingBox(), true);
 
         // Disable tracking mode if enabled
@@ -1536,7 +1533,6 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
             mTrackingMode = false;
             updateUIWithTrackingMode();
         }
-//        mMap.invalidate();
     }
 
 

@@ -29,7 +29,7 @@ import me.carc.btown.extras.adapters.TransportPlanSelectionAdapter;
 import me.carc.btown.extras.bahns.Bahns;
 import me.carc.btown.settings.SendFeedback;
 import me.carc.btown.ui.custom.DividerItemDecoration;
-import me.carc.btown.ui.custom.MyCustomLayoutManager;
+import me.carc.btown.ui.custom.PreDrawLayoutManager;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -106,7 +106,7 @@ public class TransportPlansFragment extends Fragment {
                 GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 2);
                 recyclerView.setLayoutManager(gridLayoutManager);
             } else {
-                MyCustomLayoutManager layoutManager = new MyCustomLayoutManager(getActivity());
+                PreDrawLayoutManager layoutManager = new PreDrawLayoutManager(getActivity());
                 recyclerView.setLayoutManager(layoutManager);
 
                 RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST);

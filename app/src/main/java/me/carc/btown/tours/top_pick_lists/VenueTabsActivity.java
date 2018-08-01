@@ -10,6 +10,7 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -28,9 +29,10 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DecodeFormat;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.BitmapImageViewTarget;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.DrawableImageViewTarget;
 import com.flaviofaria.kenburnsview.KenBurnsView;
 
 import butterknife.BindView;
@@ -38,6 +40,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import me.carc.btown.BaseActivity;
 import me.carc.btown.R;
+import me.carc.btown.Utils.ImageUtils;
 import me.carc.btown.Utils.ViewUtils;
 import me.carc.btown.common.C;
 import me.carc.btown.common.Commons;
@@ -61,7 +64,6 @@ public class VenueTabsActivity extends BaseActivity implements ToursScrollListen
     public static final String EXTRA_VENUE_ID   = "EXTRA_VENUE_ID";
     public static final String EXTRA_PHOTOS     = "EXTRA_PHOTOS";
 
-    private MyFragmentPagerAdapter adapter;
     private VenueResult mVenueResult;
 
     @BindView(R.id.venueAppbar) AppBarLayout venueAppbar;
@@ -155,33 +157,35 @@ public class VenueTabsActivity extends BaseActivity implements ToursScrollListen
 
             Glide.with(this)
                     .load(photo)
-                    .asBitmap()
-                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                    .into(new BitmapImageViewTarget(venueHeaderImage) {
+                    .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.RESOURCE).format(DecodeFormat.PREFER_RGB_565))
+                    .into(new DrawableImageViewTarget(venueHeaderImage) {
                         @Override
-                        public void onResourceReady(final Bitmap bitmap, GlideAnimation anim) {
-                            super.onResourceReady(bitmap, anim);
-                            new Palette.Builder(bitmap).generate(new Palette.PaletteAsyncListener() {
-                                @Override
-                                public void onGenerated(Palette palette) {
-                                    if (!bitmap.isRecycled()) {
-                                        if (palette != null) {
-                                            Palette.Swatch s = palette.getVibrantSwatch();
-                                            if (s == null)
-                                                s = palette.getDarkVibrantSwatch();
-                                            if (s == null)
-                                                s = palette.getLightVibrantSwatch();
-                                            if (s == null)
-                                                s = palette.getMutedSwatch();
+                        protected void setResource(@Nullable Drawable resource) {
+                            super.setResource(resource);
+                            if(resource != null) {
+                                final Bitmap bitmap = ImageUtils.drawableToBitmap(resource);
+                                new Palette.Builder(bitmap).generate(new Palette.PaletteAsyncListener() {
+                                    @Override
+                                    public void onGenerated(Palette palette) {
+                                        if (!bitmap.isRecycled()) {
+                                            if (palette != null) {
+                                                Palette.Swatch s = palette.getVibrantSwatch();
+                                                if (s == null)
+                                                    s = palette.getDarkVibrantSwatch();
+                                                if (s == null)
+                                                    s = palette.getLightVibrantSwatch();
+                                                if (s == null)
+                                                    s = palette.getMutedSwatch();
 
-                                            setColors(s.getTitleTextColor(), s.getRgb(), s.getBodyTextColor());
-                                        }
-                                    } else
-                                        Log.d(TAG, "onGenerated: BITMAP RECYCLED");
-                                }
-                            });
+                                                setColors(s.getTitleTextColor(), s.getRgb(), s.getBodyTextColor());
+                                            }
+                                        } else
+                                            Log.d(TAG, "onGenerated: BITMAP RECYCLED");
+                                    }
+                                });
+                            }
                         }
-                    });
+                        });
 
         } catch (Exception e) {
             venueHeaderImage.setImageResource(R.drawable.no_image);
@@ -259,7 +263,7 @@ public class VenueTabsActivity extends BaseActivity implements ToursScrollListen
     }
 
     private void setupViewPager() {
-        adapter = new MyFragmentPagerAdapter(getSupportFragmentManager());
+        MyFragmentPagerAdapter adapter = new MyFragmentPagerAdapter(getSupportFragmentManager());
 
         Bundle bundle = null;
         if (Commons.isNotNull(mVenueResult)) {
@@ -313,30 +317,11 @@ public class VenueTabsActivity extends BaseActivity implements ToursScrollListen
         }, duration * 2);
     }
 
-    /**
-     * Find story data from its ID
-     *
-     * @param id the ID of the list item
-     * @return the position of the item
-     */
-    private int findPositionById(int id) {
-/*
-        ArrayList<TourData> allStories = TourLists.getAttractions();
-        for (int position = 0; position < allStories.size(); position++) {
-            if (allStories.get(position).getId() == id)
-                return position;
-        }
-*/
-        return -1;
-    }
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_fsq_venue, menu);
         return true;
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -347,13 +332,9 @@ public class VenueTabsActivity extends BaseActivity implements ToursScrollListen
                 break;
 
             case R.id.menu_show_on_map:
-//                setResult(RESULT_OK, getIntent());
-
                 getIntent().setClass(this, MapActivity.class);
                 setResult(RESULT_OK, getIntent());
                 startActivity(getIntent());
-
-//                finish();
                 break;
 
             default:

@@ -48,10 +48,9 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
-import com.firebase.ui.storage.images.FirebaseImageLoader;
+import com.bumptech.glide.request.transition.Transition;
 import com.flaviofaria.kenburnsview.KenBurnsView;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -64,6 +63,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import me.carc.btown.GlideApp;
 import me.carc.btown.App;
 import me.carc.btown.R;
 import me.carc.btown.Utils.AndroidUtils;
@@ -73,11 +73,13 @@ import me.carc.btown.Utils.WikiUtils;
 import me.carc.btown.common.C;
 import me.carc.btown.common.CacheDir;
 import me.carc.btown.common.Commons;
+import me.carc.btown.db.tours.model.Attraction;
+import me.carc.btown.db.tours.model.StopInfo;
 import me.carc.btown.extras.WikiWebViewActivity;
 import me.carc.btown.tours.adapters.PoiInfoListAdapter;
 import me.carc.btown.tours.attractionPager.InfoCard;
-import me.carc.btown.db.tours.model.Attraction;
-import me.carc.btown.db.tours.model.StopInfo;
+
+import static com.bumptech.glide.request.RequestOptions.centerCropTransform;
 
 /**
  * Bottom Sheet Dialog for points of interest
@@ -265,25 +267,23 @@ public class TourSheetDialog extends BottomSheetDialogFragment {
         if(Commons.isNotNull(attractionData.getImage())) {
             Glide.with(this)
                     .load(CacheDir.getInstance().getCachePath() + attractionData.getImage())
-                    .into(new SimpleTarget<GlideDrawable>() {
+                    .into(new SimpleTarget<Drawable>() {
                         @Override
-                        public void onLoadFailed(Exception e, Drawable errorDrawable) {
-                            super.onLoadFailed(e, errorDrawable);
-
-                            // NO LOCAL VERSION FOUND - Load the image from Firebase
-                            StorageReference mCoverImageStorageRef = FirebaseStorage.getInstance().getReference().child("coverImages/");
-                            Glide.with(getActivity())
-                                    .using(new FirebaseImageLoader())
-                                    .load(mCoverImageStorageRef.child(attractionData.getImage()))
-                                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                                    .into(imageBackDrop);
-                        }
-
-                        @Override
-                        public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
+                        public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
                             imageBackDrop.setImageDrawable(resource);
                         }
-                    });
+
+                        @Override
+                        public void onLoadFailed(@Nullable Drawable errorDrawable) {
+                            super.onLoadFailed(errorDrawable);
+                            // NO LOCAL VERSION FOUND - Load the image from Firebase
+                            StorageReference mCoverImageStorageRef = FirebaseStorage.getInstance().getReference().child("coverImages/");
+                            GlideApp.with(getActivity())
+                                    .load(mCoverImageStorageRef.child(attractionData.getImage()))
+                                    .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.DATA))
+                                    .into(imageBackDrop);
+                        }
+                        });
         }
     }
 
@@ -391,12 +391,11 @@ public class TourSheetDialog extends BottomSheetDialogFragment {
                 int end = line.indexOf(">");
 
                 Uri uri = Uri.parse(line.substring(start, end));
-
                 Glide.with(this)
                         .load(uri)
-                        .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                        .centerCrop()
-                        .override(imgOverrideSizeX, imgOverrideSizeY)
+                        .apply(centerCropTransform()
+                                .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+                                .override(imgOverrideSizeX, imgOverrideSizeY))
                         .into(imageView);
 
                 String imageTitle = line.substring(0, line.indexOf("<"));

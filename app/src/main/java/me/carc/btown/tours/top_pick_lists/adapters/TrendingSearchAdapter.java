@@ -45,8 +45,8 @@ public class TrendingSearchAdapter extends RecyclerView.Adapter<TrendingSearchAd
 
         holder.label.setText(data.getTitleResourceId());
         Glide.with(holder.icon.getContext())
-                .load(data.getIconUrl().concat("bg_120.png"))
                 .asBitmap()
+                .load(data.getIconUrl().concat("bg_120.png"))
                 .into(holder.icon);
 /*
                 .into(new SimpleTarget<Bitmap>() {

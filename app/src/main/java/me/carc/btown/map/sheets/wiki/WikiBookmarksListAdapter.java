@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 
 import org.osmdroid.util.GeoPoint;
 
@@ -58,7 +59,7 @@ public class WikiBookmarksListAdapter extends RecyclerView.Adapter<WikiBookmarks
 
         Glide.with(holder.mView.getContext())
                 .load(item.getThumbnail())
-                .error(R.drawable.ic_wiki_map_marker)
+                .apply(new RequestOptions().error(R.drawable.ic_wiki_map_marker))
                 .into(holder.thumbnail);
 
         holder.thumbnail.setOnClickListener(new View.OnClickListener() {

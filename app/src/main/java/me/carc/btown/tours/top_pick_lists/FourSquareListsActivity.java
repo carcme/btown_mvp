@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -21,7 +22,21 @@ import android.widget.Toast;
 
 import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.CustomEvent;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageMetadata;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -30,8 +45,10 @@ import butterknife.OnClick;
 import me.carc.btown.BaseActivity;
 import me.carc.btown.BuildConfig;
 import me.carc.btown.R;
+import me.carc.btown.Utils.FileUtils;
 import me.carc.btown.Utils.ViewUtils;
 import me.carc.btown.common.C;
+import me.carc.btown.common.CacheDir;
 import me.carc.btown.common.Commons;
 import me.carc.btown.common.interfaces.OnItemSelectedListener;
 import me.carc.btown.data.all4squ.FourSquResult;
@@ -40,9 +57,10 @@ import me.carc.btown.data.all4squ.FourSquareServiceProvider;
 import me.carc.btown.data.all4squ.entities.BtownListsResult;
 import me.carc.btown.data.all4squ.entities.GroupsList;
 import me.carc.btown.data.all4squ.entities.ItemsUserList;
+import me.carc.btown.data.all4squ.entities.ListItems;
 import me.carc.btown.data.all4squ.entities.ListResult;
 import me.carc.btown.tours.top_pick_lists.adapters.ListsAdapter;
-import me.carc.btown.ui.custom.MyCustomLayoutManager;
+import me.carc.btown.ui.custom.PreDrawLayoutManager;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -61,8 +79,7 @@ public class FourSquareListsActivity extends BaseActivity {
     @BindView(R.id.inventoryProgressBar) ProgressBar progressLayout;
     @BindView(R.id.fab) FloatingActionButton fab;
 
-    @OnClick(R.id.fab)
-    void done() {
+    @OnClick(R.id.fab) void done() {
         onBackPressed();
     }
 
@@ -152,6 +169,14 @@ public class FourSquareListsActivity extends BaseActivity {
             Commons.Toast(this, R.string.operation_error, Color.RED, Toast.LENGTH_SHORT);
     }
 
+    private void launchVenueList(String title, ListItems venueList) {
+        Intent intent = new Intent(FourSquareListsActivity.this, FourSquareListDetailsActivity.class);
+        intent.putExtra(EXTRA_TITLE, title);
+        intent.putExtra(EXTRA_LISTS, (Parcelable) venueList);
+        startActivityForResult(intent, RESULT_SHOW_MAP_ALL);
+        setProgressItems(View.GONE);
+    }
+
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void setupRecycler(ArrayList<ItemsUserList> lists) {
         mAdapter = new ListsAdapter(lists);
@@ -163,13 +188,11 @@ public class FourSquareListsActivity extends BaseActivity {
                 GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
                 recyclerView.setLayoutManager(gridLayoutManager);
             } else {
-                MyCustomLayoutManager layoutManager = new MyCustomLayoutManager(this);
+                PreDrawLayoutManager layoutManager = new PreDrawLayoutManager(this);
                 recyclerView.setLayoutManager(layoutManager);
             }
             recyclerView.setAdapter(mAdapter);
-
             scrollHider(recyclerView, fab);
-
             setProgressItems(View.GONE);
 
             recyclerView.addOnItemTouchListener(new OnItemSelectedListener(this) {
@@ -180,43 +203,113 @@ public class FourSquareListsActivity extends BaseActivity {
 
                     final ItemsUserList item = mAdapter.getItem(pos);
 
-                    FourSquareApi service = FourSquareServiceProvider.get();
-                    Call<FourSquResult> listsCall = service.getListDetails(item.getId());
+                    String venueList = db.getString(item.getId());
+                    if (!Commons.isEmpty(venueList)) {
+                        ListItems items = new Gson().fromJson(venueList, new TypeToken<ListItems>() {}.getType());
+                        launchVenueList(item.getName(), items);
+                    } else {
+                        StorageReference imageRef = FirebaseStorage.getInstance().getReference().child("venue_lists/" + item.getId());
+                        final File localFile = new File(CacheDir.getInstance().getCacheDirAsFile(), item.getId());
+                        imageRef.getFile(localFile)
+                                .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                                    @Override
+                                    public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                                        // List exists on Firebase
+                                        try {
+                                            ListItems venue = new Gson().fromJson(FileUtils.readFile(localFile),
+                                                    new TypeToken<ListItems>() {}.getType());
 
-                    listsCall.enqueue(new Callback<FourSquResult>() {
-                        @SuppressWarnings({"ConstantConditions"})
-                        @Override
-                        public void onResponse (@NonNull Call < FourSquResult > call, @NonNull Response < FourSquResult > response) {
-                            FourSquResult body = response.body();
-                            if (Commons.isNotNull(body)) {
-                                ListResult resp = body.getResponse().getListResult();
+                                            launchVenueList(item.getName(), venue);
+                                            db.putString(item.getId(), new Gson().toJson(venue));
+                                        } catch (IOException e) {
+                                            //You'll need to add proper error handling here
+                                            Log.d(TAG, "File read erro");
+                                        }
 
-                                if (Commons.isNotNull(resp) && resp.getListItems().getCount() > 0) {
-                                    if (BuildConfig.USE_CRASHLYTICS)
-                                        Answers.getInstance().logCustom(new CustomEvent("TopPicks " + item.getName()));
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception exception) {
+                                        FourSquareApi service = FourSquareServiceProvider.get();
+                                        Call<FourSquResult> listsCall = service.getListDetails(item.getId());
 
-                                    setProgressItems(View.GONE);
-                                    Intent intent = new Intent(FourSquareListsActivity.this, FourSquareListDetailsActivity.class);
-                                    intent.putExtra(EXTRA_TITLE, item.getName());
-                                    intent.putExtra(EXTRA_LISTS, (Parcelable) resp.getListItems());
-                                    startActivityForResult(intent, RESULT_SHOW_MAP_ALL);
-                                } else
-                                    showError();
-                            } else
-                                showError();
-//                                Commons.Toast(FourSquareListsActivity.this, R.string.network_not_available_error, Color.RED, Toast.LENGTH_SHORT);
-                        }
+                                        listsCall.enqueue(new Callback<FourSquResult>() {
+                                            @SuppressWarnings({"ConstantConditions"})
+                                            @Override
+                                            public void onResponse(@NonNull Call<FourSquResult> call, @NonNull Response<FourSquResult> response) {
+                                                FourSquResult body = response.body();
+                                                if (Commons.isNotNull(body)) {
+                                                    ListResult resp = body.getResponse().getListResult();
 
-                        @Override
-                        public void onFailure (@NonNull Call call, @NonNull Throwable t){
-                            Log.d(TAG, "onFailure: ");
-                            showError();
-                        }
-                    });
+                                                    if (Commons.isNotNull(resp) && resp.getListItems().getCount() > 0) {
+                                                        if (BuildConfig.USE_CRASHLYTICS)
+                                                            Answers.getInstance().logCustom(new CustomEvent("TopPicks " + item.getName()));
+
+                                                        uploadVenueList(resp);
+                                                        launchVenueList(item.getName(), resp.getListItems());
+
+                                                    } else
+                                                        showError();
+                                                } else
+                                                    showError();
+                                            }
+
+                                            @Override
+                                            public void onFailure(@NonNull Call call, @NonNull Throwable t) {
+                                                Log.d(TAG, "onFailure: ");
+                                                showError();
+                                            }
+                                        });
+                                    }
+                        });
+                    }
                 }
             });
         }
     }
+
+
+    private void uploadVenueList(final ListResult venueList) {
+
+        Gson gson = new Gson();
+        final String json = gson.toJson(venueList.getListItems());
+
+        final File localFile = new File(CacheDir.getInstance().getCacheDirAsFile(), venueList.getId());
+        Uri uploadUri = Uri.fromFile(localFile);
+        try {
+            // write json data to file
+            Writer output = new BufferedWriter(new FileWriter(localFile));
+            output.write(json);
+            output.close();
+
+            StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+            StorageMetadata metadata = new StorageMetadata.Builder()
+                    .setContentType("application/json")
+                    .setCustomMetadata("listID", venueList.getId())
+                    .setCustomMetadata("listName", venueList.getName())
+                    .setCustomMetadata("listDescription", venueList.getDescription())
+                    .build();
+            UploadTask uploadTask = storageRef.child("venue_lists/" + uploadUri.getLastPathSegment()).putFile(uploadUri, metadata);
+
+            uploadTask.addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+
+                    Log.d(TAG, "onFailure: " + exception.getMessage());
+                    // Handle unsuccessful uploads
+                }
+            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    // always save local version
+                    db.putString(venueList.getId(), json);
+                }
+            });
+
+        } catch (Exception ignore) {
+        }
+    }
+
 
     private void setProgressItems(int vis) {
         progressLayout.setVisibility(vis);

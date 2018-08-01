@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,10 +51,13 @@ public class ExternalLinksAdapter extends RecyclerView.Adapter<ExternalLinksAdap
         final ExternalLinkItem data = mItems.get(position);
         Context ctx = holder.siteImage.getContext();
 
+        RequestOptions opts = new RequestOptions()
+                .error(R.drawable.no_image)
+                .diskCacheStrategy(DiskCacheStrategy.DATA);
+
         Glide.with(holder.siteImage.getContext())
                 .load(ctx.getString(data.getIconLink()))
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .error(R.drawable.no_image)
+                .apply(opts)
                 .into(holder.siteImage);
 
         holder.siteDesc.setText(data.getSubTitleResourceId());

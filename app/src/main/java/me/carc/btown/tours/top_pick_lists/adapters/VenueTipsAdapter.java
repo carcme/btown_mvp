@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 
 import java.util.ArrayList;
 
@@ -31,13 +32,13 @@ public class VenueTipsAdapter extends RecyclerView.Adapter<VenueTipsAdapter.TipH
     }
 
     @Override
-    public TipHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
+    public @NonNull TipHolder onCreateViewHolder(@NonNull final ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.venue_tip, parent, false);
         return new TipHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(final TipHolder holder, final int pos) {
+    public void onBindViewHolder(@NonNull final TipHolder holder, final int pos) {
 
         ItemsGroupsTip tip = tips.get(pos);
 
@@ -50,7 +51,7 @@ public class VenueTipsAdapter extends RecyclerView.Adapter<VenueTipsAdapter.TipH
                     Uri uri = Uri.parse(photo.getPrefix() + "width200" + photo.getSuffix());
                     Glide.with(holder.mView.getContext())
                             .load(uri)
-                            .placeholder(R.drawable.checkered_background)
+                            .apply(new RequestOptions().placeholder(R.drawable.checkered_background))
                             .into(holder.userPhoto);
                 } else
                     holder.userPhoto.setImageResource(R.drawable.no_image);
@@ -68,7 +69,7 @@ public class VenueTipsAdapter extends RecyclerView.Adapter<VenueTipsAdapter.TipH
             Uri uri = Uri.parse(tip.getPhoto().getPrefix() + "width300" + tip.getPhoto().getSuffix());
             Glide.with(holder.mView.getContext())
                     .load(uri)
-                    .placeholder(R.drawable.checkered_background)
+                    .apply(new RequestOptions().placeholder(R.drawable.checkered_background))
                     .into(holder.tipPhoto);
             holder.tipPhoto.setVisibility(View.VISIBLE);
         }

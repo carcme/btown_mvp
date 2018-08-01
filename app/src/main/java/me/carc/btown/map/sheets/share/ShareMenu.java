@@ -66,7 +66,7 @@ public class ShareMenu {
         list.add(ShareItem.CLIPBOARD);
         list.add(ShareItem.GEO);
         list.add(ShareItem.QR_CODE);
-        if(address.toLowerCase().startsWith("http"))
+        if(Commons.isNotNull(address) && address.toLowerCase().startsWith("http"))
             list.add(ShareItem.WEB);
         return list;
     }
@@ -75,7 +75,7 @@ public class ShareMenu {
         List<ShareItem> list = new LinkedList<>();
         list.add(ShareItem.CLIPBOARD);
         list.add(ShareItem.QR_CODE);
-        if(address.toLowerCase().startsWith("http"))
+        if(Commons.isNotNull(address) && address.toLowerCase().startsWith("http"))
             list.add(ShareItem.WEB);
         return list;
     }

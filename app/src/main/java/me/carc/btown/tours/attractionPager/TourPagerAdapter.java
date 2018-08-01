@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 
 import java.util.List;
 
+import me.carc.btown.common.Commons;
 import me.carc.btown.db.tours.model.Attraction;
 
 
@@ -31,6 +32,8 @@ class TourPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public int getCount() {
+        if(Commons.isNull(attractionsData))
+            return 0;
         return attractionsData.size();
     }
 

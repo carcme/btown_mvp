@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 
 import java.util.ArrayList;
 
@@ -43,7 +44,7 @@ public class VenuePhotoAdapter extends RecyclerView.Adapter<PhotoViewHolder> {
         Uri uri = Uri.parse(photo.getPrefix() + "cap" + 200 + photo.getSuffix());
         Glide.with(holder.mView.getContext())
                 .load(uri)
-                .placeholder(R.drawable.checkered_background)
+                .apply(new RequestOptions().placeholder(R.drawable.checkered_background))
                 .into(holder.photo);
     }
 

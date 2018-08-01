@@ -1,10 +1,7 @@
 package me.carc.btown.Utils;
 
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
-import android.text.TextUtils;
-import android.util.Log;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -22,8 +19,9 @@ public class ForceUpdateChecker {
 
     private static final String TAG = ForceUpdateChecker.class.getSimpleName();
 
-    public static final String KEY_UPDATE_REQUIRED = "force_update_req";
-    public static final String KEY_CURRENT_VERSION = "force_update_current_version";
+    public static final String KEY_UPDATE_REQUIRED       = "force_update_req";
+    public static final String KEY_CURRENT_VERSION       = "force_update_current_version";
+    public static final String KEY_VERSION_CODE          = "force_update_version_code";
     public static final String KEY_UPDATE_DESCRIPTION_EN = "force_update_desc_en";
     public static final String KEY_UPDATE_DESCRIPTION_DE = "force_update_desc_de";
 
@@ -50,7 +48,7 @@ public class ForceUpdateChecker {
                 .build();
         remoteConfig.setConfigSettings(configSettings);
 
-        remoteConfig.fetch().addOnCompleteListener(new OnCompleteListener<Void>() {
+        remoteConfig.fetch().addOnCompleteListener(new OnCompleteListener<Void>() {  // for DEBUGGING use fetch(timeout) ** timeout in seconds **
             @Override
             public void onComplete(@NonNull Task<Void> task) {
 
@@ -58,13 +56,12 @@ public class ForceUpdateChecker {
                     remoteConfig.activateFetched();
                     if (remoteConfig.getBoolean(KEY_UPDATE_REQUIRED)) {
 
-                        String currentVersion = remoteConfig.getString(KEY_CURRENT_VERSION);
-                        String appVersion = getAppVersion(context);
+                        long valRemoteVersion = remoteConfig.getLong(KEY_VERSION_CODE);
 
                         String updateDescEN = remoteConfig.getString(KEY_UPDATE_DESCRIPTION_EN);
                         String updateDescDE = remoteConfig.getString(KEY_UPDATE_DESCRIPTION_DE);
 
-                        if ((!TextUtils.equals(currentVersion, appVersion)) && onUpdateNeededListener != null) {
+                        if (valRemoteVersion > BuildConfig.VERSION_CODE && onUpdateNeededListener != null) {
                             onUpdateNeededListener.onUpdateNeeded(C.USER_LANGUAGE.equalsIgnoreCase("en") ? updateDescEN : updateDescDE);
                         }
                     }
@@ -73,21 +70,7 @@ public class ForceUpdateChecker {
         });
     }
 
-    private String getAppVersion(Context context) {
-        String result = "";
-
-        try {
-            result = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
-            result = result.replaceAll("[a-zA-Z]|-", "");
-        } catch (PackageManager.NameNotFoundException e) {
-            Log.e(TAG, e.getMessage());
-        }
-
-        return result;
-    }
-
     public static class Builder {
-
         private Context context;
         private OnUpdateNeededListener onUpdateNeededListener;
 
@@ -107,7 +90,6 @@ public class ForceUpdateChecker {
         public ForceUpdateChecker check() {
             ForceUpdateChecker forceUpdateChecker = build();
             forceUpdateChecker.check();
-
             return forceUpdateChecker;
         }
     }

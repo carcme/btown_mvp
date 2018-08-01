@@ -28,13 +28,18 @@
 
 
     <style name="AppTheme.FullScrnActivity" parent="AppTheme">
+        <item name="android:windowBackground">@color/colorPrimaryDark</item>
+        <item name="android:windowTranslucentStatus">true</item>
+    </style>
+
+    <style name="AppTheme.FullScrnActivityBak" parent="AppTheme">
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowIsTranslucent">true</item>
     </style>
 
     <style name="AppTheme.ShowCaseGallery" parent="AppTheme.FullScrnActivity">
-        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowBackground">@color/colorPrimaryDark</item>
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowAnimationStyle">@null</item>  <!--Override the other defined transitions-->

@@ -6,7 +6,6 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -14,7 +13,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -42,7 +40,7 @@ import me.carc.btown.common.viewHolders.CatalogueViewHolder;
 import me.carc.btown.db.tours.TourViewModel;
 import me.carc.btown.db.tours.model.TourCatalogueItem;
 import me.carc.btown.tours.adapters.ToursAdapter;
-import me.carc.btown.ui.custom.MyCustomLayoutManager;
+import me.carc.btown.ui.custom.PreDrawLayoutManager;
 
 public class CatalogueActivity extends BaseActivity {
     private static final String TAG = CatalogueActivity.class.getName();
@@ -104,19 +102,21 @@ public class CatalogueActivity extends BaseActivity {
         // Set the padding to match the Status Bar height
         if (C.HAS_L)
             toolbar.setPadding(0, getStatusBarHeight(), 0, 0);
+
+//        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void setupRecycler() {
         mAdapter = new ToursAdapter(isGermanLanguage());
 
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
-            recyclerView.setLayoutManager(gridLayoutManager);
-        } else {
-            MyCustomLayoutManager layoutManager = new MyCustomLayoutManager(this);
+//        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+//            GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
+//            recyclerView.setLayoutManager(gridLayoutManager);
+//        } else {
+            PreDrawLayoutManager layoutManager = new PreDrawLayoutManager(this);
             recyclerView.setLayoutManager(layoutManager);
-        }
+//        }
         recyclerView.setAdapter(mAdapter);
         scrollHider(recyclerView, fabExit);
 

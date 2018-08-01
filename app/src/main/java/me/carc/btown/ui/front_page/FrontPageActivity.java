@@ -2,6 +2,7 @@ package me.carc.btown.ui.front_page;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
@@ -117,6 +118,8 @@ public class FrontPageActivity extends MvpBaseActivity implements
         boolean neverUpdate = TinyDB.getTinyDB().getBoolean(NEVER_UPDATE);
         long updateTime = TinyDB.getTinyDB().getLong(LAST_UPDATE_TIME, 0);
 
+        updateTime = 0;
+
         if(!neverUpdate && System.currentTimeMillis() > updateTime) {
             TinyDB.getTinyDB().putLong(LAST_UPDATE_TIME, System.currentTimeMillis() + C.TIME_ONE_DAY);
             ForceUpdateChecker.with(this).onUpdateNeeded(this).check();
@@ -193,7 +196,11 @@ public class FrontPageActivity extends MvpBaseActivity implements
     @Override
     public void setupHeader(@DrawableRes int imageRes) {
 
-        profileImage.setImageResource(imageRes);
+        try { // Crashlytics #183 - resouce not found exception thrown :/ Moved the relevent res images to nodpi folder
+            profileImage.setImageResource(imageRes);
+        } catch ( Resources.NotFoundException e) {
+            profileImage.setImageResource(R.drawable.background_museum_insel);
+        }
         profileImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -273,6 +280,7 @@ public class FrontPageActivity extends MvpBaseActivity implements
                     }
                 })
                 .create();
+
 
         dialog.show();
     }

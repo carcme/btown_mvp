@@ -48,7 +48,7 @@ import me.carc.btown.data.all4squ.FourSquareServiceProvider;
 import me.carc.btown.data.all4squ.entities.ExploreItem;
 import me.carc.btown.data.all4squ.entities.VenueResult;
 import me.carc.btown.tours.top_pick_lists.adapters.FsqSearchResultAdapter;
-import me.carc.btown.ui.custom.MyCustomLayoutManager;
+import me.carc.btown.ui.custom.PreDrawLayoutManager;
 import me.toptas.fancyshowcase.FancyShowCaseQueue;
 import me.toptas.fancyshowcase.FancyShowCaseView;
 import me.toptas.fancyshowcase.FocusShape;
@@ -176,7 +176,7 @@ public class FourSquareSearchResultActivity extends BaseActivity {
     private void setupRecyclerView(ArrayList<VenueResult> items) {
         if (Commons.isNotNull(items)) {
 
-            recyclerView.setLayoutManager(new MyCustomLayoutManager(recyclerView.getContext()));
+            recyclerView.setLayoutManager(new PreDrawLayoutManager(recyclerView.getContext()));
 
             final FsqSearchResultAdapter adapter = new FsqSearchResultAdapter(items);
             recyclerView.setAdapter(adapter);

@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 
 import org.osmdroid.util.GeoPoint;
 
@@ -364,11 +365,15 @@ public class MarkerListDialogFragment extends DialogFragment {
 
         if (imageList.size() > 0) {
             String randomImageUrl = imageList.get(new Random().nextInt(imageList.size()));
-            Glide.with(getActivity())
-                    .load(randomImageUrl)
+
+            RequestOptions opts = new RequestOptions()
                     .placeholder(R.drawable.checkered_background)
                     .error(R.drawable.no_image)
-                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                    .diskCacheStrategy(DiskCacheStrategy.RESOURCE);
+
+            Glide.with(getActivity())
+                    .load(randomImageUrl)
+                    .apply(opts)
                     .into(imageBackDrop);
             imageBackDrop.setVisibility(View.VISIBLE);
 /*

@@ -7,10 +7,12 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
@@ -27,8 +29,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 
 import java.io.File;
@@ -49,6 +53,8 @@ import okhttp3.Call;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+
+import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
 
 /**
  * Show a rotating compass dialog page
@@ -125,25 +131,29 @@ public class ImageDialog extends DialogFragment {
             if (Commons.isEmpty(args.getString(SUBTITLE)))
                 imageSubTitle.setVisibility(View.GONE);
 
+            RequestOptions opts = new RequestOptions()
+                    .placeholder(R.drawable.checkered_background)  // required otherwise load doesn't happen!!
+                    .error(R.drawable.no_image);
+
+
             Glide.with(getActivity())
                     .load(imageUrl)
-                    .listener(new RequestListener<String, GlideDrawable>() {
+                    .listener(new RequestListener<Drawable>() {
                         @Override
-                        public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
                             retryNetworkImage();
                             return true;
                         }
 
                         @Override
-                        public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
                             if (Commons.isNotNull(imageLoadProgress))
                                 imageLoadProgress.setVisibility(View.GONE);
                             return false;
                         }
                     })
-                    .crossFade(500)
-                    .placeholder(R.drawable.checkered_background)  // required otherwise load doesn't happen!!
-                    .error(R.drawable.no_image)
+                    .transition(withCrossFade(500))
+                    .apply(opts)
                     .into(image);
 
             int scale = TinyDB.getTinyDB().getInt(SAVED_SCALE_TYPE, ImageView.ScaleType.CENTER_CROP.ordinal());
@@ -170,15 +180,16 @@ public class ImageDialog extends DialogFragment {
             Glide.with(getActivity())
                     .load(loadString)
                     .listener(glideListener)
-                    .crossFade(500)
+                    .transition(withCrossFade(500))
                     .into(image);
     }
 
-    private RequestListener<String, GlideDrawable> glideListener = new RequestListener<String, GlideDrawable>() {
+    private RequestListener<Drawable> glideListener = new RequestListener<Drawable>() {
+
         int retryCount = 2;
 
         @Override
-        public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
             // Attempt a retry
             if (retryCount != 0) {
                 retryNetworkImage();
@@ -202,7 +213,7 @@ public class ImageDialog extends DialogFragment {
         }
 
         @Override
-        public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
             image.setImageDrawable(resource);
             if (Commons.isNotNull(imageLoadProgress))
                 imageLoadProgress.setVisibility(View.GONE);

@@ -2,6 +2,7 @@ package me.carc.btown.tours.adapters;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.support.annotation.NonNull;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -14,12 +15,14 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
-import com.firebase.ui.storage.images.FirebaseImageLoader;
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.CustomEvent;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import me.carc.btown.GlideApp;
 import me.carc.btown.R;
 import me.carc.btown.Utils.ViewUtils;
 import me.carc.btown.common.C;
@@ -38,7 +41,6 @@ public class AttractionGalleryViewerAdapter extends RecyclerView.Adapter<Attract
 
     private StorageReference mCoverImageStorageRef;
     private int mDefaultBackgroundColor;
-    private int mMaxMemory;
 
     private OnItemClickListener onItemClickListener;
 
@@ -55,7 +57,7 @@ public class AttractionGalleryViewerAdapter extends RecyclerView.Adapter<Attract
     }
 
     @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public @NonNull MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Log.d(TAG, "onCreateViewHolder: ");
         Context ctx = parent.getContext();
         View rowView = LayoutInflater.from(ctx).inflate(R.layout.gallery_image_item, parent, false);
@@ -66,7 +68,7 @@ public class AttractionGalleryViewerAdapter extends RecyclerView.Adapter<Attract
     }
 
     @Override
-    public void onBindViewHolder(final MyViewHolder holder, int pos) {
+    public void onBindViewHolder(@NonNull final MyViewHolder holder, int pos) {
         final int position = holder.getAdapterPosition();
 
         final GalleryItem galleryItem = AttractionTabsActivity.galleryItems.get(position);
@@ -77,14 +79,17 @@ public class AttractionGalleryViewerAdapter extends RecyclerView.Adapter<Attract
 
         if (galleryItem.hasCachedFile() && Commons.isNull(galleryItem.getBitmap())) {
             Glide.with(holder.mView.getContext())
-                    .load(galleryItem.getCachedFile())
                     .asBitmap()
-                    .override(C.IMAGE_WIDTH/6, C.IMAGE_HEIGHT/6)
-                    .dontAnimate()
+                    .apply(new RequestOptions()
+                            .override(C.IMAGE_WIDTH/6, C.IMAGE_HEIGHT/6)
+                            .dontAnimate())
+                    .load(galleryItem.getCachedFile())
                     .into(new BitmapImageViewTarget(holder.gallleryImage) {
                         @Override
-                        public void onResourceReady(final Bitmap bitmap, GlideAnimation anim) {
-                            super.onResourceReady(bitmap, anim);
+                        protected void setResource(final Bitmap bitmap) {
+                            super.setResource(bitmap);
+                            if(bitmap == null)
+                                return;
                             new Palette.Builder(bitmap).generate(new Palette.PaletteAsyncListener() {
                                 @Override
                                 public void onGenerated(Palette palette) {
@@ -128,10 +133,9 @@ public class AttractionGalleryViewerAdapter extends RecyclerView.Adapter<Attract
             ViewUtils.animateViewColor(holder.imageTextContainer, mDefaultBackgroundColor, galleryItem.getSwatch().getRgb());
         } else {
             // hmmm... something interesting!! Get the image from the server again :/
-            Glide.with(holder.mView.getContext())
-                    .using(new FirebaseImageLoader())
+            GlideApp.with(holder.mView.getContext())
                     .load(mCoverImageStorageRef.child(galleryItem.getFilename()))
-                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                    .diskCacheStrategy(DiskCacheStrategy.DATA)
                     .into(holder.gallleryImage);
         }
     }
@@ -142,6 +146,10 @@ public class AttractionGalleryViewerAdapter extends RecyclerView.Adapter<Attract
 
     @Override
     public int getItemCount() {
+        if(Commons.isNull(AttractionTabsActivity.galleryItems)) {
+            Answers.getInstance().logCustom(new CustomEvent("ERROR:AttractionGalleryViewerAdapter list is empty"));
+            return 0;
+        }
         return AttractionTabsActivity.galleryItems.size();
     }
 

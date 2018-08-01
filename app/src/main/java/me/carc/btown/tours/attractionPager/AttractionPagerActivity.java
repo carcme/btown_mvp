@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.TargetApi;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
@@ -24,6 +25,7 @@ import android.support.v4.view.OnApplyWindowInsetsListener;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.WindowInsetsCompat;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -64,15 +66,10 @@ public class AttractionPagerActivity extends BaseActivity implements Placeholder
     private static final int RESULT_DETAIL = 10;
     private static final int RESULT_CAMERA_PREVIEW = 101;
 
-    //    private String mOnCameraLocation;
     private TourPagerAdapter tourAdapter;
     private int selectedAttraction;
-//    private ArrayList<Attraction> attractions;
 
-
-    @BindView(R.id.attractionViewPager)
-    LockableViewPager mViewPager;
-
+    @BindView(R.id.attractionViewPager) LockableViewPager mViewPager;
 
     private ViewPager.SimpleOnPageChangeListener onPagerChangedListener = new ViewPager.SimpleOnPageChangeListener() {
 
@@ -108,40 +105,70 @@ public class AttractionPagerActivity extends BaseActivity implements Placeholder
         setContentView(R.layout.tour_attraction_pager);
         ButterKnife.bind(this);
 
-        Log.d(TAG, "onCreate: ");
-
         Intent intent = getIntent();
         if (intent.hasExtra(CatalogueActivity.CATALOGUE_INDEX)) {
-            final FragmentManager fm = getSupportFragmentManager();
 
             if (savedInstanceState != null) {
                 selectedAttraction = savedInstanceState.getInt(ATTRACTION_INDEX);
                 // find the retained fragment on activity restarts
+                FragmentManager fm = getSupportFragmentManager();
                 RetainedFragment retainedFragment = (RetainedFragment) fm.findFragmentByTag(RetainedFragment.ID_TAG);
-                if(Commons.isNotNull(retainedFragment))
-                    setupPager(retainedFragment.getAttractionList());
-
-            } else {
-                int CATALOGUE_INDEX = intent.getIntExtra(CatalogueActivity.CATALOGUE_INDEX, -1);
-                selectedAttraction = intent.getIntExtra(ATTRACTION_INDEX, 0);
-
-                TourViewModel mTourViewModel = ViewModelProviders.of(this).get(TourViewModel.class);
-                mTourViewModel.getTour(CATALOGUE_INDEX).observe(this, new Observer<TourCatalogueItem>() {
-                    @Override
-                    public void onChanged(@Nullable final TourCatalogueItem tour) {
-                        if(Commons.isNotNull(tour)) {
-                            // Create the retained fragment to store the tour data
-                            RetainedFragment retainedFragment = new RetainedFragment();
-                            retainedFragment.setAttractionList(tour.getAttractions());
-                            fm.beginTransaction().add(retainedFragment, RetainedFragment.ID_TAG).commit();
-
-                            setupPager(tour.getAttractions());
-                        }
+                if(Commons.isNotNull(retainedFragment)) {
+                    if (Commons.isNotNull(retainedFragment.getAttractionList()) && retainedFragment.getAttractionList().size() > 0) {
+                        setupPager(retainedFragment.getAttractionList());
+                    } else {
+                        getToursViewModel();
                     }
-                });
+                } else
+                    getToursViewModel();
+            } else {
+                getToursViewModel();
             }
             setStatusBarColor(false, R.color.colorPrimary);
         }
+    }
+
+    private void getToursViewModel() {
+        int CATALOGUE_INDEX = getIntent().getIntExtra(CatalogueActivity.CATALOGUE_INDEX, -1);
+        selectedAttraction = getIntent().getIntExtra(ATTRACTION_INDEX, 0);
+
+        TourViewModel mTourViewModel = ViewModelProviders.of(this).get(TourViewModel.class);
+        mTourViewModel.getTour(CATALOGUE_INDEX).observe(this, new Observer<TourCatalogueItem>() {
+            @Override
+            public void onChanged(@Nullable final TourCatalogueItem tour) {
+                if (Commons.isNotNull(tour) && Commons.isNotNull(tour.getAttractions())) {
+                    // Create the retained fragment to store the tour data
+                    RetainedFragment retainedFragment = new RetainedFragment();
+                    retainedFragment.setAttractionList(tour.getAttractions());
+                    getSupportFragmentManager().beginTransaction().add(retainedFragment, RetainedFragment.ID_TAG).commit();
+
+                    if(tour.getAttractions().size() > 0)
+                        setupPager(tour.getAttractions());
+                    else
+                        showErrorDialog();
+                } else {
+                    showErrorDialog();
+                }
+            }
+        });
+    }
+
+
+    private void showErrorDialog() {
+        Answers.getInstance().logCustom(new CustomEvent("ERROR:Attractions list failure"));
+
+        AlertDialog.Builder dlg = new AlertDialog.Builder(AttractionPagerActivity.this)
+                .setIcon(R.mipmap.ic_launcher_btown)
+                .setTitle(R.string.serious_error_title)
+                .setMessage(R.string.error_attractions_database_problem)
+                .setPositiveButton(R.string.shared_string_close, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                });
+        dlg.show();
+
     }
 
     private void setupPager(List<Attraction> attractions) {
@@ -185,7 +212,6 @@ public class AttractionPagerActivity extends BaseActivity implements Placeholder
 
     @Override
     public void onBackPressed() {
-
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {

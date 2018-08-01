@@ -1,5 +1,6 @@
 package me.carc.btown.tours.top_pick_lists.adapters;
 
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 
 import org.osmdroid.util.GeoPoint;
 
@@ -36,13 +38,13 @@ public class ListDetailsAdapter extends RecyclerView.Adapter<ListDetailsAdapter.
     }
 
     @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public @NonNull MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.venue_list_detail_item_layout, parent, false);
         return new MyViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(final MyViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull final MyViewHolder holder, final int position) {
         ItemsListItem item = mList.get(position);
 
         try {
@@ -50,7 +52,7 @@ public class ListDetailsAdapter extends RecyclerView.Adapter<ListDetailsAdapter.
             String photo = item.getPhoto().getPrefix() + "width300" + item.getPhoto().getSuffix();
             Glide.with(holder.mView.getContext())
                     .load(photo)
-                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                    .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.RESOURCE))
                     .into(holder.icon);
         } catch (Exception e) {
             holder.icon.setImageResource(R.drawable.no_image);

@@ -25,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 
 import org.osmdroid.util.GeoPoint;
 
@@ -244,7 +245,7 @@ public class WikiReadingListDialogFragment extends DialogFragment implements Wik
                 if (Commons.isNotNull(randomImageUrl)) {
                     Glide.with(getActivity())
                             .load(randomImageUrl)
-                            .placeholder(R.drawable.checkered_background)
+                            .apply(new RequestOptions().placeholder(R.drawable.checkered_background))
                             .into(imageBackDrop);
                 } else {
                     imageBackDrop.setScaleType(ImageView.ScaleType.FIT_XY);

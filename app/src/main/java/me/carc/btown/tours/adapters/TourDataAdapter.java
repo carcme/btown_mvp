@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.firebase.ui.storage.images.FirebaseImageLoader;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -59,14 +59,13 @@ public class TourDataAdapter extends RecyclerView.Adapter<TourDataAdapter.MyView
         if (FileUtils.checkValidFilePath(cachedImage)) {
             Glide.with(holder.mView.getContext())
                     .load(cachedImage)
-                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                    .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.RESOURCE))
                     .into(holder.icon);
         } else {
             // Load the image using Glide
             Glide.with(holder.mView.getContext())
-                    .using(new FirebaseImageLoader())
                     .load(mCoverImageStorageRef.child(mAttractions.get(pos).getImage()))
-                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                    .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.DATA))
                     .into(holder.icon);
         }
 

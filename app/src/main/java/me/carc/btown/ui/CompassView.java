@@ -7,8 +7,6 @@ import android.util.AttributeSet;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.util.constants.MathConstants;
 
-import java.util.Date;
-
 /**
  * Class CompassView extends Android ImageView to perform cool, real-life animation of objects such
  * compass needle in magnetic field. Rotation is performed relative to the center of image.
@@ -69,7 +67,7 @@ public class CompassView extends android.support.v7.widget.AppCompatImageView {
     @Override
     public void onDraw(Canvas canvas) {
         if (animationOn) {
-            if (angleRecalculate(new Date().getTime())) {
+            if (angleRecalculate(System.currentTimeMillis())) {
                 this.setRotation(angle1);
             }
         } else {

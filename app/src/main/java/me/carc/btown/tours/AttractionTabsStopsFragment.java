@@ -28,7 +28,7 @@ import me.carc.btown.db.tours.TourViewModel;
 import me.carc.btown.db.tours.model.TourCatalogueItem;
 import me.carc.btown.tours.adapters.TourDataAdapter;
 import me.carc.btown.tours.attractionPager.AttractionPagerActivity;
-import me.carc.btown.ui.custom.MyCustomLayoutManager;
+import me.carc.btown.ui.custom.PreDrawLayoutManager;
 
 public class AttractionTabsStopsFragment extends Fragment {
 
@@ -123,7 +123,7 @@ public class AttractionTabsStopsFragment extends Fragment {
                 }
             });
 
-            recyclerView.setLayoutManager(new MyCustomLayoutManager(recyclerView.getContext()));
+            recyclerView.setLayoutManager(new PreDrawLayoutManager(recyclerView.getContext()));
             // Is this needed
             RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL);
             recyclerView.addItemDecoration(itemDecoration);

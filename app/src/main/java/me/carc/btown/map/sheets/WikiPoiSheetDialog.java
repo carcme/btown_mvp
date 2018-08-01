@@ -30,6 +30,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 
 import org.osmdroid.util.GeoPoint;
 
@@ -211,13 +212,15 @@ public class WikiPoiSheetDialog extends BottomSheetDialogFragment {
 
             if (C.HAS_L) wikiExtract.setNestedScrollingEnabled(true);
 
-
-            Glide.with(getActivity())
-                    .load(page.thumbUrl())
-                    .asBitmap()
-                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+            RequestOptions opts = new RequestOptions()
                     .placeholder(R.drawable.checkered_background)
                     .error(R.drawable.ic_wiki)
+                    .diskCacheStrategy(DiskCacheStrategy.RESOURCE);
+
+            Glide.with(getActivity())
+                    .asBitmap()
+                    .load(page.thumbUrl())
+                    .apply(opts)
                     .into(wikiThumbnail);
 
         } catch (NullPointerException e) {

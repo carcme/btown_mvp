@@ -2,6 +2,8 @@ package me.carc.btown.tours.adapters;
 
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,21 +12,22 @@ import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
-import com.firebase.ui.storage.images.FirebaseImageLoader;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.DrawableImageViewTarget;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import me.carc.btown.GlideApp;
 import me.carc.btown.R;
 import me.carc.btown.common.C;
 import me.carc.btown.common.CacheDir;
 import me.carc.btown.common.viewHolders.CatalogueViewHolder;
 import me.carc.btown.db.tours.model.TourCatalogueItem;
+
+import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
 
 /**
  * A custom adapter to use with the RecyclerView widget.
@@ -41,13 +44,13 @@ public class ToursAdapter extends RecyclerView.Adapter<CatalogueViewHolder> {
     }
 
     @Override
-    public CatalogueViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+    public @NonNull CatalogueViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.catalogue_card, viewGroup, false);
         return new CatalogueViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(final CatalogueViewHolder holder, final int pos) {
+    public void onBindViewHolder(@NonNull final CatalogueViewHolder holder, final int pos) {
         final TourCatalogueItem card = tours.get(pos);
 
         holder.catalogueTitle.setText(card.getCatalogueName(isGermanLanguage));
@@ -60,23 +63,21 @@ public class ToursAdapter extends RecyclerView.Adapter<CatalogueViewHolder> {
         // Load image from Local storeage using Glide
         Glide.with(holder.catalogueImage.getContext())
                 .load(CacheDir.getInstance().getCachePath() + card.getCatalogueImage())
-                .crossFade(500)
-                .placeholder(R.drawable.checkered_background)
-                .into(new GlideDrawableImageViewTarget(holder.catalogueImage) {
+                .transition(withCrossFade(500))
+                .apply(new RequestOptions().placeholder(R.drawable.checkered_background))
+                .into(new DrawableImageViewTarget(holder.catalogueImage) {
                     @Override
-                    public void onLoadFailed(Exception e, Drawable errorDrawable) {
-                        super.onLoadFailed(e, errorDrawable);
-                        // Load image from Firebase using Glide
-                        Glide.with(holder.catalogueImage.getContext())
-                                .using(new FirebaseImageLoader()) // cannot resolve method using!
-                                .load(mCoverImageStorageRef.child(card.getCatalogueImage()))
-                                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                                .into(holder.catalogueImage);
+                    protected void setResource(@Nullable Drawable resource) {
+                        super.setResource(resource);
                     }
 
                     @Override
-                    public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
-                        super.onResourceReady(resource, glideAnimation);
+                    public void onLoadFailed(@Nullable Drawable errorDrawable) {
+                        super.onLoadFailed(errorDrawable);
+                        GlideApp.with(holder.catalogueImage.getContext())
+                                .load(mCoverImageStorageRef.child(card.getCatalogueImage()))
+                                .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.DATA))
+                                .into(holder.catalogueImage);
                     }
                 });
 

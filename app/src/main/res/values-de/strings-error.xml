@@ -13,6 +13,10 @@
     <string name="operation_error">Der Vorgang kann momentan nicht ausgeführt werden</string>
     <string name="serious_error_title">Ernsthaftes Problem</string>
     <string name="serious_error_body">In der Database fand sich ein schwerer Fehler. Die Seite muss neu geladen werden.</string>
+    <string name="error_attractions_database_problem">Die Attraktionen konnten nicht aus der Datenbank abgerufen werden</string>
+
+    <string name="error_fsq_quote_title">Datenkontingent erreicht</string>
+    <string name="error_fsq_quote_reached">Foursquare hat kürzlich seine Datenlimits geändert. Ich arbeite an einer Lösung dafür</string>
 
     <string name="retry">Wiederholen</string>
 

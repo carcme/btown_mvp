@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 
 import org.osmdroid.util.GeoPoint;
 
@@ -80,7 +81,7 @@ public class MarkerListAdapter extends RecyclerView.Adapter<MarkerListAdapter.Po
         if(Commons.isNotNull(item.thumb)) {
             Glide.with(holder.mView.getContext())
                     .load(item.thumb)
-                    .error(R.drawable.no_image)
+                    .apply(new RequestOptions().error(R.drawable.no_image))
                     .into(holder.icon);
         } else {
             holder.icon.setImageDrawable(item.icon);

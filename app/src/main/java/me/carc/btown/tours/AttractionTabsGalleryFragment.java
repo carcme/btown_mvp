@@ -30,7 +30,7 @@ import me.carc.btown.db.tours.TourViewModel;
 import me.carc.btown.db.tours.model.Attraction;
 import me.carc.btown.db.tours.model.TourCatalogueItem;
 import me.carc.btown.tours.adapters.AttractionGalleryViewerAdapter;
-import me.carc.btown.ui.custom.MyCustomLayoutManager;
+import me.carc.btown.ui.custom.PreDrawLayoutManager;
 
 
 public class AttractionTabsGalleryFragment extends Fragment {
@@ -104,12 +104,14 @@ public class AttractionTabsGalleryFragment extends Fragment {
     };
 
     private void setupRecyclerView(RecyclerView recyclerView) {
-        MyCustomLayoutManager layoutManager = new MyCustomLayoutManager(getActivity());
+        PreDrawLayoutManager layoutManager = new PreDrawLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
 
         Bundle args = getArguments();
 
         if(Commons.isNotNull(args)) {
+
+            // TODO: 23/07/2018 check AttractionTabsActivity.galleryItems.size() if crash continues
             AttractionGalleryViewerAdapter adapter = new AttractionGalleryViewerAdapter();
             recyclerView.setAdapter(adapter);
             recyclerView.setHasFixedSize(true);

@@ -22,6 +22,12 @@
     <string name="serious_error_title">Serious Problem</string>
     <string name="serious_error_body">Detected a major issue with the database and it must be refreshed.</string>
 
+    <string name="error_fsq_quote_title">Data Quota Reached</string>
+    <string name="error_fsq_quote_reached">Foursquare have recently changed their data limits. I\'m working on a solution to this</string>
+
+
+    <string name="error_attractions_database_problem">Unable to get Attractions from database</string>
+
     <string name="retry">Retry</string>
 
     <string name="network_offline_title">Network Offline</string>

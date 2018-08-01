@@ -27,6 +27,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 
@@ -241,12 +242,15 @@ public class SinglePoiOptionsDialog extends BottomSheetDialogFragment {
             }
 
             if(Commons.isNotNull(node.tags.thumbnail)) {
-                Glide.with(getActivity())
-                        .load(node.tags.thumbnail)
-                        .asBitmap()
-                        .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                RequestOptions opts = new RequestOptions()
                         .placeholder(R.drawable.checkered_background)
                         .error(node.iconId)
+                        .diskCacheStrategy(DiskCacheStrategy.RESOURCE);
+
+                Glide.with(getActivity())
+                        .asBitmap()
+                        .load(node.tags.thumbnail)
+                        .apply(opts)
                         .into(featureIcon);
             } else if(node.iconId == 0)
                 featureIcon.setImageResource(R.drawable.no_image);
@@ -350,7 +354,7 @@ public class SinglePoiOptionsDialog extends BottomSheetDialogFragment {
                     featureOpeningHours.setText(R.string.poi_string_closed);
                     featureOpeningHours.setTextColor(ContextCompat.getColor(getActivity(), R.color.poiOpenTimesClosedColor));
                 }
-                items.add(new InfoCard(hours.getOriginalFormatted(), InfoCard.ItemType.NONE, FontAwesome.Icon.faw_clock_o));
+                items.add(new InfoCard(hours.getOriginalFormatted(), InfoCard.ItemType.NONE, FontAwesome.Icon.faw_clock));
             }
 
             if (!Commons.isEmpty(node.tags.cuisine))
