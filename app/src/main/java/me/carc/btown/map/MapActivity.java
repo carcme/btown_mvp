@@ -98,6 +98,7 @@ public class MapActivity extends BaseActivity implements
     private boolean hasDropPinsVisible;
 
     @BindView(R.id.mapView)                 MapView mMap;
+
     @BindView(R.id.featureProgressDialog)   ProgressBar featureProgressDialog;
     @BindView(R.id.routeInfoText)           TextView routeInfoText;
     @BindView(R.id.fab_map_friend)          FloatingActionButton fab_map_friend;
@@ -200,6 +201,16 @@ public class MapActivity extends BaseActivity implements
                     Answers.getInstance().logCustom(new CustomEvent("QWIK TOURISM"));
                 presenter.onTouristLookupFromLongPress(point);
                 showSearching(true);
+                dlg.dismiss();
+            }
+        });
+
+        view.findViewById(R.id.itemSharePoint).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (BuildConfig.USE_CRASHLYTICS)
+                    Answers.getInstance().logCustom(new CustomEvent("SHARE LOCATION POINT"));
+                presenter.onShareLocationPoint(point);
                 dlg.dismiss();
             }
         });

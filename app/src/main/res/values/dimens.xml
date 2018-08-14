@@ -9,10 +9,17 @@
     <dimen name="margin_large">32dp</dimen>
     <dimen name="margin_huge">64dp</dimen>
 
+    <!-- TEXT SIZES -->
     <dimen name="tiny_list_text_size">12sp</dimen>
     <dimen name="small_list_text_size">14sp</dimen>
     <dimen name="default_list_text_size">16sp</dimen>
     <dimen name="large_list_text_size">19sp</dimen>
+
+    <dimen name="text_size_header_large">36sp</dimen>
+    <dimen name="item_text_size">18sp</dimen>
+
+    <dimen name="carc_item_title">16sp</dimen>
+    <dimen name="carc_item_text">14sp</dimen>
 
 
     <dimen name="fab_space">72dp</dimen>
@@ -47,9 +54,6 @@
     <dimen name="card_icon_padding_right">10dp</dimen>
 
 
-
-    <dimen name="text_size_header_large">36sp</dimen>
-    <dimen name="item_text_size">18sp</dimen>
 
     <!-- fab sizes -->
     <dimen name="fab_margin">16dp</dimen>
@@ -117,7 +121,5 @@
 
 
 
-    <dimen name="carc_item_title">16sp</dimen>
-    <dimen name="carc_item_text">14sp</dimen>
 
 </resources>

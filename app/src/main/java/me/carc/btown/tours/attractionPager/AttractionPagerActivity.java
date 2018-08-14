@@ -52,7 +52,6 @@ import me.carc.btown.extras.messaging.CommentsActivity;
 import me.carc.btown.map.sheets.ImageDialog;
 import me.carc.btown.tours.CatalogueActivity;
 import me.carc.btown.tours.RetainedFragment;
-import me.carc.btown.tours.data.services.FirebaseImageDownloader;
 import me.carc.btown.ui.custom.LockableViewPager;
 
 public class AttractionPagerActivity extends BaseActivity implements PlaceholderFragment.TourListener {
@@ -363,11 +362,9 @@ public class AttractionPagerActivity extends BaseActivity implements Placeholder
 
     @Override
     public void firebaseUpdateRequired() {
-        if (Commons.isNetworkAvailable(this)) {
-            Intent getImagesIntent = new Intent(this, FirebaseImageDownloader.class);
-            getImagesIntent.putExtra("FORCE_UPDATE", true);
-            startService(getImagesIntent);
-        } else
+        if (Commons.isNetworkAvailable(this))
+            getApp().getFirebaseTours(true);
+        else
             showAlertDialog(R.string.no_image_no_connection_title, R.string.no_image_no_connection_desc, -1, R.drawable.ic_menu_share);
     }
 }

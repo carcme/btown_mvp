@@ -27,6 +27,7 @@ import io.fabric.sdk.android.Fabric;
 import me.carc.btown.common.C;
 import me.carc.btown.common.Commons;
 import me.carc.btown.common.NetworkChangeReceiver;
+import me.carc.btown.common.NotificationUtils;
 import me.carc.btown.common.injection.component.ApplicationComponent;
 import me.carc.btown.common.injection.component.DaggerApplicationComponent;
 import me.carc.btown.common.injection.module.ApplicationModule;
@@ -144,6 +145,9 @@ public class App extends Application {
         applicationContext = getApplicationContext();
         registerConnectivityRecver();
 
+        if (C.HAS_O)
+            new NotificationUtils(this);
+
         if (mBillingService == null && GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this) == ConnectionResult.SUCCESS) {
             Intent serviceIntent = new Intent("com.android.vending.billing.InAppBillingService.BIND");
             serviceIntent.setPackage(GooglePlayServicesUtil.GOOGLE_PLAY_STORE_PACKAGE);
@@ -165,9 +169,10 @@ public class App extends Application {
     /**
      * Get the tours and images
      */
-    public void getFirebaseTours() {
+    public void getFirebaseTours(boolean forceUpdate) {
         if(isNetworkAvailable() && !isUpdatingFirebase()) {
             imagesServiceIntent = new Intent(getApplicationContext(), FirebaseImageDownloader.class);
+            imagesServiceIntent.putExtra(FirebaseImageDownloader.FORCE_UPDATE, forceUpdate);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
                 startForegroundService(imagesServiceIntent);
             else

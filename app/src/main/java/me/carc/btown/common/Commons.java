@@ -2,6 +2,7 @@ package me.carc.btown.common;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -31,21 +32,6 @@ import me.carc.btown.R;
 
 public class Commons {
 
-/*
-    public static String getTag() {
-        String tag = "";
-        if (BuildConfig.DEBUG) {
-            final StackTraceElement[] ste = Thread.currentThread().getStackTrace();
-            for (int i = 0; i < ste.length; i++) {
-                if (ste[i].getMethodName().equals("getTag")) {
-                    tag = "(" + ste[i + 1].getFileName() + ":" + ste[i + 1].getLineNumber() + ")";
-                }
-            }
-        }
-        return tag;
-    }
-*/
-
     @SuppressFBWarnings("NM_METHOD_NAMING_CONVENTION")
     public static void Toast(Context context, String msg, @ColorInt int bgColor, int duration) {
         final View v = ((LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE))
@@ -56,7 +42,8 @@ public class Commons {
         tv.setTextColor(Color.WHITE);
 
         Drawable background = context.getDrawable(R.drawable.toast_background);
-        background.setTint(bgColor);
+        assert background != null;
+        background.setColorFilter(bgColor, PorterDuff.Mode.OVERLAY);
         tv.setBackground(background);
 
         final Toast toast = new Toast(context);

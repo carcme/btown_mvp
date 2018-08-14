@@ -20,9 +20,9 @@ android {
     defaultConfig {
         applicationId 'me.carc.btown'
         minSdkVersion 21
-        targetSdkVersion 27
-        versionCode 69
-        versionName "2.1.29"
+        targetSdkVersion 26
+        versionCode 71
+        versionName "2.1.31"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         android.defaultConfig.vectorDrawables.useSupportLibrary = true
         javaCompileOptions {
@@ -100,7 +100,8 @@ ext {
     firebase = '16.0.1'
     firebaseUI = '4.0.0'
     facebook = '4.23.+'
-    glide = '4.7.1'    //''3.7.0'
+    glide = '4.7.1'
+//    glide = '3.7.0'
     retrofit = '2.4.0'
     okhttp = '3.8.0'
 //    roomVersion = '1.1.0'
@@ -162,6 +163,10 @@ dependencies {
     // FIREBASE - specific versions
     implementation 'com.google.firebase:firebase-auth:16.0.2'
     implementation 'com.google.firebase:firebase-config:16.0.0'
+
+    // MAPBOX
+//    implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:6.3.0'
+//    implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-building:0.3.0'
 
     // OSMDROID
 //    implementation(name: 'osmdroid-android-6.0.2-SNAPSHOT', ext: 'aar')

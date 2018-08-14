@@ -92,7 +92,6 @@ public class FrontPageActivity extends MvpBaseActivity implements
 
         mRecyclerView.setAdapter(mAdapter);
 
-
         int orient = getResources().getConfiguration().orientation;
         switch (orient) {
             case ORIENTATION_LANDSCAPE:
@@ -117,8 +116,6 @@ public class FrontPageActivity extends MvpBaseActivity implements
 
         boolean neverUpdate = TinyDB.getTinyDB().getBoolean(NEVER_UPDATE);
         long updateTime = TinyDB.getTinyDB().getLong(LAST_UPDATE_TIME, 0);
-
-        updateTime = 0;
 
         if(!neverUpdate && System.currentTimeMillis() > updateTime) {
             TinyDB.getTinyDB().putLong(LAST_UPDATE_TIME, System.currentTimeMillis() + C.TIME_ONE_DAY);

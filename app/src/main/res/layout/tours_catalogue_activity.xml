@@ -41,7 +41,7 @@
             android:layout_margin="@dimen/margin_standard"
             android:layout_centerInParent="true"
             android:drawableTop="@drawable/ic_offline_icon"
-            android:text="Tours Not Downloaded"
+            android:text="@string/tours_not_downloaded"
             android:textSize="25sp"/>
 
         <TextView
@@ -51,7 +51,7 @@
             android:layout_margin="@dimen/margin_standard"
             android:layout_below="@id/no_network_icon"
             android:layout_centerInParent="true"
-            android:text="Check your network connection and then download"
+            android:text="@string/tours_network_message"
             android:textAlignment="center"
             android:textSize="20sp"/>
 

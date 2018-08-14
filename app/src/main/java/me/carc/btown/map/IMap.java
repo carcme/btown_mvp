@@ -72,6 +72,7 @@ public interface IMap {
         void showPoiDialog(Object obj);
         void onShowCameraOrPoiMarkerListDialog();
 
+        void onShareLocationPoint(GeoPoint p);
         void onDropPin(GeoPoint p);
         void onClearPins();
 

@@ -701,8 +701,10 @@ public class SinglePoiOptionsDialog extends BottomSheetDialogFragment {
 
     public CompassDialog getCompassFragment() {
         AppCompatActivity activity = ((App) getActivity().getApplication()).getCurrentActivity();
-
-        Fragment fragment = activity.getSupportFragmentManager().findFragmentByTag(CompassDialog.ID_TAG);
+        Fragment fragment = null;
+        if(Commons.isNotNull(activity)) { // Crashlytics #193 - seems user got bored and left
+            fragment = activity.getSupportFragmentManager().findFragmentByTag(CompassDialog.ID_TAG);
+        }
         return fragment != null && !fragment.isDetached() && !fragment.isRemoving() ? (CompassDialog) fragment : null;
     }
 

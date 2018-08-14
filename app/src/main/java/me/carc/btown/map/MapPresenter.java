@@ -99,6 +99,7 @@ import me.carc.btown.map.sheets.SinglePoiOptionsDialog;
 import me.carc.btown.map.sheets.TourSheetDialog;
 import me.carc.btown.map.sheets.WikiPoiSheetDialog;
 import me.carc.btown.map.sheets.marker_list.MarkerListDialogFragment;
+import me.carc.btown.map.sheets.share.ShareMenu;
 import me.carc.btown.ui.custom.MySimplePointOverlayOptions;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -211,6 +212,7 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
                 mMap.getController().animateTo(mLocation); //keep the map view centered on current location:
             else
                 mMap.invalidate(); // re-draw
+
         }
 
         @Override
@@ -872,6 +874,10 @@ public class MapPresenter implements IMap.Presenter, MapEventsReceiver, org.osmd
         });
     }
 
+    @Override
+    public void onShareLocationPoint(GeoPoint p) {
+        ShareMenu.show(p, "", "", mContext.getApplicationContext());
+    }
 
     @Override
     public void onDropPin(final GeoPoint p) {

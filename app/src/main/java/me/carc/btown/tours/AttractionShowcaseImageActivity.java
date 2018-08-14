@@ -58,7 +58,6 @@ import me.carc.btown.Utils.IntentUtils;
 import me.carc.btown.Utils.ViewUtils;
 import me.carc.btown.common.C;
 import me.carc.btown.common.Commons;
-import me.carc.btown.tours.data.services.FirebaseImageDownloader;
 import me.carc.btown.ui.TouchImageView;
 import me.carc.btown.ui.custom.CustomAnimatorListener;
 import me.carc.btown.ui.custom.CustomTransitionListener;
@@ -303,8 +302,7 @@ public class AttractionShowcaseImageActivity extends BaseActivity {
                 .show();
 
         if (Commons.isNetworkAvailable(AttractionShowcaseImageActivity.this)) {
-            Intent getImagesIntent = new Intent(this, FirebaseImageDownloader.class);
-            startService(getImagesIntent);
+            getApp().getFirebaseTours(true);
         }
     }
 

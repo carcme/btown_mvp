@@ -70,7 +70,7 @@ public class CatalogueActivity extends BaseActivity {
 
     @OnClick(R.id.startDownloadBtn)
     void downloadTours() {
-        ((App) getApplication()).getFirebaseTours();
+        getApp().getFirebaseTours(true);
         showDownloadingDialog();
     }
 
@@ -125,8 +125,10 @@ public class CatalogueActivity extends BaseActivity {
             @Override
             public void onChanged(@Nullable final List<TourCatalogueItem> tours) {
                 if(Commons.isNotNull(tours)) {
-                    if (tours.size() == 0)
+                    if (tours.size() == 0) {
                         downloadLayout.setVisibility(View.VISIBLE);
+                        getApp().getFirebaseTours(true);
+                    }
                     mAdapter.setTours(tours);
                 }
             }

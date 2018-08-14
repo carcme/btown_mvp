@@ -29,7 +29,6 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DecodeFormat;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.DrawableImageViewTarget;
@@ -157,7 +156,7 @@ public class VenueTabsActivity extends BaseActivity implements ToursScrollListen
 
             Glide.with(this)
                     .load(photo)
-                    .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.RESOURCE).format(DecodeFormat.PREFER_RGB_565))
+                    .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.RESOURCE))
                     .into(new DrawableImageViewTarget(venueHeaderImage) {
                         @Override
                         protected void setResource(@Nullable Drawable resource) {

@@ -46,43 +46,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.front_page.FrontPageActivity">
             </meta-data>
-
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
-
-                <data
-                    android:host="*"
-                    android:pathPattern="/*.kml"
-                    android:scheme="http"/>
-                <data
-                    android:host="*"
-                    android:pathPattern="/*.kml"
-                    android:scheme="https"/>
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-
-                <category android:name="android.intent.category.DEFAULT"/>
-
-                <data
-                    android:host="*"
-                    android:mimeType="*/*"
-                    android:pathPattern=".*\\.kml"
-                    android:scheme="file"/>
-                <data
-                    android:host="*"
-                    android:mimeType="*/*"
-                    android:pathPattern=".*\\.kmz"
-                    android:scheme="file"/>
-                <data
-                    android:host="*"
-                    android:mimeType="*/*"
-                    android:pathPattern=".*\\.json"
-                    android:scheme="file"/>
-            </intent-filter>
         </activity>
         <activity
             android:name=".settings.SettingsActivity"
@@ -121,10 +84,6 @@
             android:theme="@style/AppTheme"/>
 
         <!-- TOURS -->
-        <activity
-            android:name=".tours.ToursLaunchActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.FullScrnActivity"/>
         <activity
             android:name=".login.LoginActivity"
             android:screenOrientation="portrait"

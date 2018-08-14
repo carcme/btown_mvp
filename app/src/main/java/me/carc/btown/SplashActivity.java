@@ -44,7 +44,7 @@ public class SplashActivity extends AppCompatActivity implements EasyPermissions
     private void launchNextActivity() {
         if(hasStorage && hasLocation /*&& hasUser && attemptedLogin*/) {
             // have permissions, get the tours and images
-            ((App)getApplicationContext()).getFirebaseTours();
+            ((App)getApplicationContext()).getFirebaseTours(false);
 
             new Handler().postDelayed(new Runnable() {
                 @Override

@@ -15,7 +15,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif-condensed"
-        android:padding="10dp"
-        android:textSize="16sp"/>
+        android:padding="@dimen/margin_standard"
+        android:textSize="@dimen/item_text_size"
+        tools:text="@tools:sample/lorem"/>
 
 </LinearLayout>

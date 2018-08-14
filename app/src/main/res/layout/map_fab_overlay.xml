@@ -69,6 +69,7 @@
         android:layout_marginTop="12dp"
         android:indeterminate="true"
         android:visibility="gone"
+        tools:visibility="visible"
         />
 
     <android.support.design.widget.FloatingActionButton

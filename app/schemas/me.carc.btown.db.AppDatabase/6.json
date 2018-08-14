@@ -1,0 +1,1409 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 6,
+    "identityHash": "17c3c7e02f7bab89dda831cef447ed23",
+    "entities": [
+      {
+        "tableName": "FavoriteEntry",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`osmId` INTEGER NOT NULL, `timestamp` INTEGER NOT NULL, `latitude` REAL NOT NULL, `longtitude` REAL NOT NULL, `displayName` TEXT, `address` TEXT, `userComment` TEXT, `iconStr` TEXT, `iconInt` INTEGER NOT NULL, `type` TEXT, `id` INTEGER, `lat` REAL, `lon` REAL, `distance` REAL, `userDescription` TEXT, `iconId` INTEGER, `aerialway` TEXT, `aeroway` TEXT, `amenity` TEXT, `barrier` TEXT, `boundary` TEXT, `building` TEXT, `craft` TEXT, `emergency` TEXT, `geological` TEXT, `highway` TEXT, `historic` TEXT, `landuse` TEXT, `leisure` TEXT, `man_made` TEXT, `military` TEXT, `natural` TEXT, `office` TEXT, `place` TEXT, `power` TEXT, `public_transport` TEXT, `railway` TEXT, `route` TEXT, `shop` TEXT, `sport` TEXT, `tourism` TEXT, `waterway` TEXT, `healthcare` TEXT, `entrance` TEXT, `memorial` TEXT, `name` TEXT, `phone` TEXT, `contactPhone` TEXT, `contactEmail` TEXT, `website` TEXT, `facebook` TEXT, `instagram` TEXT, `twitter` TEXT, `fax` TEXT, `contactWebsite` TEXT, `source` TEXT, `sourceName` TEXT, `sourceRef` TEXT, `url` TEXT, `addressCity` TEXT, `addressPostCode` TEXT, `addressSuburb` TEXT, `addressStreet` TEXT, `addressHouseNumber` TEXT, `wheelchair` TEXT, `wheelchairToilets` TEXT, `wheelchairDescription` TEXT, `openingHours` TEXT, `internetAccess` TEXT, `fee` TEXT, `operator` TEXT, `collectionTimes` TEXT, `takeaway` TEXT, `delivery` TEXT, `outdoor_seating` TEXT, `religion` TEXT, `denomination` TEXT, `image` TEXT, `thumbnail` TEXT, `isIcon` INTEGER, `smoking` TEXT, `note` TEXT, `cuisine` TEXT, `wikipedia` TEXT, `wikidata` TEXT, `nudism` TEXT, `cycleway` TEXT, `comment` TEXT, `height` TEXT, PRIMARY KEY(`osmId`))",
+        "fields": [
+          {
+            "fieldPath": "osmId",
+            "columnName": "osmId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "timestamp",
+            "columnName": "timestamp",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lat",
+            "columnName": "latitude",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lon",
+            "columnName": "longtitude",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "displayName",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "address",
+            "columnName": "address",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "comment",
+            "columnName": "userComment",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "iconStr",
+            "columnName": "iconStr",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "iconInt",
+            "columnName": "iconInt",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "osmPojo.type",
+            "columnName": "type",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.lat",
+            "columnName": "lat",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.lon",
+            "columnName": "lon",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.distance",
+            "columnName": "distance",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.userDescription",
+            "columnName": "userDescription",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.iconId",
+            "columnName": "iconId",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.aerialway",
+            "columnName": "aerialway",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.aeroway",
+            "columnName": "aeroway",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.amenity",
+            "columnName": "amenity",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.barrier",
+            "columnName": "barrier",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.boundary",
+            "columnName": "boundary",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.building",
+            "columnName": "building",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.craft",
+            "columnName": "craft",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.emergency",
+            "columnName": "emergency",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.geological",
+            "columnName": "geological",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.highway",
+            "columnName": "highway",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.historic",
+            "columnName": "historic",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.landuse",
+            "columnName": "landuse",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.leisure",
+            "columnName": "leisure",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.man_made",
+            "columnName": "man_made",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.military",
+            "columnName": "military",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.natural",
+            "columnName": "natural",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.office",
+            "columnName": "office",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.place",
+            "columnName": "place",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.power",
+            "columnName": "power",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.public_transport",
+            "columnName": "public_transport",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.railway",
+            "columnName": "railway",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.route",
+            "columnName": "route",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.shop",
+            "columnName": "shop",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.sport",
+            "columnName": "sport",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.tourism",
+            "columnName": "tourism",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.waterway",
+            "columnName": "waterway",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.healthcare",
+            "columnName": "healthcare",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.entrance",
+            "columnName": "entrance",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.memorial",
+            "columnName": "memorial",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.phone",
+            "columnName": "phone",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.contactPhone",
+            "columnName": "contactPhone",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.contactEmail",
+            "columnName": "contactEmail",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.website",
+            "columnName": "website",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.facebook",
+            "columnName": "facebook",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.instagram",
+            "columnName": "instagram",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.twitter",
+            "columnName": "twitter",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.fax",
+            "columnName": "fax",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.contactWebsite",
+            "columnName": "contactWebsite",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.source",
+            "columnName": "source",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.sourceName",
+            "columnName": "sourceName",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.sourceRef",
+            "columnName": "sourceRef",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.url",
+            "columnName": "url",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.addressCity",
+            "columnName": "addressCity",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.addressPostCode",
+            "columnName": "addressPostCode",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.addressSuburb",
+            "columnName": "addressSuburb",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.addressStreet",
+            "columnName": "addressStreet",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.addressHouseNumber",
+            "columnName": "addressHouseNumber",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.wheelchair",
+            "columnName": "wheelchair",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.wheelchairToilets",
+            "columnName": "wheelchairToilets",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.wheelchairDescription",
+            "columnName": "wheelchairDescription",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.openingHours",
+            "columnName": "openingHours",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.internetAccess",
+            "columnName": "internetAccess",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.fee",
+            "columnName": "fee",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.operator",
+            "columnName": "operator",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.collectionTimes",
+            "columnName": "collectionTimes",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.takeaway",
+            "columnName": "takeaway",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.delivery",
+            "columnName": "delivery",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.outdoor_seating",
+            "columnName": "outdoor_seating",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.religion",
+            "columnName": "religion",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.denomination",
+            "columnName": "denomination",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.image",
+            "columnName": "image",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.thumbnail",
+            "columnName": "thumbnail",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.isIcon",
+            "columnName": "isIcon",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.smoking",
+            "columnName": "smoking",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.note",
+            "columnName": "note",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.cuisine",
+            "columnName": "cuisine",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.wikipedia",
+            "columnName": "wikipedia",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.wikidata",
+            "columnName": "wikidata",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.nudism",
+            "columnName": "nudism",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.cycleway",
+            "columnName": "cycleway",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.comment",
+            "columnName": "comment",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.height",
+            "columnName": "height",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "osmId"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "HistoryEntry",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`osmId` INTEGER NOT NULL, `timestamp` INTEGER NOT NULL, `latitude` REAL NOT NULL, `longtitude` REAL NOT NULL, `displayName` TEXT, `address` TEXT, `userComment` TEXT, `iconStr` TEXT, `iconInt` INTEGER NOT NULL, `type` TEXT, `id` INTEGER, `lat` REAL, `lon` REAL, `distance` REAL, `userDescription` TEXT, `iconId` INTEGER, `aerialway` TEXT, `aeroway` TEXT, `amenity` TEXT, `barrier` TEXT, `boundary` TEXT, `building` TEXT, `craft` TEXT, `emergency` TEXT, `geological` TEXT, `highway` TEXT, `historic` TEXT, `landuse` TEXT, `leisure` TEXT, `man_made` TEXT, `military` TEXT, `natural` TEXT, `office` TEXT, `place` TEXT, `power` TEXT, `public_transport` TEXT, `railway` TEXT, `route` TEXT, `shop` TEXT, `sport` TEXT, `tourism` TEXT, `waterway` TEXT, `healthcare` TEXT, `entrance` TEXT, `memorial` TEXT, `name` TEXT, `phone` TEXT, `contactPhone` TEXT, `contactEmail` TEXT, `website` TEXT, `facebook` TEXT, `instagram` TEXT, `twitter` TEXT, `fax` TEXT, `contactWebsite` TEXT, `source` TEXT, `sourceName` TEXT, `sourceRef` TEXT, `url` TEXT, `addressCity` TEXT, `addressPostCode` TEXT, `addressSuburb` TEXT, `addressStreet` TEXT, `addressHouseNumber` TEXT, `wheelchair` TEXT, `wheelchairToilets` TEXT, `wheelchairDescription` TEXT, `openingHours` TEXT, `internetAccess` TEXT, `fee` TEXT, `operator` TEXT, `collectionTimes` TEXT, `takeaway` TEXT, `delivery` TEXT, `outdoor_seating` TEXT, `religion` TEXT, `denomination` TEXT, `image` TEXT, `thumbnail` TEXT, `isIcon` INTEGER, `smoking` TEXT, `note` TEXT, `cuisine` TEXT, `wikipedia` TEXT, `wikidata` TEXT, `nudism` TEXT, `cycleway` TEXT, `comment` TEXT, `height` TEXT, PRIMARY KEY(`osmId`))",
+        "fields": [
+          {
+            "fieldPath": "osmId",
+            "columnName": "osmId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "timestamp",
+            "columnName": "timestamp",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lat",
+            "columnName": "latitude",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lon",
+            "columnName": "longtitude",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "displayName",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "address",
+            "columnName": "address",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "comment",
+            "columnName": "userComment",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "iconStr",
+            "columnName": "iconStr",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "iconInt",
+            "columnName": "iconInt",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "osmPojo.type",
+            "columnName": "type",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.lat",
+            "columnName": "lat",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.lon",
+            "columnName": "lon",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.distance",
+            "columnName": "distance",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.userDescription",
+            "columnName": "userDescription",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.iconId",
+            "columnName": "iconId",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.aerialway",
+            "columnName": "aerialway",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.aeroway",
+            "columnName": "aeroway",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.amenity",
+            "columnName": "amenity",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.barrier",
+            "columnName": "barrier",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.boundary",
+            "columnName": "boundary",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.building",
+            "columnName": "building",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.craft",
+            "columnName": "craft",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.emergency",
+            "columnName": "emergency",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.geological",
+            "columnName": "geological",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.highway",
+            "columnName": "highway",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.historic",
+            "columnName": "historic",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.landuse",
+            "columnName": "landuse",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.leisure",
+            "columnName": "leisure",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.man_made",
+            "columnName": "man_made",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.military",
+            "columnName": "military",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.natural",
+            "columnName": "natural",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.office",
+            "columnName": "office",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.place",
+            "columnName": "place",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.power",
+            "columnName": "power",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.public_transport",
+            "columnName": "public_transport",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.railway",
+            "columnName": "railway",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.route",
+            "columnName": "route",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.shop",
+            "columnName": "shop",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.sport",
+            "columnName": "sport",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.tourism",
+            "columnName": "tourism",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.waterway",
+            "columnName": "waterway",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.healthcare",
+            "columnName": "healthcare",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.entrance",
+            "columnName": "entrance",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.memorial",
+            "columnName": "memorial",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.phone",
+            "columnName": "phone",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.contactPhone",
+            "columnName": "contactPhone",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.contactEmail",
+            "columnName": "contactEmail",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.website",
+            "columnName": "website",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.facebook",
+            "columnName": "facebook",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.instagram",
+            "columnName": "instagram",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.twitter",
+            "columnName": "twitter",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.fax",
+            "columnName": "fax",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.contactWebsite",
+            "columnName": "contactWebsite",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.source",
+            "columnName": "source",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.sourceName",
+            "columnName": "sourceName",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.sourceRef",
+            "columnName": "sourceRef",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.url",
+            "columnName": "url",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.addressCity",
+            "columnName": "addressCity",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.addressPostCode",
+            "columnName": "addressPostCode",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.addressSuburb",
+            "columnName": "addressSuburb",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.addressStreet",
+            "columnName": "addressStreet",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.addressHouseNumber",
+            "columnName": "addressHouseNumber",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.wheelchair",
+            "columnName": "wheelchair",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.wheelchairToilets",
+            "columnName": "wheelchairToilets",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.wheelchairDescription",
+            "columnName": "wheelchairDescription",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.openingHours",
+            "columnName": "openingHours",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.internetAccess",
+            "columnName": "internetAccess",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.fee",
+            "columnName": "fee",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.operator",
+            "columnName": "operator",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.collectionTimes",
+            "columnName": "collectionTimes",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.takeaway",
+            "columnName": "takeaway",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.delivery",
+            "columnName": "delivery",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.outdoor_seating",
+            "columnName": "outdoor_seating",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.religion",
+            "columnName": "religion",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.denomination",
+            "columnName": "denomination",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.image",
+            "columnName": "image",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.thumbnail",
+            "columnName": "thumbnail",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.isIcon",
+            "columnName": "isIcon",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.smoking",
+            "columnName": "smoking",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.note",
+            "columnName": "note",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.cuisine",
+            "columnName": "cuisine",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.wikipedia",
+            "columnName": "wikipedia",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.wikidata",
+            "columnName": "wikidata",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.nudism",
+            "columnName": "nudism",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.cycleway",
+            "columnName": "cycleway",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.comment",
+            "columnName": "comment",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "osmPojo.tags.height",
+            "columnName": "height",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "osmId"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "BookmarkEntry",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`pageId` INTEGER NOT NULL, `timestamp` INTEGER NOT NULL, `latitude` REAL NOT NULL, `longtitude` REAL NOT NULL, `title` TEXT, `link` TEXT, `extract` TEXT, `thumbnail` TEXT, `description` TEXT, `userComment` TEXT, PRIMARY KEY(`pageId`))",
+        "fields": [
+          {
+            "fieldPath": "pageId",
+            "columnName": "pageId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "timestamp",
+            "columnName": "timestamp",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lat",
+            "columnName": "latitude",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lon",
+            "columnName": "longtitude",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "title",
+            "columnName": "title",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "linkUrl",
+            "columnName": "link",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "extract",
+            "columnName": "extract",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "thumbnail",
+            "columnName": "thumbnail",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "description",
+            "columnName": "description",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "userComment",
+            "columnName": "userComment",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "pageId"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "catalogue_table",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`tourId` INTEGER NOT NULL, `tourName` TEXT, `de_tourName` TEXT, `tourDistance` REAL NOT NULL, `tourTime` INTEGER NOT NULL, `tourRating` REAL NOT NULL, `tourDesc` TEXT, `de_tourDesc` TEXT, `tourBrief` TEXT, `de_tourBrief` TEXT, `tourCoverImageFile` TEXT, `attractions` TEXT, PRIMARY KEY(`tourId`))",
+        "fields": [
+          {
+            "fieldPath": "tourId",
+            "columnName": "tourId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "tourName",
+            "columnName": "tourName",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "de_tourName",
+            "columnName": "de_tourName",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "tourDistance",
+            "columnName": "tourDistance",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "tourTime",
+            "columnName": "tourTime",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "tourRating",
+            "columnName": "tourRating",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "tourDesc",
+            "columnName": "tourDesc",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "de_tourDesc",
+            "columnName": "de_tourDesc",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "tourBrief",
+            "columnName": "tourBrief",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "de_tourBrief",
+            "columnName": "de_tourBrief",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "tourCoverImageFile",
+            "columnName": "tourCoverImageFile",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "attractions",
+            "columnName": "attractions",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "tourId"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "Attraction",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`atractionId` INTEGER NOT NULL, `stopName` TEXT, `busStop` TEXT, `de_busStop` TEXT, `facebookPageId` INTEGER NOT NULL, `wikiLink` TEXT, `de_wikiLink` TEXT, `web` TEXT, `email` TEXT, `tel` TEXT, `address` TEXT, `hours` TEXT, `stopImageFile` TEXT, `stopImagesource` TEXT, `stopCost` TEXT, `stopType` TEXT, `stopRating` INTEGER NOT NULL, `location` TEXT, `pois` TEXT, `stopInfo` TEXT, `de_stopInfo` TEXT, PRIMARY KEY(`atractionId`))",
+        "fields": [
+          {
+            "fieldPath": "attractionId",
+            "columnName": "atractionId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "stopName",
+            "columnName": "stopName",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "busStop",
+            "columnName": "busStop",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "de_busStop",
+            "columnName": "de_busStop",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "facebookPageId",
+            "columnName": "facebookPageId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "wikiLink",
+            "columnName": "wikiLink",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "de_wikiLink",
+            "columnName": "de_wikiLink",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "web",
+            "columnName": "web",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "email",
+            "columnName": "email",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "tel",
+            "columnName": "tel",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "address",
+            "columnName": "address",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "hours",
+            "columnName": "hours",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "stopImageFile",
+            "columnName": "stopImageFile",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "stopImagesource",
+            "columnName": "stopImagesource",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "stopCost",
+            "columnName": "stopCost",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "stopType",
+            "columnName": "stopType",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "stopRating",
+            "columnName": "stopRating",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "location",
+            "columnName": "location",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "pois",
+            "columnName": "pois",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "stopInfo",
+            "columnName": "stopInfo",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "de_stopInfo",
+            "columnName": "de_stopInfo",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "atractionId"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"17c3c7e02f7bab89dda831cef447ed23\")"
+    ]
+  }
+}

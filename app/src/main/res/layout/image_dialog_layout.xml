@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_glide_placeholder"
-    android:animateLayoutChanges="true">
+    android:animateLayoutChanges="true"
+    android:background="@drawable/background_glide_placeholder">
 
     <me.carc.btown.ui.TouchImageView
         android:id="@+id/imageDialogImage"
@@ -19,35 +20,35 @@
         android:id="@+id/imageLoadProgress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true" />
+        android:layout_centerInParent="true"/>
 
     <LinearLayout
         android:id="@+id/helpContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/margin_large"
         android:layout_centerInParent="true"
         android:background="@color/tintDark"
         android:orientation="vertical"
+        android:padding="@dimen/margin_large"
         android:visibility="gone"
-        tools:visibility="gone" >
+        tools:visibility="gone">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/white"
             android:layout_marginBottom="@dimen/margin_small"
             android:fontFamily="serif"
-            android:textSize="@dimen/large_list_text_size"
-            android:text="@string/quick_guide"/>
+            android:text="@string/quick_guide"
+            android:textColor="@color/white"
+            android:textSize="@dimen/large_list_text_size"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/white"
             android:lineSpacingMultiplier="1.3"
-            android:textSize="@dimen/small_list_text_size"
-            android:text="@string/help_string_image_dialog_viewer"/>
+            android:text="@string/help_string_image_dialog_viewer"
+            android:textColor="@color/white"
+            android:textSize="@dimen/small_list_text_size"/>
 
     </LinearLayout>
 
@@ -56,7 +57,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="@color/tintStandard"
-        android:orientation="horizontal" >
+        android:orientation="horizontal">
 
         <LinearLayout
             android:id="@+id/textContainer"
@@ -74,19 +75,19 @@
                 android:fontFamily="serif"
                 android:textColor="@color/white"
                 android:textSize="18sp"
-                tools:text="Title is here" />
+                tools:text="Title is here"/>
 
             <me.carc.btown.ui.custom.CapitalisedTextView
                 android:id="@+id/imageSubTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                android:paddingTop="10dp"
-                android:textSize="14sp"
-                android:maxLines="2"
                 android:ellipsize="end"
-                tools:visibility="visible"
-                tools:text="@string/lorum_ipsum" />
+                android:maxLines="2"
+                android:paddingTop="10dp"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                tools:text="@string/lorum_ipsum"
+                tools:visibility="visible"/>
 
         </LinearLayout>
 
@@ -97,7 +98,7 @@
             android:layout_height="48dp"
             android:layout_gravity="bottom"
             android:contentDescription="@null"
-            app:srcCompat="@drawable/ic_more" />
+            app:srcCompat="@drawable/ic_more"/>
 
     </LinearLayout>
 

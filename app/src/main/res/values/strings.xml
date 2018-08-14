@@ -112,6 +112,8 @@
     <string name="shared_string_trends">Trends</string>
     <string name="shared_string_update">Update</string>
     <string name="shared_string_new_features">New featres in update:\n</string>
+    <string name="shared_string_try_again">Please try again</string>
+
 
     <string name="home_screen_updated">Home Screen Updated</string>
 

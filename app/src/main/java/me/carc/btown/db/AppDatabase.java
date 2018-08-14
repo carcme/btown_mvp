@@ -26,7 +26,7 @@ import me.carc.btown.db.tours.model.TourCatalogueItem;
  * Created by bamptonm on 04/10/2017.
  */
 
-@Database(entities = {FavoriteEntry.class, HistoryEntry.class, BookmarkEntry.class, TourCatalogueItem.class, Attraction.class}, version = 5)
+@Database(entities = {FavoriteEntry.class, HistoryEntry.class, BookmarkEntry.class, TourCatalogueItem.class, Attraction.class}, version = 6)
 public abstract class AppDatabase extends RoomDatabase {
     public abstract FavoriteDao favoriteDao();
     public abstract HistoryDao historyDao();
@@ -43,7 +43,7 @@ public abstract class AppDatabase extends RoomDatabase {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             AppDatabase.class, App.BTOWN_DATABASE_NAME)
                             .addMigrations(Migrations.MIGRATION_1_2)
-//                            .fallbackToDestructiveMigration()  // TODO: REMOVE FOR RELEASE
+                            .fallbackToDestructiveMigration()  // TODO: REMOVE FOR RELEASE
                             .build();
                 }
             }

@@ -45,6 +45,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class FirebaseImageDownloader extends IntentService {
 
     private static final String TAG = FirebaseImageDownloader.class.getName();
+    public static final String FORCE_UPDATE = "FORCE_UPDATE";
 
     private String dir;
     private StorageReference mStorageRef;
@@ -81,7 +82,7 @@ public class FirebaseImageDownloader extends IntentService {
         if (!updateInProgress()) {
             Boolean forceUpdate = false;
             if (intent != null)
-                forceUpdate = intent.getBooleanExtra("FORCE_UPDATE", false);
+                forceUpdate = intent.getBooleanExtra(FORCE_UPDATE, false);
             initValues();
             getLatestJsonTours(checkForUpdates(forceUpdate));
         }
@@ -101,7 +102,7 @@ public class FirebaseImageDownloader extends IntentService {
 
             // Check if upgrading to database - tours still stored in shared prefs
 //             db.putString(CatalogueActivity.SERVER_FILE, "SIMULATE SHARED PREFS - REMOVE THIS LINE");
-            boolean upgradeToDB = !db.getString(CatalogueActivity.SERVER_FILE, "").equals("");
+            boolean upgradeToDB = forceUpdate || !db.getString(CatalogueActivity.SERVER_FILE, "").equals("");
             if (upgradeToDB) {
                 db.remove(CatalogueActivity.LAST_JSON_UPDATE);
                 db.remove(CatalogueActivity.JSON_VERSION);

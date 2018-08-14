@@ -77,26 +77,14 @@ public class ImageDialog extends DialogFragment {
 
     private Unbinder unbinder;
 
-    @BindView(R.id.imageDialogImage)
-    TouchImageView image;
+    @BindView(R.id.imageDialogImage) TouchImageView image;
+    @BindView(R.id.imageLoadProgress) ProgressBar imageLoadProgress;
+    @BindView(R.id.imageTitle) TextView imageTitle;
+    @BindView(R.id.imageSubTitle) TextView imageSubTitle;
+    @BindView(R.id.imageMoreBtn) ImageButton imageMoreBtn;
+    @BindView(R.id.helpContainer) LinearLayout helpContainer;
 
-    @BindView(R.id.imageLoadProgress)
-    ProgressBar imageLoadProgress;
-
-    @BindView(R.id.imageTitle)
-    TextView imageTitle;
-
-    @BindView(R.id.imageSubTitle)
-    TextView imageSubTitle;
-
-    @BindView(R.id.imageMoreBtn)
-    ImageButton imageMoreBtn;
-
-    @BindView(R.id.helpContainer)
-    LinearLayout helpContainer;
-
-
-    public static boolean showInstance(final Context appContext, final String imageUrl, final String pageUrl, final String title, final String subTitle) {
+        public static boolean showInstance(final Context appContext, final String imageUrl, final String pageUrl, final String title, final String subTitle) {
 
         AppCompatActivity activity = ((App) appContext).getCurrentActivity();
 
@@ -119,12 +107,12 @@ public class ImageDialog extends DialogFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.image_dialog_layout, container, false);
         unbinder = ButterKnife.bind(this, view);
 
         Bundle args = getArguments();
-        if (args != null) {
+        if (args != null && getActivity() != null) {
             String imageUrl = args.getString(IMAGE_URL);
             imageTitle.setText(args.getString(TITLE));
             imageSubTitle.setText(args.getString(SUBTITLE));
@@ -133,16 +121,19 @@ public class ImageDialog extends DialogFragment {
 
             RequestOptions opts = new RequestOptions()
                     .placeholder(R.drawable.checkered_background)  // required otherwise load doesn't happen!!
-                    .error(R.drawable.no_image);
-
+                    .error(R.drawable.ic_server_offline_icon);
 
             Glide.with(getActivity())
                     .load(imageUrl)
+                    .apply(opts)
                     .listener(new RequestListener<Drawable>() {
                         @Override
-                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                            retryNetworkImage();
-                            return true;
+                        public boolean onLoadFailed(@Nullable GlideException e, Object model, final Target<Drawable> target, boolean isFirstResource) {
+                            image.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                            imageTitle.setText(R.string.error_image_load_failed);
+                            imageSubTitle.setText(R.string.shared_string_try_again);
+                            imageLoadProgress.setVisibility(View.GONE);
+                            return false;
                         }
 
                         @Override
@@ -153,7 +144,6 @@ public class ImageDialog extends DialogFragment {
                         }
                     })
                     .transition(withCrossFade(500))
-                    .apply(opts)
                     .into(image);
 
             int scale = TinyDB.getTinyDB().getInt(SAVED_SCALE_TYPE, ImageView.ScaleType.CENTER_CROP.ordinal());
@@ -176,12 +166,19 @@ public class ImageDialog extends DialogFragment {
     private void retryNetworkImage() {
         String loadString = getArguments().getString(IMAGE_URL);
         // Crashlytics  #138 - check user hasn't got bored and left
-        if(getActivity() != null)
+        if(getActivity() != null) {
+
+            RequestOptions opts = new RequestOptions()
+                    .placeholder(R.drawable.checkered_background)  // required otherwise load doesn't happen!!
+                    .error(R.drawable.no_image);
+
             Glide.with(getActivity())
                     .load(loadString)
+                    .apply(opts)
                     .listener(glideListener)
                     .transition(withCrossFade(500))
                     .into(image);
+        }
     }
 
     private RequestListener<Drawable> glideListener = new RequestListener<Drawable>() {
@@ -238,10 +235,15 @@ public class ImageDialog extends DialogFragment {
 
     @OnClick(R.id.imageMoreBtn)
     void onSettingOverflow() {
-        PopupMenu popupMenu = new PopupMenu(getActivity(), imageMoreBtn);
-        popupMenu.inflate(R.menu.menu_image);
-        popupMenu.setOnMenuItemClickListener(menuListener);
-        popupMenu.show();
+
+        if(imageTitle.getText().equals(getString(R.string.error_image_load_failed)))
+            Commons.Toast(getActivity(), R.string.error_image_load_failed, Color.RED, Toast.LENGTH_SHORT);
+        else if(getActivity() != null) {
+            PopupMenu popupMenu = new PopupMenu(getActivity(), imageMoreBtn);
+            popupMenu.inflate(R.menu.menu_image);
+            popupMenu.setOnMenuItemClickListener(menuListener);
+            popupMenu.show();
+        }
     }
 
     private PopupMenu.OnMenuItemClickListener menuListener = new PopupMenu.OnMenuItemClickListener() {
@@ -356,14 +358,17 @@ public class ImageDialog extends DialogFragment {
     }
 
     private void showDownloadError() {
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (Commons.isNotNull(imageLoadProgress))
-                    imageLoadProgress.setVisibility(View.GONE);
-                Commons.Toast(getActivity(), R.string.operation_error, Color.RED, Toast.LENGTH_SHORT);
-            }
-        });
+        if(getActivity() != null) {
+
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (Commons.isNotNull(imageLoadProgress))
+                        imageLoadProgress.setVisibility(View.GONE);
+                    Commons.Toast(getActivity(), R.string.operation_error, Color.RED, Toast.LENGTH_SHORT);
+                }
+            });
+        }
     }
 
 
